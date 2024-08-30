@@ -1,5 +1,7 @@
-
-#import resta  
+from sumar import sumar;
+from resta import restar;
+#from dividir import dividir;
+#from multiplicacion import multiplicar;
 
 
 def calculadora():
