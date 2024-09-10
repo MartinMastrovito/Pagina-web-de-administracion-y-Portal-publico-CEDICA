@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import render_template
 
 
 def create_app(env = "development", static_folder = ""):
@@ -6,5 +7,7 @@ def create_app(env = "development", static_folder = ""):
         
 	@app.route("/") 
 	def home():
-		return "hola mundo"
+
+		return render_template('home.html')
+
 	return app
