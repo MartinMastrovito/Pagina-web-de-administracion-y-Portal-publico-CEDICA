@@ -20,6 +20,7 @@ def create_app(env = "development", static_folder = ""):
 		return render_template('home.html')
 
 	app.register_error_handler(404, not_found_error)
+	app.register_error_handler(500,internal_server_error)
 	
 	@app.cli.command(name="reset-db")
 	def reset_db():
