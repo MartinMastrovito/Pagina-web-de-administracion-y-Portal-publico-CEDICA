@@ -7,7 +7,7 @@ from src.core.config import config
 
 
 def create_app(env = "development", static_folder = ""):
-	app = Flask(__name__, template_folder='../web/templates')
+	app = Flask(__name__, template_folder='../web/templates',static_folder='../../static/')
         
 	app.config.from_object(config[env])
 	

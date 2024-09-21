@@ -4,13 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Mi Aplicación{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+    <link rel="stylesheet" href="static/css/layout.css">
 </head>
 <body>
     <header>
-        <h1>Bienvenido a Mi Aplicación</h1>
+        <img id='logo' src="static/assets/logo.png">
+        <nav>
+            {% for i in range(5) %}
+                {{i}}
+            {% endfor %}
+        </nav>
+        <div class="temp"></div>
     </header>
-
     <main>
         {% block content %}
         <!-- Contenido específico de cada página -->
