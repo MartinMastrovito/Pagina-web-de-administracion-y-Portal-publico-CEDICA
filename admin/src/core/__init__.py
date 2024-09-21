@@ -3,6 +3,7 @@ from flask import render_template
 from src.web.handlers.error import not_found_error
 from src.core import database
 from src.core.config import config
+from src.web.controllers.issues import web_blueprint
 
 def create_app(env = "development", static_folder = ""):
 	app = Flask(__name__)
@@ -11,14 +12,7 @@ def create_app(env = "development", static_folder = ""):
 	
 	database.init_app(app)
 	
-	
-	
-	
-	@app.route("/") 
-	def home():
-
-		return render_template('home.html')
-
+	app.register_blueprint(web_blueprint)
 	app.register_error_handler(404, not_found_error)
 	
 	@app.cli.command(name="reset-db")
