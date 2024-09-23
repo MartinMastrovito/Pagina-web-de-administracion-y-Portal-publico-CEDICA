@@ -5,7 +5,10 @@ from dataclasses import dataclass
 class Error:
     code: int
     name: str
-    description: str 
+    description: str
+    link: str = 'https://http.cat/' 
+    def __post_init__(self):
+        self.link = f'{self.link}{self.code}' 
 
 def not_found_error(e):
     error = Error(404,"Not found","the requested URL was not found on the server.")
