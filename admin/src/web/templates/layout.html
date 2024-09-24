@@ -13,9 +13,25 @@
 </head>
 <body>
     <header>
-        <img id='logo' src="static/assets/logo.png">
-        {{macros.build_navbar}}
-        <div class="temp"></div>
+        <img id='logo' alt="logo" src="static/assets/logo.png" >
+        <nav>
+            <a class="button" href="#">J&A</a>
+            <a class="button" href="#">Ecuestre</a>
+            <a class="button" href="#">Equipo</a>
+        </nav>
+        <div class="dropdown">
+                <div class="dropdown-trigger">
+                        <figure class="image is-48x48">
+                            <img class="is-rounded" src="static/assets/profile_icon.png">
+                        </figure>
+                </div>
+            <div class="dropdown-menu">
+                <div class="dropdown-content">
+                    <a href="#" class="dropdown-item">Perfil</a>
+                    <a href="#" class="dropdown-item">Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
     </header>
     <main>
         {% block content %}
