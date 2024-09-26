@@ -1,8 +1,8 @@
 from core.board.issue import Issue
-from src.core.database import db
+from core.database import db
 
 def list_issues():
-    issues = issue.query.all()
+    issues = Issue.query.all()
 
     return issues
 
