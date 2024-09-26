@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Lista de Usuarios{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <header>
+        <h1>Administración de Usuarios</h1>
+    </header>
+
+    <section>
+        <article>
+            <h2>Usuarios registrados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Alias</th>
+                        <th>Activo</th>
+                        <th>Rol</th>
+                        <th>Acciones</th> <!-- Nueva columna para las acciones -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.alias }}</td>
+                        <td>{{ 'Sí' if user.enabled else 'No' }}</td>
+                        <td>{{ user.role.name }}</td>
+                        <td>
+                            <a href="{{ url_for('users.user_update', user_id=user.id) }}" class="btn">Editar</a>
+                            <a href="{{ url_for('users.user_delete', user_id=user.id) }}" class="btn">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="margin-top: 20px;">
+                <a href="{{ url_for('users.create_user') }}" class="btn">Crear nuevo usuario</a>
+            </div>
+            
+        </article>
+    </section>
+    {% endblock %}
+
+    <footer>
+        <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
+    </footer>
+
+</body>
+</html>

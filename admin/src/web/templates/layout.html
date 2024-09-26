@@ -9,20 +9,20 @@
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
     >
-    <link rel="stylesheet" href="static/css/layout.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
 </head>
 <body>
     <header>
-        <img id='logo' alt="logo" src="static/assets/logo.png" >
+        <img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}">
         <nav>
-            <a class="button" href="#">J&A</a>
+            <a class="button" href="{{ url_for('users.index') }}">J&A</a>
             <a class="button" href="#">Ecuestre</a>
             <a class="button" href="#">Equipo</a>
         </nav>
         <div class="dropdown">
                 <div class="dropdown-trigger">
                         <figure class="image is-48x48">
-                            <img class="is-rounded" src="static/assets/profile_icon.png">
+                            <img class="is-rounded" src="{{ url_for('static', filename='assets/profile_icon.png') }}">
                         </figure>
                 </div>
             <div class="dropdown-menu">
