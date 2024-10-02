@@ -1,23 +1,45 @@
+{%import "macros.html" as macros %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Mi Aplicación{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
 </head>
 <body>
     <header>
-        <h1>Bienvenido a Mi Aplicación</h1>
+        <img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}">
+        <nav>
+            <a class="button" href="{{ url_for('users.index') }}">J&A</a>
+            <a class="button" href="#">Ecuestre</a>
+            <a class="button" href="#">Equipo</a>
+        </nav>
+        <div class="dropdown is-right is-hoverable">
+                <div class="dropdown-trigger">
+                        <figure class="image is-48x48">
+                            <img class="is-rounded" src="{{ url_for('static', filename='assets/profile_icon.png') }}">
+                        </figure>
+                </div>
+            <div class="dropdown-menu">
+                <div class="dropdown-content">
+                    <a href="#" class="dropdown-item">Perfil</a>
+                    <a href="#" class="dropdown-item">Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
     </header>
-
     <main>
         {% block content %}
         <!-- Contenido específico de cada página -->
         {% endblock %}
     </main>
 
-    <footer>
+    <footer class="footer sticky-footer" >
         <p>© 2024 Mi Sitio Web</p>
     </footer>
 </body>
