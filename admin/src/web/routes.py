@@ -1,5 +1,6 @@
 from flask import render_template, Blueprint
 from web.controllers.users import bp as users_bp
+from web.controllers.invoices import invoices_bp
 
 def register(app):
     # Crear un Blueprint para las rutas
@@ -13,7 +14,15 @@ def register(app):
     # Register blueprints    
     app.register_blueprint(users_bp)
 
-    #def pages_list():
+    app.register_blueprint(invoices_bp)
+
+
+
+
+
+
+    #de
+    # f pages_list():
         
      #   pages = [
       #      {

@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+<head>
+    {% block title %}Cobros{% endblock %}
+    <link rel = "stylesheet" href="google.com">
+</head>
+{% block content %}
+<h1>COBROS</h1>
+<a href="{{url_for('invoices.invoices_index')}}">LISTAR</a>
+{% endblock %}

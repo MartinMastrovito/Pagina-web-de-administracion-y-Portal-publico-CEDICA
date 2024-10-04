@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Esto es un index</h1>
+<br>
+<br>
+{% for invoice in invoices %}
+    <p>{{invoice.id}}</p>
+{% endfor %}
+{% endblock %}
