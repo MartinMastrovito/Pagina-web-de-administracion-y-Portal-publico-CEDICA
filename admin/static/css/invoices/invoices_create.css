@@ -1,0 +1,10 @@
+main{
+    display: flex;
+    justify-content: center;
+}
+.form_style{
+    display:flex;
+    flex-direction: column;
+    width:50%;
+    height:50%;
+}
