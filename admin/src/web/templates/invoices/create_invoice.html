@@ -7,33 +7,33 @@
 <body>
     <main>
         {% block content %}
-            <form action="{{ url_for('invoices.invoice_create') }}"class="form_style" action="url_for('invoices.invoice_create')" method="POST">
+            <form action="{{ url_for('invoices.invoice_create') }}" id="invoice_form" class="form_style" method="POST">
                 <label class="label" for="pay_date">Fecha de pago</label>
-                <input class="input" type="date" id="pay_date" required >
+                <input class="input" type="date" name="pay_date" required >
                 <label class="label" for="amount"> Monto</label>
-                <input class="input" type="price" id="amount" required placeholder="591.00">
+                <input class="input" type="number" min="0.00" max="10000.00" step="0.01"name="amount" required placeholder="591.00">
                 <label class="label" for="payment_method">Metodo de pago</label>
-                <select class="select" id="payment_method">
-                    <option value="1">Efectivo</option>
-                    <option value="2">Tarjeta de credito</option>
-                    <option value="3">Tarjeta de debito</option>
-                    <option value="4">Otro</option>
+                <select class="select" name="payment_method">
+                    <option value=efectivo>Efectivo</option>
+                    <option value=tarjeta_credito>Tarjeta de credito</option>
+                    <option value=tarjeta_debito>Tarjeta de debito</option>
+                    <option value=otros>Otro</option>
                 </select>
                 <label class="label" for="j&a">J&A</label>
-                <select class="select" id="j&a">
-                    <option value="1">Carlos</option>
-                    <option value="2">Bianca</option>
-                    <option value="3">Faka</option>
+                <select class="select" name="j&a">
+                    <option value=1>Carlos</option>
+                    <option value=2>Bianca</option>
+                    <option value=3>Faka</option>
                 </select>
                 <label class="label" for="recipient">Beneficiario</label>
-                <select class="select" id="recipient">
-                    <option value="1">Carlos</option>
-                    <option value="2">Bianca</option>
-                    <option value="3">Faka</option>
+                <select class="select" name="recipient">
+                    <option value=1>Carlos</option>
+                    <option value=2>Bianca</option>
+                    <option value=3>Faka</option>
                 </select>
                 <label class="label" for="observations">Observaciones</label>
                 <textarea class="textarea has-fixed-size textarea_style" name="observations"></textarea>
-                <input type="submit">
+                <button form="invoice_form" class="button">Crear cobro</button>
             </form>
     </main>
     {% endblock %}
