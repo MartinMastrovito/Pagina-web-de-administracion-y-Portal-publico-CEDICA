@@ -10,6 +10,7 @@
         href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
     >
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+    {% block imports %} {% endblock %}
 </head>
 <body>
     <header>

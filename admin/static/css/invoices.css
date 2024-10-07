@@ -1,0 +1,4 @@
+.invoices_options{
+    display:flex;
+    flex-direction: column;
+}

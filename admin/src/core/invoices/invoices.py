@@ -1,6 +1,8 @@
 from core.database import db
 from datetime import datetime
-
+"""
+    modelo de cobros 
+"""
 #lass Payment_methods(Payment_methods):
 #    cash = "efectivo"
 #    credit_card = "tarjeta de credito"
