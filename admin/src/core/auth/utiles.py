@@ -1,6 +1,8 @@
 from core.auth.users import Users
 from core.bcrypt import bcrypt
 from core.database import db
+from core.auth.models import User  
+
 
 def list_users():
     users = Users.query.all()
@@ -34,3 +36,12 @@ def update_user(user_id, **kwargs):
 def delete_user(user_id):
     db.session.query(Users).filter(Users.id==user_id).delete()
     db.session.commit()
+
+
+
+
+
+
+
+def get_user_by_email(email):
+    return User.query.filter_by(email=email).first()  # Usa el modelo para buscar el usuario
