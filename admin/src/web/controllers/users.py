@@ -9,7 +9,11 @@ bp = Blueprint("users", __name__, url_prefix="/usuarios")
 
 @bp.get("/login")
 def show_login_form():
-    return render_template("users/login.html")  # 
+    return render_template("users/login.html")
+
+@bp.get("/principal")
+def show_home():
+    return render_template("layout.html")  # 
 
 @bp.post("/login")
 def login():

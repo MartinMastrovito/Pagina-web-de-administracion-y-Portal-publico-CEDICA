@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
-    <link rel="stylesheet" href="/static/css/layout.css"> <!-- Asegúrate de tener tu archivo CSS -->
+    <link rel="stylesheet" href="/static/css/login.css"> 
 </head>
 <body>
+    <!-- Header -->
+    <header>
+        <img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}">
+        <nav>
+            <a class="button" href="{{ url_for('users.show_home') }}">Inicio</a>
+        </nav>
+    </header>
     <div class="container">
         <h2>Iniciar Sesión</h2>
 
@@ -32,10 +39,16 @@
                 <input type="password" id="password" name="password" class="form-control" required>
             </div>
 
-            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            <button type="submit" class="btn">Iniciar Sesión</button>
         </form>
 
         <p>¿No tienes una cuenta? <a href="{{ url_for('users.show_create_user_form') }}">Regístrate aquí</a>.</p>
     </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; {{ current_year }} Mi Aplicación. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 </body>
 </html>
