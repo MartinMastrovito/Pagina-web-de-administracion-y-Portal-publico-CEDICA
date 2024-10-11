@@ -21,8 +21,8 @@ def login():
     password = request.form['password']
     user = utiles.get_user_by_email(email) 
 
-    if user and check_password_hash(user['password'], password):  
-        session['user_id'] = user['id']  # Guardamos el ID del usuario en la sesión
+    if user and check_password_hash(user.password, password): 
+        session['user_id'] = user.id  # Guardamos el ID del usuario en la sesión
         flash('Inicio de sesión exitoso.', 'success')
         return redirect(url_for('users.index'))  # Redirige a la lista de usuarios
     else:
