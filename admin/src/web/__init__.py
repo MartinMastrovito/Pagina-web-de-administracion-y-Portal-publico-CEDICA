@@ -1,7 +1,7 @@
 from flask import Flask, session
 from web import routes
 from core.bcrypt import bcrypt
-from core.database import db  # Importar 'db' desde 'core.database'
+from core.database import db, db_reset # Importar 'db' desde 'core.database'
 from web.config import config
 from web.handlers.error import not_found_error
 from web.handlers.error import internal_server_error
@@ -29,6 +29,6 @@ def create_app(env="development"):
     @app.cli.command(name="reset-db")
     def reset_db():
         # Lógica para resetear la base de datos
-        database.reset()
+        db_reset()
 
     return app

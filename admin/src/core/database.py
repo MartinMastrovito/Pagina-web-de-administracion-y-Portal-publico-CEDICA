@@ -23,7 +23,7 @@ def config(app):
     
     return app
 
-def reset():
+def db_reset():
     """
         reseta la bd
     """
