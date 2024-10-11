@@ -6,6 +6,15 @@
 </head>
 <body>
     <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{message}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         {% block content %}
             <form action="{{ url_for('invoices.invoice_create') }}" id="invoice_form" class="form_style" method="POST">
                 <label class="label" for="pay_date">Fecha de pago</label>
@@ -14,19 +23,29 @@
                 <input class="input" type="number" min="0.00" max="10000.00" step="0.01"name="amount" required placeholder="591.00">
                 <label class="label" for="payment_method">Metodo de pago</label>
                 <select class="select" name="payment_method">
-                    <option value=efectivo>Efectivo</option>
-                    <option value=tarjeta_credito>Tarjeta de credito</option>
-                    <option value=tarjeta_debito>Tarjeta de debito</option>
-                    <option value=otros>Otro</option>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="tarjeta de credito">Tarjeta de credito</option>
+                    <option value="tarjeta_debito">Tarjeta de debito</option>
+                    <option value="otro">Otro</option>
                 </select>
                 <label class="label" for="j&a">J&A</label>
                 <select class="select" name="j&a">
+                <!--
+                    {%for ja in ja_list %}
+                        <option value={{ja.id}}>{{ja.nombre}}</option>
+                    {% endfor %}
+                -->
                     <option value=1>Carlos</option>
                     <option value=2>Bianca</option>
                     <option value=3>Faka</option>
                 </select>
                 <label class="label" for="recipient">Beneficiario</label>
                 <select class="select" name="recipient">
+                <!--
+                    {%for recipient in recipients_list %}
+                        <option value={{recipient.id}}>{{recipient.nombre}}</option>
+                    {% endfor %}
+                -->
                     <option value=1>Carlos</option>
                     <option value=2>Bianca</option>
                     <option value=3>Faka</option>

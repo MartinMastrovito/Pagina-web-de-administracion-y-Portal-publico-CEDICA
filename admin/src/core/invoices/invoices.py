@@ -13,7 +13,7 @@ class payment_methods(enum.Enum):
 class Invoices(db.Model):
     __tablename__="invoices"
     id = db.Column(db.Integer, primary_key=True)
-    #j_a = db.Column(db.Integer, db.ForeignKey("users.id")) de momento por falta de modelo no es asi
+    #j_a = db.Column(db.Integer, db.ForeignKey("ja.id")) de momento por falta de modelo no es asi
     j_a = db.Column(db.Integer)
     pay_date = db.Column(db.Date)
     payment_method = db.Column(db.String)

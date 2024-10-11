@@ -1,6 +1,8 @@
-from flask import render_template, request, Blueprint, redirect
+from flask import render_template, request, Blueprint, redirect, flash
 from src.core.invoices.invoices import Invoices
 from core.database import db
+from core.invoices import utiles 
+
 
 """
 Esto es un controlador relacionado con los cobros de los J&A. 
@@ -18,11 +20,25 @@ def invoices_index():
     return render_template("list_invoices.html", invoices=invoices,eliminado=True)
 
 @invoices_bp.post("/lista.cobros")
-def ola():
-    data_id = {
-        "id": request.form['id']
+def delete_invoice():
+    id_delete = request.form['id']
+    utiles.delete(id_delete)
+    return redirect("/cobros/lista-cobros")
+
+@invoices_bp.get("/actualizar-cobro/<int:invoice_id>")
+def update_invoice(invoice_id):
+    invoice = utiles.get_invoice(invoice_id)
+    return render_template("update_invoice.html",invoice=invoice)
+
+@invoices_bp.post("/actualizar-cobro/<int:invoice_id>")
+def invoice_update(invoice_id):
+    invoice_information = {
+        "pay_date":request.form['pay_date'],
+        "amount":float(request.form['amount']),
+        "observations":request.form['observations'],
+        "payment_method":request.form['payment_method']
     }
-    Invoices.delete().where(Invoices.id==id)
+    utiles.update_invoice(invoice_id, **invoice_information)
     return redirect("/cobros/lista-cobros")
 
 @invoices_bp.get("/crear-cobro")
@@ -30,16 +46,17 @@ def invoice_create():
     return render_template("create_invoice.html",invoices=invoices_bp)
 
 @invoices_bp.post("/crear-cobro")
-def create_invoice():
+def create_invoice():                
     invoice_information = {
         "pay_date": request.form['pay_date'],
-        "amount": request.form['amount'],
+        "amount": float(request.form['amount']),
         "payment_method": request.form['payment_method'],
         "j_a": request.form['j&a'],
         "recipient": request.form['recipient'],
         "observations": request.form['observations'],
     }
-    invoice_information = Invoices(**invoice_information)
-    db.session.add(invoice_information)
-    db.session.commit()
-    return redirect('/cobros')
+    if(utiles.validate(**invoice_information)):
+         utiles.create(**invoice_information)
+    else: 
+        return redirect('/cobros')
+    return redirect('/cobros/crear-cobro')

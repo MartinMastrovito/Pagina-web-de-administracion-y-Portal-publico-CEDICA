@@ -21,10 +21,11 @@
         <p>Monto: {{invoice.amount}}</p>
         <p>Beneficiario: {{invoice.recipient}}</p>
         {% if eliminado %}
-        <form action="{{ url_for('invoices.ola') }}" id="invoice_form" class="form_style" method="POST">
+        <form action="{{ url_for('invoices.delete_invoice') }}" id="invoice_delete_form" class="form_style" method="POST">
             <input type="hidden" value={{invoice.id}} name="id">        
-            <button class="button" style="background-color:#f5be6b">Eliminar</button>
+            <button class="button" name="delete" style="background-color:#f5be6b">Eliminar</button>
         </form>
+        <a class="button" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a>
         {% endif %}
     </div>
 {% endfor %}
