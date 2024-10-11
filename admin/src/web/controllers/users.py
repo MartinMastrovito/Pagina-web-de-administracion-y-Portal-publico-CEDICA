@@ -41,7 +41,6 @@ def show_create_user_form():
     return render_template("users/create_user.html")
 
 @bp.post("/crear_usuario")
-@login_required
 def create_user():
     user_data = {
         "email": request.form['email'],
@@ -50,8 +49,15 @@ def create_user():
         "enabled": 'enabled' in request.form,
         "role_id": request.form['role_id']
     }
-    utiles.create_user(**user_data)
+    user = utiles.create_user(**user_data)
+    
+    if user:
+        flash('Usuario creado exitosamente', 'success')
+    else:
+        flash('El usuario ya existe o ocurrió un error', 'danger')
+
     return redirect('/usuarios')
+
 
 @bp.get("/actualizar/<int:user_id>")
 @login_required
