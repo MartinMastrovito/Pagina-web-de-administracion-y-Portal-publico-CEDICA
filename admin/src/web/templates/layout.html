@@ -10,6 +10,7 @@
         href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
     >
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+    {% block imports %} {% endblock %}
 </head>
 <body>
     <header>
@@ -40,8 +41,5 @@
         {% endblock %}
     </main>
 
-    <footer class="footer sticky-footer" >
-        <p>© 2024 Mi Sitio Web</p>
-    </footer>
 </body>
 </html>

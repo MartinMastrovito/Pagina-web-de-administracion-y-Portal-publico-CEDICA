@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, request, redirect, url_for, flash
 from web.controllers.users import bp as users_bp
-from core.auth.utiles import login_user  # Importa la función de login
+from web.controllers.invoices import invoices_bp
 
 def register(app):
     # Crear un Blueprint para las rutas
@@ -31,10 +31,22 @@ def register(app):
     # Register blueprints    
     app.register_blueprint(users_bp)
 
-    # def pages_list():
-    #     pages = [
-    #         {
-    #             "name": "home", "url": url_for("home")
-    #         }
-    #     ]
-    #     return pages
+    app.register_blueprint(invoices_bp)
+
+
+
+
+
+
+    #de
+    # f pages_list():
+        
+     #   pages = [
+      #      {
+       #         "name":"home","url":url_for("home")
+        #    }
+        #]
+        
+       # return pages
+
+	
