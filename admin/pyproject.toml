@@ -11,10 +11,8 @@ python = "^3.12.3"
 flask = "^3.0.3"
 psycopg2-binary = "^2.9.9"
 flask-sqlalchemy = "^3.1.1"
-<<<<<<< HEAD
-=======
 flask-bcrypt = "^1.0.1"
->>>>>>> a500fb970dbd80adbb18b0efe4584acf30c84a87
+flask-migrate = "^4.0.7"
 
 
 [tool.poetry.group.dev.dependencies]
