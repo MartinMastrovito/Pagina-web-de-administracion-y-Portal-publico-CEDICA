@@ -120,16 +120,19 @@ class TipoJA(db.Model):
 class Documento(db.Model):
     __tablename__ = 'documentos'
 
-    id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(255), nullable=False)
-    tipo_documento = db.Column(db.String(255), nullable=False)  # Ej: Ficha General, Plan de Entrenamiento, etc.
-    archivo_url = db.Column(db.String(255), nullable=True)  # URL de archivo adjunto o externo
+    id = db.Column(db.Integer, primary_key=True)  # Clave primaria
+    nombre = db.Column(db.String(255), nullable=False)  # Nombre del documento
+    tipo_documento = db.Column(db.String(255), nullable=False)  # Tipo de documento (ej: Ficha General, Plan de Entrenamiento, etc.)
+    archivo_url = db.Column(db.String(255), nullable=True)  # URL del archivo adjunto o externo
 
     # Relación con Caballo
-    caballo_id = db.Column(db.Integer, db.ForeignKey('caballos.id'), nullable=False)
+    caballo_id = db.Column(db.Integer, db.ForeignKey('caballos.id'), nullable=False)  # Clave foránea que referencia a Caballo
 
     def __repr__(self):
         return f'<Documento {self.nombre}>'
+
+
+
 
 
     

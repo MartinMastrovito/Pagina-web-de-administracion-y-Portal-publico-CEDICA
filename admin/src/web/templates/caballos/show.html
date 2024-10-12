@@ -32,11 +32,24 @@
         {% endfor %}
     </ul>
 
+    <h3>Documentos Adjuntos</h3>
+    <ul>
+        {% for documento in caballo.documentos %}
+            <li>
+                <a href="{{ url_for('static', filename=documento.archivo_url) }}">{{ documento.nombre }}</a>
+                ({{ documento.tipo_documento }})
+            </li>
+        {% else %}
+            <li>No hay documentos adjuntos.</li>
+        {% endfor %}
+    </ul>
+
     <a href="{{ url_for('editar_caballo', id=caballo.id) }}">Editar</a>
     <form action="{{ url_for('eliminar_caballo', id=caballo.id) }}" method="POST">
         <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este caballo?')">Eliminar</button>
     </form>
 
     <a href="{{ url_for('listar_caballos') }}">Volver al listado</a>
+    <a href="{{ url_for('subir_documento', id=caballo.id) }}">Adjuntar Nuevo Documento</a>
 </body>
 </html>
