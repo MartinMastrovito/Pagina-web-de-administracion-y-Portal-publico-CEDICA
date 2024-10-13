@@ -13,10 +13,10 @@ def delete(id_delete):
 
 def validate(**datos):
     payment_methods_list = [
-        "efectivo",
-        "tarjeta de credito",
-        "tarjeta de debito",
-        "otro"
+        "Efectivo",
+        "Tarjeta de credito",
+        "Tarjeta de debito",
+        "Otro"
     ]
     payment_method = datos.get("payment_method")
     if(not payment_method in payment_methods_list):

@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 <header>
     {% block imports %}
-        <style>
-            .box{
-                background-color:rgb(174, 235, 225);
-            }
-        </style>
+    <style>
+        .box {
+            background-color: rgb(174, 235, 225);
+        }
+    </style>
     {% endblock %}
 </header>
 {% block content %}
@@ -13,20 +13,36 @@
 <br>
 <br>
 {% for invoice in invoices %}
-    <div class="box has-background-$red">
-        <p>Id: {{invoice.id}}</p>
-        <p>j&a: {{invoice.j_a}}</p>
-        <p>Fecha de pago: {{invoice.pay_date}}</p>
-        <p>Metodo de pago: {{invoice.payment_method}}</p>
-        <p>Monto: {{invoice.amount}}</p>
-        <p>Beneficiario: {{invoice.recipient}}</p>
-        {% if eliminado %}
-        <form action="{{ url_for('invoices.delete_invoice') }}" id="invoice_delete_form" class="form_style" method="POST">
-            <input type="hidden" value={{invoice.id}} name="id">        
-            <button class="button" name="delete" style="background-color:#f5be6b">Eliminar</button>
-        </form>
-        <a class="button" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a>
-        {% endif %}
-    </div>
+<div class="box has-background-$red">
+    <p>Id: {{invoice.id}}</p>
+    <p>j&a: {{invoice.j_a}}</p>
+    <p>Fecha de pago: {{invoice.pay_date}}</p>
+    <p>Metodo de pago: {{invoice.payment_method}}</p>
+    <p>Monto: {{invoice.amount}}</p>
+    <p>Beneficiario: {{invoice.recipient}}</p>
+    {% if eliminado %}
+    <form action="{{ url_for('invoices.delete_invoice') }}" id="invoice_delete_form" class="form_style" method="POST">
+        <input type="hidden" value={{invoice.id}} name="id">
+        <button class="button" name="delete" style="background-color:#f5be6b">Eliminar</button>
+    </form>
+    <a class="button" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a>
+    {% endif %}
+</div>
 {% endfor %}
+<div class="page-items">
+    <p>{{invoices.first}} - {{invoices.last}} of {{invoices.total}} </p>
+</div>
+<div class="pagination">
+    {% for page in invoices.iter_pages() %}
+        {% if page %}
+            {% if page != invoices.page %}
+                <a href="{{ url_for('invoices.invoices_index',page=page) }}">{{page}}</a>
+            {% else %}
+                <strong>{{page}}</strong>
+            {% endif %}
+        {% else %}
+            <span class="ellipsis">...</span>
+        {% endif %}
+    {% endfor %}
+</div>
 {% endblock %}

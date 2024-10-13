@@ -14,16 +14,16 @@ invoices_bp = Blueprint("invoices", __name__,url_prefix="/cobros", template_fold
 def invoices_menu():
     return render_template("invoices_menu.html",invoices=invoices_bp)
 
-@invoices_bp.get("/lista-cobros")
-def invoices_index():
-    invoices = Invoices.query.all()
+@invoices_bp.get("/lista-cobros/<int:page>")
+def invoices_index(page):
+    invoices = db.paginate(db.select(Invoices),page=page,max_per_page=10)
     return render_template("list_invoices.html", invoices=invoices,eliminado=True)
 
-@invoices_bp.post("/lista.cobros")
+@invoices_bp.post("/lista-cobros/")
 def delete_invoice():
     id_delete = request.form['id']
     utiles.delete(id_delete)
-    return redirect("/cobros/lista-cobros")
+    return redirect("/cobros/")
 
 @invoices_bp.get("/actualizar-cobro/<int:invoice_id>")
 def update_invoice(invoice_id):
