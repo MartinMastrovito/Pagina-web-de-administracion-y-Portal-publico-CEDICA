@@ -6,9 +6,17 @@ class Config(object):
     SECRET_KEY = "grupo30"
 
 class ProductionConfig(Config):
+    MINIO_SERVER = environ.get("MINIO_SERVER")
+    MINIO_ACCESS_KEY = environ.get("MINIO_ACCESS_KEY")
+    MINIO_SECRET_KEY = environ.get("MINIO_SECRET_KEY")
+    MINIO_SECURE = True
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
 
 class DevelopmentConfig(Config):
+    MINIO_SERVER = "localhost:9000"
+    MINIO_ACCESS_KEY = "RYZT62lu0qa8LTWqQyl3"
+    MINIO_SECRET_KEY = "I94NDTB1iDXCxvifqooxFRpzEtVmQojszGv6ZNAR"
+    MINIO_SECURE = False
     DB_USER = os.getenv("DB_USER", os.getlogin())  # obtener el nombre de usuario del sistema
     DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")  # permitir que cada usuario configure su contraseña
     DB_HOST = "localhost"

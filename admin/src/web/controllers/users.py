@@ -11,6 +11,7 @@ def index():
     
     return render_template("users/list_users.html", users=users)
 
+
 @bp.get("/crear_usuario")
 def show_create_user_form():
     return render_template("users/create_user.html")
