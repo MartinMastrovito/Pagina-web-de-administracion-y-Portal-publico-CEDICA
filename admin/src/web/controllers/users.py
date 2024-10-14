@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, session, flash, url_for
-from core.database import db
+from core import db
 from flask import Blueprint
 from core.auth import utiles
 from core.auth.decorators import login_required  # Importamos el decorador

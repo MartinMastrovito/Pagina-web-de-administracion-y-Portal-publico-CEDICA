@@ -1,7 +1,7 @@
 #aca se guardan todos los metodos que se van a usar en la base de datos
 #como la comprobacion de login, por ejemplo
 from core.bcrypt import bcrypt
-from core.database import db
+from core import db
 from core.auth.models import User , Role
 
 
