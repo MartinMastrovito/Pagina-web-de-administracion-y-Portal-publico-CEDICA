@@ -10,9 +10,10 @@
     {% endblock %}
 </header>
 {% block content %}
-<h1>Esto es un index</h1>
-<br>
-<br>
+<form>
+    <input type="search" placeholder="Nombre">
+    <input type="search"
+</form>
 {% for invoice in invoices %}
 <div class="box has-background-$red">
     <p>Id: {{invoice.id}}</p>

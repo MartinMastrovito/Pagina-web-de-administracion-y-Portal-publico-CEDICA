@@ -1,19 +1,22 @@
+"""
+Esto es un controlador relacionado con los cobros de los J&A. 
+"""
 from flask import render_template, request, Blueprint, redirect, flash
 from src.core.invoices.invoices import Invoices
 from core.database import db
 from core.invoices import utiles 
 
 
-"""
-Esto es un controlador relacionado con los cobros de los J&A. 
-"""
 
 
 invoices_bp = Blueprint("invoices", __name__,url_prefix="/cobros", template_folder='../templates/invoices',static_folder="/admin/static")
+
+#Ruta del menu principal
 @invoices_bp.route("/")
 def invoices_menu():
     return render_template("invoices_menu.html",invoices=invoices_bp)
 
+#Rutas del listado de cobros
 @invoices_bp.get("/lista-cobros/<int:page>")
 def invoices_index(page):
     invoices = db.paginate(db.select(Invoices),page=page,max_per_page=10)
@@ -25,6 +28,7 @@ def delete_invoice():
     utiles.delete(id_delete)
     return redirect("/cobros/")
 
+#Ruta para actualizar cobro
 @invoices_bp.get("/actualizar-cobro/<int:invoice_id>")
 def update_invoice(invoice_id):
     invoice = utiles.get_invoice(invoice_id)
@@ -41,6 +45,7 @@ def invoice_update(invoice_id):
     utiles.update_invoice(invoice_id, **invoice_information)
     return redirect("/cobros/lista-cobros")
 
+#Rutas del creador de cobros
 @invoices_bp.get("/crear-cobro")
 def invoice_create():
     return render_template("create_invoice.html",invoices=invoices_bp)
