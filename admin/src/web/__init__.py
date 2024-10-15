@@ -5,6 +5,7 @@ from core.database import db, db_reset # Importar 'db' desde 'core.database'
 from web.config import config
 from web.handlers.error import not_found_error
 from web.handlers.error import internal_server_error
+from web.handlers.auth import check_permission
 
 def create_app(env="development"):
     app = Flask(__name__, template_folder='../web/templates', static_folder='../../static/')
@@ -23,8 +24,12 @@ def create_app(env="development"):
     # Register routes
     routes.register(app)
 
+    # Register error handlers
     app.register_error_handler(404, not_found_error)
     app.register_error_handler(500, internal_server_error)
+
+    # Register functions on jinja
+    app.jinja_env.globals.update(check_permission=check_permission)
 
     @app.cli.command(name="reset-db")
     def reset_db():
