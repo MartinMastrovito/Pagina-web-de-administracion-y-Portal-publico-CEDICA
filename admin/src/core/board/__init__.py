@@ -1,5 +1,5 @@
 from core.board.issue import Issue
-from core.database import db
+from core import db
 
 def list_issues():
     issues = Issue.query.all()
