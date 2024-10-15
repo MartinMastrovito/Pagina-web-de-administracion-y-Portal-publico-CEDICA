@@ -2,9 +2,18 @@
 #como la comprobacion de login, por ejemplo
 from core.bcrypt import bcrypt
 from core.database import db
-from core.auth.models import User , Role
+from core.auth.models import User , RolePermission, Permission
 
-
+def get_permissions(user):
+    # Obtenemos los permisos asociados al rol del usuario
+    role_permissions = (
+        db.session.query(Permission.name)
+        .join(RolePermission, RolePermission.permission_id == Permission.id)
+        .filter(RolePermission.role_id == user.role_id)
+        .all()
+    )
+    # Devuelve una lista de nombres de permisos
+    return [perm.name for perm in role_permissions]
 
 def list_users():
     users = User.query.all()
