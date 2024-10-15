@@ -1,7 +1,7 @@
 # app.py
 from src.web import create_app
 from src.core import db
-from flask_migrate import Migrate
+#from flask_migrate import Migrate
 
 app = create_app()  
 
