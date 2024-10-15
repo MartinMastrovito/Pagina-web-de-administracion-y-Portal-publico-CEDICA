@@ -1,5 +1,9 @@
 from datetime import datetime
+<<<<<<< HEAD
 from core import db 
+=======
+from core.database import db
+>>>>>>> 95f2d408430dabd205217fd9ee0ed3f0e8eea70b
 
 class Role(db.Model):
     __tablename__ = 'role'
@@ -8,6 +12,9 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
 
+    # Relación con la tabla RolePermission
+    permissions = db.relationship('Permission', secondary='role_permissions', backref='roles')
+    
     def __repr__(self):
         return f'<Role {self.name}>'
 
@@ -42,6 +49,7 @@ class MiembroEquipo(db.Model):
     __tablename__ = 'miembros_equipo'
     __table_args__ = {'extend_existing': True}
     
+<<<<<<< HEAD
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(255), nullable=False)
 
@@ -116,3 +124,7 @@ caballo_tipoja = db.Table('caballo_tipoja',
     db.Column('tipoja_id', db.Integer, db.ForeignKey('tipos_ja.id'), primary_key=True),
     extend_existing=True
 )
+=======
+    role = db.relationship('Role', backref='role_permissions')
+    permission = db.relationship('Permission', backref='role_permissions')
+>>>>>>> 95f2d408430dabd205217fd9ee0ed3f0e8eea70b
