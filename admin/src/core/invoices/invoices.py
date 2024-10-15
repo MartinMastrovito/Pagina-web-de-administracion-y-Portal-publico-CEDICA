@@ -1,15 +1,8 @@
 from core.database import db
 import enum
 from sqlalchemy import Enum
-"""
-    modelo de cobros 
-"""
-class payment_methods(enum.Enum):
-    efectivo= 1
-    tarjeta_credito= 2
-    tarjeta_debito= 3
-    otros= 4
 
+#Modelo de cobros
 class Invoices(db.Model):
     __tablename__="invoices"
     id = db.Column(db.Integer, primary_key=True)
@@ -22,3 +15,12 @@ class Invoices(db.Model):
     recipient = db.Column(db.Integer)
     observations = db.Column(db.Text, nullable=True)
 
+
+#Modelo para registrar deudores
+
+class debt_statuses(db.Model):
+        __tablename__="debt_statuses"
+        id = db.Column(db.Integer, primary_key=True)
+        """id_ja = db.COlumn(db.Integer, ForeignKey("ja.id"))"""
+        id_ja = db.Column(db.Integer)
+        debts = db.Column(db.Boolean, default=False)

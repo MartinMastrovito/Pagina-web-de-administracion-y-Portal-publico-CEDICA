@@ -11,5 +11,6 @@
 <nav class="invoices_options">
     <a class="button" href="{{url_for('invoices.invoices_index', page = 1)}}">LISTAR</a>
     <a class="button" href="{{url_for('invoices.invoice_create')}}">CREAR COBRO</a>
+    <a class="button" href="{{url_for('invoices.invoice_statuses')}}">Estado deudores</a>
 </nav>
 {% endblock %}
