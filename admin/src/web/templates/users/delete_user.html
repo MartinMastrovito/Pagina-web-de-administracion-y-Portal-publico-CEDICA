@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Eliminar usuario{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <header>
+        <h1>Estás seguro que desea eliminar a {{ user.email}} </h1>
+    </header>
+
+    <section>
+        <form action="{{ url_for('users.user_delete', user_id=user.id) }}" method="POST">
+            <div>
+                <button type="submit">Eliminar usuario</button>
+            </div>
+    </section>
+    {% endblock %}
+
+    <footer>
+        <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
+    </footer>
+
+</body>
+</html>

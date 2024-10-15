@@ -1,0 +1,1 @@
+#habia modelos declarados aca, que se movieron a models.py donde tendrian que ir los modelos

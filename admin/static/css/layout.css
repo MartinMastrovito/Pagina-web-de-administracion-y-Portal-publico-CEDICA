@@ -1,0 +1,16 @@
+body{
+    display:flex;
+    flex-direction: column;
+}
+
+header{
+    background-color:rgb(174, 235, 225);
+    display:flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+#logo{
+    width: 150px;
+    height: 50px;
+}
