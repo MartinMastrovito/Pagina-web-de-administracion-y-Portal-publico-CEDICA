@@ -3,6 +3,7 @@ from core import db
 from flask import Blueprint
 from core.auth import utiles
 from core.auth.decorators import login_required  # Importamos el decorador
+from core.auth.decorators import check  # Importamos el decorador
 from core.bcrypt import check_password_hash
 
 bp = Blueprint("users", __name__, url_prefix="/usuarios")
@@ -31,16 +32,18 @@ def login():
 
 @bp.get("/")
 @login_required
+@check("user_index")
 def index():
     users = utiles.list_users()
     return render_template("users/list_users.html", users=users)
 
 @bp.get("/crear_usuario")
-
+@check("user_new")
 def show_create_user_form():
     return render_template("users/create_user.html")
 
 @bp.post("/crear_usuario")
+@check("user_new")
 def create_user():
     user_data = {
         "email": request.form['email'],
@@ -61,12 +64,14 @@ def create_user():
 
 @bp.get("/actualizar/<int:user_id>")
 @login_required
+@check("user_update")
 def show_update_user(user_id):
     user = utiles.get_user(user_id)
     return render_template("users/update_user.html", user=user)
 
 @bp.post("/actualizar/<int:user_id>")
 @login_required
+@check("user_update")
 def user_update(user_id):
     user_data = {
         'email': request.form['email'],
@@ -79,12 +84,14 @@ def user_update(user_id):
 
 @bp.get("/eliminar/<int:user_id>")
 @login_required
+@check("user_destroy")
 def show_delete_user(user_id):
     user = utiles.get_user(user_id)
     return render_template("users/delete_user.html", user=user)
 
 @bp.post("/eliminar/<int:user_id>")
 @login_required
+@check("user_destroy")
 def user_delete(user_id):
     utiles.delete_user(user_id)
     return redirect('/usuarios')

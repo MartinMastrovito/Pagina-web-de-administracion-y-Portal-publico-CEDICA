@@ -18,7 +18,7 @@ def register(app):
         if request.method == 'POST':
             email = request.form['email']
             password = request.form['password']
-            
+        
             user = login_user(email, password)
             if user:
                 
@@ -32,7 +32,7 @@ def register(app):
     # Register blueprints    
     app.register_blueprint(users_bp)
 
-    app.register_blueprint(invoices_bp)
+    #app.register_blueprint(invoices_bp)
 
     app.register_blueprint(caballos_bp) 
 
