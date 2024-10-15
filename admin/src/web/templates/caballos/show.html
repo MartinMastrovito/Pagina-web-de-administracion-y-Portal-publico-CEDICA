@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballos/show.css') }}">
+    <title>Detalles del Caballo</title>
+</head>
+<body>
+    <h1>Detalles del Caballo: {{ caballo.nombre }}</h1>
+
+    <p><strong>Nombre:</strong> {{ caballo.nombre }}</p>
+    <p><strong>Fecha de Nacimiento:</strong> {{ caballo.fecha_nacimiento }}</p>
+    <p><strong>Sexo:</strong> {{ caballo.sexo }}</p>
+    <p><strong>Raza:</strong> {{ caballo.raza }}</p>
+    <p><strong>Pelaje:</strong> {{ caballo.pelaje }}</p>
+    <p><strong>Tipo de Ingreso:</strong> {{ caballo.tipo_ingreso }}</p>
+    <p><strong>Fecha de Ingreso:</strong> {{ caballo.fecha_ingreso }}</p>
+    <p><strong>Sede Asignada:</strong> {{ caballo.sede_asignada }}</p>
+
+    <h3>Entrenadores</h3>
+    <ul>
+        {% for entrenador in caballo.entrenadores %}
+        <li>{{ entrenador.nombre }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Tipos de J&A Asignados</h3>
+    <ul>
+        {% for tipo_ja in caballo.tipos_ja %}
+        <li>{{ tipo_ja.nombre }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Documentos Adjuntos</h3>
+    <ul>
+        {% for documento in caballo.documentos %}
+            <li>
+                <a href="{{ url_for('static', filename=documento.archivo_url) }}">{{ documento.nombre }}</a>
+                ({{ documento.tipo_documento }})
+            </li>
+        {% else %}
+            <li>No hay documentos adjuntos.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('editar_caballo', id=caballo.id) }}">Editar</a>
+    <form action="{{ url_for('eliminar_caballo', id=caballo.id) }}" method="POST">
+        <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este caballo?')">Eliminar</button>
+    </form>
+
+    <a href="{{ url_for('listar_caballos') }}">Volver al listado</a>
+    <a href="{{ url_for('subir_documento', id=caballo.id) }}">Adjuntar Nuevo Documento</a>
+</body>
+</html>
