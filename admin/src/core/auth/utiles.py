@@ -2,8 +2,8 @@
 #como la comprobacion de login, por ejemplo
 from core.bcrypt import bcrypt
 from core import db
-from core.auth.models import User , Role
-from core.auth.models import  RolePermission, Permission
+from core.auth.models.model_user import User , Role
+from core.auth.models.model_permission import  RolePermission, Permission
 
 def get_permissions(user):
     # Obtenemos los permisos asociados al rol del usuario
