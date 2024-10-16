@@ -6,7 +6,13 @@ class Config(object):
     SECRET_KEY = "grupo30"
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = environ.get("postgresql://grupo30:ipltTtE2u7Jt59cGJOQU@127.0.0.1:5432/grupo30")
+    """Configuracion de produccion."""
+    SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_size": 10,
+        "pool_recycle": 60,
+        "pool_pre_ping": True,
+    }
 
 class DevelopmentConfig(Config):
     DB_USER = os.getenv("DB_USER", os.getlogin())  # obtener el nombre de usuario del sistema
