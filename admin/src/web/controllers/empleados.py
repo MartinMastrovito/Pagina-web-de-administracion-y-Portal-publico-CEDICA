@@ -1,13 +1,15 @@
 from flask import Blueprint, request, jsonify
-from src.core.models import Empleados
-from src.core.database import get_db
+from src.core.auth.models import Empleados
+from flask import render_template
 
-empleados_bp = Blueprint('empleados', __name__)
+empleados_bp = Blueprint('empleados', __name__, url_prefix="/menu_empleados")
+@empleados_bp.get("/empleados")
+def show_empleado_form():
+    return render_template("empleados/menu_empleados.html")
 
 # Creo empleados
 @empleados_bp.route('/empleados', methods=['POST'])
 def create_empleados():
-    db = next(db)
     data = request.get_json()
 
     nuevo_empleados = Empleados(
@@ -34,31 +36,28 @@ def create_empleados():
     return jsonify({'message': 'se creo empleados'})
 # Read empleadoss
 @empleados_bp.route('/empleados', methods=['GET'])
-def list_empleadoss():
-    db = next(get_db())
-    empleadoss = db.query(Empleados).all()
+def list_empleados():
+    empleadoss = Empleados.query.all()
     return jsonify([empleados.as_dict() for empleados in empleadoss])
 
 # Update empleados
 @empleados_bp.route('/empleados/<int:id>', methods=['PUT'])
 def update_empleados(id):
-    db = next(get_db())
     data = request.get_json()
-    empleados = db.query(empleados).filter(empleados.id == id).first()
+    empleados = empleados.query.get(id)
     if empleados:
         for key, value in data.items():
             setattr(empleados, key, value)
-        db.commit()
+        db.session.commit()
         return jsonify({'message': 'empleados updated successfully'})
     return jsonify({'message': 'error emple'}), 404
 
 # Delete empleados
 @empleados_bp.route('/empleados/<int:id>', methods=['DELETE'])
 def delete_empleados(id):
-    db = next(get_db())
-    empleados = db.query(empleados).filter(empleados.id == id).first()
+    empleados = empleados.query.get(id)
     if empleados:
-        db.delete(empleados)
-        db.commit()
+        db.session.delete(empleados)
+        db.session.commit()
         return jsonify({'message': 'se elimino emple'})
     return jsonify({'message': 'error emple'})

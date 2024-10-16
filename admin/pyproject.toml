@@ -12,11 +12,8 @@ flask = "^3.0.3"
 psycopg2-binary = "^2.9.9"
 flask-sqlalchemy = "^3.1.1"
 flask-bcrypt = "^1.0.1"
-<<<<<<< HEAD
 minio = "^7.2.9"
-=======
 flask-migrate = "^4.0.7"
->>>>>>> 8fee9b7a120b35b621612a353d27f36a3cdd3462
 
 
 [tool.poetry.group.dev.dependencies]

@@ -1,9 +1,9 @@
 from flask import render_template, request, redirect, session, flash, url_for
-from core.database import db
+from src.core.database import db
 from flask import Blueprint
-from core.auth import utiles
-from core.auth.decorators import login_required  # Importamos el decorador
-from core.bcrypt import check_password_hash
+from src.core.auth import utiles
+from src.core.auth.decorators import login_required  # Importamos el decorador
+from src.core.bcrypt import check_password_hash
 
 bp = Blueprint("users", __name__, url_prefix="/usuarios")
 

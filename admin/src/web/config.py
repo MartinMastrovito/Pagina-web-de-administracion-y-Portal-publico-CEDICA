@@ -13,7 +13,7 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
 
 class DevelopmentConfig(Config):
-    MINIO_SERVER = "localhost:9000"
+    MINIO_SERVER = "minio.proyecto2024.linti.unlp.edu.ar"
     MINIO_ACCESS_KEY = "RYZT62lu0qa8LTWqQyl3"
     MINIO_SECRET_KEY = "I94NDTB1iDXCxvifqooxFRpzEtVmQojszGv6ZNAR"
     MINIO_SECURE = False
