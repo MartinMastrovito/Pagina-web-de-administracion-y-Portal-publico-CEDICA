@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/documentos/documento_form.css') }}">
+    <title>Adjuntar Documento</title>
+</head>
+<body>
+    <h1>Adjuntar Documento a Caballo: {{ caballo.nombre }}</h1>
+
+    <form action="{{ url_for('subir_documento', id=caballo.id) }}" method="POST" enctype="multipart/form-data">
+        <label for="nombre">Nombre del Documento:</label>
+        <input type="text" name="nombre" required>
+
+        <label for="tipo_documento">Tipo de Documento:</label>
+        <input type="text" name="tipo_documento" required>
+
+        <label for="archivo">Archivo:</label>
+        <input type="file" name="archivo" accept=".pdf,.doc,.docx,.jpg,.png" required>
+
+        <button type="submit">Subir Documento</button>
+    </form>
+
+    <a href="{{ url_for('mostrar_caballo', id=caballo.id) }}">Cancelar</a>
+</body>
+</html>

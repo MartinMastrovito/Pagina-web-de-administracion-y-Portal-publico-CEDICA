@@ -1,8 +1,9 @@
 #aca se guardan todos los metodos que se van a usar en la base de datos
 #como la comprobacion de login, por ejemplo
 from core.bcrypt import bcrypt
-from core.database import db
-from core.auth.models import User , RolePermission, Permission
+from core import db
+from core.auth.models import User , Role
+from core.auth.models import  RolePermission, Permission
 
 def get_permissions(user):
     # Obtenemos los permisos asociados al rol del usuario
