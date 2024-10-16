@@ -1,3 +1,5 @@
+{% extends "layout.html" %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,15 +20,6 @@
                 <div>
                     <label for="alias">Alias</label>
                     <input type="text" id="alias" name="alias" required value="{{ user.alias }}">
-                </div>
-                <div>
-                    <label for="password">Nueva Contraseña (opcional)</label>
-                    <input type="password" id="password" name="password" placeholder="********">
-                </div>
-                <div>
-                    <label for="enabled">Usuario activo</label>
-                    <input type="checkbox" id="enabled" name="enabled" {% if user.enabled %}checked{% endif %}>
-                    <small>Marque esta casilla si el usuario está activo</small>
                 </div>
                 <div>
                     <label for="role_id">Rol</label>
