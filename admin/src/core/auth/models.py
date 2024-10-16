@@ -1,5 +1,5 @@
+from core import db
 from datetime import datetime
-from core import db 
 
 class Role(db.Model):
     __tablename__ = 'role'
@@ -8,11 +8,12 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
 
-    # Relación con la tabla RolePermission
-    permissions = db.relationship('Permission', secondary='role_permissions', backref='roles')
-    
+    # Relación con RolePermission
+    role_permissions = db.relationship('RolePermission', back_populates='role', cascade='all, delete-orphan')
+
     def __repr__(self):
         return f'<Role {self.name}>'
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -23,23 +24,37 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=False)
     alias = db.Column(db.String(50))
     enabled = db.Column(db.Boolean, default=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))  
-    role = db.relationship('Role', backref='users')  # Se mantiene la importación directa porque ya está aquí.
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    role = db.relationship('Role', backref='users')
 
     def __repr__(self):
         return f'<User {self.email}>'
 
+
 class Permission(db.Model):
     __tablename__ = 'permissions'
     __table_args__ = {'extend_existing': True}
+
     id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
+
+    # Relación con RolePermission
+    role_permissions = db.relationship('RolePermission', back_populates='permission', cascade='all, delete-orphan')
+
+    def __repr__(self):
+        return f'<Permission {self.name}>'
+
 
 class RolePermission(db.Model):
     __tablename__ = 'role_permissions'
     __table_args__ = {'extend_existing': True}
+
     role_id = db.Column(db.BigInteger, db.ForeignKey('role.id'), primary_key=True)
     permission_id = db.Column(db.BigInteger, db.ForeignKey('permissions.id'), primary_key=True)
+
+    role = db.relationship('Role', back_populates='role_permissions')
+    permission = db.relationship('Permission', back_populates='role_permissions')
 
 class MiembroEquipo(db.Model):
     __tablename__ = 'miembros_equipo'
@@ -119,6 +134,3 @@ caballo_tipoja = db.Table('caballo_tipoja',
     db.Column('tipoja_id', db.Integer, db.ForeignKey('tipos_ja.id'), primary_key=True),
     extend_existing=True
 )
-
-role = db.relationship('Role', backref='role_permissions')
-permission = db.relationship('Permission', backref='role_permissions')

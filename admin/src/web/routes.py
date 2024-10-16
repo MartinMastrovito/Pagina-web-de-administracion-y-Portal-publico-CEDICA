@@ -32,7 +32,7 @@ def register(app):
     # Register blueprints    
     app.register_blueprint(users_bp)
 
-    #app.register_blueprint(invoices_bp)
+    app.register_blueprint(invoices_bp)
 
     app.register_blueprint(caballos_bp) 
 

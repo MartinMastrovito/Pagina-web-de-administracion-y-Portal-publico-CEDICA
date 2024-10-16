@@ -5,23 +5,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>{% block title %}Eliminar usuario{% endblock %}</title>
 </head>
 <body>
     {% block content %}
-    <header>
-        <h1>Estás seguro que desea eliminar a {{ user.email}} </h1>
-    </header>
-
-    <section>
-        <form action="{{ url_for('users.user_delete', user_id=user.id) }}" method="POST">
-            <div>
-                <button type="submit">Eliminar usuario</button>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h2>Confirmación de eliminación</h2>
             </div>
-    </section>
+            <div class="card-body">
+                <p>¿Estás seguro de que deseas eliminar al usuario <strong>{{ user.email }}</strong>?</p>
+                <form action="{{ url_for('users.user_delete', user_id=user.id) }}" method="POST">
+                    <div class="d-flex justify-content-between">
+                        <!-- Botón para eliminar -->
+                        <button type="submit" class="btn btn-danger">Eliminar usuario</button>
+                        <!-- Botón para cancelar -->
+                        <a href="{{ url_for('users.index') }}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     {% endblock %}
 
-    <footer>
+    <footer class="text-center mt-5">
         <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
     </footer>
 
