@@ -1,4 +1,3 @@
-import os
 from os import environ
 
 class Config(object):
@@ -9,8 +8,8 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
 
 class DevelopmentConfig(Config):
-    DB_USER = os.getenv("DB_USER", os.getlogin())  # obtener el nombre de usuario del sistema
-    DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")  # permitir que cada usuario configure su contraseña
+    DB_USER = os.getenv("DB_USER", os.getlogin())
+    DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
     DB_HOST = "localhost"
     DB_PORT = "5432"
     DB_NAME = "grupo30"

@@ -1,6 +1,7 @@
 from flask import render_template, Blueprint, request, redirect, url_for, flash
 from web.controllers.users import bp as users_bp
 from web.controllers.invoices import invoices_bp
+from web.controllers.caballos import caballos_bp
 
 def register(app):
     # Crear un Blueprint para las rutas
@@ -17,7 +18,7 @@ def register(app):
         if request.method == 'POST':
             email = request.form['email']
             password = request.form['password']
-            
+        
             user = login_user(email, password)
             if user:
                 
@@ -33,7 +34,7 @@ def register(app):
 
     app.register_blueprint(invoices_bp)
 
-
+    app.register_blueprint(caballos_bp) 
 
 
 

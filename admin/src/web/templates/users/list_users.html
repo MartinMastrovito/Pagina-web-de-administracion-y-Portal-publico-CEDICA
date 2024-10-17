@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>{% block title %}Lista de Usuarios{% endblock %}</title>
 </head>
 <body>
@@ -16,14 +17,60 @@
     <section>
         <article>
             <h2>Usuarios registrados</h2>
-            <table>
-                <thead>
+
+            <form method="get" action="{{ url_for('users.index') }}">
+                <label for="email">Email:</label>
+                <input type="text" name="email" value="{{ request.args.get('email', '') }}">
+                
+                <label for="enabled">Activo:</label>
+                <select name="enabled">
+                    <option value="">Todos</option>
+                    <option value="si" {% if request.args.get('enabled') == 'si' %}selected{% endif %}>Sí</option>
+                    <option value="no" {% if request.args.get('enabled') == 'no' %}selected{% endif %}>No</option>
+                </select>
+                
+                <label for="role_id">Rol:</label>
+                <select name="role_id">
+                    <option value="">Todos</option>
+                    <option value="1" {% if request.args.get('role_id') == '1' %}selected{% endif %}>Técnica</option>
+                    <option value="2" {% if request.args.get('role_id') == '2' %}selected{% endif %}>Ecuestre</option>
+                    <option value="3" {% if request.args.get('role_id') == '3' %}selected{% endif %}>Voluntariado</option>
+                    <option value="4" {% if request.args.get('role_id') == '4' %}selected{% endif %}>Administración</option>
+                    <option value="5" {% if request.args.get('role_id') == '5' %}selected{% endif %}>Sysadmin</option>
+                </select>
+                
+                <button type="submit">Buscar</button>
+            </form>
+                           
+            <table class="table table-striped ">
+                <thead class="thead-dark">
                     <tr>
-                        <th>Email</th>
+                        <th>
+                            <a href="{{ url_for('users.index', sort_by='email', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                email=request.args.get('email', ''), 
+                                enabled=request.args.get('enabled', ''), 
+                                role_id=request.args.get('role_id', '')) }}">
+                                Email
+                                {% if request.args.get('sort_by') == 'email' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
                         <th>Alias</th>
                         <th>Activo</th>
                         <th>Rol</th>
-                        <th>Acciones</th> <!-- Nueva columna para las acciones -->
+                        <th>
+                            <a href="{{ url_for('users.index', sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                email=request.args.get('email', ''), 
+                                enabled=request.args.get('enabled', ''), 
+                                role_id=request.args.get('role_id', '')) }}">
+                                Fecha de creación
+                                {% if request.args.get('sort_by') == 'created_at' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,19 +80,56 @@
                         <td>{{ user.alias }}</td>
                         <td>{{ 'Sí' if user.enabled else 'No' }}</td>
                         <td>{{ user.role.name }}</td>
+                        <td>{{ user.created_at.strftime('%Y-%m-%d') if user.created_at else 'No disponible' }}</td>
                         <td>
-                            <a href="{{ url_for('users.user_update', user_id=user.id) }}" class="btn">Editar</a>
-                            <a href="{{ url_for('users.user_delete', user_id=user.id) }}" class="btn">Eliminar</a>
+                            {% if user.enabled %}
+                                <a href="{{ url_for('users.confirm_block', user_id=user.id) }}" class="btn btn-warning">Bloquear</a>
+                            {% else %}
+                                <form method="POST" action="{{ url_for('users.unblock', user_id=user.id) }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-success">Desbloquear</button>
+                                </form>
+                            {% endif %}
+                            <a href="{{ url_for('users.user_update', user_id=user.id) }}" class="btn btn-primary">Editar</a>
+                            <a href="{{ url_for('users.user_delete', user_id=user.id) }}" class="btn btn-danger">Eliminar</a>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
-            </table>
+            </table>                     
+            
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if pagination.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('users.index', page=pagination.prev_num, 
+                            email=request.args.get('email', ''), 
+                            enabled=request.args.get('enabled', ''), 
+                            role_id=request.args.get('role_id', ''), 
+                            sort_by=request.args.get('sort_by', ''), 
+                            order=request.args.get('order', '')) }}" aria-label="Previous">Anterior
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item disabled"><span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span></li>
+                    {% if pagination.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('users.index', page=pagination.next_num, 
+                            email=request.args.get('email', ''), 
+                            enabled=request.args.get('enabled', ''), 
+                            role_id=request.args.get('role_id', ''), 
+                            sort_by=request.args.get('sort_by', ''), 
+                            order=request.args.get('order', '')) }}" aria-label="Next">Siguiente
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>            
 
             <div style="margin-top: 20px;">
                 <a href="{{ url_for('users.create_user') }}" class="btn">Crear nuevo usuario</a>
             </div>
-            
         </article>
     </section>
     {% endblock %}
