@@ -18,7 +18,7 @@ def crear_empleado():
 
 # listar empleados
 @empleados_bp.route('/lista-empleados', methods=['GET'])
-def list_empleados():
+def listar_empleados():
     empleados = empleados.query.all() 
     return render_template('empleados/listar_empleados.html', empleados=empleados)
 

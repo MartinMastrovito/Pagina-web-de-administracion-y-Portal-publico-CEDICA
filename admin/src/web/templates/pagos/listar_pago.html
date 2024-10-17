@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+<head>
+    {% block imports %} 
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/pagos/pagos_list.css') }}">
+        <header>
+            <a class="btn" href="{{ url_for('users.show_home') }}">Volver al Inicio</a>
+        </header>  
+    {% endblock %}
+</head>
+<body>
+    <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        {% block content %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Beneficiario</th>
+                        <th>Monto</th>
+                        <th>Fecha de Pago</th>
+                        <th>Tipo de Pago</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pago in pagos %}
+                    <tr>
+                        <td>{{ pago.beneficiario.nombre }} {{ pago.beneficiario.apellido }}</td>
+                        <td>{{ pago.monto }}</td>
+                        <td>{{ pago.fecha_pago }}</td>
+                        <td>{{ pago.tipo_pago }}</td>
+                        <td>{{ pago.descripcion }}</td>
+                        <td>
+                            <a href="{{ url_for('pago.actualizar_pago', pago_id=pago.id) }}">Actualizar</a> |
+                            <form action="{{ url_for('pago.eliminar_pago', pago_id=pago.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Seguro que deseas eliminar este pago?');">
+                                <button type="submit">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endblock %}
+    </main>
+</body>

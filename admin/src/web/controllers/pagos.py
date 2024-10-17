@@ -1,55 +1,48 @@
 from flask import Blueprint, render_template, request, redirect
-from core.database import get_db
-from src.core.models import Pagos
+from core.database import db
+from src.core.auth.models import Pago
 from sqlalchemy.orm import Session
+from datetime import datetime
 
-pagos_bp = Blueprint("pagos", __name__, url_prefix="/pagos")
 
-@pagos_bp.route('/', methods=['GET'])
-def index():
-    db= next(get_db())
-    pagos = db.query(Pagos).all()
-    return render_template('pagos/list_pagos.html', pagos=pagos)
+pago_bp = Blueprint("pago", __name__, url_prefix="/pago", template_folder='../templates/pagos',static_folder="/admin/static")
 
-@pagos_bp.route('/crear', methods=['GET'])
+@pago_bp.route('/listar', methods=['GET'])
+def listar_pago():
+    pago = db.query(Pago).all()
+    return render_template('pagos/listar_pago.html')
+
+@pago_bp.route('/crear', methods=['GET'])
 def crear_pago_form():
     return render_template('pagos/crear_pago.html')
 
-@pagos_bp.route('/crear', methods=['POST'])
+@pago_bp.route('/crear', methods=['POST'])
 def crear_pago():
-    db= next(get_db())
     nuevo_pago = {
         "beneficiario_id": request.form.get('beneficiario_id'),
         "monto": request.form['monto'],
         "tipo_pago": request.form['tipo_pago'],
         "descripcion": request.form.get('descripcion', "")
     }
-    pago = Pagos(**nuevo_pago)
+    pago = Pago(**nuevo_pago)
     db.add(pago)
     db.commit()
-    return redirect('/pagos')
+    return redirect('/pago')
 
-@pagos_bp.route('/actualizar/<int:pago_id>', methods=['GET'])
+@pago_bp.route('/actualizar/<int:pago_id>', methods=['POST'])
 def actualizar_pago(pago_id):
-    db= next(get_db())
-    pago = db.query(Pagos).get(pago_id)
-    return render_template('pagos/actualizar_pago.html', pago=pago)
-
-@pagos_bp.route('/actualizar/<int:pago_id>', methods=['POST'])
-def actualizar_pago(pago_id):
-    db = next(get_db())
-    pago = db.query(Pagos).get(pago_id)
+    pago = db.query(Pago).get(pago_id)
     
     pago.monto = request.form['monto']####################DUDA:CON ACTUALIZAR BENEFICIARIO
+    pago.fecha = datetime.now()
     pago.tipo_pago = request.form['tipo_pago']
     pago.descripcion = request.form.get('descripcion', "")
     
     db.commit()
-    return redirect('/pagos')
+    return redirect('/pago')
 
-@pagos_bp.route('/eliminar/<int:pago_id>', methods=['POST'])
-def delete_pago(pago_id):
-    db= next(get_db())
-    db.query(Pagos).filter(pago_id == pago_id).delete()
+@pago_bp.route('/eliminar/<int:pago_id>', methods=['POST'])
+def eliminar_pago(pago_id):
+    db.query(Pago).filter(pago_id == pago_id).delete()
     db.commit()
-    return redirect('/pagos')
+    return redirect('/pago')

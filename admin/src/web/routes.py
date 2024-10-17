@@ -2,6 +2,7 @@ from flask import render_template, Blueprint, request, redirect, url_for, flash
 from src.web.controllers.users import bp as users_bp
 from src.web.controllers.invoices import invoices_bp
 from src.web.controllers.empleados import  empleados_bp
+from src.web.controllers.pagos import  pago_bp
 
 def register(app):
     # Crear un Blueprint para las rutas
@@ -35,6 +36,8 @@ def register(app):
     app.register_blueprint(invoices_bp)
 
     app.register_blueprint(empleados_bp)
+
+    app.register_blueprint(pago_bp)
    
 
 
