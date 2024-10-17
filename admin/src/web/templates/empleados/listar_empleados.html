@@ -17,10 +17,23 @@
     <a href="{{ url_for('empleados.crear_empleado') }}">Crear Nuevo Empleado</a>
     <table>
         <tr>
+            <th>ID</th>
             <th>Nombre</th>
             <th>Apellido</th>
             <th>DNI</th>
+            <th>domicilio</th>
             <th>Email</th>
+            <th>localidad</th>
+            <th>telefono</th>
+            <th>Profesión</th>
+            <th>Puesto</th>
+            <th>Fecha de Inicio</th>
+            <th>fecha de cese</th>
+            <th>Contacto de Emergencia</th>
+            <th>Obra Social</th>
+            <th>Número de Afiliado</th>
+            <th>Condición</th>
+            <th>Activo</th>
             <th>Acciones</th>
         </tr>
         {% for empleado in empleados %}
@@ -28,10 +41,21 @@
             <td>{{ empleado.nombre }}</td>
             <td>{{ empleado.apellido }}</td>
             <td>{{ empleado.dni }}</td>
+            <td>{{ empleado.domicilio }}</td>
             <td>{{ empleado.email }}</td>
+            <td>{{ empleado.telefono }}</td>
+            <td>{{ empleado.profesion }}</td>
+            <td>{{ empleado.puesto }}</td>
+            <td>{{ empleado.fecha_inicio }}</td>
+            <td>{{ empleado.fecha_cese }}</td>
+            <td>{{ empleado.contacto_emergencia }}</td>
+            <td>{{ empleado.obra_social }}</td>
+            <td>{{ empleado.numero_afiliado }}</td>
+            <td>{{ empleado.activo }}</td>
+
             <td>
-                <a href="/empleados/actualizar/{{ empleado.id }}">Actualizar</a> | 
-                <a href="/empleados/eliminar/{{ empleado.id }}">Eliminar</a>
+                <a href="{{ url_for('empleados.actualizar_empleados', id=empleado.id ) }}">Actualizar</a> | 
+                <a href="{{ url_for('empleados.eliminar_empleados' , id=empleado.id ) }}">Eliminar</a>
             </td>
         </tr>
         {% endfor %}
