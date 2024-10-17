@@ -7,10 +7,6 @@ empleados_bp = Blueprint('empleados', __name__, url_prefix="/menu_empleados", te
 def show_empleado_form():
     return render_template("empleados/menu_empleados.html")
 
-# regreso al menu emple
-def empleado_menu():
-    return render_template("menu_empleados.html",empleados=empleados_bp)
-
 @empleados_bp.get("/crear-empleado")
 def crear_empleado():
     return render_template("empleados/crear_empleado.html")

@@ -16,7 +16,9 @@
             {% endif %}
         {% endwith %}
         {% block content %}
-           
+            <header>
+                <a class="btn" href="{{ url_for('empleados.show_empleado_form') }}">Volver al Menu</a>
+            </header>
             <form action="{{ url_for('empleados.crear_empleado') }}" id="empleados_form" class="form_style" method="POST" enctype="multipart/form-data">
                 <!-- Nombre -->
                 <label for="nombre">Nombre:</label>
