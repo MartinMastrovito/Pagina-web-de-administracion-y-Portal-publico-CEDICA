@@ -22,6 +22,12 @@ def create_app(env="development"):
     # Cargar la configuración del entorno
     app.config.from_object(config[env])
 
+    #importar los modelos 
+    #from src.core.auth.models.model_caballos import Caballo
+    #from src.core.auth.models.model_JyA import TipoJA
+    #from src.core.auth.models.model_documento import Documento
+    #from src.core.auth.models.model_permission import Permission
+
     # Inicializar la base de datos y migraciones
     db.init_app(app)  # Inicializa SQLAlchemy con la app
     migrate.init_app(app, db)  # Inicializa Migrate con la app y db

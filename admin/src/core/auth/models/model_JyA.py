@@ -1,6 +1,6 @@
 from core import db
-from core.auth.models.model_tablasIntermedias import caballo_tipoja , caballo_entrenadores , caballo_conductores
-
+#from core.auth.models.model_tablasIntermedias import  caballo_entrenadores , caballo_conductores
+from core.auth.models.model_caballos import caballo_tipoja
 class TipoJA(db.Model):
     __tablename__ = 'tipos_ja'
     __table_args__ = {'extend_existing': True}
