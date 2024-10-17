@@ -13,7 +13,7 @@ def show_login_form():
 
 @bp.get("/principal")
 def show_home():
-    return render_template("layout.html")  # 
+    return render_template("home.html")  # 
 
 @bp.post("/login")
 def login():
