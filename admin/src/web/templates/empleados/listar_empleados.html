@@ -11,76 +11,31 @@
         <img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}">
         <a class="btn" href="{{ url_for('users.show_home') }}">Volver al Inicio</a>
     </header>
-    <h2>Crear empleados</h2>
+    <h2>Lista de empleados</h2>
 
-    <form action="/employees" method="POST" enctype="multipart/form-data">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
-        <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" name="apellido" required>
-        <label for="dni">DNI:</label>
-        <input type="text" id="dni" name="dni" required>
-        <label for="domicilio">Domicilio:</label>
-        <input type="text" id="domicilio" name="domicilio" required>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <label for="localidad">Localidad:</label>
-        <input type="text" id="localidad" name="localidad" required>
-        <label for="telefono">Teléfono:</label>
-        <input type="text" id="telefono" name="telefono" required>
-        <label for="profesion">Profesión:</label>
-        <select id="profesion" name="profesion" required>
-            <option value="Psicólogo/a">Psicólogo/a</option>
-            <option value="Psicomotricista">Psicomotricista</option>
-            <option value="Médico/a">Médico/a</option>
-            <option value="Kinesiólogo/a">Kinesiólogo/a</option>
-            <option value="Terapista Ocupacional">Terapista Ocupacional</option>
-            <option value="Psicopedagogo/a">Psicopedagogo/a</option>
-            <option value="Docente">Docente</option>
-            <option value="Profesor">Profesor</option>
-            <option value="Fonoaudiólogo/a">Fonoaudiólogo/a</option>
-            <option value="Veterinario/a">Veterinario/a</option>
-            <option value="Otro">Otro</option>
-        </select>
-        <label for="puesto">puesto</label>
-        <select id="puesto" name="puesto" required>
-            <option value="Administrativo/a">Administrativo/a</option>
-            <option value="Terapeuta">Terapeuta</option>
-            <option value="Conductor">Conductor</option>
-            <option value="Auxiliar de pista">Auxiliar de pista</option>
-            <option value="Herrero">Herrero</option>
-            <option value="Veterinario">Veterinario</option>
-            <option value="Entrenador de Caballos">Entrenador de Caballos</option>
-            <option value="Domador">Domador</option>
-            <option value="Profesor de Equitación">Profesor de Equitación</option>
-            <option value="Docente de Capacitación">Docente de Capacitación</option>
-            <option value="Auxiliar de mantenimiento">Auxiliar de mantenimiento</option>
-            <option value="Otro">Otro</option>
-        </select>
-        <label for="fecha_inicio">Fecha de Inicio:</label>
-        <input type="date" id="fecha_inicio" name="fecha_inicio" required>
-        <label for="fecha_cese">Fecha de Cese:</label>
-        <input type="date" id="fecha_cese" name="fecha_cese">
-        <label for="contacto_emergencia">Contacto de Emergencia (Nombre y Teléfono):</label>
-        <input type="text" id="contacto_emergencia" name="contacto_emergencia" required>
-        <label for="obra_social">Obra Social:</label>
-        <input type="text" id="obra_social" name="obra_social">
-        <label for="numero_afiliado">N° de Afiliado:</label>
-        <input type="text" id="numero_afiliado" name="numero_afiliado">
-        <label for="condicion">Condición:</label>
-        <select id="condicion" name="condicion" required>
-            <option value="Voluntario">Voluntario</option>
-            <option value="Personal Rentado">Personal Rentado</option>
-        </select>
-        <label for="activo">Activo:</label>
-        <select id="activo" name="activo" required>
-            <option value="true">Sí</option>
-            <option value="false">No</option>
-        </select>
-        <!-- realizar la subida de archivos con Minio, con opcion multiple-->
-        <label for="documentacion">Subir Documentación Complementaria:</label>
-        <input type="file" id="documentacion" name="documentacion[]" multiple>
-        <button type="submit"  class="btn">Crear Empleado</button>
-    </form>
+    <h1>Listado de Empleados</h1>
+    <a href="{{ url_for('empleados.crear_empleado') }}">Crear Nuevo Empleado</a>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+        {% for empleado in empleados %}
+        <tr>
+            <td>{{ empleado.nombre }}</td>
+            <td>{{ empleado.apellido }}</td>
+            <td>{{ empleado.dni }}</td>
+            <td>{{ empleado.email }}</td>
+            <td>
+                <a href="/empleados/actualizar/{{ empleado.id }}">Actualizar</a> | 
+                <a href="/empleados/eliminar/{{ empleado.id }}">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
 </body>
 </html>

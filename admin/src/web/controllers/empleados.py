@@ -11,11 +11,10 @@ def show_empleado_form():
 def crear_empleado():
     return render_template("empleados/crear_empleado.html")
 
-# Read empleadoss
-@empleados_bp.route('/empleados', methods=['GET'])
+@empleados_bp.route('/lista-empleados', methods=['GET'])
 def list_empleados():
-    empleadoss = Empleados.query.all()
-    return jsonify([empleados.as_dict() for empleados in empleadoss])
+    empleados = Empleados.query.all() 
+    return render_template('empleados/listar_empleados.html', empleados=empleados)
 
 # Update empleados
 @empleados_bp.route('/empleados/<int:id>', methods=['PUT'])
