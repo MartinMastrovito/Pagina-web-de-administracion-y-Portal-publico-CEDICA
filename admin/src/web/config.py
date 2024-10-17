@@ -15,7 +15,7 @@ class ProductionConfig(Config):
     }
 
 class DevelopmentConfig(Config):
-    DB_USER = os.getenv("DB_USER", os.getlogin())  # obtener el nombre de usuario del sistema
+    DB_USER = os.getenv("DB_USER", "tu_user_name")  # obtener el nombre de usuario del sistema
     DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")  # permitir que cada usuario configure su contraseña
     DB_HOST = "localhost"
     DB_PORT = "5432"
