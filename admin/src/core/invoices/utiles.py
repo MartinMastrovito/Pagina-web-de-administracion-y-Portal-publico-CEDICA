@@ -1,5 +1,7 @@
 from core.database import db
 from src.core.invoices.invoices import Invoices
+from src.core.models import User
+
 
 def create(**kwargs):
     invoice = Invoices(**kwargs)
@@ -38,3 +40,13 @@ def update_invoice(invoice_id,**kwargs):
     db.session.commit()
     
     return invoice
+
+def get_ja():
+    return 
+
+def get_recipients():
+    recipients = Empleados.query.all()
+    recipients_list = [
+        id = recipient.
+    ]
+    for recipient in recipients:

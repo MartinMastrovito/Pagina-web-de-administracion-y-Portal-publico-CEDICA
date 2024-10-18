@@ -14,6 +14,8 @@ invoices_bp = Blueprint("invoices", __name__,url_prefix="/cobros", template_fold
 #Ruta del menu principal
 @invoices_bp.route("/")
 def invoices_menu():
+    ja_data = 
+    recipient_data = 
     return render_template("invoices_menu.html",invoices=invoices_bp)
 
 #Rutas del listado de cobros

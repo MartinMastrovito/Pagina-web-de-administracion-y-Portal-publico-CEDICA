@@ -1,5 +1,5 @@
 from os import environ
-
+import os 
 class Config(object):
     TESTING = False
     SECRET_KEY = "grupo30"
