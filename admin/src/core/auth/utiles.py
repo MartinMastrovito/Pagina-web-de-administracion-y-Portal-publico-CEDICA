@@ -53,19 +53,6 @@ def search_users(email=None, enabled=None, role_id=None, sort_by='email', order=
     # Paginación
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
-def get_role_id_by_name(role_name):
-    # Asegúrate de que el nombre del rol esté correctamente formateado
-    role = Role.query.filter_by(name=role_name.lower()).first()
-    return role.id if role else None
-
-
-
-def get_users_by_enabled(is_enabled):
-    return User.query.filter_by(enabled=is_enabled)
-
-def get_users_by_role(role_name):
-    return User.query.join(Role).filter(Role.name == role_name)
-
 def create_user(**kwargs):
     
     existing_user = get_user_by_email(kwargs["email"])
