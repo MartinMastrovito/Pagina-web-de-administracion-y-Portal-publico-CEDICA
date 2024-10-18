@@ -3,7 +3,7 @@ from flask import Flask
 from flask_migrate import Migrate  # Importar Migrate
 from web import routes
 from core.bcrypt import bcrypt
-from core.database import db_reset 
+from core.database import db_reset, init_app
 from core.database import db # Importar 'db' desde 'core.database'
 from web.config import config
 from web.handlers.error import not_found_error
@@ -29,7 +29,7 @@ def create_app(env="development"):
     #from src.core.auth.models.model_permission import Permission
 
     # Inicializar la base de datos y migraciones
-    db.init_app(app)  # Inicializa SQLAlchemy con la app
+    init_app(app)  # Inicializa SQLAlchemy con la app
     migrate.init_app(app, db)  # Inicializa Migrate con la app y db
 
     # Inicializar Bcrypt
