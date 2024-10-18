@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash,jsonify
 from src.core.database import db
-from src.core.auth.models.model_caballos import Caballo, MiembroEquipo
+from src.core.auth.models.model_caballos import Caballo
+from src.core.auth.models.model_miembroEquipo import MiembroEquipo
 from src.core.auth.models.model_documento import Documento
 from src.core.auth.models.model_JyA import TipoJA
 from werkzeug.utils import secure_filename
