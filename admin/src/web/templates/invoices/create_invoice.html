@@ -30,14 +30,9 @@
                 </select>
                 <label class="label" for="j&a">J&A</label>
                 <select class="select" name="j&a">
-                <!--
-                    {%for ja in ja_list %}
-                        <option value={{ja.id}}>{{ja.nombre}}</option>
+                    {% for ja in jinetes_amazonas.keys() %}
+                        <option value={{ja}}>{{jinetes_amazonas[ja]}}</option>
                     {% endfor %}
-                -->
-                    <option value=1>Carlos</option>
-                    <option value=2>Bianca</option>
-                    <option value=3>Faka</option>
                 </select>
                 <label class="label" for="recipient">Beneficiario</label>
                 <select class="select" name="recipient">

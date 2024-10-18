@@ -1,6 +1,6 @@
 from core.database import db
 from src.core.invoices.invoices import Invoices
-from src.core.models import User
+from src.core.models.model_JyA import JYA
 
 
 def create(**kwargs):
@@ -42,11 +42,11 @@ def update_invoice(invoice_id,**kwargs):
     return invoice
 
 def get_ja():
-    return 
+    ja_query = JYA.query.all()
+    ja_dictionary = {}
+    for ja in ja_query:
+        ja_dictionary[ja.id] = ja.nombre + " " + ja.apellido
+    return ja_dictionary
 
 def get_recipients():
-    recipients = Empleados.query.all()
-    recipients_list = [
-        id = recipient.
-    ]
-    for recipient in recipients:
+    pass

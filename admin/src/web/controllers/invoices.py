@@ -14,8 +14,6 @@ invoices_bp = Blueprint("invoices", __name__,url_prefix="/cobros", template_fold
 #Ruta del menu principal
 @invoices_bp.route("/")
 def invoices_menu():
-    ja_data = 
-    recipient_data = 
     return render_template("invoices_menu.html",invoices=invoices_bp)
 
 #Rutas del listado de cobros
@@ -50,7 +48,8 @@ def invoice_update(invoice_id):
 #Rutas del creador de cobros
 @invoices_bp.get("/crear-cobro")
 def invoice_create():
-    return render_template("create_invoice.html",invoices=invoices_bp)
+    ja_dictionary = utiles.get_ja()
+    return render_template("create_invoice.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary)
 
 @invoices_bp.post("/crear-cobro")
 def create_invoice():                
