@@ -1,7 +1,6 @@
 from flask import render_template, request, redirect, session, flash, url_for
 from flask import Blueprint
 from core.auth import utiles
-from core.auth.utiles import get_user, block_user, unblock_user
 from core.auth.decorators import login_required  # Importamos el decorador
 from core.auth.decorators import check  # Importamos el decorador
 from core.bcrypt import check_password_hash
@@ -45,7 +44,7 @@ def index():
     users_pagination = utiles.search_users(
         email=email,
         enabled=enabled,
-        role_id=role_id,  # Cambiado aquí
+        role_id=role_id,
         sort_by=sort_by,
         order=order,
         page=page,
@@ -123,14 +122,14 @@ def user_delete(user_id):
 @login_required
 @check("user_update")
 def confirm_block(user_id):
-    user = get_user(user_id)
+    user = utiles.get_user(user_id)
     return render_template("users/confirm_block.html", user=user)
 
 @bp.post("/block/<int:user_id>")
 @login_required
 @check("user_update")
 def block(user_id):
-    if block_user(user_id):
+    if utiles.block_user(user_id):
         flash("Usuario bloqueado exitosamente.")
     else:
         flash("No se puede bloquear el usuario.")
@@ -141,7 +140,7 @@ def block(user_id):
 @check("user_update")
 def unblock(user_id):
     print("TEASTEANDO")
-    if unblock_user(user_id):
+    if utiles.unblock_user(user_id):
         flash("Usuario desbloqueado exitosamente.")
     else:
         flash("No se puede desbloquear el usuario.")

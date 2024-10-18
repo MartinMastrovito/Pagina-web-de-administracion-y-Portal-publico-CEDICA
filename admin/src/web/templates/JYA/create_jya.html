@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>{% block title %}Crear J&A{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <header>
+        <h1>Crear Nuevo J&A</h1>
+    </header>
+
+    <section>
+        <article>
+            <form method="post" action="{{ url_for('crud_JyA.create_jya') }}">
+                <!-- Datos personales -->
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" class="form-control" id="apellido" name="apellido" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dni">DNI:</label>
+                    <input type="text" class="form-control" id="dni" name="dni" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="edad">Edad:</label>
+                    <input type="number" class="form-control" id="edad" name="edad" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_de_nacimiento" required>
+                </div>
+
+                <!-- Lugar de nacimiento -->
+                <div class="form-group">
+                    <label for="lugar_nacimiento_localidad">Lugar de Nacimiento:</label>
+                    <input type="text" class="form-control" id="lugar_nacimiento_localidad" name="lugar_nacimiento_localidad" placeholder="Localidad" required>
+                    <input type="text" class="form-control mt-2" id="lugar_nacimiento_provincia" name="lugar_nacimiento_provincia" placeholder="Provincia" required>
+                </div>
+
+                <!-- Domicilio actual -->
+                <div class="form-group">
+                    <label for="domicilio_actual_calle">Domicilio Actual:</label>
+                    <input type="text" class="form-control" id="domicilio_actual_calle" name="domicilio_actual_calle" placeholder="Calle" required>
+                    <input type="text" class="form-control mt-2" id="domicilio_actual_numero" name="domicilio_actual_numero" placeholder="Número" required>
+                    <input type="text" class="form-control mt-2" id="domicilio_actual_departamento" name="domicilio_actual_departamento" placeholder="Departamento (opcional)">
+                    <input type="text" class="form-control mt-2" id="domicilio_actual_localidad" name="domicilio_actual_localidad" placeholder="Localidad" required>
+                    <input type="text" class="form-control mt-2" id="domicilio_actual_provincia" name="domicilio_actual_provincia" placeholder="Provincia" required>
+                </div>
+
+                <!-- Teléfono actual -->
+                <div class="form-group">
+                    <label for="telefono_actual">Teléfono Actual:</label>
+                    <input type="text" class="form-control" id="telefono_actual" name="telefono_actual" required>
+                </div>
+
+                <!-- Contacto de emergencia -->
+                <div class="form-group">
+                    <label for="contacto_emergencia_nombre">Contacto de Emergencia:</label>
+                    <input type="text" class="form-control" id="contacto_emergencia_nombre" name="contacto_emergencia_nombre" placeholder="Nombre" required>
+                    <input type="text" class="form-control mt-2" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono" placeholder="Teléfono" required>
+                </div>
+
+                <!-- Becado y porcentaje de beca -->
+                <div class="form-group">
+                    <label for="becado">Becado:</label>
+                    <select class="form-control" id="becado" name="becado" required>
+                        <option value="" disabled selected>Seleccione una opción</option> <!-- Opción por defecto -->
+                        <option value="true">Sí</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="porcentaje_beca">Porcentaje de Beca:</label>
+                    <input type="number" step="0.01" class="form-control" id="porcentaje_beca" name="porcentaje_beca">
+                </div>
+
+                <!-- Profesionales que lo atienden -->
+                <div class="form-group">
+                    <label for="profesionales_atendiendo">Profesionales que lo atienden:</label>
+                    <textarea class="form-control" id="profesionales_atendiendo" name="profesionales_atendiendo" rows="3"></textarea>
+                </div>
+
+                <!-- Botón de creación -->
+                <button type="submit" class="btn btn-primary">Crear Usuario</button>
+            </form>
+        </article>
+    </section>
+
+    {% endblock %}
+
+    <footer>
+        <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
+    </footer>
+
+</body>
+</html>

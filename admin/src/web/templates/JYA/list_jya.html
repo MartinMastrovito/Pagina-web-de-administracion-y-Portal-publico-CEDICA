@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>{% block title %}Lista de J&A{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <header>
+        <h1>Administración de J&A</h1>
+    </header>
+
+    <section>
+        <article>
+            <h2>J&A registrados</h2>
+
+            <!-- Formulario de búsqueda -->
+            <form method="get" action="{{ url_for('crud_JyA.index') }}">
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" value="{{ request.args.get('nombre', '') }}">
+                
+                <label for="apellido">Apellido:</label>
+                <input type="text" name="apellido" value="{{ request.args.get('apellido', '') }}">
+
+                <label for="dni">DNI:</label>
+                <input type="text" name="dni" value="{{ request.args.get('dni', '') }}">
+
+                <label for="profesionales_atendiendo">Atendido por:</label> <!-- Corrección de la etiqueta -->
+                <input type="text" name="profesionales_atendiendo" value="{{ request.args.get('profesionales_atendiendo', '') }}">
+                
+                <button type="submit">Buscar</button>
+            </form>
+                           
+            <!-- Tabla de resultados -->
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <!-- Columna Nombre con enlace para ordenar -->
+                        <th>
+                            <a href="{{ url_for('crud_JyA.index', sort_by='nombre', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                nombre=request.args.get('nombre', ''), 
+                                apellido=request.args.get('apellido', ''),
+                                profesionales_atendiendo=request.args.get('profesionales_atendiendo', '')) }}">
+                                Nombre
+                                {% if request.args.get('sort_by') == 'nombre' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+
+                        <!-- Columna Apellido con enlace para ordenar -->
+                        <th>
+                            <a href="{{ url_for('crud_JyA.index', sort_by='apellido', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                nombre=request.args.get('nombre', ''), 
+                                apellido=request.args.get('apellido', ''), 
+                                profesionales_atendiendo=request.args.get('profesionales_atendiendo', '')) }}">
+                                Apellido
+                                {% if request.args.get('sort_by') == 'apellido' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+
+                        <!-- Columna DNI -->
+                        <th>DNI</th>
+
+                        <!-- Columna Atendido por -->
+                        <th>Atendido por</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for jya in jyas %}
+                    <tr>
+                        <td>{{ jya.nombre }}</td>
+                        <td>{{ jya.apellido }}</td>
+                        <td>{{ jya.dni }}</td>
+                        <td>{{ jya.profesionales_atendiendo }}</td>
+                        <td>
+                            <a href="{{ url_for('crud_JyA.show_update_jya', jya_dni=jya.dni) }}" class="btn btn-danger">Ver más</a>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('crud_JyA.show_delete_jya', jya_dni=jya.dni) }}" class="btn btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>                     
+            
+            <!-- Paginación -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if pagination.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('crud_JyA.index', page=pagination.prev_num, 
+                            nombre=request.args.get('nombre', ''), 
+                            apellido=request.args.get('apellido', ''), 
+                            dni=request.args.get('dni', ''), 
+                            profesionales_atendiendo=request.args.get('profesionales_atendiendo', ''),
+                            sort_by=request.args.get('sort_by', ''), 
+                            order=request.args.get('order', '')) }}" aria-label="Previous">Anterior
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item disabled"><span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span></li>
+                    {% if pagination.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('crud_JyA.index', page=pagination.next_num, 
+                            nombre=request.args.get('nombre', ''), 
+                            apellido=request.args.get('apellido', ''), 
+                            dni=request.args.get('dni', ''), 
+                            profesionales_atendiendo=request.args.get('profesionales_atendiendo', ''),
+                            sort_by=request.args.get('sort_by', ''), 
+                            order=request.args.get('order', '')) }}" aria-label="Next">Siguiente
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+            <div style="margin-top: 20px;">
+                <a href="{{ url_for('crud_JyA.create_jya') }}" class="btn">Crear nuevo J&A</a>
+            </div>
+
+        </article>
+    </section>
+    {% endblock %}
+
+    <footer>
+        <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
+    </footer>
+
+</body>
+</html>
