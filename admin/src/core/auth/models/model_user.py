@@ -1,4 +1,4 @@
-from core import db
+from src.core.database import db
 
 class Role(db.Model):
     __tablename__ = 'role'

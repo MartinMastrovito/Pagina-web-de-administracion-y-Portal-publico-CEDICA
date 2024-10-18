@@ -1,4 +1,4 @@
-from core import db
+from src.core.database import db
 from core.auth.models.model_documento import Documento
 #from core.auth.models.model_tablasIntermedias import  caballo_entrenadores , caballo_conductores
 

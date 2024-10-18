@@ -1,4 +1,4 @@
-from core import db
+from src.core.database import db
 
 class Documento(db.Model):
     __tablename__ = 'documentos'
