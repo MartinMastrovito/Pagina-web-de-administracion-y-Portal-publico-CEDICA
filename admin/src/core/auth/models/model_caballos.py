@@ -1,6 +1,5 @@
 from src.core.database import db
-from core.auth.models.model_documento import Documento
-#from core.auth.models.model_tablasIntermedias import  caballo_entrenadores , caballo_conductores
+#from core.auth.models.model_documento import Documento
 
 
 caballo_entrenadores = db.Table('caballo_entrenadores', 
@@ -22,8 +21,8 @@ class MiembroEquipo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(255), nullable=False)
 
-    entrenados = db.relationship('Caballo', secondary='caballo_entrenadores', back_populates='entrenadores')
-    conducidos = db.relationship('Caballo', secondary='caballo_conductores', back_populates='conductores')
+    #entrenados = db.relationship('Caballo', secondary='caballo_entrenadores', back_populates='entrenadores')
+    #conducidos = db.relationship('Caballo', secondary='caballo_conductores', back_populates='conductores')
 
     def __repr__(self):
         return f'<MiembroEquipo {self.nombre}>'
@@ -39,6 +38,14 @@ caballo_tipoja = db.Table('caballo_tipoja',
 class Caballo(db.Model):
     __tablename__ = 'caballos'
     __table_args__ = {'extend_existing': True}
+
+    entrenadores = db.relationship('MiembroEquipo', secondary='caballo_entrenadores')
+    conductores = db.relationship('MiembroEquipo', secondary='caballo_conductores')
+
+    documentos = db.relationship('Documento', lazy=True)
+
+    tipos_ja = db.relationship('TipoJA', secondary=caballo_tipoja)
+
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(255), nullable=False)
     fecha_nacimiento = db.Column(db.Date, nullable=False)
@@ -49,12 +56,7 @@ class Caballo(db.Model):
     fecha_ingreso = db.Column(db.Date, nullable=False)
     sede_asignada = db.Column(db.String(255), nullable=False)
 
-    entrenadores = db.relationship('MiembroEquipo', secondary='caballo_entrenadores', back_populates='entrenados')
-    conductores = db.relationship('MiembroEquipo', secondary='caballo_conductores', back_populates='conductores')
-
-    documentos = db.relationship('Documento', backref='caballo', lazy=True)
-
-    tipos_ja = db.relationship('TipoJA', secondary=caballo_tipoja, back_populates='caballos')
+    
 
     def __repr__(self):
         return f'<Caballo {self.nombre}>'
