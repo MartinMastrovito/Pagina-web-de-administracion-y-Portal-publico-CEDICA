@@ -3,8 +3,8 @@ from flask import Flask
 from flask_migrate import Migrate  # Importar Migrate
 from web import routes
 from core.bcrypt import bcrypt
-from core.database import db_reset, init_app
-from core.database import db # Importar 'db' desde 'core.database'
+from src.core.database import db_reset, init_app
+from src.core.database import db # Importar 'db' desde 'core.database'
 from web.config import config
 from web.handlers.error import not_found_error
 from web.handlers.error import internal_server_error
