@@ -71,5 +71,4 @@ def create_invoice():
 #ruta para el listado de los estados de deuda
 @invoices_bp.get("/deudores")
 def invoice_statuses():
-    sexo = [1,2,3,4,5]
-    return render_template("statuses_list.html",sexo=sexo)
+    return render_template("statuses_list.html",)
