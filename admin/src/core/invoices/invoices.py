@@ -1,6 +1,6 @@
 from core import db
 import enum
-from sqlalchemy import Enum
+from sqlalchemy import Enum, ForeignKey
 
 #Modelo de cobros
 class Invoices(db.Model):
@@ -21,6 +21,5 @@ class Invoices(db.Model):
 class debt_statuses(db.Model):
         __tablename__="debt_statuses"
         id = db.Column(db.Integer, primary_key=True)
-        """id_ja = db.COlumn(db.Integer, ForeignKey("ja.id"))"""
-        id_ja = db.Column(db.Integer)
+        id_ja = db.Column(db.Integer, ForeignKey("ja.id"))
         debts = db.Column(db.Boolean, default=False)
