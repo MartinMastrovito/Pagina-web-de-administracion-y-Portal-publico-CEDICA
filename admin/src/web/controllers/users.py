@@ -14,7 +14,7 @@ def show_login_form():
 
 @bp.get("/principal")
 def show_home():
-    return render_template("layout.html")  # 
+    return render_template("layout.html")
 
 @bp.post("/login")
 def login():
@@ -34,15 +34,38 @@ def login():
 @login_required
 @check("user_index")
 def index():
-    users = utiles.list_users()
-    return render_template("users/list_users.html", users=users)
+    email = request.args.get('email')
+    enabled = request.args.get('enabled')
+    role_id = request.args.get('role_id', type=int)
+    sort_by = request.args.get('sort_by', 'email')
+    order = request.args.get('order', 'asc')
+    page = request.args.get('page', 1, type=int)
+    per_page = 25
+
+    users_pagination = utiles.search_users(
+        email=email,
+        enabled=enabled,
+        role_id=role_id,
+        sort_by=sort_by,
+        order=order,
+        page=page,
+        per_page=per_page
+    )
+
+    return render_template(
+        "users/list_users.html",
+        users=users_pagination.items,
+        pagination=users_pagination
+    )
 
 @bp.get("/crear_usuario")
+@login_required
 @check("user_new")
 def show_create_user_form():
     return render_template("users/create_user.html")
 
 @bp.post("/crear_usuario")
+@login_required
 @check("user_new")
 def create_user():
     user_data = {
@@ -56,10 +79,10 @@ def create_user():
     
     if user:
         flash('Usuario creado exitosamente', 'success')
+        return redirect('/usuarios')
     else:
         flash('El usuario ya existe o ocurrió un error', 'danger')
-
-    return redirect('/usuarios')
+        return redirect("/usuarios/crear_usuario")
 
 
 @bp.get("/actualizar/<int:user_id>")
@@ -95,3 +118,31 @@ def show_delete_user(user_id):
 def user_delete(user_id):
     utiles.delete_user(user_id)
     return redirect('/usuarios')
+
+@bp.get("/block/<int:user_id>")
+@login_required
+@check("user_update")
+def confirm_block(user_id):
+    user = utiles.get_user(user_id)
+    return render_template("users/confirm_block.html", user=user)
+
+@bp.post("/block/<int:user_id>")
+@login_required
+@check("user_update")
+def block(user_id):
+    if utiles.block_user(user_id):
+        flash("Usuario bloqueado exitosamente.")
+    else:
+        flash("No se puede bloquear el usuario.")
+    return redirect(url_for("users.index"))
+
+@bp.post("/unblock/<int:user_id>")
+@login_required
+@check("user_update")
+def unblock(user_id):
+    print("TEASTEANDO")
+    if utiles.unblock_user(user_id):
+        flash("Usuario desbloqueado exitosamente.")
+    else:
+        flash("No se puede desbloquear el usuario.")
+    return redirect(url_for("users.index"))

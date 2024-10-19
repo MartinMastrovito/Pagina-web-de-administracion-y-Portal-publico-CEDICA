@@ -1,4 +1,3 @@
-# src/web/__init__.py
 from flask import Flask
 from flask_migrate import Migrate  # Importar Migrate
 from web import routes
