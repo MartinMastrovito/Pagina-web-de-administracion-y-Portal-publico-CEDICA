@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<header>
+    <h1>Documentos del J&A</h1>
+</header>
+
+<section>
+    <article>
+        <h2>Documentos registrados</h2>
+
+        <!-- Formulario de búsqueda -->
+        <form method="get" action="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni) }}">
+            
+            <label for="nombre_documento">Nombre del Documento:</label>
+            <input type="text" class="form-control" name="nombre_documento" value="{{ request.args.get('nombre_documento', '') }}">
+            
+            <label for="tipo_documento">Tipo de Documento:</label>
+            <select class="form-control" id="tipo_documento" name="tipo_documento">
+                <option value="" disabled selected>Seleccione una opción</option>
+                <option value="entrevista" {% if request.args.get('tipo_documento') == 'entrevista' %}selected{% endif %}>Entrevista</option>
+                <option value="evaluacion" {% if request.args.get('tipo_documento') == 'evaluacion' %}selected{% endif %}>Evaluación</option>
+                <option value="planificaciones" {% if request.args.get('tipo_documento') == 'planificaciones' %}selected{% endif %}>Planificaciones</option>
+                <option value="evolucion" {% if request.args.get('tipo_documento') == 'evolucion' %}selected{% endif %}>Evolución</option>
+                <option value="cronicas" {% if request.args.get('tipo_documento') == 'cronicas' %}selected{% endif %}>Crónicas</option>
+                <option value="documental" {% if request.args.get('tipo_documento') == 'documental' %}selected{% endif %}>Documental</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary btn-block">Buscar</button>
+        </form>
+                        
+        <!-- Tabla de resultados -->
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        <a href="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni, sort_by='nombre_documento', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                            nombre_documento=request.args.get('nombre_documento', '')) }}">
+                            Nombre
+                            {% if request.args.get('sort_by') == 'nombre_documento' %}
+                                {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                            Tipo
+                    </th>
+                    <th>
+                        <a href="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni, sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                            nombre_documento=request.args.get('nombre_documento', '')) }}">
+                            Fecha
+                            {% if request.args.get('sort_by') == 'created_at' %}
+                                {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for documento in documentos %}
+                <tr>
+                    <td>{{ documento.nombre_documento }}</td>
+                    <td>{{ documento.tipo }}</td>
+                    <td>{{ documento.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        <a href="{{ url_for('crud_JyA.show_update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
+                        <a href="{{ url_for('crud_JyA.show_delete_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a>
+                        <a href="{{ url_for('crud_JyA.download_documento', documento_id=documento.id) }}" class="btn btn-success">Descargar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>                     
+        
+        <!-- Paginación -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni, page=pagination.prev_num, 
+                        nombre_documento=request.args.get('nombre_documento', ''), 
+                        tipo_documento=request.args.get('tipo_documento', ''), 
+                        sort_by=request.args.get('sort_by', ''), 
+                        order=request.args.get('order', '') ) }}" aria-label="Previous">
+                        Anterior
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+                <li class="page-item disabled"><span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span></li>
+                {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni, page=pagination.next_num, 
+                        nombre_documento=request.args.get('nombre_documento', ''), 
+                        tipo_documento=request.args.get('tipo_documento', ''), 
+                        sort_by=request.args.get('sort_by', ''), 
+                        order=request.args.get('order', '') ) }}" aria-label="Next">
+                        Siguiente
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div style="margin-top: 20px;">
+            <a href="{{ url_for('crud_JyA.show_upload_document', jya_dni=jya.dni) }}" class="btn btn-secondary">Subir documento/s</a>
+            <a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
+        </div>
+    </article>
+</section>
+
+<footer>
+    <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
+</footer>
+
+{% endblock %}

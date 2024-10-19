@@ -1,6 +1,28 @@
 from core import db
 from sqlalchemy.dialects.postgresql import JSON
 
+class Document(db.Model):
+    __tablename__ = 'document'
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    jya_dni = db.Column(db.String(20), db.ForeignKey('JYA.dni'), nullable=False)
+    nombre_documento = db.Column(db.String(255), nullable=False)
+    tipo = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    
+    jya = db.relationship('JYA', back_populates='documentos')
+
+class Link(db.Model):
+    __tablename__ = 'Link'
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    jya_dni = db.Column(db.String(20), db.ForeignKey('JYA.dni'), nullable=False)
+    nombre_enlace = db.Column(db.String(255), nullable=False)
+    tipo = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    
+    jya = db.relationship('JYA', back_populates='documentos')
+
 class JYA(db.Model):
     __tablename__ = 'JYA'
     
@@ -32,10 +54,8 @@ class JYA(db.Model):
     # Profesionales que lo atienden (campo libre)
     profesionales_atendiendo = db.Column(db.Text, nullable=True)
     
+    # Relación con documentos
+    documentos = db.relationship('Document', back_populates='jya')
+
     def __repr__(self):
         return f'<Persona {self.nombre} {self.apellido}>'
-
-# Ejemplo de un diccionario que podrías almacenar en los campos JSON:
-# lugar_nacimiento = {'localidad': 'Ciudad X', 'provincia': 'Provincia Y'}
-# domicilio_actual = {'calle': 'Calle Z', 'numero': 123, 'departamento': 'A', 'localidad': 'Ciudad X', 'provincia': 'Provincia Y'}
-# contacto_emergencia = {'nombre': 'Juan Pérez', 'telefono': '123456789'}

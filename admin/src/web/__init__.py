@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate  # Importar Migrate
 from web import routes
+from web import helpers
 from web.storage import storage
 from core.bcrypt import bcrypt
 from core.database import db_reset 
@@ -41,7 +42,8 @@ def create_app(env="development"):
 
     # Register functions on jinja
     app.jinja_env.globals.update(check_permission=check_permission)
-
+    app.jinja_env.globals.update(document_url=helpers.document_url)
+    
     @app.cli.command(name="reset-db")
     def reset_db():
         """Comando para resetear la base de datos."""
