@@ -48,5 +48,17 @@ def get_ja():
         ja_dictionary[ja.id] = ja.nombre + " " + ja.apellido
     return ja_dictionary
 
+def get_statuses():
+    status_query = JYA.query.all()
+    status_dictionary = {}
+    for status in status_query:
+        status_dictionary[status.id] = status.debts
+    return status_dictionary
+
+def change_status(id_change):
+    query_value = JYA.query.get_or_404(id_change)
+    setattr(query_value,'debts',not query_value.debts)
+    db.session.commit()
+
 def get_recipients():
     pass

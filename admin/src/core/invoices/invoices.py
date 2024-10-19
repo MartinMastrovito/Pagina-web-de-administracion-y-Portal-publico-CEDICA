@@ -16,10 +16,3 @@ class Invoices(db.Model):
     observations = db.Column(db.Text, nullable=True)
 
 
-#Modelo para registrar deudores
-
-class debt_statuses(db.Model):
-        __tablename__="debt_statuses"
-        id = db.Column(db.Integer, primary_key=True)
-        id_ja = db.Column(db.Integer, ForeignKey("ja.id"))
-        debts = db.Column(db.Boolean, default=False)

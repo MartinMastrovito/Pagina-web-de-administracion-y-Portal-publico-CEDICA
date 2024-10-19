@@ -70,5 +70,12 @@ def create_invoice():
 #ruta para el listado de los estados de deuda
 @invoices_bp.get("/deudores")
 def invoice_statuses():
-    statuses = [1,2,3,4,5]
-    return render_template("statuses_list.html",statuses=statuses)
+    ja_dictionary = utiles.get_ja()
+    statuses_dictionary = utiles.get_statuses()
+    return render_template("statuses_list.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary,statuses = statuses_dictionary)
+
+@invoices_bp.post("/deudores")
+def update_status():
+    ja_update = request.form['id']
+    utiles.change_status(ja_update)
+    return redirect('/cobros/deudores')
