@@ -3,8 +3,8 @@ from flask_migrate import Migrate  # Importar Migrate
 from web import routes
 from web.storage import storage
 from core.bcrypt import bcrypt
-from core.database import db_reset 
-from core.database import db # Importar 'db' desde 'core.database'
+from src.core.database import db_reset, init_app
+from src.core.database import db # Importar 'db' desde 'core.database'
 from web.config import config
 from web.handlers.error import not_found_error
 from web.handlers.error import internal_server_error
@@ -22,8 +22,14 @@ def create_app(env="development"):
     # Cargar la configuración del entorno
     app.config.from_object(config[env])
 
+    #importar los modelos 
+    #from src.core.auth.models.model_caballos import Caballo
+    #from src.core.auth.models.model_JyA import TipoJA
+    #from src.core.auth.models.model_documento import Documento
+    #from src.core.auth.models.model_permission import Permission
+
     # Inicializar la base de datos y migraciones
-    db.init_app(app)  # Inicializa SQLAlchemy con la app
+    init_app(app)  # Inicializa SQLAlchemy con la app
     migrate.init_app(app, db)  # Inicializa Migrate con la app y db
 
     # Inicializar Bcrypt

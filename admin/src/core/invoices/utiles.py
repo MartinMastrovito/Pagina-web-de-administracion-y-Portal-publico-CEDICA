@@ -1,4 +1,4 @@
-from core.database import db
+from src.core.database import db
 from src.core.invoices.invoices import Invoices
 
 def create(**kwargs):
