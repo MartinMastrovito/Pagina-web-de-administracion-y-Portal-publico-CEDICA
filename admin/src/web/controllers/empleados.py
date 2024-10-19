@@ -20,7 +20,7 @@ def crear_empleado():
 # listar empleados
 @empleados_bp.route('/lista-empleados', methods=['GET'])
 def listar_empleados():
-    nombre = request.args.get('nombre')
+    nombre = request.args.get('nombre')  
     apellido = request.args.get('apellido')
     dni = request.args.get('dni')
     puesto = request.args.get('puesto')
@@ -29,7 +29,7 @@ def listar_empleados():
     query = db.query(Empleados)
 
     if nombre:
-        query = query.filter(Empleados.nombre.ilike(f'%{nombre}%'))
+        query = query.filter(Empleados.nombre.ilike(f'%{nombre}%')) #realiza busquedas insensibles a mayusculas y minuscula
     if apellido:
         query = query.filter(Empleados.apellido.ilike(f'%{apellido}%'))
     if dni:
