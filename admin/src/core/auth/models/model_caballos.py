@@ -18,7 +18,7 @@ caballo_conductores = db.Table('caballo_conductores',
 
 caballo_tipoja = db.Table('caballo_tipoja',
     db.Column('caballo_id', db.Integer, db.ForeignKey('caballos.id'), primary_key=True),
-    db.Column('tipoja_id', db.Integer, db.ForeignKey('tipos_ja.id'), primary_key=True),
+    db.Column('JYA_id', db.Integer, db.ForeignKey('JYA.id'), primary_key=True),
     extend_existing=True
 )
 
@@ -32,7 +32,7 @@ class Caballo(db.Model):
 
     documentos = db.relationship('Documento', lazy=True)
 
-    tipos_ja = db.relationship('TipoJA', secondary=caballo_tipoja)
+    JYA = db.relationship('JYA', secondary=caballo_tipoja)
 
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(255), nullable=False)

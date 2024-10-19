@@ -3,7 +3,7 @@ from src.core.database import db
 from src.core.auth.models.model_caballos import Caballo
 from src.core.auth.models.model_miembroEquipo import MiembroEquipo
 from src.core.auth.models.model_documento import Documento
-from src.core.auth.models.model_JyA import TipoJA
+from src.core.auth.models.model_JyA import JYA
 from werkzeug.utils import secure_filename
 import os
 
@@ -89,8 +89,8 @@ def crear_caballo():
         return redirect(url_for('caballos.listar_caballos'))
 
     entrenadores = MiembroEquipo.query.all()
-    tipos_ja = TipoJA.query.all()
-    return render_template('caballos/nuevo.html', entrenadores=entrenadores, tipos_ja=tipos_ja)
+    JYA = JYA.query.all()
+    return render_template('caballos/nuevo.html', entrenadores=entrenadores, JYA=JYA)
 
 
 @caballos_bp.route('/caballos/<int:id>/eliminar', methods=['POST'])
