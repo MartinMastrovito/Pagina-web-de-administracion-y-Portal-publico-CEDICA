@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from src.core.auth.models import Empleados
 from flask import render_template
 from src.core.database import db
+from sqlalchemy import asc, desc
 
 empleados_bp = Blueprint('empleados', __name__, url_prefix="/menu_empleados", template_folder='../templates/empleados',static_folder="/admin/static")
 @empleados_bp.get("/empleados")
@@ -19,8 +20,31 @@ def crear_empleado():
 # listar empleados
 @empleados_bp.route('/lista-empleados', methods=['GET'])
 def listar_empleados():
-    empleados = empleados.query.all() 
+    nombre = request.args.get('nombre')
+    apellido = request.args.get('apellido')
+    dni = request.args.get('dni')
+    puesto = request.args.get('puesto')
+    ordenar_por = request.args.get('ordenar_por', 'nombre')  
+    direccion_orden = request.args.get('direccion_orden', 'asc') 
+    query = db.query(Empleados)
+
+    if nombre:
+        query = query.filter(Empleados.nombre.ilike(f'%{nombre}%'))
+    if apellido:
+        query = query.filter(Empleados.apellido.ilike(f'%{apellido}%'))
+    if dni:
+        query = query.filter(Empleados.dni == dni)
+    if puesto:
+        query = query.filter(Empleados.puesto.ilike(f'%{puesto}%'))
+
+    if direccion_orden == 'asc':
+        query = query.order_by(asc(getattr(Empleados, ordenar_por)))
+    else:
+        query = query.order_by(desc(getattr(Empleados, ordenar_por)))
+
+    empleados = query.all()
     return render_template('empleados/listar_empleados.html', empleados=empleados)
+
 
 # actualizar empleados
 @empleados_bp.route('/empleados/<int:id>', methods=['PUT'])

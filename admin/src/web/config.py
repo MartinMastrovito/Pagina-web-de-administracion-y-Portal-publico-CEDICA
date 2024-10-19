@@ -1,5 +1,5 @@
-import os
 from os import environ
+import os
 
 class Config(object):
     TESTING = False

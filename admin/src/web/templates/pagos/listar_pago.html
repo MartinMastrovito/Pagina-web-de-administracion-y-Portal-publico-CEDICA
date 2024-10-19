@@ -19,6 +19,29 @@
             {% endif %}
         {% endwith %}
         {% block content %}
+            <form method="GET" action="{{ url_for('pago.listar_pago') }}">
+                <label for="fecha_inicio">Fecha Inicio:</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ request.args.get('fecha_inicio', '') }}">
+
+                <label for="fecha_fin">Fecha Fin:</label>
+                <input type="date" id="fecha_fin" name="fecha_fin" value="{{ request.args.get('fecha_fin', '') }}">
+
+                <label for="tipo_pago">Tipo de Pago:</label>
+                <select id="tipo_pago" name="tipo_pago">
+                    <option value="">Todos</option>
+                    <option value="Honorarios" {% if request.args.get('tipo_pago') == 'Honorarios' %}selected{% endif %}>Honorarios</option>
+                    <option value="Proveedor" {% if request.args.get('tipo_pago') == 'Proveedor' %}selected{% endif %}>Proveedor</option>
+                    <option value="GastosVarios" {% if request.args.get('tipo_pago') == 'GastoVarios' %}selected{% endif %}>Gastos Varios</option>
+                </select>
+
+                <label for="orden">Ordenar por fecha:</label>
+                <select id="orden" name="orden">
+                    <option value="asc" {% if request.args.get('orden') == 'asc' %}selected{% endif %}>Ascendente</option>
+                    <option value="desc" {% if request.args.get('orden') == 'desc' %}selected{% endif %}>Descendente</option>
+                </select>
+
+                <button type="submit">Buscar</button>
+            </form>
             <table>
                 <thead>
                     <tr>

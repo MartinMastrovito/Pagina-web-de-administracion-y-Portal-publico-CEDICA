@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/documentos/listar_documentos.css') }}">
+    <title>Documentos de {{ caballo.nombre }}</title>
+</head>
+<body>
+    <h1>Documentos de {{ caballo.nombre }}</h1>
+
+    <form method="GET">
+        <label for="nombre">Nombre del Documento:</label>
+        <input type="text" name="nombre" value="{{ request.args.get('nombre', '') }}">
+
+        <label for="tipo">Tipo de Documento:</label>
+        <input type="text" name="tipo" value="{{ request.args.get('tipo', '') }}">
+
+        <button type="submit">Buscar</button>
+    </form>
+
+    <h3>Documentos Adjuntos</h3>
+    <ul>
+        {% for documento in documentos.items %}
+            <li>
+                <a href="{{ url_for('static', filename=documento.archivo_url) }}">{{ documento.nombre }}</a>
+                ({{ documento.tipo_documento }})
+                <a href="{{ url_for('editar_documento', id=documento.id) }}">Editar</a>
+                <form action="{{ url_for('eliminar_documento', id=documento.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este documento?')">Eliminar</button>
+                </form>
+            </li>
+        {% else %}
+            <li>No hay documentos adjuntos.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('subir_documento', id=caballo.id) }}">Adjuntar Nuevo Documento</a>
+    <a href="{{ url_for('mostrar_caballo', id=caballo.id) }}">Volver al Caballo</a>
+
+    <!-- Paginación -->
+    <div>
+        {% if documentos.has_prev %}
+            <a href="{{ url_for('listar_documentos', id=caballo.id, page=documentos.prev_num, nombre=request.args.get('nombre', ''), tipo=request.args.get('tipo', '')) }}">Anterior</a>
+        {% endif %}
+        {% if documentos.has_next %}
+            <a href="{{ url_for('listar_documentos', id=caballo.id, page=documentos.next_num, nombre=request.args.get('nombre', ''), tipo=request.args.get('tipo', '')) }}">Siguiente</a>
+        {% endif %}
+    </div>
+</body>
+</html>

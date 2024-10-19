@@ -1,6 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db=SQLAlchemy()
+from core import db
 
 def init_app(app):
     """
@@ -8,6 +6,7 @@ def init_app(app):
     """
     db.init_app(app)
     config(app)
+
 
     return app
 

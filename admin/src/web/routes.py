@@ -1,8 +1,9 @@
 from flask import render_template, Blueprint, request, redirect, url_for, flash
-from src.web.controllers.users import bp as users_bp
-from src.web.controllers.invoices import invoices_bp
-from src.web.controllers.empleados import  empleados_bp
-from src.web.controllers.pagos import  pago_bp
+from web.controllers.users import bp as users_bp
+from web.controllers.invoices import invoices_bp
+from web.controllers.caballos import caballos_bp
+from web.controllers.pagos import pago_bp
+from web.controllers.empleados import empleados_bp
 
 def register(app):
     # Crear un Blueprint para las rutas
@@ -19,7 +20,7 @@ def register(app):
         if request.method == 'POST':
             email = request.form['email']
             password = request.form['password']
-            
+        
             user = login_user(email, password)
             if user:
                 
@@ -28,21 +29,19 @@ def register(app):
             else:
                 flash('Correo electrónico o contraseña incorrectos.', 'danger')
         
-        return render_template('login.html')  # 
+        return render_template('login.html')  
+ 
     
     # Register blueprints    
     app.register_blueprint(users_bp)
 
     app.register_blueprint(invoices_bp)
 
+    app.register_blueprint(caballos_bp) 
+
+    app.register_blueprint(pago_bp) 
+
     app.register_blueprint(empleados_bp)
-
-    app.register_blueprint(pago_bp)
-   
-
-
-
-
 
 
     #de
@@ -55,5 +54,7 @@ def register(app):
         #]
         
        # return pages
+
+	
 
 	
