@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate  # Importar Migrate
 from web import routes
+from web.storage import storage
 from core.bcrypt import bcrypt
 from core.database import db_reset 
 from core.database import db # Importar 'db' desde 'core.database'
@@ -31,6 +32,9 @@ def create_app(env="development"):
     # Registrar rutas
     routes.register(app)
 
+    # Registrar storage
+    storage.init_app(app)
+    
     # Manejar errores
     app.register_error_handler(404, not_found_error)
     app.register_error_handler(500, internal_server_error)
