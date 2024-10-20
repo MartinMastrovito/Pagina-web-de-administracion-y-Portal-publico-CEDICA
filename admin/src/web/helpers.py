@@ -5,9 +5,5 @@ def document_url(document):
     
     if document is None:
         return ""
-    
-    aux = client.presigned_get_object("grupo30", document)
-    
-    print(aux)
-    
-    return aux
+
+    return client.presigned_get_object("grupo30", document)
