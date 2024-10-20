@@ -30,15 +30,18 @@ def invoices_index(page,**order):
 
 @invoices_bp.post("/lista-cobros/")
 def order_list():
-    order_information = {
-        "payment_method" : request.form['payment_method'],
-        "date_from": request.form['from'],
-        "date_to": request.form['to'],
-        "first_name": request.form['first_name'],
-        "last_name": request.form['last_name'],
-        "order": request.form['order']
-    }
-    return invoices_index(1,**order_information)
+    if("id" in request.form):
+        return delete_invoice()
+    else:
+        order_information = {
+            "payment_method" : request.form['payment_method'],
+            "date_from": request.form['from'],
+            "date_to": request.form['to'],
+            "first_name": request.form['first_name'],
+            "last_name": request.form['last_name'],
+            "order": request.form['order']
+        }
+        return invoices_index(1,**order_information)
 
 @invoices_bp.post("/lista-cobros/")
 def delete_invoice():
@@ -57,12 +60,12 @@ def update_invoice(invoice_id):
 def invoice_update(invoice_id):
     invoice_information = {
         "pay_date":request.form['pay_date'],
-        "amount":float(request.form['amount']),
+        "amount":(request.form['amount']),
         "observations":request.form['observations'],
         "payment_method":request.form['payment_method']
     }
     utiles.update_invoice(invoice_id, **invoice_information)
-    return redirect("/cobros/lista-cobros")
+    return redirect("/cobros/lista-cobros/1")
 
 #Rutas del creador de cobros
 @invoices_bp.get("/crear-cobro")

@@ -13,6 +13,7 @@ def create(**kwargs):
 def delete(id_delete):
     db.session.query(Invoices).filter(Invoices.id==id_delete).delete()
     db.session.commit()
+
 def validate(**datos):
     payment_methods_list = [
         "Efectivo",
@@ -25,6 +26,8 @@ def validate(**datos):
         return False
     if(datos.get("amount")<0):
         return False
+    JYA.query.get_or_404(datos.get("j_a"))
+    #empleados.query.get_or_404(datos.get("recipient"))
     return True 
 
 def get_invoice(id):
@@ -34,7 +37,8 @@ def update_invoice(invoice_id,**kwargs):
     invoice = get_invoice(invoice_id)
     # Actualizar los atributos del usuario con los valores proporcionados en kwargs
     for key, value in kwargs.items():
-        setattr(invoice, key, value)
+        if value != '':
+            setattr(invoice, key, value)
     
     # Confirmar los cambios en la base de datos
     db.session.commit()
