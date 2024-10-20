@@ -7,7 +7,9 @@
         }
         .search{
             display:flex;
-            flex-direction: row;
+            flex-direction:row;
+            justify-content:flex-start;
+            flex-wrap: wrap;
             gap:1%;
         }
     </style>
@@ -16,25 +18,28 @@
 </head>
 <body>
     {% block content %}
-    <form class="search" method="POST" id="search-form">
-        <label for="first-name" class="label">
-            <input type="search" placeholder="Nombre" name="first-name">
-        </label>
-        <label for="last-name" class="label">
-            <input type="search" placeholder="Apellido" name="last-name">
-        </label>
-        <label for="from" class="label">
-            <input type="date" name="from">
-        </label>
-        <label for="to" class="label">
-            <input type="date" name="to">
-        </label>
-        <button type="submit" form="search-form" class="button is-rounded" style="background-color:#78b9bf"></button>
+    <form class="form search" method="POST" id="search-form" action="{{ url_for('invoices.order_list') }}">
+        <input type="search" placeholder="Nombre" name="first_name">
+        <input type="search" placeholder="Apellido" name="last_name">
+        <input type="date" name="from" value="">
+        <input type="date" name="to" value="">
+        <select class="select" name="payment_method" >
+            <option value="">Todos</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Tarjeta de credito">Tarjeta de credito</option>
+            <option value="Tarjeta de debito">Tarjeta de debito</option>
+            <option value="Otro">Otro</option>
+        </select>
+        <select class="select" name="order">
+            <option value="ASC">Ascendente</option>
+            <option value="DESC">Descendente</option>
+        </select>
+       <button type="submit" form="search-form" class="button is-rounded" style="background-color:#78b9bf">BUSCAR</button>
     </form>
     {% for invoice in invoices %}
     <div class="box has-background">
         <p>Id: {{invoice.id}}</p>
-        <p>j&a: {{invoice.j_a}}</p>
+        <p>j&a: {{jinetes_amazonas[invoice.j_a]}}</p>
         <p>Fecha de pago: {{invoice.pay_date}}</p>
         <p>Metodo de pago: {{invoice.payment_method}}</p>
         <p>Monto: {{invoice.amount}}</p>
@@ -45,6 +50,7 @@
             <button class="button" name="delete" style="background-color:#f5be6b">Eliminar</button>
         </form>
         <a class="button" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a>
+        <a class="button" href="{{url_for('invoices.show_invoice' ,invoice_id = invoice.id)}}">Mostrar mas</a>
         {% endif %}
     </div>
     {% endfor %}

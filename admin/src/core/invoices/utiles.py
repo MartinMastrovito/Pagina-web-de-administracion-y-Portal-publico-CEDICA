@@ -1,6 +1,7 @@
 from core.database import db
 from src.core.invoices.invoices import Invoices
 from src.core.models.model_JyA import JYA
+from sqlalchemy import desc
 
 
 def create(**kwargs):
@@ -12,7 +13,6 @@ def create(**kwargs):
 def delete(id_delete):
     db.session.query(Invoices).filter(Invoices.id==id_delete).delete()
     db.session.commit()
-
 def validate(**datos):
     payment_methods_list = [
         "Efectivo",
@@ -41,12 +41,16 @@ def update_invoice(invoice_id,**kwargs):
     
     return invoice
 
-def get_ja():
+def get_all_ja():
     ja_query = JYA.query.all()
     ja_dictionary = {}
     for ja in ja_query:
         ja_dictionary[ja.id] = ja.nombre + " " + ja.apellido
     return ja_dictionary
+
+def get_ja(ja_id):
+    query = JYA.query.get_or_404(ja_id)
+    return query.nombre + " " + query.apellido
 
 def get_statuses():
     status_query = JYA.query.all()
@@ -62,3 +66,26 @@ def change_status(id_change):
 
 def get_recipients():
     pass
+
+#De momento esta hecho con JYA porque queria probar como hacerlo. Cuando tenga para conectar con modelo de empleados cambiara.
+def select_filter(**kwargs):
+    invoices = db.select(Invoices)
+    if(kwargs['date_from'] != '') and (kwargs['date_to'] !=''):
+        invoices = invoices.filter(Invoices.pay_date.between(kwargs["date_from"],kwargs["date_to"]))
+    if(kwargs['payment_method'] != ''):
+        invoices = invoices.filter(Invoices.payment_method == kwargs['payment_method'])
+    if(kwargs['first_name'] != ''):
+        id_filter = db.select(JYA.id).filter(JYA.nombre == kwargs["first_name"])
+        invoices = invoices.filter(Invoices.j_a.in_(id_filter))
+    if(kwargs['last_name'] != ''):
+        id_filter = db.select(JYA.id).filter(JYA.apellido==kwargs["last_name"])
+        invoices = invoices.filter(Invoices.j_a.in_(id_filter))
+    if(kwargs['order'] != ""):
+        if(kwargs['order'] == 'ASC'):
+            invoices = invoices.order_by((Invoices.pay_date))
+        elif(kwargs['order'] =='DESC'):
+            invoices = invoices.order_by(desc(Invoices.pay_date))
+    return invoices
+
+def select_all():
+    return db.select(Invoices)

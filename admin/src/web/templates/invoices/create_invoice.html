@@ -22,20 +22,22 @@
                 <label class="label" for="amount"> Monto</label>
                 <input class="input" type="number" min="0.00" max="10000000.00" step="0.01"name="amount" required placeholder="591.00">
                 <label class="label" for="payment_method">Metodo de pago</label>
-                <select class="select" name="payment_method">
+                <select class="select" name="payment_method" required>
                     <option value="Efectivo">Efectivo</option>
                     <option value="Tarjeta de credito">Tarjeta de credito</option>
                     <option value="Tarjeta de debito">Tarjeta de debito</option>
                     <option value="Otro">Otro</option>
                 </select>
                 <label class="label" for="j&a">J&A</label>
-                <select class="select" name="j&a">
+                <select class="select" name="j&a" required>
+                    <option value="" disabled="" selected="">Seleccione un J&A</option>
                     {% for ja in jinetes_amazonas.keys() %}
                         <option value={{ja}}>{{jinetes_amazonas[ja]}}</option>
                     {% endfor %}
                 </select>
                 <label class="label" for="recipient">Beneficiario</label>
-                <select class="select" name="recipient">
+                <select class="select" name="recipient" required>
+                    <option value="" disabled="" selected="">Seleccione un beneficiario</option>
                 <!--
                     {%for recipient in recipients_list %}
                         <option value={{recipient.id}}>{{recipient.nombre}}</option>
