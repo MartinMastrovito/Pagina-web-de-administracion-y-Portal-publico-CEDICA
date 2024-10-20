@@ -3,6 +3,12 @@ from src.core.invoices.invoices import Invoices
 from src.core.models.model_JyA import JYA
 from sqlalchemy import desc
 
+payment_methods_list = [
+        "Efectivo",
+        "Tarjeta de credito",
+        "Tarjeta de debito",
+        "Otro"
+    ]
 
 def create(**kwargs):
     invoice = Invoices(**kwargs)
@@ -14,13 +20,7 @@ def delete(id_delete):
     db.session.query(Invoices).filter(Invoices.id==id_delete).delete()
     db.session.commit()
 
-def validate(**datos):
-    payment_methods_list = [
-        "Efectivo",
-        "Tarjeta de credito",
-        "Tarjeta de debito",
-        "Otro"
-    ]
+def validate_create(**datos):
     payment_method = datos.get("payment_method")
     if(not payment_method in payment_methods_list):
         return False
@@ -33,17 +33,31 @@ def validate(**datos):
 def get_invoice(id):
     return Invoices.query.get_or_404(id)
 
+def validate_update(**kwargs):
+    payment_method = kwargs.get("payment_method")
+    amount = kwargs.get("amount")
+    if(payment_method != ''):
+        if(not payment_method in payment_methods_list):
+            return False
+    if(amount != ''):
+        if(float(amount) < 0):
+            return False
+    return True
+
 def update_invoice(invoice_id,**kwargs):
     invoice = get_invoice(invoice_id)
     # Actualizar los atributos del usuario con los valores proporcionados en kwargs
-    for key, value in kwargs.items():
-        if value != '':
-            setattr(invoice, key, value)
+    if(validate_update(**kwargs)):
+        for key, value in kwargs.items():
+            if value != '':
+                setattr(invoice, key, value)
+        
+        # Confirmar los cambios en la base de datos
+        db.session.commit()
+    else:
+        return False
     
-    # Confirmar los cambios en la base de datos
-    db.session.commit()
-    
-    return invoice
+    return True
 
 def get_all_ja():
     ja_query = JYA.query.all()

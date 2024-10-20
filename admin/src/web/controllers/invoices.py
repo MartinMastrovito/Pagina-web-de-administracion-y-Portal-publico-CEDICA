@@ -83,7 +83,7 @@ def create_invoice():
         "recipient": request.form['recipient'],
         "observations": request.form['observations'],
     }
-    if(utiles.validate(**invoice_information)):
+    if(utiles.validate_create(**invoice_information)):
          utiles.create(**invoice_information)
     else: 
         return redirect('/cobros')
