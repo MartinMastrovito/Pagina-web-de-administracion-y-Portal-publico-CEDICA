@@ -70,6 +70,7 @@
 
                         <!-- Columna Atendido por -->
                         <th>Atendido por</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,7 +81,7 @@
                         <td>{{ jya.dni }}</td>
                         <td>{{ jya.profesionales_atendiendo }}</td>
                         <td>
-                            <a href="{{ url_for('crud_JyA.show_update_jya', jya_dni=jya.dni) }}" class="btn btn-danger">Ver más</a>
+                            <a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="btn btn-danger">Ver más</a>
                         </td>
                         <td>
                             <a href="{{ url_for('crud_JyA.show_delete_jya', jya_dni=jya.dni) }}" class="btn btn-danger">Eliminar</a>

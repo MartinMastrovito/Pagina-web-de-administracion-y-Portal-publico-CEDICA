@@ -34,7 +34,7 @@ class Caballo(db.Model):
 
     JYA = db.relationship('JYA', secondary=caballo_tipoja)
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(255), nullable=False)
     fecha_nacimiento = db.Column(db.Date, nullable=False)
     sexo = db.Column(db.String(50), nullable=False)
