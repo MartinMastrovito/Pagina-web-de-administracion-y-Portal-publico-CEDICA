@@ -159,7 +159,8 @@ class Empleados(db.Model):
     numero_afiliado = db.Column(db.String, nullable=True)
     condicion = db.Column(db.String)
     activo = db.Column(db.Boolean, default=True)
-
+    def __repr__(self):
+        return f'<Empleado {self.nombre},{self.id}>'
 
 class Pago(db.Model):
     __tablename__ = 'Pago'
