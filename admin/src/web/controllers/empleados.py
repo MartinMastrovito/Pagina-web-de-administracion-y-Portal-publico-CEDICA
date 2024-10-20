@@ -11,13 +11,13 @@ empleados_bp = Blueprint('empleados', __name__, url_prefix="/menu_empleados", te
 @empleados_bp.get("/empleados")
 
 def show_empleado_form():
-    return render_template("empleados/menu_empleados.html")
+    return render_template("/empleados/menu_empleados.html")
 
 #crear empleados
 
-@empleados_bp.get("/crear-empleado")
+@empleados_bp.get("/crear_empleado")
 def crear_empleado():
-    return render_template("empleados/crear_empleado.html")
+    return render_template("/empleados/crear_empleado.html")
 
 @empleados_bp.post("/crear_empleado")
 #@login_required
@@ -58,21 +58,23 @@ def crear_empleado_listo():
                 if file and file.filename != '':
                     filename = secure_filename(file.filename)
                     file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-                    # Aquí puedes agregar lógica para guardar la referencia del archivo en la BD si es necesario.
         
-        return redirect('/menu_empleados/empleados')
+        return redirect("/menu_empleados/crear_empleado")
+
+
 
 
     except Exception as e:
         db.session.rollback()
         flash('Ocurrió un error al crear el empleado: ' + str(e), 'danger')
-        return redirect("/empleados/crear_empleado")
+        return redirect("/menu_empleados/crear_empleado")
+
 
 
 
 
 # listar empleados
-@empleados_bp.route('/lista-empleados', methods=['GET'])
+@empleados_bp.route('/listar_empleados', methods=['GET'])
 def listar_empleados():
     nombre = request.args.get('nombre')  
     apellido = request.args.get('apellido')
@@ -80,7 +82,7 @@ def listar_empleados():
     puesto = request.args.get('puesto')
     ordenar_por = request.args.get('ordenar_por', 'nombre')  
     direccion_orden = request.args.get('direccion_orden', 'asc') 
-    query = db.query(Empleados)
+    query = db.session.query(Empleados)
 
     if nombre:
         query = query.filter(Empleados.nombre.ilike(f'%{nombre}%')) #realiza busquedas insensibles a mayusculas y minuscula

@@ -31,6 +31,7 @@ def crear_pago_form():
     return render_template('pagos/crear_pago.html')
 
 @pago_bp.route('/crear', methods=['POST'])
+#@login_required
 def crear_pago():
     nuevo_pago = {
         "beneficiario_id": request.form.get('beneficiario_id'),
@@ -41,7 +42,7 @@ def crear_pago():
     pago = Pago(**nuevo_pago)
     db.add(pago)
     db.commit()
-    return redirect('/pago')
+    return redirect('/menu_empleados/pago')
 
 @pago_bp.route('/actualizar/<int:pago_id>', methods=['POST'])
 def actualizar_pago(pago_id):
