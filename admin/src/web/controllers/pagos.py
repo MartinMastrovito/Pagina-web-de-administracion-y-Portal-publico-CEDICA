@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect
 from core.database import db
-from src.core.auth.models import Pago
+from src.core.auth.models.model_pago import Pago
 from sqlalchemy.orm import Session
 from datetime import datetime
 from sqlalchemy import asc, desc

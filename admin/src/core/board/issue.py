@@ -1,5 +1,5 @@
 from datetime import datetime
-from core import db
+from src.core.database import db
 
 class Issue(db.Model):
     id = db.Column(db.Integer, primary_key= True)

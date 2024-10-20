@@ -22,7 +22,7 @@
             <header>
                 <a class="btn" href="{{ url_for('empleados.show_empleado_form') }}">Volver al Menu</a>
             </header>
-            <form action="{{ url_for('empleados.crear_empleado') }}" id="empleados_form" class="form_style" method="POST" enctype="multipart/form-data">
+            <form action="{{ url_for('empleados.crear_empleado_listo') }}" id="empleados_form" method="POST" enctype="multipart/form-data">
                 <!-- Nombre -->
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>

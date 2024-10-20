@@ -1,4 +1,8 @@
-from core import db
+from flask_sqlalchemy import SQLAlchemy
+
+# Crear la instancia de SQLAlchemy
+db = SQLAlchemy()
+
 
 def init_app(app):
     """

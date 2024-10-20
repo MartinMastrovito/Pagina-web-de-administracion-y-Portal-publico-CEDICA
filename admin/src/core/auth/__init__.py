@@ -1,4 +1,4 @@
-from core.auth.models import User
+from core.auth.models.model_user import User
 from core.bcrypt import bcrypt
 from core.database import db
 
