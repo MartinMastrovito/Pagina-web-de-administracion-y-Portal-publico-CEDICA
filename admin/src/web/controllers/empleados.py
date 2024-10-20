@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from src.core.auth.models import Empleados
+from src.core.auth.models.model_empleado import Empleados
 from flask import render_template , flash, redirect, current_app
 from src.core.database import db
 from sqlalchemy import asc, desc
@@ -20,7 +20,7 @@ def crear_empleado():
     return render_template("empleados/crear_empleado.html")
 
 @empleados_bp.post("/crear_empleado")
-@login_required
+#@login_required
 def crear_empleado_listo():
     # Obtener los datos del formulario
     empleado_data = {

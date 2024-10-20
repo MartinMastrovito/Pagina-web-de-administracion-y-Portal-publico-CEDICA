@@ -1,8 +1,10 @@
 from src.core.database import db
 
 class Empleados(db.Model):
-    __tablename__ = "Empleados"
+    __tablename__ = "empleados"
     __table_args__ = {'extend_existing': True}
+
+    beneficiary = db.relationship('Pago', secondary='beneficiary', back_populates='empleados')
 
     id = db.Column(db.Integer, primary_key=True, index=True)
     nombre = db.Column(db.String, index=True)
@@ -21,6 +23,9 @@ class Empleados(db.Model):
     numero_afiliado = db.Column(db.String, nullable=True)
     condicion = db.Column(db.String)
     activo = db.Column(db.Boolean, default=True)
+
+
+
     def __repr__(self):
         return f'<Empleado {self.nombre},{self.id}>'
 
