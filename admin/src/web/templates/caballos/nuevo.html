@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballos/nuevo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/nuevo.css') }}">
     <title>Nuevo Caballo</title>
 </head>
 <body>
     <h1>Registrar Nuevo Caballo</h1>
 
-    <form action="{{ url_for('crear_caballo') }}" method="POST">
+    <form action="{{ url_for('caballos.crear_caballo') }}" method="POST">
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" required>
 
@@ -54,6 +54,6 @@
         <button type="submit">Registrar Caballo</button>
     </form>
 
-    <a href="{{ url_for('listar_caballos') }}">Volver al listado</a>
+    <a href="{{ url_for('caballos.listar_caballos') }}">Volver al listado</a>
 </body>
 </html>
