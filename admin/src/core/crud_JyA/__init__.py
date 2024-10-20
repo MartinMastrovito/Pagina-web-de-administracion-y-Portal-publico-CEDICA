@@ -1,4 +1,4 @@
-from core import db
+from core.database import db
 from src.core.auth.models.model_JyA import JYA
 
 def list_users():
