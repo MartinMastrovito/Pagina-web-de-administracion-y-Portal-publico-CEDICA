@@ -1,8 +1,9 @@
 #aca se guardan todos los metodos que se van a usar en la base de datos
 #como la comprobacion de login, por ejemplo
-from core.auth.models import User, RolePermission, Permission, Role
-from core import db
 from core.bcrypt import bcrypt
+from src.core.database import db
+from core.auth.models.model_user import User , Role
+from core.auth.models.model_permission import  RolePermission, Permission
 
 def get_permissions(user_id):
     user = get_user(user_id)
@@ -52,19 +53,6 @@ def search_users(email=None, enabled=None, role_id=None, sort_by='email', order=
 
     # Paginación
     return query.paginate(page=page, per_page=per_page, error_out=False)
-
-def get_role_id_by_name(role_name):
-    # Asegúrate de que el nombre del rol esté correctamente formateado
-    role = Role.query.filter_by(name=role_name.lower()).first()
-    return role.id if role else None
-
-
-
-def get_users_by_enabled(is_enabled):
-    return User.query.filter_by(enabled=is_enabled)
-
-def get_users_by_role(role_name):
-    return User.query.join(Role).filter(Role.name == role_name)
 
 def create_user(**kwargs):
     
