@@ -14,7 +14,7 @@ def show_login_form():
 
 @bp.get("/principal")
 def show_home():
-    return render_template("layout.html")
+    return render_template("home.html")  # 
 
 @bp.post("/login")
 def login():
@@ -57,6 +57,7 @@ def index():
         users=users_pagination.items,
         pagination=users_pagination
     )
+
 
 @bp.get("/crear_usuario")
 @login_required
