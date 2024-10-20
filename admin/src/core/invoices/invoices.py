@@ -1,4 +1,4 @@
-from core import db
+from src.core.database import db
 import enum
 from sqlalchemy import Enum
 """

@@ -1,5 +1,5 @@
-from core import db
-from core.models.model_JyA import JYA, Document
+from src.core.database import db
+from src.core.auth.models.model_JyA import JYA
 
 def list_users():
     jya = JYA.query.all()

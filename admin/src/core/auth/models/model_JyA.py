@@ -1,5 +1,8 @@
-from core import db
+from src.core.database import db
 from sqlalchemy.dialects.postgresql import JSON
+#from core.auth.models.model_tablasIntermedias import  caballo_entrenadores , caballo_conductores
+#from core.auth.models.model_caballos import caballo_tipoja
+
 
 class Document(db.Model):
     __tablename__ = 'document'
@@ -25,7 +28,8 @@ class Link(db.Model):
 
 class JYA(db.Model):
     __tablename__ = 'JYA'
-    
+    __table_args__ = {'extend_existing': True}
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     
     # Datos personales
@@ -47,6 +51,9 @@ class JYA(db.Model):
     # Contacto de emergencia (nombre y teléfono)
     contacto_emergencia = db.Column(JSON, nullable=False)
     
+    caballos = db.relationship('Caballo', secondary='caballo_tipoja', back_populates='JYA')
+
+
     # Becado (sí/no) y porcentaje de beca
     becado = db.Column(db.Boolean, default=False)
     porcentaje_beca = db.Column(db.Float, default=0.0)
