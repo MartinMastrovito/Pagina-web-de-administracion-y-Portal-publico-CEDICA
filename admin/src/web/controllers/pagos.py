@@ -14,7 +14,7 @@ def listar_pago():
     fecha_fin = request.args.get('fecha_fin')
     tipo_pago = request.args.get('tipo_pago')
     orden = request.args.get('orden', 'asc')
-    query = db.query(Pago)
+    query = db.query.all(Pago)
     if fecha_inicio and fecha_fin:
         query = query.filter(Pago.fecha_pago.between(fecha_inicio, fecha_fin))
     if tipo_pago:
