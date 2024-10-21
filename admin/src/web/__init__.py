@@ -6,8 +6,8 @@ from web.config import config
 from web.handlers.error import not_found_error
 from web.handlers.error import internal_server_error
 
-def create_app(env="development"):
-    app = Flask(__name__, template_folder='../web/templates', static_folder='static')
+def create_app(env="development", static_folder=''):
+    app = Flask(__name__, template_folder='../web/templates', static_folder='../../static/')
 
     # Clave secreta necesaria para manejar sesiones de forma segura
     app.config['SECRET_KEY'] = 'clave_secreta_super_segura'
