@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+<head>
+    {% block imports %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_create.css') }}">
+        <style>
+            .box{
+                background-color: rgb(174, 235, 225);
+                display:flex;
+                flex-direction: column;
+    
+            }
+        </style>
+    {% endblock %}
+</head>
+<body>
+    <main>
+        {% block content %}
+        <h1>El cobro corresponde al ID {{invoice.id}}</h1>
+            <section class="box is-size-5-mobile is-size-4-tablet is-size-3-desktop " >
+                <span>j&a: {{ja_name}}</span>
+                <span>Fecha de pago: {{invoice.pay_date}}</span>
+                <span>Metodo de pago: {{invoice.payment_method}}</span>
+                <span>Monto: {{invoice.amount}}</span>
+                <span>Beneficiario: {{invoice.recipient}}</span>
+                <p>Descripcion: {{invoice.observations}}</p>
+            </section>
+            <a class="button" href="{{url_for('invoices.invoices_index', page = 1)}}">Ir al listado</a>     
+        {% endblock %}
+    </main>
+</body>
