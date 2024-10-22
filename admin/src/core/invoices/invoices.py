@@ -10,8 +10,7 @@ class Invoices(db.Model):
     pay_date = db.Column(db.Date)
     payment_method = db.Column(db.String)
     amount = db.Column(db.Float)
-    #recipient = db.Column(db.Integer,db.ForeignKey("users.id")) Falta de modelo
-    recipient = db.Column(db.Integer)
+    recipient = db.Column(db.Integer,db.ForeignKey("empleados.id"))
     observations = db.Column(db.Text, nullable=True)
 
 

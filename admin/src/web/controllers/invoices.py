@@ -24,8 +24,9 @@ def invoices_index(page,**order):
     else:
         invoices = utiles.select_all()
     ja_dictionary = utiles.get_all_ja()
+    emp_dictionary = utiles.get_all_employees()
     invoices = db.paginate(invoices,page=page,max_per_page=10)
-    return render_template("list_invoices.html", invoices=invoices,eliminado=True,jinetes_amazonas = ja_dictionary)
+    return render_template("list_invoices.html", invoices=invoices,eliminado=True,jinetes_amazonas = ja_dictionary, employees=emp_dictionary)
 
 
 @invoices_bp.post("/lista-cobros/")
@@ -71,7 +72,8 @@ def invoice_update(invoice_id):
 @invoices_bp.get("/crear-cobro")
 def invoice_create():
     ja_dictionary = utiles.get_all_ja()
-    return render_template("create_invoice.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary)
+    emp_dictionary = utiles.get_all_employees()
+    return render_template("create_invoice.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary,employees = emp_dictionary)
 
 @invoices_bp.post("/crear-cobro")
 def create_invoice():                
@@ -107,4 +109,5 @@ def update_status():
 def show_invoice(invoice_id):
     invoice = utiles.get_invoice(invoice_id)
     ja_name = utiles.get_ja(invoice.j_a)
-    return render_template("show_invoice.html",invoice=invoice, ja_name= ja_name)
+    emp_name = utiles.get_emp(invoice.recipient)
+    return render_template("show_invoice.html",invoice=invoice, ja_name= ja_name, emp_name = emp_name)
