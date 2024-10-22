@@ -1,9 +1,5 @@
-#RUTA: admin/src/core/auth/models/model_JyA
-
 from src.core.database import db
 from sqlalchemy.dialects.postgresql import JSON
-#from core.auth.models.model_tablasIntermedias import  caballo_entrenadores , caballo_conductores
-#from core.auth.models.model_caballos import caballo_tipoja
 
 class JYA(db.Model):
     __tablename__ = 'JYA'
@@ -30,16 +26,49 @@ class JYA(db.Model):
     # Contacto de emergencia (nombre y teléfono)
     contacto_emergencia = db.Column(JSON, nullable=False)
     
-    caballos = db.relationship('Caballo', secondary='caballo_tipoja', back_populates='JYA')
-
-    documentos = db.relationship('Documento', backref='jya', lazy=True)
-
     # Becado (sí/no) y porcentaje de beca
     becado = db.Column(db.Boolean, default=False)
     porcentaje_beca = db.Column(db.Float, default=0.0)
-    
+    observaciones_beca = db.Column(db.Text, nullable=True)
     # Profesionales que lo atienden (campo libre)
     profesionales_atendiendo = db.Column(db.Text, nullable=True)
+    
+    # Discapacidad
+    certificado_discapacidad = db.Column(db.Boolean, default=False)
+    diagnostico_discapacidad = db.Column(db.String, nullable=True)
+    tipo_discapacidad = db.Column(db.Enum('Mental', 'Motora', 'Sensorial', 'Visceral', name='tipo_discapacidad'), nullable=True)
+
+    # Asignaciones familiares
+    asignacion_familiar = db.Column(db.Boolean, default=False)
+    tipo_asignacion = db.Column(db.String, nullable=True)
+    
+    # Pensión
+    pension = db.Column(db.Boolean, default=False)
+    tipo_pension = db.Column(db.String, nullable=True)
+
+    # Situación previsional
+    obra_social = db.Column(db.String, nullable=True)
+    numero_afiliado = db.Column(db.String, nullable=True)
+    curatela = db.Column(db.Boolean, default=False)
+    observaciones_previsionales = db.Column(db.Text, nullable=True)
+    
+    # Institución escolar
+    institucion_escolar = db.Column(JSON, nullable=True)
+    
+    # Familiares o tutores responsables
+    familiares_tutores = db.Column(JSON, nullable=True)
+    
+    # Actividad en la institución
+    propuesta_trabajo = db.Column(db.String, nullable=True)
+    condicion_trabajo = db.Column(db.Enum('REGULAR', 'DE BAJA', name='condicion_trabajo'), nullable=True)
+    sede = db.Column(db.String, nullable=True)
+    dias_asistencia = db.Column(JSON, nullable=True)
+
+    # Relación con empleados (a través de la tabla intermedia JYAEmpleado)
+    empleados = db.relationship('JYAEmpleado', back_populates='jya')
+    
+    caballos = db.relationship('Caballo', secondary='caballo_tipoja', back_populates='JYA')
+    documentos = db.relationship('Documento', backref='jya', lazy=True)
 
     def __repr__(self):
         return f'<Persona {self.nombre} {self.apellido}>'

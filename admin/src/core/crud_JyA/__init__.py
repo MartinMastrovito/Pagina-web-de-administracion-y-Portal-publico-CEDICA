@@ -1,6 +1,10 @@
 from src.core.database import db
 from src.core.auth.models.model_JyA import JYA
 from src.core.auth.models.model_documento import Documento
+from src.core.auth.models.model_empleado import Empleados
+from src.core.auth.models.model_caballos import Caballo
+from src.core.auth.models.model_JYAEmpleado import JYAEmpleado
+from sqlalchemy import or_
 
 def list_users():
     jya = JYA.query.all()
@@ -54,6 +58,16 @@ def create_jya(**kwargs):
     db.session.commit()
 
     return jya
+
+def assign_employee_to_jya(jya_id, empleado_id, rol):
+    """Asigna un empleado a un JYA con un rol específico (terapeuta, conductor, auxiliar)."""
+    asignacion = JYAEmpleado(
+        jya_id=jya_id,
+        empleado_id=empleado_id,
+        rol=rol
+    )
+    db.session.add(asignacion)
+    db.session.commit()
 
 def update_jya(jya_dni, **kwargs):
     jya = get_jya_by_dni(jya_dni)
@@ -122,3 +136,28 @@ def get_jya_by_document(document):
     jya = JYA.query.filter_by(dni=document.jya_dni).first()
     
     return jya
+
+def get_empleados_terapeuta_profesor():
+    # Empleados con profesión terapeuta o profesor
+    empleados = Empleados.query.filter(
+        or_(Empleados.puesto == "Terapeuta", Empleados.puesto == "Profesor")
+    ).all()
+    
+    return empleados
+
+def get_empleados_conductor():
+    # Empleados con profesión conductor
+    empleados = Empleados.query.filter_by(puesto="Conductor").all()
+    
+    return empleados
+    
+def get_empleados_auxiliar():
+    # Empleados con profesión auxiliar
+    empleados = Empleados.query.filter_by(puesto="Auxiliar de pista").all()
+    
+    return empleados
+
+def get_caballos():
+    caballos = Caballo.query.all()
+    
+    return caballos
