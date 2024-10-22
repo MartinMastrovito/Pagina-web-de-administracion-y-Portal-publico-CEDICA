@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>{% block title %}Detalles de J&A{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <header>
+        <h1>Detalles del J&A</h1>
+    </header>
+
+    <section>
+        <article>
+            <h2>Información Personal</h2>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Nombre:</strong> {{ jya.nombre }}</li>
+                <li class="list-group-item"><strong>Apellido:</strong> {{ jya.apellido }}</li>
+                <li class="list-group-item"><strong>DNI:</strong> {{ jya.dni }}</li>
+                <li class="list-group-item"><strong>Edad:</strong> {{ jya.edad }}</li>
+                <li class="list-group-item"><strong>Fecha de Nacimiento:</strong> {{ jya.fecha_nacimiento }}</li>
+            </ul>
+
+            <h2 class="mt-4">Lugar de Nacimiento</h2>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Localidad:</strong> {{ jya.lugar_nacimiento.localidad }}</li>
+                <li class="list-group-item"><strong>Provincia:</strong> {{ jya.lugar_nacimiento.provincia }}</li>
+            </ul>
+
+            <h2 class="mt-4">Domicilio Actual</h2>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Calle:</strong> {{ jya.domicilio_actual.calle }}</li>
+                <li class="list-group-item"><strong>Número:</strong> {{ jya.domicilio_actual.numero }}</li>
+                <li class="list-group-item"><strong>Departamento:</strong> {{ jya.domicilio_actual.departamento }}</li>
+                <li class="list-group-item"><strong>Localidad:</strong> {{ jya.domicilio_actual.localidad }}</li>
+                <li class="list-group-item"><strong>Provincia:</strong> {{ jya.domicilio_actual.provincia }}</li>
+            </ul>
+
+            <h2 class="mt-4">Teléfono Actual</h2>
+            <p>{{ jya.telefono_actual }}</p>
+
+            <h2 class="mt-4">Contacto de Emergencia</h2>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Nombre:</strong> {{ jya.contacto_emergencia.nombre }}</li>
+                <li class="list-group-item"><strong>Teléfono:</strong> {{ jya.contacto_emergencia.telefono }}</li>
+            </ul>
+
+            <h2 class="mt-4">Estado de Beca</h2>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Becado:</strong> {{ 'Sí' if jya.becado else 'No' }}</li>
+                <li class="list-group-item"><strong>Porcentaje de Beca:</strong> {{ jya.porcentaje_beca }}</li>
+            </ul>
+
+            <h2 class="mt-4">Profesionales que lo Atienden</h2>
+            <p>{{ jya.profesionales_atendiendo }}</p>
+        </article>
+
+        <!-- Botones para editar y ver documentos adjuntos-->
+        <div class="mt-4">
+            <a href="{{ url_for('crud_JyA.show_update_jya', jya_dni=jya.dni) }}" class="btn btn-warning">Editar</a>
+            <a href="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-info">Documentos Adjuntos</a>
+        </div>
+    </section>
+
+    {% endblock %}
+
+    <footer>
+        <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
+    </footer>
+
+</body>
+</html>

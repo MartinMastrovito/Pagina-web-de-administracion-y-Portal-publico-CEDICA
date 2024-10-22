@@ -1,11 +1,37 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash,jsonify
-from src.core import db
-from src.core.auth.models import Caballo, TipoJA, MiembroEquipo, Documento
+from src.core.database import db
+from src.core.auth.models.model_caballos import Caballo
+from src.core.auth.models.model_miembroEquipo import MiembroEquipo
+from src.core.auth.models.model_documento import Documento
+from src.core.auth.models.model_JyA import JYA
 from werkzeug.utils import secure_filename
 import os
 
 # Definir el blueprint para caballos
 caballos_bp = Blueprint('caballos', __name__)
+
+@caballos_bp.route('/caballos', methods=['GET'])
+def menu_caballos():
+    page = request.args.get('page', 1, type=int)
+    nombre = request.args.get('nombre', '', type=str)
+    
+    query = db.session.query(Caballo).filter(Caballo.nombre.like(f"%{nombre}%"))
+    
+    # Ordenar resultados
+    orden = request.args.get('orden', 'nombre')
+    direction = request.args.get('direction', 'asc')
+    
+    if direction == 'asc':
+        query = query.order_by(getattr(Caballo, orden).asc())
+    else:
+        query = query.order_by(getattr(Caballo, orden).desc())
+
+    # Paginación
+    caballos_paginados = query.paginate(page=page, per_page=10)
+
+    return render_template('caballos/index.html', caballos=caballos_paginados)
+
+
 
 @caballos_bp.route('/caballos', methods=['GET'])
 def listar_caballos():
@@ -86,8 +112,8 @@ def crear_caballo():
         return redirect(url_for('caballos.listar_caballos'))
 
     entrenadores = MiembroEquipo.query.all()
-    tipos_ja = TipoJA.query.all()
-    return render_template('caballos/nuevo.html', entrenadores=entrenadores, tipos_ja=tipos_ja)
+    jya_list = JYA.query.all()  
+    return render_template('caballos/nuevo.html', entrenadores=entrenadores, JYA=jya_list)
 
 
 @caballos_bp.route('/caballos/<int:id>/eliminar', methods=['POST'])
@@ -176,3 +202,26 @@ def eliminar_documento(caballo_id, documento_id):
     db.session.commit()
     flash('Documento eliminado exitosamente.', 'success')
     return redirect(url_for('caballos.listar_documentos', id=caballo_id))
+
+
+
+@caballos_bp.route('/caballos/<int:id>/editar', methods=['GET', 'POST'])
+def editar_caballo(id):
+    caballo = Caballo.query.get_or_404(id)
+
+    if request.method == 'POST':
+        
+        caballo.nombre = request.form['nombre']
+        caballo.fecha_nacimiento = request.form['fecha_nacimiento']
+        caballo.sexo = request.form['sexo']
+        caballo.raza = request.form['raza']
+        caballo.pelaje = request.form['pelaje']
+        caballo.tipo_ingreso = request.form['tipo_ingreso']
+        caballo.fecha_ingreso = request.form['fecha_ingreso']
+        caballo.sede_asignada = request.form['sede_asignada']
+
+        db.session.commit()
+        flash('Caballo editado exitosamente.', 'success')
+        return redirect(url_for('caballos.listar_caballos'))
+
+    return render_template('caballos/editar.html', caballo=caballo)

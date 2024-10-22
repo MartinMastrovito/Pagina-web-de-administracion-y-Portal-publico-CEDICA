@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballos/show.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/show.css') }}">
     <title>Detalles del Caballo</title>
 </head>
 <body>
@@ -27,7 +27,7 @@
 
     <h3>Tipos de J&A Asignados</h3>
     <ul>
-        {% for tipo_ja in caballo.tipos_ja %}
+        {% for tipo_ja in caballo.JYA %}
         <li>{{ tipo_ja.nombre }}</li>
         {% endfor %}
     </ul>
@@ -44,12 +44,12 @@
         {% endfor %}
     </ul>
 
-    <a href="{{ url_for('editar_caballo', id=caballo.id) }}">Editar</a>
-    <form action="{{ url_for('eliminar_caballo', id=caballo.id) }}" method="POST">
+    <a href="{{ url_for('caballos.editar_caballo', id=caballo.id) }}">Editar</a>
+    <form action="{{ url_for('caballos.eliminar_caballo', id=caballo.id) }}" method="POST">
         <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este caballo?')">Eliminar</button>
     </form>
 
-    <a href="{{ url_for('listar_caballos') }}">Volver al listado</a>
-    <a href="{{ url_for('subir_documento', id=caballo.id) }}">Adjuntar Nuevo Documento</a>
+    <a href="{{ url_for('caballos.listar_caballos') }}">Volver al listado</a>
+    <a href="{{ url_for('caballos.subir_documento', id=caballo.id) }}">Adjuntar Nuevo Documento</a>
 </body>
 </html>

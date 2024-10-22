@@ -3,6 +3,8 @@ from web.controllers.users import bp as users_bp
 from web.controllers.invoices import invoices_bp
 from web.controllers.crud_JyA import bp as crud_JyA_bp
 from web.controllers.caballos import caballos_bp
+from web.controllers.pagos import pago_bp
+from web.controllers.empleados import empleados_bp
 
 def register(app):
     # Crear un Blueprint para las rutas
@@ -28,7 +30,8 @@ def register(app):
             else:
                 flash('Correo electrónico o contraseña incorrectos.', 'danger')
         
-        return render_template('login.html')  # 
+        return render_template('login.html')  
+ 
     
     # Register blueprints    
     app.register_blueprint(users_bp)
@@ -39,7 +42,9 @@ def register(app):
 
     app.register_blueprint(caballos_bp) 
 
+    app.register_blueprint(pago_bp) 
 
+    app.register_blueprint(empleados_bp)
 
 
     #de
@@ -52,5 +57,7 @@ def register(app):
         #]
         
        # return pages
+
+	
 
 	

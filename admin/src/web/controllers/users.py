@@ -1,4 +1,5 @@
 from flask import render_template, request, redirect, session, flash, url_for
+from src.core.database import db
 from flask import Blueprint
 from core.auth import utiles
 from core.auth.decorators import login_required  # Importamos el decorador
@@ -13,7 +14,7 @@ def show_login_form():
 
 @bp.get("/principal")
 def show_home():
-    return render_template("layout.html")
+    return render_template("home.html")  # 
 
 @bp.post("/login")
 def login():
@@ -56,6 +57,7 @@ def index():
         users=users_pagination.items,
         pagination=users_pagination
     )
+
 
 @bp.get("/crear_usuario")
 @login_required

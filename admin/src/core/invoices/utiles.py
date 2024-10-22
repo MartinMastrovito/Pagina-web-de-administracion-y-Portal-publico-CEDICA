@@ -1,4 +1,4 @@
-from core.database import db
+from src.core.database import db
 from src.core.invoices.invoices import Invoices
 from src.core.models.model_JyA import JYA
 from sqlalchemy import desc

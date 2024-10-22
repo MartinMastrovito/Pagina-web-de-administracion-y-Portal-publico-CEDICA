@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballos/editar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/editar.css') }}">
     <title>Editar Caballo</title>
 </head>
 <body>
@@ -46,10 +46,10 @@
             {% endfor %}
         </select>
 
-        <label for="tipos_ja">Tipos de J&A:</label>
-        <select name="tipos_ja" multiple>
-            {% for tipo_ja in tipos_ja %}
-            <option value="{{ tipo_ja.id }}" {% if tipo_ja in caballo.tipos_ja %} selected {% endif %}>
+        <label for="JYA">Tipos de J&A:</label>
+        <select name="JYA" multiple>
+            {% for tipo_ja in JYA %}
+            <option value="{{ tipo_ja.id }}" {% if tipo_ja in caballo.JYA %} selected {% endif %}>
                 {{ tipo_ja.nombre }}
             </option>
             {% endfor %}
