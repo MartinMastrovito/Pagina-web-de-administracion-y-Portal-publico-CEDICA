@@ -4,7 +4,7 @@ Esto es un controlador relacionado con los cobros de los J&A.
 from flask import render_template, request, Blueprint, redirect, flash
 from src.core.invoices.invoices import Invoices
 from src.core.database import db
-from core.invoices import utiles 
+from src.core.invoices import utiles 
 
 
 
