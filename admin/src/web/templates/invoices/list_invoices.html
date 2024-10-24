@@ -43,7 +43,7 @@
         <p>Fecha de pago: {{invoice.pay_date}}</p>
         <p>Metodo de pago: {{invoice.payment_method}}</p>
         <p>Monto: {{invoice.amount}}</p>
-        <p>Beneficiario: {{invoice.recipient}}</p>
+        <p>Beneficiario: {{employees[invoice.recipient]}}</p>
         {% if eliminado %}
         <form action="{{ url_for('invoices.delete_invoice') }}" id="invoice_delete_form" class="form_style" method="POST">
             <input type="hidden" value={{invoice.id}} name="id">
