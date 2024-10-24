@@ -11,7 +11,7 @@
 <body>
     {% block content %}
     <header>
-        <h1>Actualizar J&A</h1>
+        <h1>Actualizar JYA</h1>
     </header>
 
     <section>
@@ -40,24 +40,39 @@
 
                 <div class="form-group">
                     <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_de_nacimiento" required value="{{ jya.fecha_de_nacimiento }}">
+                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_de_nacimiento" required value="{{ jya.fecha_nacimiento }}">
                 </div>
 
                 <!-- Lugar de nacimiento -->
                 <div class="form-group">
-                    <label for="lugar_nacimiento_localidad">Lugar de Nacimiento:</label>
-                    <input type="text" class="form-control" id="lugar_nacimiento_localidad" name="lugar_nacimiento_localidad" placeholder="Localidad" required value="{{ jya.lugar_nacimiento["localidad"] }}">
-                    <input type="text" class="form-control mt-2" id="lugar_nacimiento_provincia" name="lugar_nacimiento_provincia" placeholder="Provincia" required value="{{ jya.lugar_nacimiento["provincia"] }}">
+                    <label for="lugar_nacimiento_localidad">Lugar de Nacimiento - Localidad:</label>
+                    <input type="text" class="form-control" id="lugar_nacimiento_localidad" name="lugar_nacimiento_localidad" required value="{{ jya.lugar_nacimiento['localidad'] }}">
+                </div>
+                <div class="form-group">
+                    <label for="lugar_nacimiento_provincia">Lugar de Nacimiento - Provincia:</label>
+                    <input type="text" class="form-control" id="lugar_nacimiento_provincia" name="lugar_nacimiento_provincia" required value="{{ jya.lugar_nacimiento['provincia'] }}">
                 </div>
 
                 <!-- Domicilio actual -->
                 <div class="form-group">
-                    <label for="domicilio_actual_calle">Domicilio Actual:</label>
-                    <input type="text" class="form-control" id="domicilio_actual_calle" name="domicilio_actual_calle" placeholder="Calle" required value="{{ jya.domicilio_actual["calle"] }}">
-                    <input type="text" class="form-control mt-2" id="domicilio_actual_numero" name="domicilio_actual_numero" placeholder="Número" required value="{{ jya.domicilio_actual["numero"] }}">
-                    <input type="text" class="form-control mt-2" id="domicilio_actual_departamento" name="domicilio_actual_departamento" placeholder="Departamento (opcional)" value="{{ jya.domicilio_actual["departamento"] }}">
-                    <input type="text" class="form-control mt-2" id="domicilio_actual_localidad" name="domicilio_actual_localidad" placeholder="Localidad" required value="{{ jya.domicilio_actual["localidad"] }}">
-                    <input type="text" class="form-control mt-2" id="domicilio_actual_provincia" name="domicilio_actual_provincia" placeholder="Provincia" required value="{{ jya.domicilio_actual["provincia"] }}">
+                    <label for="domicilio_actual_calle">Domicilio Actual - Calle:</label>
+                    <input type="text" class="form-control" id="domicilio_actual_calle" name="domicilio_actual_calle" required value="{{ jya.domicilio_actual['calle'] }}">
+                </div>
+                <div class="form-group">
+                    <label for="domicilio_actual_numero">Domicilio Actual - Número:</label>
+                    <input type="text" class="form-control" id="domicilio_actual_numero" name="domicilio_actual_numero" required value="{{ jya.domicilio_actual['numero'] }}">
+                </div>
+                <div class="form-group">
+                    <label for="domicilio_actual_departamento">Domicilio Actual - Departamento (opcional):</label>
+                    <input type="text" class="form-control" id="domicilio_actual_departamento" name="domicilio_actual_departamento" value="{{ jya.domicilio_actual['departamento'] }}">
+                </div>
+                <div class="form-group">
+                    <label for="domicilio_actual_localidad">Domicilio Actual - Localidad:</label>
+                    <input type="text" class="form-control" id="domicilio_actual_localidad" name="domicilio_actual_localidad" required value="{{ jya.domicilio_actual['localidad'] }}">
+                </div>
+                <div class="form-group">
+                    <label for="domicilio_actual_provincia">Domicilio Actual - Provincia:</label>
+                    <input type="text" class="form-control" id="domicilio_actual_provincia" name="domicilio_actual_provincia" required value="{{ jya.domicilio_actual['provincia'] }}">
                 </div>
 
                 <!-- Teléfono actual -->
@@ -68,16 +83,18 @@
 
                 <!-- Contacto de emergencia -->
                 <div class="form-group">
-                    <label for="contacto_emergencia_nombre">Contacto de Emergencia:</label>
-                    <input type="text" class="form-control" id="contacto_emergencia_nombre" name="contacto_emergencia_nombre" placeholder="Nombre" required value="{{ jya.contacto_emergencia["nombre"] }}">
-                    <input type="text" class="form-control mt-2" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono" placeholder="Teléfono" required value="{{ jya.contacto_emergencia["telefono"] }}">
+                    <label for="contacto_emergencia_nombre">Contacto de Emergencia - Nombre:</label>
+                    <input type="text" class="form-control" id="contacto_emergencia_nombre" name="contacto_emergencia_nombre" required value="{{ jya.contacto_emergencia['nombre'] }}">
+                </div>
+                <div class="form-group">
+                    <label for="contacto_emergencia_telefono">Contacto de Emergencia - Teléfono:</label>
+                    <input type="text" class="form-control" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono" required value="{{ jya.contacto_emergencia['telefono'] }}">
                 </div>
 
                 <!-- Becado y porcentaje de beca -->
                 <div class="form-group">
                     <label for="becado">Becado:</label>
                     <select class="form-control" id="becado" name="becado" required>
-                        <option value="" disabled selected>Seleccione una opción</option> <!-- Opción por defecto -->
                         <option value="true" {% if jya.becado %}selected{% endif %}>Sí</option>
                         <option value="false" {% if not jya.becado %}selected{% endif %}>No</option>
                     </select>
@@ -85,7 +102,122 @@
 
                 <div class="form-group">
                     <label for="porcentaje_beca">Porcentaje de Beca:</label>
-                    <input type="number" step="0.01" class="form-control" id="porcentaje_beca" name="porcentaje_beca" required value="{{ jya.porcentaje_beca }}">
+                    <input type="number" step="0.01" class="form-control" id="porcentaje_beca" name="porcentaje_beca" value="{{ jya.porcentaje_beca }}">
+                </div>
+
+                <!-- Profesionales que lo atienden -->
+                <div class="form-group">
+                    <label for="profesionales_atendiendo">Profesionales que lo atienden:</label>
+                    <textarea class="form-control" id="profesionales_atendiendo" name="profesionales_atendiendo">{{ jya.profesionales_atendiendo }}</textarea>
+                </div>
+
+                <!-- Discapacidad -->
+                <div class="form-group">
+                    <label for="certificado_discapacidad">Certificado de Discapacidad:</label>
+                    <select class="form-control" id="certificado_discapacidad" name="certificado_discapacidad">
+                        <option value="true" {% if jya.certificado_discapacidad %}selected{% endif %}>Sí</option>
+                        <option value="false" {% if not jya.certificado_discapacidad %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="diagnostico_discapacidad">Diagnóstico de Discapacidad:</label>
+                    <input type="text" class="form-control" id="diagnostico_discapacidad" name="diagnostico_discapacidad" value="{{ jya.diagnostico_discapacidad }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo_discapacidad">Tipo de Discapacidad:</label>
+                    <select class="form-control" id="tipo_discapacidad" name="tipo_discapacidad">
+                        <option value="Mental" {% if jya.tipo_discapacidad == 'Mental' %}selected{% endif %}>Mental</option>
+                        <option value="Motora" {% if jya.tipo_discapacidad == 'Motora' %}selected{% endif %}>Motora</option>
+                        <option value="Sensorial" {% if jya.tipo_discapacidad == 'Sensorial' %}selected{% endif %}>Sensorial</option>
+                        <option value="Visceral" {% if jya.tipo_discapacidad == 'Visceral' %}selected{% endif %}>Visceral</option>
+                    </select>
+                </div>
+                
+                <!-- Asignaciones familiares -->
+                <div class="form-group">
+                    <label for="asignacion_familiar">Asignación Familiar:</label>
+                    <select class="form-control" id="asignacion_familiar" name="asignacion_familiar" required>
+                        <option value="true" {% if jya.asignacion_familiar %}selected{% endif %}>Sí</option>
+                        <option value="false" {% if not jya.asignacion_familiar %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo_asignacion">Tipo de Asignación:</label>
+                    <select class="form-control" id="tipo_asignacion" name="tipo_asignacion" value="jya.tipo_asignacion">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Asignación Universal por hijo">Asignación Universal por hijo</option>
+                        <option value="Asignación Universal por hijo con Discapacidad">Asignación Universal por hijo con Discapacidad</option>
+                        <option value="Asignación por ayuda escolar anual">Asignación por ayuda escolar anual</option>
+                    </select>
+                </div>
+
+                <!-- Pensión -->
+                <div class="form-group">
+                    <label>¿Es beneficiario de alguna pensión?</label>
+                    <select class="form-control" id="pension" name="pension">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="true">Sí</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo_pension">Tipo de Pensión (si corresponde):</label>
+                    <input type="text" class="form-control" id="tipo_pension" name="tipo_pension" placeholder="Indique si es Provincial o Nacional">
+                </div>
+
+                <!-- Situación previsional -->
+                <div class="form-group">
+                    <label for="obra_social">Obra Social:</label>
+                    <input type="text" class="form-control" id="obra_social" name="obra_social">
+                </div>
+
+                <div class="form-group">
+                    <label for="numero_afiliado">Número de Afiliado:</label>
+                    <input type="text" class="form-control" id="numero_afiliado" name="numero_afiliado">
+                </div>
+
+                <div class="form-group">
+                    <label for="curatela">¿Posee curatela?</label>
+                    <select class="form-control" id="curatela" name="curatela">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="true">Sí</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="observaciones_previsionales">Observaciones Previsionales:</label>
+                    <textarea class="form-control" id="observaciones_previsionales" name="observaciones_previsionales" rows="3"></textarea>
+                </div>
+
+                <!-- Institución escolar -->
+                <div class="form-group">
+                    <label for="institucion_escolar_nombre">Nombre de la Institución Escolar:</label>
+                    <input type="text" class="form-control" id="institucion_escolar_nombre" name="institucion_escolar_nombre">
+                </div>
+
+                <div class="form-group">
+                    <label for="institucion_escolar_direccion">Dirección:</label>
+                    <input type="text" class="form-control" id="institucion_escolar_direccion" name="institucion_escolar_direccion">
+                </div>
+
+                <div class="form-group">
+                    <label for="institucion_escolar_telefono">Teléfono:</label>
+                    <input type="text" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono">
+                </div>
+
+                <div class="form-group">
+                    <label for="grado_actual">Grado/Año Actual:</label>
+                    <input type="text" class="form-control" id="grado_actual" name="grado_actual">
+                </div>
+
+                <div class="form-group">
+                    <label for="institucion_escolar_observaciones">Observaciones:</label>
+                    <textarea class="form-control" id="institucion_escolar_observaciones" name="institucion_escolar_observaciones" rows="3"></textarea>
                 </div>
 
                 <!-- Profesionales que lo atienden -->
@@ -94,8 +226,152 @@
                     <textarea class="form-control" id="profesionales_atendiendo" name="profesionales_atendiendo" rows="3"></textarea>
                 </div>
 
-                <!-- Botón de creación -->
-                <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
+                <!-- Familiares o tutores responsables -->
+                <h3>Datos del Familiar o Tutor Responsable</h3>
+                <div class="form-group">
+                    <label for="familiar1_parentesco">Parentesco:</label>
+                    <input type="text" class="form-control" id="familiar1_parentesco" name="familiar1_parentesco">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar1_nombre">Nombre:</label>
+                    <input type="text" class="form-control" id="familiar1_nombre" name="familiar1_nombre">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar1_apellido">Apellido:</label>
+                    <input type="text" class="form-control" id="familiar1_apellido" name="familiar1_apellido">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar1_dni">DNI:</label>
+                    <input type="text" class="form-control" id="familiar1_dni" name="familiar1_dni">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar1_domicilio_actual">Domicilio Actual:</label>
+                    <input type="text" class="form-control" id="familiar1_domicilio_actual" name="familiar1_domicilio_actual">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar1_celular_actual">Celular Actual:</label>
+                    <input type="text" class="form-control" id="familiar1_celular_actual" name="familiar1_celular_actual">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar1_email">Email:</label>
+                    <input type="email" class="form-control" id="familiar1_email" name="familiar1_email">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar1_nivel_escolaridad">Nivel de Escolaridad:</label>
+                    <select class="form-control" id="familiar1_nivel_escolaridad" name="familiar1_nivel_escolaridad">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Primario">Primario</option>
+                        <option value="Secundario">Secundario</option>
+                        <option value="Terciario">Terciario</option>
+                        <option value="Universitario">Universitario</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar1_ocupacion">Ocupación:</label>
+                    <input type="text" class="form-control" id="familiar1_ocupacion" name="familiar1_ocupacion">
+                </div>
+
+                <!-- Segundo familiar/tutor (opcional) -->
+                <h3>Datos de otro Familiar o Tutor (opcional)</h3>
+                <div class="form-group">
+                    <label for="familiar2_parentesco">Parentesco:</label>
+                    <input type="text" class="form-control" id="familiar2_parentesco" name="familiar2_parentesco">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar2_nombre">Nombre:</label>
+                    <input type="text" class="form-control" id="familiar2_nombre" name="familiar2_nombre">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar2_apellido">Apellido:</label>
+                    <input type="text" class="form-control" id="familiar2_apellido" name="familiar2_apellido">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar2_dni">DNI:</label>
+                    <input type="text" class="form-control" id="familiar2_dni" name="familiar2_dni">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar2_domicilio_actual">Domicilio Actual:</label>
+                    <input type="text" class="form-control" id="familiar2_domicilio_actual" name="familiar2_domicilio_actual">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar2_celular_actual">Celular Actual:</label>
+                    <input type="text" class="form-control" id="familiar2_celular_actual" name="familiar2_celular_actual">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar2_email">Email:</label>
+                    <input type="email" class="form-control" id="familiar2_email" name="familiar2_email">
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar2_nivel_escolaridad">Nivel de Escolaridad:</label>
+                    <select class="form-control" id="familiar2_nivel_escolaridad" name="familiar2_nivel_escolaridad">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Primario">Primario</option>
+                        <option value="Secundario">Secundario</option>
+                        <option value="Terciario">Terciario</option>
+                        <option value="Universitario">Universitario</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="familiar2_ocupacion">Ocupación:</label>
+                    <input type="text" class="form-control" id="familiar2_ocupacion" name="familiar2_ocupacion">
+                </div>
+                
+                <div class="form-group">
+                    <label for="propuesta_trabajo">Propuesta de trabajo institucional:</label>
+                    <select class="form-control" id="propuesta_trabajo" name="propuesta_trabajo">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Hipoterapia">Hipoterapia</option>
+                        <option value="Monta Terápeutica">Monta Terápeutica</option>
+                        <option value="Deporte">Deporte</option>
+                        <option value="Encuetre adaptado">Encuetre adaptado</option>
+                        <option value="Actividades Recreativas">Actividades Recreativas</option>
+                        <option value="Equitación">Equitación</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Condicion:</label>
+                    <select class="form-control" id="condicion_trabajo" name="condicion_trabajo">
+                        <option value="" disabled selected>Seleccione un tipo</option>
+                        <option value="REGULAR">REGULAR</option>
+                        <option value="DE BAJA">DE BAJA</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sede">Sede:</label>
+                    <select class="form-control" id="sede" name="sede">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="CASJ">CASJ</option>
+                        <option value="HLP">HLP</option>
+                        <option value="OTRO">OTRO</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dias_asistencia">Días de Asistencia:</label><br>
+                        <input type="checkbox" name="dias_asistencia[]" value="Lunes"> Lunes<br>
+                        <input type="checkbox" name="dias_asistencia[]" value="Martes"> Martes<br>
+                        <input type="checkbox" name="dias_asistencia[]" value="Miércoles"> Miércoles<br>
+                        <input type="checkbox" name="dias_asistencia[]" value="Jueves"> Jueves<br>
+                        <input type="checkbox" name="dias_asistencia[]" value="Viernes"> Viernes<br>
+                </div>
+                <button type="submit" class="btn btn-primary">Actualizar usuario</button>
             </form>
         </article>
     </section>

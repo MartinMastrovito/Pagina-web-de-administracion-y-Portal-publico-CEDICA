@@ -24,7 +24,7 @@ class Empleados(db.Model):
     condicion = db.Column(db.String)
     activo = db.Column(db.Boolean, default=True)
 
-
+    jyas_roles = db.relationship('JYAEmpleado', back_populates='empleado')
 
     def __repr__(self):
         return f'<Empleado {self.nombre},{self.id}>'
