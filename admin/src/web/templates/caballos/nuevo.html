@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/nuevo.css') }}">
+    <title>Nuevo Caballo</title>
+</head>
+<body>
+    <h1>Registrar Nuevo Caballo</h1>
+
+    <form action="{{ url_for('caballos.crear_caballo') }}" method="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" required>
+
+        <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+        <input type="date" name="fecha_nacimiento" required>
+
+        <label for="sexo">Sexo:</label>
+        <input type="text" name="sexo" required>
+
+        <label for="raza">Raza:</label>
+        <input type="text" name="raza">
+
+        <label for="pelaje">Pelaje:</label>
+        <input type="text" name="pelaje">
+
+        <label for="tipo_ingreso">Tipo de Ingreso:</label>
+        <select name="tipo_ingreso" required>
+            <option value="Compra">Compra</option>
+            <option value="Donación">Donación</option>
+        </select>
+
+        <label for="fecha_ingreso">Fecha de Ingreso:</label>
+        <input type="date" name="fecha_ingreso" required>
+
+        <label for="sede_asignada">Sede Asignada:</label>
+        <input type="text" name="sede_asignada" required>
+
+        <label for="entrenadores">Entrenadores:</label>
+        <select name="entrenadores" multiple>
+            {% for entrenador in entrenadores %}
+            <option value="{{ entrenador.id }}">{{ entrenador.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="JYA">Tipos de J&A:</label>
+        <select name="JYA" multiple>
+            {% for tipo_ja in JYA %}
+            <option value="{{ tipo_ja.id }}">{{ tipo_ja.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Registrar Caballo</button>
+    </form>
+
+    <a href="{{ url_for('caballos.listar_caballos') }}">Volver al listado</a>
+</body>
+</html>

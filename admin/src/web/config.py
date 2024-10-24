@@ -1,12 +1,14 @@
-import os
 from os import environ
-
+import os 
 class Config(object):
     TESTING = False
     SECRET_KEY = "grupo30"
 
 class ProductionConfig(Config):
-    """Configuracion de produccion."""
+    MINIO_SERVER = environ.get("MINIO_SERVER")
+    MINIO_ACCESS_KEY = environ.get("MINIO_ACCESS_KEY")
+    MINIO_SECRET_KEY = environ.get("MINIO_SECRET_KEY")
+    MINIO_SECURE = True
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_size": 10,
@@ -14,9 +16,22 @@ class ProductionConfig(Config):
         "pool_pre_ping": True,
     }
 
-class DevelopmentConfig(Config):
-    DB_USER = os.getenv("DB_USER", "tu_user_name")  # obtener el nombre de usuario del sistema
+
+""" MINIO_SERVER = "minio.proyecto2024.linti.unlp.edu.ar"
+    MINIO_ACCESS_KEY = "RYZT62lu0qa8LTWqQyl3"
+    MINIO_SECRET_KEY = "I94NDTB1iDXCxvifqooxFRpzEtVmQojszGv6ZNAR"
+    MINIO_SECURE = False
+    DB_USER = os.getenv("DB_USER", os.getlogin())  # obtener el nombre de usuario del sistema
     DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")  # permitir que cada usuario configure su contraseña
+    ======="""
+
+class DevelopmentConfig(Config):
+    MINIO_SERVER = "localhost:9000"
+    MINIO_ACCESS_KEY = "9H3ZLLlZC4qX1vbZ1MJb"
+    MINIO_SECRET_KEY = "mJGy8It49ebNNu2C1PaFMe5g1s6ObJ9adpzAHsWC"
+    MINIO_SECURE = False
+    DB_USER = os.getenv("DB_USER", os.getlogin())
+    DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
     DB_HOST = "localhost"
     DB_PORT = "5432"
     DB_NAME = "grupo30"

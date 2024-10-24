@@ -1,32 +1,74 @@
 {% extends "layout.html" %}
-<header>
+<head>
     {% block imports %}
-        <style>
-            .box{
-                background-color:rgb(174, 235, 225);
-            }
-        </style>
+    <style>
+        .box {
+            background-color: rgb(174, 235, 225);
+        }
+        .search{
+            display:flex;
+            flex-direction:row;
+            justify-content:flex-start;
+            flex-wrap: wrap;
+            gap:1%;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_list.css') }}">
     {% endblock %}
-</header>
-{% block content %}
-<h1>Esto es un index</h1>
-<br>
-<br>
-{% for invoice in invoices %}
-    <div class="box has-background-$red">
+</head>
+<body>
+    {% block content %}
+    <form class="form search" method="POST" id="search-form" action="{{ url_for('invoices.order_list') }}">
+        <input type="search" placeholder="Nombre" name="first_name">
+        <input type="search" placeholder="Apellido" name="last_name">
+        <input type="date" name="from" value="">
+        <input type="date" name="to" value="">
+        <select class="select" name="payment_method" >
+            <option value="">Todos</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Tarjeta de credito">Tarjeta de credito</option>
+            <option value="Tarjeta de debito">Tarjeta de debito</option>
+            <option value="Otro">Otro</option>
+        </select>
+        <select class="select" name="order">
+            <option value="ASC">Ascendente</option>
+            <option value="DESC">Descendente</option>
+        </select>
+       <button type="submit" form="search-form" class="button is-rounded" style="background-color:#78b9bf">BUSCAR</button>
+    </form>
+    {% for invoice in invoices %}
+    <div class="box has-background">
         <p>Id: {{invoice.id}}</p>
-        <p>j&a: {{invoice.j_a}}</p>
+        <p>j&a: {{jinetes_amazonas[invoice.j_a]}}</p>
         <p>Fecha de pago: {{invoice.pay_date}}</p>
         <p>Metodo de pago: {{invoice.payment_method}}</p>
         <p>Monto: {{invoice.amount}}</p>
-        <p>Beneficiario: {{invoice.recipient}}</p>
+        <p>Beneficiario: {{employees[invoice.recipient]}}</p>
         {% if eliminado %}
         <form action="{{ url_for('invoices.delete_invoice') }}" id="invoice_delete_form" class="form_style" method="POST">
-            <input type="hidden" value={{invoice.id}} name="id">        
+            <input type="hidden" value={{invoice.id}} name="id">
             <button class="button" name="delete" style="background-color:#f5be6b">Eliminar</button>
         </form>
         <a class="button" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a>
+        <a class="button" href="{{url_for('invoices.show_invoice' ,invoice_id = invoice.id)}}">Mostrar mas</a>
         {% endif %}
     </div>
-{% endfor %}
-{% endblock %}
+    {% endfor %}
+    <div class="page-items">
+        <p>{{invoices.first}} - {{invoices.last}} of {{invoices.total}} </p>
+    </div>
+    <div class="pagination">
+        {% for page in invoices.iter_pages() %}
+            {% if page %}
+                {% if page != invoices.page %}
+                    <a class="button" href="{{ url_for('invoices.invoices_index',page=page) }}">{{page}}</a>
+                {% else %}
+                    <strong>{{page}}</strong>
+                {% endif %}
+            {% else %}
+                <span class="ellipsis">...</span>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endblock %}
+</body>
