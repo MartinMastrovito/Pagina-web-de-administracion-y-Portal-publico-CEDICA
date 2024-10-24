@@ -4,7 +4,6 @@ from sqlalchemy.dialects.postgresql import JSON
 class JYA(db.Model):
     __tablename__ = 'JYA'
     __table_args__ = {'extend_existing': True}
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     
     # Datos personales
@@ -14,6 +13,7 @@ class JYA(db.Model):
     edad = db.Column(db.Integer)
     fecha_nacimiento = db.Column(db.Date, nullable=False)
     
+    debts = db.Column(db.Boolean,default=False)
     # Lugar de nacimiento (localidad, provincia)
     lugar_nacimiento = db.Column(JSON, nullable=False)
     

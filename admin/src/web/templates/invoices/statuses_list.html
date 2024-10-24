@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+<body>
+    {% block content %}
+        {% for ja in jinetes_amazonas.keys() %}
+            <div class="box has-background">
+                <p>nombre: {{jinetes_amazonas[ja]}}</p>
+                {%if statuses[ja] == True %}
+                    <p>Estado de deuda: Deudor</p>
+                {% else %}
+                    <p>Estado de deuda: No deudor</p>
+                {% endif %}
+                <form action="{{ url_for('invoices.update_status') }}" id="status_update" class="form_style" method="POST">
+                    <input type="hidden" value={{ja}} name="id">
+                    <button class="button" name="update" style="background-color:#f5be6b">Cambiar estado deuda</button>
+                </form>
+            </div>
+        {% endfor %}
+    {% endblock %}
+</body>

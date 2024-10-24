@@ -1,30 +1,56 @@
+"""
+Esto es un controlador relacionado con los cobros de los J&A. 
+"""
 from flask import render_template, request, Blueprint, redirect, flash
 from src.core.invoices.invoices import Invoices
 from src.core.database import db
 from src.core.invoices import utiles 
 
 
-"""
-Esto es un controlador relacionado con los cobros de los J&A. 
-"""
 
 
 invoices_bp = Blueprint("invoices", __name__,url_prefix="/cobros", template_folder='../templates/invoices',static_folder="/admin/static")
+
+#Ruta del menu principal
 @invoices_bp.route("/")
 def invoices_menu():
     return render_template("invoices_menu.html",invoices=invoices_bp)
 
-@invoices_bp.get("/lista-cobros")
-def invoices_index():
-    invoices = Invoices.query.all()
-    return render_template("list_invoices.html", invoices=invoices,eliminado=True)
+#Rutas del listado de cobros
+@invoices_bp.get("/lista-cobros/<int:page>")
+def invoices_index(page,**order):
+    if(len(order) != 0):
+        invoices = utiles.select_filter(**order)
+    else:
+        invoices = utiles.select_all()
+    ja_dictionary = utiles.get_all_ja()
+    invoices = db.paginate(invoices,page=page,max_per_page=10)
+    return render_template("list_invoices.html", invoices=invoices,eliminado=True,jinetes_amazonas = ja_dictionary)
 
-@invoices_bp.post("/lista.cobros")
+
+@invoices_bp.post("/lista-cobros/")
+def order_list():
+    if("id" in request.form):
+        return delete_invoice()
+    else:
+        order_information = {
+            "payment_method" : request.form['payment_method'],
+            "date_from": request.form['from'],
+            "date_to": request.form['to'],
+            "first_name": request.form['first_name'],
+            "last_name": request.form['last_name'],
+            "order": request.form['order']
+        }
+        return invoices_index(1,**order_information)
+
+@invoices_bp.post("/lista-cobros/")
 def delete_invoice():
     id_delete = request.form['id']
     utiles.delete(id_delete)
-    return redirect("/cobros/lista-cobros")
+    return redirect("/cobros/")
 
+
+#Ruta para actualizar cobro
 @invoices_bp.get("/actualizar-cobro/<int:invoice_id>")
 def update_invoice(invoice_id):
     invoice = utiles.get_invoice(invoice_id)
@@ -34,16 +60,18 @@ def update_invoice(invoice_id):
 def invoice_update(invoice_id):
     invoice_information = {
         "pay_date":request.form['pay_date'],
-        "amount":float(request.form['amount']),
+        "amount":(request.form['amount']),
         "observations":request.form['observations'],
         "payment_method":request.form['payment_method']
     }
     utiles.update_invoice(invoice_id, **invoice_information)
-    return redirect("/cobros/lista-cobros")
+    return redirect("/cobros/lista-cobros/1")
 
+#Rutas del creador de cobros
 @invoices_bp.get("/crear-cobro")
 def invoice_create():
-    return render_template("create_invoice.html",invoices=invoices_bp)
+    ja_dictionary = utiles.get_all_ja()
+    return render_template("create_invoice.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary)
 
 @invoices_bp.post("/crear-cobro")
 def create_invoice():                
@@ -55,8 +83,28 @@ def create_invoice():
         "recipient": request.form['recipient'],
         "observations": request.form['observations'],
     }
-    if(utiles.validate(**invoice_information)):
+    if(utiles.validate_create(**invoice_information)):
          utiles.create(**invoice_information)
     else: 
         return redirect('/cobros')
     return redirect('/cobros/crear-cobro')
+
+#rutas para el listado de los estados de deuda
+@invoices_bp.get("/deudores")
+def invoice_statuses():
+    ja_dictionary = utiles.get_all_ja()
+    statuses_dictionary = utiles.get_statuses()
+    return render_template("statuses_list.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary, statuses = statuses_dictionary)
+
+@invoices_bp.post("/deudores")
+def update_status():
+    ja_update = request.form['id']
+    utiles.change_status(ja_update)
+    return redirect('/cobros/deudores')
+
+#rutas para la muestra de un cobro especifico.
+@invoices_bp.get("/mostrar-cobro/<int:invoice_id>")
+def show_invoice(invoice_id):
+    invoice = utiles.get_invoice(invoice_id)
+    ja_name = utiles.get_ja(invoice.j_a)
+    return render_template("show_invoice.html",invoice=invoice, ja_name= ja_name)
