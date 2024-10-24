@@ -1,6 +1,6 @@
 import logging
 from logging.config import fileConfig
-from src.core.database import db
+
 from flask import current_app
 
 from alembic import context
@@ -45,12 +45,10 @@ target_db = current_app.extensions['migrate'].db
 # ... etc.
 
 
-#def get_metadata():
-#    if hasattr(target_db, 'metadatas'):
-#        return target_db.metadatas[None]
-#    return target_db.metadata
 def get_metadata():
-    return target_db.metadata  # Único metadata para todas las tablas
+    if hasattr(target_db, 'metadatas'):
+        return target_db.metadatas[None]
+    return target_db.metadata
 
 
 def run_migrations_offline():
