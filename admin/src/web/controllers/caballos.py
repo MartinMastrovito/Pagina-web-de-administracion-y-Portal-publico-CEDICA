@@ -6,11 +6,14 @@ from src.core.auth.models.model_documento import Documento
 from src.core.auth.models.model_JyA import JYA
 from werkzeug.utils import secure_filename
 import os
+from src.core.auth.decorators import login_required 
 
 # Definir el blueprint para caballos
 caballos_bp = Blueprint('caballos', __name__)
 
+
 @caballos_bp.route('/caballos', methods=['GET'])
+@login_required
 def menu_caballos():
     page = request.args.get('page', 1, type=int)
     nombre = request.args.get('nombre', '', type=str)
