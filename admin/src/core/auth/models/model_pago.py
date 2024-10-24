@@ -20,7 +20,7 @@ class Pago(db.Model):
     description = db.Column(db.String, nullable=True)
     
     
-    empleados = db.relationship("Empleados", secondary='beneficiary', back_populates='beneficiary')
+    empleados = db.relationship("src.core.auth.models.model_empleado.Empleados", secondary='beneficiary', back_populates='beneficiary')
 
 
 
