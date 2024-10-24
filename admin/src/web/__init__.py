@@ -1,15 +1,15 @@
 from flask import Flask
 from flask_migrate import Migrate  # Importar Migrate
-from web import routes
-from web import helpers
-from web.storage import storage
-from core.bcrypt import bcrypt
+from src.web import routes
+from src.web import helpers
+from src.web.storage import storage
+from src.core.bcrypt import bcrypt
 from src.core.database import db_reset, init_app
 from src.core.database import db # Importar 'db' desde 'core.database'
-from web.config import config
-from web.handlers.error import not_found_error
-from web.handlers.error import internal_server_error
-from web.handlers.auth import check_permission
+from src.web.config import config
+from src.web.handlers.error import not_found_error
+from src.web.handlers.error import internal_server_error
+from src.web.handlers.auth import check_permission
 
 # Inicializa Migrate aquí para poder usarlo en create_app
 migrate = Migrate()  
