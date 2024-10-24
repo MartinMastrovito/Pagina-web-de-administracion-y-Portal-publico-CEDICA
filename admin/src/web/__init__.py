@@ -14,7 +14,7 @@ from src.web.handlers.auth import check_permission
 # Inicializa Migrate aquí para poder usarlo en create_app
 migrate = Migrate()  
 
-def create_app(env="development"):
+def create_app(env="development", static_folder=''):
     app = Flask(__name__, template_folder='../web/templates', static_folder='../../static/')
 
     # Clave secreta necesaria para manejar sesiones de forma segura
