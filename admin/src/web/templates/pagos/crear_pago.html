@@ -24,11 +24,11 @@
             </header>
             <form action="{{ url_for('pago.crear_pago') }}" id="pagos_form" class="form_style" method="POST">
                 <label for="beneficiario">Beneficiario:</label>
-                <select id="beneficiario" name="beneficiario_id" required>
+                <select id="beneficiario" name="id" required>
                     <option value="" disabled selected>Seleccione un empleado</option>
-                    {% for empleado in empleados %}
-                        <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
-                    {% endfor %}
+                        {% for empleado in empleados %}
+                            <option value="{{empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
+                        {% endfor %}
                 </select>
                 <label for="monto">Monto:</label>
                 <input type="number" id="monto" name="monto" required>
@@ -40,8 +40,8 @@
                     <option value="Proveedor">Proveedor</option>
                     <option value="Gastos Varios">Gastos Varios</option>
                 </select>
-                <label for="descripcion">Descripción:</label>
-                <textarea id="descripcion" name="descripcion" rows="3"></textarea>
+                <label for="description">Descripción:</label>
+                <textarea id="description" name="description" rows="3"></textarea>
 
                 <button form="pagos_form" class="button" type="submit">Registrar Pago</button>
             </form>

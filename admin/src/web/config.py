@@ -1,7 +1,6 @@
 import os
 from os import environ
-import os
-
+import os 
 class Config(object):
     TESTING = False
     SECRET_KEY = "grupo30"
@@ -21,16 +20,16 @@ class ProductionConfig(Config):
     DB_USER = os.getenv("DB_USER", os.getlogin())  # obtener el nombre de usuario del sistema
     DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")  # permitir que cada usuario configure su contraseña
     ======="""
+
 class DevelopmentConfig(Config):
-   
     MINIO_SERVER = "localhost:9000"
     MINIO_ACCESS_KEY = "9H3ZLLlZC4qX1vbZ1MJb"
     MINIO_SECRET_KEY = "mJGy8It49ebNNu2C1PaFMe5g1s6ObJ9adpzAHsWC"
     MINIO_SECURE = False
-    DB_USER = os.getenv("DB_USER", os.getlogin())
+    DB_USER = os.getenv("DB_USER", "postgres")
     DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
     DB_HOST = "localhost"
-    DB_PORT = "5432"
+    DB_PORT = "5433"
     DB_NAME = "grupo30"
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"

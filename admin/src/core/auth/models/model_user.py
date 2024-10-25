@@ -23,6 +23,7 @@ class User(db.Model):
     enabled = db.Column(db.Boolean, default=True)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))  
     role = db.relationship('Role', backref='users')
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     def __repr__(self):
         return f'<User {self.email}>'

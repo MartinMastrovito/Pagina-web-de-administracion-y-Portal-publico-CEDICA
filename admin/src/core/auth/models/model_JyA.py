@@ -1,13 +1,13 @@
+#RUTA: admin/src/core/auth/models/model_JyA
+
 from src.core.database import db
 from sqlalchemy.dialects.postgresql import JSON
 #from core.auth.models.model_tablasIntermedias import  caballo_entrenadores , caballo_conductores
 #from core.auth.models.model_caballos import caballo_tipoja
 
-
 class JYA(db.Model):
     __tablename__ = 'JYA'
     __table_args__ = {'extend_existing': True}
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     
     # Datos personales
@@ -17,6 +17,7 @@ class JYA(db.Model):
     edad = db.Column(db.Integer)
     fecha_nacimiento = db.Column(db.Date, nullable=False)
     
+    debts = db.Column(db.Boolean,default=False)
     # Lugar de nacimiento (localidad, provincia)
     lugar_nacimiento = db.Column(JSON, nullable=False)
     
@@ -31,6 +32,7 @@ class JYA(db.Model):
     
     caballos = db.relationship('Caballo', secondary='caballo_tipoja', back_populates='JYA')
 
+    documentos = db.relationship('Documento', backref='jya', lazy=True)
 
     # Becado (sí/no) y porcentaje de beca
     becado = db.Column(db.Boolean, default=False)
@@ -38,11 +40,6 @@ class JYA(db.Model):
     
     # Profesionales que lo atienden (campo libre)
     profesionales_atendiendo = db.Column(db.Text, nullable=True)
-    
+
     def __repr__(self):
         return f'<Persona {self.nombre} {self.apellido}>'
-
-# Ejemplo de un diccionario que podrías almacenar en los campos JSON:
-# lugar_nacimiento = {'localidad': 'Ciudad X', 'provincia': 'Provincia Y'}
-# domicilio_actual = {'calle': 'Calle Z', 'numero': 123, 'departamento': 'A', 'localidad': 'Ciudad X', 'provincia': 'Provincia Y'}
-# contacto_emergencia = {'nombre': 'Juan Pérez', 'telefono': '123456789'}
