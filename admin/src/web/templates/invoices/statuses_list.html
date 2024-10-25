@@ -1,4 +1,7 @@
 {% extends "layout.html" %}
+{% block imports %}
+    {{super()}}
+{% endblock %}
 <body>
     {% block content %}
         {% for ja in jinetes_amazonas.keys() %}
