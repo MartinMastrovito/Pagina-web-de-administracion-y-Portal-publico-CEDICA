@@ -5,16 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Mi Aplicación{% endblock %}</title>
-    <link
+    {% block imports %}
+        <link
         rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
-    >
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
-    {% block imports %} {% endblock %}
+    {% endblock %}
 </head>
 <body>
     <header>
-        <img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}">
+        <a href="{{url_for('home')}}"><img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}"></a>
         <nav>
             <a class="button" href="{{ url_for('caballos.menu_caballos') }}">Caballos</a>
             <a class="button" href="{{ url_for('empleados.show_empleado_form') }}">Equipo</a>

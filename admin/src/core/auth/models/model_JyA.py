@@ -65,7 +65,7 @@ class JYA(db.Model):
     dias_asistencia = db.Column(JSON, nullable=True)
 
     # Relación con empleados (a través de la tabla intermedia JYAEmpleado)
-    empleados = db.relationship('JYAEmpleado', back_populates='jya')
+    empleados = db.relationship('JYAEmpleado', back_populates='jya', cascade="all, delete-orphan")
     
     caballos = db.relationship('Caballo', secondary='caballo_tipoja', back_populates='JYA')
     documentos = db.relationship('Documento', backref='jya', lazy=True)
