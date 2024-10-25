@@ -1,7 +1,5 @@
 from src.core.database import db
 
-
-
 beneficiary = db.Table('beneficiary',
     db.Column('pago_id', db.Integer, db.ForeignKey('pago.id'), primary_key=True),
     db.Column('empleados_id', db.Integer, db.ForeignKey('empleados.id'), primary_key=True),

@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 <head>
     {% block imports %}
+        {{super()}}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_create.css') }}">
         <style>
             .box{
@@ -21,7 +22,7 @@
                 <span>Fecha de pago: {{invoice.pay_date}}</span>
                 <span>Metodo de pago: {{invoice.payment_method}}</span>
                 <span>Monto: {{invoice.amount}}</span>
-                <span>Beneficiario: {{invoice.recipient}}</span>
+                <span>Beneficiario: {{emp_name}}</span>
                 <p>Descripcion: {{invoice.observations}}</p>
             </section>
             <a class="button" href="{{url_for('invoices.invoices_index', page = 1)}}">Ir al listado</a>     

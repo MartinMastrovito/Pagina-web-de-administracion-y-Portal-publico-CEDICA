@@ -1,10 +1,10 @@
 from flask import render_template, Blueprint, request, redirect, url_for, flash
-from web.controllers.users import bp as users_bp
-from web.controllers.invoices import invoices_bp
-from web.controllers.crud_JyA import bp as crud_JyA_bp
-from web.controllers.caballos import caballos_bp
-from web.controllers.pagos import pago_bp
-from web.controllers.empleados import empleados_bp
+from src.web.controllers.users import bp as users_bp
+from src.web.controllers.invoices import invoices_bp
+from src.web.controllers.crud_JyA import bp as crud_JyA_bp
+from src.web.controllers.caballos import caballos_bp
+from src.web.controllers.pagos import pago_bp
+from src.web.controllers.empleados import empleados_bp
 
 def register(app):
     # Crear un Blueprint para las rutas
@@ -15,24 +15,7 @@ def register(app):
     def home():
         return render_template('home.html')
 
-    # Ruta para el inicio de sesión
-    @main.route('/login', methods=['GET', 'POST'])
-    def login():
-        if request.method == 'POST':
-            email = request.form['email']
-            password = request.form['password']
-        
-            user = login_user(email, password)
-            if user:
-                
-                flash('Inicio de sesión exitoso.', 'success')
-                return redirect(url_for('main.home'))  # Redirige a la página de inicio
-            else:
-                flash('Correo electrónico o contraseña incorrectos.', 'danger')
-        
-        return render_template('login.html')  
- 
-    
+
     # Register blueprints    
     app.register_blueprint(users_bp)
 

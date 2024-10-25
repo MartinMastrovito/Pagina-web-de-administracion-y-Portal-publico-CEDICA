@@ -1,19 +1,20 @@
 {% extends "layout.html" %}
 <head>
     {% block imports %}
-    <style>
-        .box {
-            background-color: rgb(174, 235, 225);
-        }
-        .search{
-            display:flex;
-            flex-direction:row;
-            justify-content:flex-start;
-            flex-wrap: wrap;
-            gap:1%;
-        }
-    </style>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_list.css') }}">
+        {{super()}}
+        <style>
+            .box {
+                background-color: rgb(174, 235, 225);
+            }
+            .search{
+                display:flex;
+                flex-direction:row;
+                justify-content:flex-start;
+                flex-wrap: wrap;
+                gap:1%;
+            }
+        </style>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_list.css') }}">
     {% endblock %}
 </head>
 <body>
@@ -43,14 +44,18 @@
         <p>Fecha de pago: {{invoice.pay_date}}</p>
         <p>Metodo de pago: {{invoice.payment_method}}</p>
         <p>Monto: {{invoice.amount}}</p>
-        <p>Beneficiario: {{invoice.recipient}}</p>
-        {% if eliminado %}
-        <form action="{{ url_for('invoices.delete_invoice') }}" id="invoice_delete_form" class="form_style" method="POST">
-            <input type="hidden" value={{invoice.id}} name="id">
-            <button class="button" name="delete" style="background-color:#f5be6b">Eliminar</button>
-        </form>
-        <a class="button" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a>
-        <a class="button" href="{{url_for('invoices.show_invoice' ,invoice_id = invoice.id)}}">Mostrar mas</a>
+        <p>Beneficiario: {{employees[invoice.recipient]}}</p>
+        {%if check_permission(session,"invoice_destroy") %}
+            <form action="{{ url_for('invoices.delete_invoice') }}" id="invoice_delete_form" class="form_style" method="POST">
+                <input type="hidden" value={{invoice.id}} name="id">
+                <button class="button" name="delete" style="background-color:#f5be6b">Eliminar</button>
+            </form>
+        {% endif %}
+        {%if check_permission(session,"invoice_update") %}
+            <a class="button" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a>
+        {% endif %}
+        {%if check_permission(session,"issue_show") %}
+            <a class="button" href="{{url_for('invoices.show_invoice' ,invoice_id = invoice.id)}}">Mostrar mas</a>
         {% endif %}
     </div>
     {% endfor %}

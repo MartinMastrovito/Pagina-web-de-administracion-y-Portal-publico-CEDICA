@@ -9,7 +9,7 @@
 <body>
     <h1>Editar Caballo: {{ caballo.nombre }}</h1>
 
-    <form action="{{ url_for('editar_caballo', id=caballo.id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ url_for('caballos.editar_caballo', id=caballo.id) }}" method="POST" enctype="multipart/form-data">
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" value="{{ caballo.nombre }}" required>
 
@@ -62,6 +62,6 @@
         <button type="submit">Guardar Cambios</button>
     </form>
 
-    <a href="{{ url_for('mostrar_caballo', id=caballo.id) }}">Cancelar</a>
+    <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}">Cancelar</a>
 </body>
 </html>

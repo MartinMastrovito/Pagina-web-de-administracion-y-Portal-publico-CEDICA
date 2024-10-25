@@ -1,9 +1,9 @@
 #aca se guardan todos los metodos que se van a usar en la base de datos
 #como la comprobacion de login, por ejemplo
-from core.bcrypt import bcrypt
+from src.core.bcrypt import bcrypt
 from src.core.database import db
-from core.auth.models.model_user import User , Role
-from core.auth.models.model_permission import  RolePermission, Permission
+from src.core.auth.models.model_user import User , Role
+from src.core.auth.models.model_permission import  RolePermission, Permission
 
 def get_permissions(user_id):
     user = get_user(user_id)
@@ -72,16 +72,20 @@ def get_user(user_id):
     return User.query.get_or_404(user_id)
 
 def update_user(user_id, **kwargs):
-    user = get_user(user_id)
+    validation = User.query.filter_by(email=kwargs["email"]).first()
     
+    if validation:
+        return "Este email está siendo utilizado, pruebe ingresar uno diferente."
     # Actualizar los atributos del usuario con los valores proporcionados en kwargs
+    user = get_user(user_id)
+    kwargs["enabled"] = True
     for key, value in kwargs.items():
         setattr(user, key, value)
     
     # Confirmar los cambios en la base de datos
     db.session.commit()
     
-    return user
+    return False
 
 def delete_user(user_id):
     db.session.query(User).filter(User.id==user_id).delete()
@@ -109,6 +113,5 @@ def unblock_user(user_id):
     if user:
         user.enabled = True
         db.session.commit()
-        print("DESBLOQUEADO")
         return True
     return False

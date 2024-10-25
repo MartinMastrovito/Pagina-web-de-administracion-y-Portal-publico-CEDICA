@@ -7,8 +7,13 @@
     <title>Listado de Caballos</title>
 </head>
 <body>
+    <header>
+        <img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}">
+        <a class="btn" href="{{ url_for('users.show_home') }}">Volver al Inicio</a>
+    </header>
+
     <h1>Listado de Caballos</h1>
-    <form action="{{ url_for('caballos.listar_caballos') }}" method="GET">
+    <form action="{{ url_for('caballos.menu_caballos') }}" method="GET">
         <input type="text" name="nombre" placeholder="Buscar por nombre..." value="{{ request.args.get('nombre') }}">
         <button type="submit">Buscar</button>
     </form>
@@ -41,11 +46,11 @@
     <!-- Paginación -->
     <div class="pagination">
         {% if caballos.has_prev %}
-        <a href="{{ url_for('caballos.listar_caballos', page=caballos.prev_num, nombre=request.args.get('nombre')) }}">Anterior</a>
+        <a href="{{ url_for('caballos.menu_caballos', page=caballos.prev_num, nombre=request.args.get('nombre')) }}">Anterior</a>
         {% endif %}
         <span>Página {{ caballos.page }} de {{ caballos.pages }}</span>
         {% if caballos.has_next %}
-        <a href="{{ url_for('caballos.listar_caballos', page=caballos.next_num, nombre=request.args.get('nombre')) }}">Siguiente</a>
+        <a href="{{ url_for('caballos.menu_caballos', page=caballos.next_num, nombre=request.args.get('nombre')) }}">Siguiente</a>
         {% endif %}
     </div>
 </body>

@@ -3,7 +3,7 @@ from src.core.auth.models.model_empleado import Empleados
 from flask import render_template , flash, redirect, current_app
 from src.core.database import db
 from sqlalchemy import asc, desc
-from core.auth.decorators import login_required 
+from src.core.auth.decorators import login_required 
 from werkzeug.utils import secure_filename
 import os
 

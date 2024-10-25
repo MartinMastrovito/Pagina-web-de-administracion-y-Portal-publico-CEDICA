@@ -3,14 +3,17 @@
 <head>
     {% block title %}Cobros{% endblock %}
     {% block imports %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_menu.css') }}">
+        {{super()}}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_menu.css') }}">
     {% endblock %}
 </head>
 {% block content %}
 <h1>COBROS</h1>
 <nav class="invoices_options">
     <a class="button" href="{{url_for('invoices.invoices_index', page = 1)}}">LISTAR</a>
-    <a class="button" href="{{url_for('invoices.invoice_create')}}">CREAR COBRO</a>
+    {% if check_permission(session,"invoice_create") %}
+        <a class="button" href="{{url_for('invoices.invoice_create')}}">CREAR COBRO</a>
+    {% endif %}
     <a class="button" href="{{url_for('invoices.invoice_statuses')}}">Estado deudores</a>
 </nav>
 {% endblock %}

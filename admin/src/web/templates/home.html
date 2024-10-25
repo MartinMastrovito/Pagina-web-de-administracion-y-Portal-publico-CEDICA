@@ -7,4 +7,13 @@ Página de Inicio
 {% block content %}
 <h2>¡Hola Mundo!</h2>
 <p>Bienvenido a la página de inicio.Esto ya es del home!</p>
+{% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 {% endblock %}
