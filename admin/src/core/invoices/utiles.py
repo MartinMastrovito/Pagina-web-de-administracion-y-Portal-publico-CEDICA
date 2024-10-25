@@ -1,6 +1,7 @@
 from src.core.database import db
 from src.core.invoices.invoices import Invoices
 from src.core.auth.models.model_JyA import JYA
+from src.core.auth.models.model_JyA import JYA
 from src.core.auth.models.model_empleado import Empleados
 from sqlalchemy import desc
 
