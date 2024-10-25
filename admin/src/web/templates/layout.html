@@ -14,7 +14,7 @@
 </head>
 <body>
     <header>
-        <img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}">
+        <a href="{{url_for('home')}}"><img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}"></a>
         <nav>
             <a class="button" href="{{ url_for('caballos.menu_caballos') }}">Caballos</a>
             <a class="button" href="{{ url_for('empleados.show_empleado_form') }}">Equipo</a>
