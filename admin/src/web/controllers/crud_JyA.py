@@ -49,10 +49,12 @@ def show_create_jya_form():
     empleados_conductor = crud_JyA.get_empleados_conductor()
     empleados_auxiliar = crud_JyA.get_empleados_auxiliar()
     caballos = crud_JyA.get_caballos()
-    print(empleados_terapeuta_profesor)
-    print(empleados_conductor)
-    print(empleados_auxiliar)
-    return render_template("JYA/create_jya.html", empleados_terapeuta_profesor=empleados_terapeuta_profesor, empleados_conductor=empleados_conductor, empleados_auxiliar=empleados_auxiliar, caballos=caballos)
+    
+    if (not empleados_terapeuta_profesor) or (not empleados_conductor) or (not empleados_auxiliar) or (not caballos):
+        flash('Debe asegurarse de que exista por lo menos un empleado terapeuta/profesor, conductor, auxiliar de pista y un caballo en el sistema', 'danger')
+        return redirect("/JYA")
+    else:
+        return render_template("JYA/create_jya.html", empleados_terapeuta_profesor=empleados_terapeuta_profesor, empleados_conductor=empleados_conductor, empleados_auxiliar=empleados_auxiliar, caballos=caballos)
 
 @bp.post("/crear_jya")
 @login_required

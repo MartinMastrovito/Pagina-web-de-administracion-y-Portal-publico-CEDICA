@@ -33,7 +33,10 @@
             </div>
             <div class="form-group">
                 <label for="alias">Alias</label>
-                <input type="text" id="alias" name="alias" required placeholder="Alias del usuario" class="form-control">
+                <input type="text" id="alias" name="alias" required placeholder="Alias del usuario" 
+                       class="form-control" 
+                       pattern="^[A-Za-z]+$" 
+                       title="El alias debe contener solo letras">
             </div>
             <div class="form-group">
                 <label for="password">Contraseña</label>

@@ -126,12 +126,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="tipo_discapacidad">Tipo de Discapacidad:</label>
+                    <label>Tipo de Discapacidad:</label>
                     <select class="form-control" id="tipo_discapacidad" name="tipo_discapacidad">
-                        <option value="Mental" {% if jya.tipo_discapacidad == 'Mental' %}selected{% endif %}>Mental</option>
-                        <option value="Motora" {% if jya.tipo_discapacidad == 'Motora' %}selected{% endif %}>Motora</option>
-                        <option value="Sensorial" {% if jya.tipo_discapacidad == 'Sensorial' %}selected{% endif %}>Sensorial</option>
-                        <option value="Visceral" {% if jya.tipo_discapacidad == 'Visceral' %}selected{% endif %}>Visceral</option>
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Mental" {% if jya.tipo_discapacidad == "Sensorial" %} selected {% endif %}>Mental</option>
+                        <option value="Motora" {% if jya.tipo_discapacidad == "Sensorial" %} selected {% endif %}>Motora</option>
+                        <option value="Sensorial"{% if jya.tipo_discapacidad == "Sensorial" %} selected {% endif %}>Sensorial</option>
+                        <option value="Visceral" {% if jya.tipo_discapacidad == "Sensorial" %} selected {% endif %}>Visceral</option>
                     </select>
                 </div>
                 
@@ -158,9 +159,8 @@
                 <div class="form-group">
                     <label>¿Es beneficiario de alguna pensión?</label>
                     <select class="form-control" id="pension" name="pension">
-                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="false" {% if jya.pension %} selected {% endif %}>No</option>
                         <option value="true">Sí</option>
-                        <option value="false">No</option>
                     </select>
                 </div>
 
@@ -172,52 +172,51 @@
                 <!-- Situación previsional -->
                 <div class="form-group">
                     <label for="obra_social">Obra Social:</label>
-                    <input type="text" class="form-control" id="obra_social" name="obra_social">
+                    <input type="text" class="form-control" id="obra_social" name="obra_social" {% if jya.obra_social%} value="{{jya.obra_social}}{% endif %}">
                 </div>
 
                 <div class="form-group">
                     <label for="numero_afiliado">Número de Afiliado:</label>
-                    <input type="text" class="form-control" id="numero_afiliado" name="numero_afiliado">
+                    <input type="text" class="form-control" id="numero_afiliado" name="numero_afiliado" {% if jya.numero_afiliado %} value="{{jya.numero_afilidado}}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="curatela">¿Posee curatela?</label>
                     <select class="form-control" id="curatela" name="curatela">
-                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="false" {% if jya.curatela %} selected {% endif %}>No</option>
                         <option value="true">Sí</option>
-                        <option value="false">No</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="observaciones_previsionales">Observaciones Previsionales:</label>
-                    <textarea class="form-control" id="observaciones_previsionales" name="observaciones_previsionales" rows="3"></textarea>
+                    <textarea class="form-control" id="observaciones_previsionales" name="observaciones_previsionales" rows="3" {% if jya.observaciones_previsionales %} value="{{ jya.observaciones_previsionales }}"{% endif %}></textarea>
                 </div>
 
                 <!-- Institución escolar -->
                 <div class="form-group">
                     <label for="institucion_escolar_nombre">Nombre de la Institución Escolar:</label>
-                    <input type="text" class="form-control" id="institucion_escolar_nombre" name="institucion_escolar_nombre">
+                    <input type="text" class="form-control" id="institucion_escolar_nombre" name="institucion_escolar_nombre" {% if jya.institucion_escolar["nombre"] %} value="{{ jya.institucion_escolar["nombre"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="institucion_escolar_direccion">Dirección:</label>
-                    <input type="text" class="form-control" id="institucion_escolar_direccion" name="institucion_escolar_direccion">
+                    <input type="text" class="form-control" id="institucion_escolar_direccion" name="institucion_escolar_direccion" {% if jya.institucion_escolar["direccion"] %} value="{{ jya.institucion_escolar["direccion"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="institucion_escolar_telefono">Teléfono:</label>
-                    <input type="text" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono">
+                    <input type="text" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono" {% if jya.institucion_escolar["telefono"] %} value="{{ jya.institucion_escolar["telefono"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="grado_actual">Grado/Año Actual:</label>
-                    <input type="text" class="form-control" id="grado_actual" name="grado_actual">
+                    <input type="text" class="form-control" id="grado_actual" name="grado_actual" {% if jya.institucion_escolar["grado_actual"] %} value="{{ jya.institucion_escolar["grado_actual"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="institucion_escolar_observaciones">Observaciones:</label>
-                    <textarea class="form-control" id="institucion_escolar_observaciones" name="institucion_escolar_observaciones" rows="3"></textarea>
+                    <textarea class="form-control" id="institucion_escolar_observaciones" name="institucion_escolar_observaciones" rows="3" {% if jya.institucion_escolar["observaciones"] %} value="{{ jya.institucion_escolar["observaciones"] }}"{% endif %}></textarea>
                 </div>
 
                 <!-- Profesionales que lo atienden -->
@@ -230,118 +229,118 @@
                 <h3>Datos del Familiar o Tutor Responsable</h3>
                 <div class="form-group">
                     <label for="familiar1_parentesco">Parentesco:</label>
-                    <input type="text" class="form-control" id="familiar1_parentesco" name="familiar1_parentesco">
+                    <input type="text" class="form-control" id="familiar1_parentesco" name="familiar1_parentesco" {% if jya.familiares_tutores[0]["parentesco"] %} value="{{ jya.familiares_tutores[0]["parentesco"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar1_nombre">Nombre:</label>
-                    <input type="text" class="form-control" id="familiar1_nombre" name="familiar1_nombre">
+                    <input type="text" class="form-control" id="familiar1_nombre" name="familiar1_nombre" {% if jya.familiares_tutores[0]["nombre"] %} value="{{ jya.familiares_tutores[0]["nombre"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar1_apellido">Apellido:</label>
-                    <input type="text" class="form-control" id="familiar1_apellido" name="familiar1_apellido">
+                    <input type="text" class="form-control" id="familiar1_apellido" name="familiar1_apellido" {% if jya.familiares_tutores[0]["apellido"] %} value="{{ jya.familiares_tutores[0]["apellido"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar1_dni">DNI:</label>
-                    <input type="text" class="form-control" id="familiar1_dni" name="familiar1_dni">
+                    <input type="text" class="form-control" id="familiar1_dni" name="familiar1_dni" {% if jya.familiares_tutores[0]["dni"] %} value="{{ jya.familiares_tutores[0]["dni"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar1_domicilio_actual">Domicilio Actual:</label>
-                    <input type="text" class="form-control" id="familiar1_domicilio_actual" name="familiar1_domicilio_actual">
+                    <input type="text" class="form-control" id="familiar1_domicilio_actual" name="familiar1_domicilio_actual" {% if jya.familiares_tutores[0]["domicilio_actual"] %} value="{{ jya.familiares_tutores[0]["domicilio_actual"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar1_celular_actual">Celular Actual:</label>
-                    <input type="text" class="form-control" id="familiar1_celular_actual" name="familiar1_celular_actual">
+                    <input type="text" class="form-control" id="familiar1_celular_actual" name="familiar1_celular_actual" {% if jya.familiares_tutores[0]["celular_actual"] %} value="{{ jya.familiares_tutores[0]["celular_actual"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar1_email">Email:</label>
-                    <input type="email" class="form-control" id="familiar1_email" name="familiar1_email">
+                    <input type="email" class="form-control" id="familiar1_email" name="familiar1_email" {% if jya.familiares_tutores[0]["email"] %} value="{{ jya.familiares_tutores[0]["email"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar1_nivel_escolaridad">Nivel de Escolaridad:</label>
-                    <select class="form-control" id="familiar1_nivel_escolaridad" name="familiar1_nivel_escolaridad">
+                    <select class="form-control" id="familiar1_nivel_escolaridad" name="familiar1_nivel_escolaridad" {% if jya.familiares_tutores[0]["nivel_escolaridad"] %} value="{{ jya.familiares_tutores[0]["nivel_escolaridad"] }}"{% endif %}>
                         <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Primario">Primario</option>
-                        <option value="Secundario">Secundario</option>
-                        <option value="Terciario">Terciario</option>
-                        <option value="Universitario">Universitario</option>
+                        <option value="Primario" {% if jya.familiares_tutores[1]["nivel_escolaridad"] == "Primario"%} selected {% endif %}>Primario</option>
+                        <option value="Secundario" {% if jya.familiares_tutores[1]["nivel_escolaridad"] == "Secundario"%} selected {% endif %}>Secundario</option>
+                        <option value="Terciario" {% if jya.familiares_tutores[1]["nivel_escolaridad"] == "Terciario"%} selected {% endif %}>Terciario</option>
+                        <option value="Universitario" {% if jya.familiares_tutores[1]["nivel_escolaridad"] == "Universitario"%} selected {% endif %}>Universitario</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar1_ocupacion">Ocupación:</label>
-                    <input type="text" class="form-control" id="familiar1_ocupacion" name="familiar1_ocupacion">
+                    <input type="text" class="form-control" id="familiar1_ocupacion" name="familiar1_ocupacion" {% if jya.familiares_tutores[0]["ocupacion"] %} value="{{ jya.familiares_tutores[0]["ocupacion"] }}"{% endif %}>
                 </div>
 
                 <!-- Segundo familiar/tutor (opcional) -->
                 <h3>Datos de otro Familiar o Tutor (opcional)</h3>
                 <div class="form-group">
                     <label for="familiar2_parentesco">Parentesco:</label>
-                    <input type="text" class="form-control" id="familiar2_parentesco" name="familiar2_parentesco">
+                    <input type="text" class="form-control" id="familiar2_parentesco" name="familiar2_parentesco" {% if jya.familiares_tutores[1]["parentesco"] %} value="{{ jya.familiares_tutores[1]["parentesco"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar2_nombre">Nombre:</label>
-                    <input type="text" class="form-control" id="familiar2_nombre" name="familiar2_nombre">
+                    <input type="text" class="form-control" id="familiar2_nombre" name="familiar2_nombre" {% if jya.familiares_tutores[1]["nombre"] %} value="{{ jya.familiares_tutores[1]["nombre"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar2_apellido">Apellido:</label>
-                    <input type="text" class="form-control" id="familiar2_apellido" name="familiar2_apellido">
+                    <input type="text" class="form-control" id="familiar2_apellido" name="familiar2_apellido" {% if jya.familiares_tutores[1]["apellido"] %} value="{{ jya.familiares_tutores[1]["apellido"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar2_dni">DNI:</label>
-                    <input type="text" class="form-control" id="familiar2_dni" name="familiar2_dni">
+                    <input type="text" class="form-control" id="familiar2_dni" name="familiar2_dni" {% if jya.familiares_tutores[1]["dni"] %} value="{{ jya.familiares_tutores[1]["dni"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar2_domicilio_actual">Domicilio Actual:</label>
-                    <input type="text" class="form-control" id="familiar2_domicilio_actual" name="familiar2_domicilio_actual">
+                    <input type="text" class="form-control" id="familiar2_domicilio_actual" name="familiar2_domicilio_actual" {% if jya.familiares_tutores[1]["domicilio_actual"] %} value="{{ jya.familiares_tutores[1]["domicilio_actual"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar2_celular_actual">Celular Actual:</label>
-                    <input type="text" class="form-control" id="familiar2_celular_actual" name="familiar2_celular_actual">
+                    <input type="text" class="form-control" id="familiar2_celular_actual" name="familiar2_celular_actual" {% if jya.familiares_tutores[1]["celular_actual"] %} value="{{ jya.familiares_tutores[1]["celular_actual"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar2_email">Email:</label>
-                    <input type="email" class="form-control" id="familiar2_email" name="familiar2_email">
+                    <input type="email" class="form-control" id="familiar2_email" name="familiar2_email" {% if jya.familiares_tutores[1]["email"] %} value="{{ jya.familiares_tutores[1]["email"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar2_nivel_escolaridad">Nivel de Escolaridad:</label>
                     <select class="form-control" id="familiar2_nivel_escolaridad" name="familiar2_nivel_escolaridad">
                         <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Primario">Primario</option>
-                        <option value="Secundario">Secundario</option>
-                        <option value="Terciario">Terciario</option>
-                        <option value="Universitario">Universitario</option>
+                        <option value="Primario" {% if jya.familiares_tutores[0]["nivel_escolaridad"] == "Primario"%} selected {% endif %}>Primario</option>
+                        <option value="Secundario" {% if jya.familiares_tutores[0]["nivel_escolaridad"] == "Secundario"%} selected {% endif %}>Secundario</option>
+                        <option value="Terciario" {% if jya.familiares_tutores[0]["nivel_escolaridad"] == "Terciario"%} selected {% endif %}>Terciario</option>
+                        <option value="Universitario" {% if jya.familiares_tutores[0]["nivel_escolaridad"] == "Universitario"%} selected {% endif %}>Universitario</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="familiar2_ocupacion">Ocupación:</label>
-                    <input type="text" class="form-control" id="familiar2_ocupacion" name="familiar2_ocupacion">
+                    <input type="text" class="form-control" id="familiar2_ocupacion" name="familiar2_ocupacion" {% if jya.familiares_tutores[1]["ocupacion"] %} value="{{ jya.familiares_tutores[1]["ocupacion"] }}"{% endif %}>
                 </div>
                 
                 <div class="form-group">
                     <label for="propuesta_trabajo">Propuesta de trabajo institucional:</label>
                     <select class="form-control" id="propuesta_trabajo" name="propuesta_trabajo">
                         <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Hipoterapia">Hipoterapia</option>
-                        <option value="Monta Terápeutica">Monta Terápeutica</option>
-                        <option value="Deporte">Deporte</option>
-                        <option value="Encuetre adaptado">Encuetre adaptado</option>
-                        <option value="Actividades Recreativas">Actividades Recreativas</option>
-                        <option value="Equitación">Equitación</option>
+                        <option value="Hipoterapia" {% if jya.propuesta_trabajo == "Hipoterapia"%} selected {% endif %}>Hipoterapia</option>
+                        <option value="Monta Terápeutica" {% if jya.propuesta_trabajo == "Monta Terápeutica"%} selected {% endif %}>Monta Terápeutica</option>
+                        <option value="Deporte" {% if jya.propuesta_trabajo == "Deporte"%} selected {% endif %}>Deporte</option>
+                        <option value="Encuetre adaptado" {% if jya.propuesta_trabajo == "Encuestre Adaptado"%} selected {% endif %}>Encuetre adaptado</option>
+                        <option value="Actividades Recreativas" {% if jya.propuesta_trabajo == "Actividades Recreativas"%} selected {% endif %}>Actividades Recreativas</option>
+                        <option value="Equitación" {% if jya.propuesta_trabajo == "Equitacion"%} selected {% endif %}>Equitación</option>
                     </select>
                 </div>
                 
@@ -349,8 +348,8 @@
                     <label>Condicion:</label>
                     <select class="form-control" id="condicion_trabajo" name="condicion_trabajo">
                         <option value="" disabled selected>Seleccione un tipo</option>
-                        <option value="REGULAR">REGULAR</option>
-                        <option value="DE BAJA">DE BAJA</option>
+                        <option value="REGULAR" {% if jya.condicion_trabajo == "REGULAR" %} selected {% endif %}>REGULAR</option>
+                        <option value="DE BAJA" {% if jya.condicion_trabajo == "DE BAJA" %} selected {% endif %}>DE BAJA</option>
                     </select>
                 </div>
                 
@@ -358,9 +357,9 @@
                     <label for="sede">Sede:</label>
                     <select class="form-control" id="sede" name="sede">
                         <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="CASJ">CASJ</option>
-                        <option value="HLP">HLP</option>
-                        <option value="OTRO">OTRO</option>
+                        <option value="CASJ" {% if jya.sede == "CASJ" %} selected {% endif %}>CASJ</option>
+                        <option value="HLP" {% if jya.sede == "HLP" %} selected {% endif %}>HLP</option>
+                        <option value="OTRO" {% if jya.sede == "OTRO" %} selected {% endif %}>OTRO</option>
                     </select>
                 </div>
                 <div class="form-group">

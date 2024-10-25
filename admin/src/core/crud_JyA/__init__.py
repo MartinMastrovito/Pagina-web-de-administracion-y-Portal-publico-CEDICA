@@ -93,7 +93,16 @@ def update_document(document_id, **kwargs):
     return document
 
 def delete_jya(jya_dni):
-    db.session.query(JYA).filter(JYA.dni==str(jya_dni)).delete()
+    # Busca el JYA a eliminar
+    jya = get_jya_by_dni(jya_dni)
+
+    # Elimina los registros relacionados en jya_empleado primero
+    db.session.query(JYAEmpleado).filter_by(jya_id=jya.id).delete(synchronize_session=False)
+
+    # Ahora elimina el registro JYA
+    db.session.delete(jya)
+
+    # Confirma todos los cambios en la base de datos
     db.session.commit()
     
 def delete_document(document_id):
