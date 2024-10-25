@@ -16,12 +16,9 @@ def check(permission):
         @wraps(f)
         def wrapper(*args, **kwargs):
             user_id = session.get("user_id")
-            print(f"Email del usuario: {user_id}")
             if not check_permission(user_id, permission):
-                print(f"Permiso {permission} no encontrado para el usuario.")
                 return redirect(url_for("users.show_home"))
             
-            print(f"Permiso {permission} encontrado para el usuario.")
             return f(*args, **kwargs)
         
         return wrapper
