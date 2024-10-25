@@ -1,7 +1,9 @@
 from flask import render_template, Blueprint, request, redirect, url_for, flash
 from src.web.controllers.users import bp as users_bp
 from src.web.controllers.invoices import invoices_bp
-from src.web.controllers.crud_JyA import bp as crud_JyA_bp
+from src.web.controllers.gestion_jya.crud_JyA import bp as crud_JyA_bp
+from src.web.controllers.gestion_jya.jya_archivos import bp as jya_archivos_bp
+from src.web.controllers.gestion_jya.jya_enlaces import bp as jya_enlaces_bp
 from src.web.controllers.caballos import caballos_bp
 from src.web.controllers.pagos import pago_bp
 from src.web.controllers.empleados import empleados_bp
@@ -39,6 +41,10 @@ def register(app):
     app.register_blueprint(invoices_bp)
     
     app.register_blueprint(crud_JyA_bp)
+    
+    app.register_blueprint(jya_archivos_bp)
+    
+    app.register_blueprint(jya_enlaces_bp)
 
     app.register_blueprint(caballos_bp) 
 
