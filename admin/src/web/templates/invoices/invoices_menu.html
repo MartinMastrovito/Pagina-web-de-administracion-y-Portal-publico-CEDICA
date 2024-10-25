@@ -3,7 +3,8 @@
 <head>
     {% block title %}Cobros{% endblock %}
     {% block imports %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_menu.css') }}">
+        {{super()}}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_menu.css') }}">
     {% endblock %}
 </head>
 {% block content %}
