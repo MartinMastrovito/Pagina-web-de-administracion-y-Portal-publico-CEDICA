@@ -93,22 +93,12 @@
                     <td>{{ empleado.numero_afiliado }}</td>
                     <td>{{ empleado.activo }}</td>
 
-                    <td> 
-                        <form action="{{ url_for('empleados.actualizar_empleados', id=empleado.id) }}" method="post" style="display:inline;">
-                            <input type="hidden" name="_method" value="PUT">
-                            <button type="submit">Actualizar</button>
-                        </form>
-                        
-                        <form action="{{ url_for('empleados.eliminar_empleados', id=empleado.id) }}" method="post" style="display:inline;">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit">Eliminar</button>
-                        </form>
-                    </td>                 
-                    
+                    <td>
+                        <a href="{{ url_for('empleados.actualizar_empleados', id=empleado.id ) }}">Actualizar</a> | 
+                        <a href="{{ url_for('empleados.eliminar_empleados' , id=empleado.id ) }}">Eliminar</a>
+                    </td>
                 </tr>
-                
                 {% endfor %}
-                
             </table>
         {% endblock %}
     </main>
