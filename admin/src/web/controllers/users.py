@@ -12,6 +12,7 @@ bp = Blueprint("users", __name__, url_prefix="/usuarios")
 def show_login_form():
     return render_template("users/login.html")
 
+
 @bp.get("/principal")
 def show_home():
     return render_template("home.html")  # 
@@ -29,6 +30,16 @@ def login():
     else:
         flash('Email o contraseña incorrectos.', 'danger')
         return redirect(url_for('users.show_login_form'))
+
+@bp.get("/logout")
+def logout():
+    if session.get("user"):
+        del session["usser"]
+        session.clear()
+        flash("¡La sesion se cerró!","info")
+    else:
+        flash("No hay una sesion activa", "error")
+    return redirect(url_for("users.login"))
 
 @bp.get("/")
 @login_required
