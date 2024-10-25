@@ -1,3 +1,4 @@
+from flask import flash
 from src.core.database import db
 from src.core.invoices.invoices import Invoices
 from src.core.auth.models.model_JyA import JYA
@@ -57,7 +58,7 @@ def update_invoice(invoice_id,**kwargs):
         db.session.commit()
     else:
         return False
-    
+    flash("Se actualizo con exito un cobro",'true')
     return True
 #Modulo para conseguir el nombre de todos los JYA y su respectivo ID 
 def get_all_ja():
