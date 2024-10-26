@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, url_for
 from src.core.auth.models.model_empleado import Empleados
 from flask import render_template , flash, redirect, current_app
 from src.core.database import db
@@ -20,7 +20,7 @@ def crear_empleado():
     return render_template("/empleados/crear_empleado.html")
 
 @empleados_bp.post("/crear_empleado")
-#@login_required
+@login_required
 def crear_empleado_listo():
     # Obtener los datos del formulario
     empleado_data = {
@@ -53,12 +53,17 @@ def crear_empleado_listo():
 
         # Si se subieron archivos
         if 'documentacion' in request.files:
-            files = request.files.getlist('documentacion')
-            for file in files:
-                if file and file.filename != '':
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-        
+            file = request.files["documentacion"]
+            client = current_app.storage.client
+            size = os.fstat(file.fileno()).st_size
+            
+            client.put_object(
+                "grupo30",
+                f"documentos-Emple/{file.filename}",
+                file,
+                size,
+                content_type=file.content_type
+            )
         return redirect("/menu_empleados/crear_empleado")
 
 
@@ -103,7 +108,7 @@ def listar_empleados():
 
 
 # actualizar empleados
-@empleados_bp.route('/empleados/<int:id>', methods=['PUT'])
+@empleados_bp.route('/empleados/<int:id>', methods=['POST','PUT'])
 def actualizar_empleados(id):
     empleado = Empleados.query.get(id)
     
@@ -112,16 +117,20 @@ def actualizar_empleados(id):
         for key, value in data.items():
             setattr(empleado, key, value)
         db.session.commit()
-        return jsonify({'message': 'Empleado actualizado exitosamente'}), 200
-    return jsonify({'message': 'Empleado no encontrado'}), 404
+        jsonify({'message': 'Empleado actualizado exitosamente'}), 200
+        return redirect(url_for('empleados.listar_empleados'))
+    jsonify({'message': 'Empleado no encontrado'}), 404
+    return redirect(url_for('empleados.listar_empleados'))
 
 
 # eliminar empleados
-@empleados_bp.route('/empleados/<int:id>', methods=['DELETE'])
+@empleados_bp.route('/empleados/<int:id>', methods=['DELETE', 'POST'])
 def eliminar_empleados(id):
     empleados = Empleados.query.get(id)
     if empleados:
         db.session.delete(empleados)
         db.session.commit()
-        return jsonify({'message': 'se elimino emple'})
-    return jsonify({'message': 'error emple'})
+        jsonify({'message': 'se elimino emple'})
+        return redirect(url_for('empleados.listar_empleados'))
+    jsonify({'message': 'error emple'})
+    return redirect(url_for('empleados.listar_empleados'))
