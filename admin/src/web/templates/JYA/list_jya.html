@@ -6,18 +6,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jya-css/list_jya.css') }}">
     <title>{% block title %}Lista de J&A{% endblock %}</title>
 </head>
 <body>
     {% block content %}
     <header>
+        <a class="btn" href="{{ url_for('users.show_home') }}">Volver al Inicio</a>
         <h1>Administración de J&A</h1>
     </header>
 
     <section>
         <article>
             <h2>J&A registrados</h2>
-
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
             <!-- Formulario de búsqueda -->
             <form method="get" action="{{ url_for('crud_JyA.index') }}">
                 <label for="nombre">Nombre:</label>
@@ -82,8 +92,6 @@
                         <td>{{ jya.profesionales_atendiendo }}</td>
                         <td>
                             <a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="btn btn-danger">Ver más</a>
-                        </td>
-                        <td>
                             <a href="{{ url_for('crud_JyA.show_delete_jya', jya_dni=jya.dni) }}" class="btn btn-danger">Eliminar</a>
                         </td>
                     </tr>

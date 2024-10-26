@@ -10,6 +10,16 @@
 </head>
 <body>
     {% block content %}
+    <!-- Mostrar mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
     <header>
         <h1>Crear Nuevo J&A</h1>
     </header>
@@ -20,22 +30,22 @@
                 <!-- Datos personales -->
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="nombre" name="nombre" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="apellido">Apellido:</label>
-                    <input type="text" class="form-control" id="apellido" name="apellido" required>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ'\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="apellido" name="apellido" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="dni">DNI:</label>
-                    <input type="text" class="form-control" id="dni" name="dni" required>
+                    <label for="dni">DNI (sin puntos o espacios):</label>
+                    <input type="number" class="form-control" id="dni" name="dni" required>
                 </div>
 
                 <div class="form-group">
                     <label for="edad">Edad:</label>
-                    <input type="number" class="form-control" id="edad" name="edad" required>
+                    <input type="number" class="form-control" id="edad" name="edad" min="18" max="100" title="Por favor ingrese una edad entre 18-100" required>
                 </div>
 
                 <div class="form-group">
@@ -47,30 +57,30 @@
                 <div class="form-group">
                     <label for="lugar_nacimiento_localidad">Lugar de Nacimiento:</label>
                     <input type="text" class="form-control" id="lugar_nacimiento_localidad" name="lugar_nacimiento_localidad" placeholder="Localidad" required>
-                    <input type="text" class="form-control mt-2" id="lugar_nacimiento_provincia" name="lugar_nacimiento_provincia" placeholder="Provincia" required>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control mt-2" id="lugar_nacimiento_provincia" name="lugar_nacimiento_provincia" placeholder="Provincia" required>
                 </div>
 
                 <!-- Domicilio actual -->
                 <div class="form-group">
                     <label for="domicilio_actual_calle">Domicilio Actual:</label>
                     <input type="text" class="form-control" id="domicilio_actual_calle" name="domicilio_actual_calle" placeholder="Calle" required>
-                    <input type="text" class="form-control mt-2" id="domicilio_actual_numero" name="domicilio_actual_numero" placeholder="Número" required>
+                    <input type="number" class="form-control mt-2" id="domicilio_actual_numero" name="domicilio_actual_numero" placeholder="Número" required>
                     <input type="text" class="form-control mt-2" id="domicilio_actual_departamento" name="domicilio_actual_departamento" placeholder="Departamento (opcional)">
                     <input type="text" class="form-control mt-2" id="domicilio_actual_localidad" name="domicilio_actual_localidad" placeholder="Localidad" required>
-                    <input type="text" class="form-control mt-2" id="domicilio_actual_provincia" name="domicilio_actual_provincia" placeholder="Provincia" required>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control mt-2" id="domicilio_actual_provincia" name="domicilio_actual_provincia" placeholder="Provincia" required>
                 </div>
 
                 <!-- Teléfono actual -->
                 <div class="form-group">
-                    <label for="telefono_actual">Teléfono Actual:</label>
-                    <input type="text" class="form-control" id="telefono_actual" name="telefono_actual" required>
+                    <label for="telefono_actual">Teléfono Actual (sin guiones o espacios):</label>
+                    <input type="number" class="form-control" id="telefono_actual" name="telefono_actual" min="0" title="Por favor ingrese un numero valido" required>
                 </div>
 
                 <!-- Contacto de emergencia -->
                 <div class="form-group">
                     <label for="contacto_emergencia_nombre">Contacto de Emergencia:</label>
-                    <input type="text" class="form-control" id="contacto_emergencia_nombre" name="contacto_emergencia_nombre" placeholder="Nombre" required>
-                    <input type="text" class="form-control mt-2" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono" placeholder="Teléfono" required>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="contacto_emergencia_nombre" name="contacto_emergencia_nombre" placeholder="Nombre" required>
+                    <input type="number" class="form-control mt-2" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono" placeholder="Teléfono" min="0" title="Por favor ingrese un numero valido" required>
                 </div>
 
                 <!-- Becado y porcentaje de beca -->
@@ -85,7 +95,7 @@
 
                 <div class="form-group">
                     <label for="porcentaje_beca">Porcentaje de Beca:</label>
-                    <input type="number" step="0.01" class="form-control" id="porcentaje_beca" name="porcentaje_beca">
+                    <input type="number" step="0.01" class="form-control" id="porcentaje_beca" name="porcentaje_beca" min="0" max="1" title="Por favor ingrese un porcentaje entre 0.1-1">
                 </div>
 
                 <!-- Discapacidad -->
@@ -110,7 +120,7 @@
                         <!-- Más opciones aquí -->
                         <option value="OTRO">Otro</option>
                     </select>
-                    <input type="text" class="form-control mt-2" id="otro_diagnostico" name="otro_diagnostico" placeholder="Si eligió OTRO, indique cuál">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control mt-2" id="otro_diagnostico" name="otro_diagnostico" placeholder="Si eligió OTRO, indique cuál">
                 </div>
 
                 <div class="form-group">
@@ -156,18 +166,18 @@
 
                 <div class="form-group">
                     <label for="tipo_pension">Tipo de Pensión (si corresponde):</label>
-                    <input type="text" class="form-control" id="tipo_pension" name="tipo_pension" placeholder="Indique si es Provincial o Nacional">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ#\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="tipo_pension" name="tipo_pension" placeholder="Indique si es Provincial o Nacional">
                 </div>
 
                 <!-- Situación previsional -->
                 <div class="form-group">
                     <label for="obra_social">Obra Social:</label>
-                    <input type="text" class="form-control" id="obra_social" name="obra_social">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="obra_social" name="obra_social">
                 </div>
 
                 <div class="form-group">
                     <label for="numero_afiliado">Número de Afiliado:</label>
-                    <input type="text" class="form-control" id="numero_afiliado" name="numero_afiliado">
+                    <input type="number" class="form-control" id="numero_afiliado" name="numero_afiliado" min="0" title="Ingrese un valor positivo">
                 </div>
 
                 <div class="form-group">
@@ -187,7 +197,7 @@
                 <!-- Institución escolar -->
                 <div class="form-group">
                     <label for="institucion_escolar_nombre">Nombre de la Institución Escolar:</label>
-                    <input type="text" class="form-control" id="institucion_escolar_nombre" name="institucion_escolar_nombre">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="institucion_escolar_nombre" name="institucion_escolar_nombre">
                 </div>
 
                 <div class="form-group">
@@ -197,7 +207,7 @@
 
                 <div class="form-group">
                     <label for="institucion_escolar_telefono">Teléfono:</label>
-                    <input type="text" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono">
+                    <input type="number" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono" min="0" title="Por favor ingrese un numero valido">
                 </div>
 
                 <div class="form-group">
@@ -220,22 +230,22 @@
                 <h3>Datos del Familiar o Tutor Responsable</h3>
                 <div class="form-group">
                     <label for="familiar1_parentesco">Parentesco:</label>
-                    <input type="text" class="form-control" id="familiar1_parentesco" name="familiar1_parentesco">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar1_parentesco" name="familiar1_parentesco">
                 </div>
 
                 <div class="form-group">
                     <label for="familiar1_nombre">Nombre:</label>
-                    <input type="text" class="form-control" id="familiar1_nombre" name="familiar1_nombre">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar1_nombre" name="familiar1_nombre">
                 </div>
 
                 <div class="form-group">
                     <label for="familiar1_apellido">Apellido:</label>
-                    <input type="text" class="form-control" id="familiar1_apellido" name="familiar1_apellido">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar1_apellido" name="familiar1_apellido">
                 </div>
 
                 <div class="form-group">
-                    <label for="familiar1_dni">DNI:</label>
-                    <input type="text" class="form-control" id="familiar1_dni" name="familiar1_dni">
+                    <label for="familiar1_dni">DNI (sin puntos o espacios):</label>
+                    <input type="number" class="form-control" id="familiar1_dni" name="familiar1_dni" min="0" title="Por favor ingrese un DNI valido">
                 </div>
 
                 <div class="form-group">
@@ -244,8 +254,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="familiar1_celular_actual">Celular Actual:</label>
-                    <input type="text" class="form-control" id="familiar1_celular_actual" name="familiar1_celular_actual">
+                    <label for="familiar1_celular_actual">Celular Actual (sin guiones o espacios):</label>
+                    <input type="number" class="form-control" id="familiar1_celular_actual" name="familiar1_celular_actual" min="0" title="Por favor ingrese un numero valido">
                 </div>
 
                 <div class="form-group">
@@ -273,22 +283,22 @@
                 <h3>Datos de otro Familiar o Tutor (opcional)</h3>
                 <div class="form-group">
                     <label for="familiar2_parentesco">Parentesco:</label>
-                    <input type="text" class="form-control" id="familiar2_parentesco" name="familiar2_parentesco">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar2_parentesco" name="familiar2_parentesco">
                 </div>
 
                 <div class="form-group">
                     <label for="familiar2_nombre">Nombre:</label>
-                    <input type="text" class="form-control" id="familiar2_nombre" name="familiar2_nombre">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas"type="text" class="form-control" id="familiar2_nombre" name="familiar2_nombre">
                 </div>
 
                 <div class="form-group">
                     <label for="familiar2_apellido">Apellido:</label>
-                    <input type="text" class="form-control" id="familiar2_apellido" name="familiar2_apellido">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar2_apellido" name="familiar2_apellido">
                 </div>
 
                 <div class="form-group">
-                    <label for="familiar2_dni">DNI:</label>
-                    <input type="text" class="form-control" id="familiar2_dni" name="familiar2_dni">
+                    <label for="familiar2_dni">DNI (sin puntos o espacios):</label>
+                    <input type="number" class="form-control" id="familiar2_dni" name="familiar2_dni" min="0" title="Por favor ingrese un DNI valido">
                 </div>
 
                 <div class="form-group">
@@ -297,8 +307,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="familiar2_celular_actual">Celular Actual:</label>
-                    <input type="text" class="form-control" id="familiar2_celular_actual" name="familiar2_celular_actual">
+                    <label for="familiar2_celular_actual">Celular Actual (sin guiones o espacios):</label>
+                    <input type="number" class="form-control" id="familiar2_celular_actual" name="familiar2_celular_actual" min="0" title="Por favor ingrese un numero valido">
                 </div>
 
                 <div class="form-group">

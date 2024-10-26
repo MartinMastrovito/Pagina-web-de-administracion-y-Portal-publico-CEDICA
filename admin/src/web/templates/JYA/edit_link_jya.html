@@ -15,7 +15,7 @@
     </header>
 
     <section>
-        <form action="{{ url_for('crud_JyA.update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url_for('enlaces.update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="tipo">Tipo de documento:</label>
                 <select class="form-control" id="tipo" name="tipo" required>

@@ -5,16 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Mi Aplicación{% endblock %}</title>
-    <link
+    {% block imports %}
+        <link
         rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
-    >
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
-    {% block imports %} {% endblock %}
+    {% endblock %}
 </head>
 <body>
     <header>
-        <img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}">
+        <a href="{{url_for('home')}}"><img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}"></a>
         <nav>
             <a class="button" href="{{ url_for('caballos.menu_caballos') }}">Caballos</a>
             <a class="button" href="{{ url_for('empleados.show_empleado_form') }}">Equipo</a>
@@ -23,19 +23,22 @@
             <a class="button" href="{{ url_for('users.login') }}">Ingreso</a>
             <a class="button" href="{{ url_for('invoices.invoices_menu') }}">COBROS</a>
         </nav>
-        <div class="dropdown is-right is-hoverable">
-                <div class="dropdown-trigger">
-                        <figure class="image is-48x48">
-                            <img class="is-rounded" src="{{ url_for('static', filename='assets/profile_icon.png') }}">
-                        </figure>
-                </div>
-            <div class="dropdown-menu">
-                <div class="dropdown-content">
-                    <a href="#" class="dropdown-item">Perfil</a>
-                    <a href="#" class="dropdown-item">Cerrar sesión</a>
+        {% if check_authenticated(session) %}
+            <div class="dropdown is-right is-hoverable">
+                    <div class="dropdown-trigger">
+                            <figure class="image is-48x48">
+                                <img class="is-rounded" src="{{ url_for('static', filename='assets/profile_icon.png') }}">
+                            </figure>
+                    </div>
+                <div class="dropdown-menu">
+                    <div class="dropdown-content">
+                        <a href="{{url_for('users.logout')}}" class="dropdown-item">Cerrar sesión</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% else %}
+            <div></div>
+        {% endif %}
     </header>
     <main>
         {% block content %}

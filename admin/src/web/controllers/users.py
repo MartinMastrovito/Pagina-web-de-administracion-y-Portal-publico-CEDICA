@@ -12,6 +12,7 @@ bp = Blueprint("users", __name__, url_prefix="/usuarios")
 def show_login_form():
     return render_template("users/login.html")
 
+
 @bp.get("/principal")
 def show_home():
     return render_template("home.html")  # 
@@ -29,6 +30,16 @@ def login():
     else:
         flash('Email o contraseña incorrectos.', 'danger')
         return redirect(url_for('users.show_login_form'))
+
+@bp.get("/logout")
+def logout():
+    if session.get("user"):
+        del session["usser"]
+        session.clear()
+        flash("¡La sesion se cerró!","info")
+    else:
+        flash("No hay una sesion activa", "error")
+    return redirect(url_for("users.login"))
 
 @bp.get("/")
 @login_required
@@ -82,7 +93,7 @@ def create_user():
         flash('Usuario creado exitosamente', 'success')
         return redirect('/usuarios')
     else:
-        flash('El usuario ya existe o ocurrió un error', 'danger')
+        flash('El usuario ya existe u ocurrió un error', 'danger')
         return redirect("/usuarios/crear_usuario")
 
 
@@ -103,8 +114,12 @@ def user_update(user_id):
         'enabled': 'enabled' in request.form,
         'role_id': request.form['role_id']
     }
-    utiles.update_user(user_id, **user_data)
-    return redirect('/usuarios')
+    mensaje = utiles.update_user(user_id, **user_data)
+    if mensaje:
+        flash(mensaje, 'danger')
+        return redirect(f'/usuarios/actualizar/{user_id}')
+    else:
+        return redirect("/usuarios")
 
 @bp.get("/eliminar/<int:user_id>")
 @login_required
@@ -134,7 +149,7 @@ def block(user_id):
     if utiles.block_user(user_id):
         flash("Usuario bloqueado exitosamente.")
     else:
-        flash("No se puede bloquear el usuario.")
+        flash("No se puede bloquear a un System Admin.")
     return redirect(url_for("users.index"))
 
 @bp.post("/unblock/<int:user_id>")
@@ -145,5 +160,5 @@ def unblock(user_id):
     if utiles.unblock_user(user_id):
         flash("Usuario desbloqueado exitosamente.")
     else:
-        flash("No se puede desbloquear el usuario.")
+        flash("No se puede desbloquear al usuario.")
     return redirect(url_for("users.index"))
