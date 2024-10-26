@@ -1,11 +1,13 @@
 {% extends "layout.html" %}
 
-<head>
     {% block title %}MenuEmpleado{% endblock %}
+   
+
     {% block imports %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_menu.css') }}">
+        {{ super() }}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/index.css') }}">
     {% endblock %}
-</head>
+
 
 {% block content %}
 <header>

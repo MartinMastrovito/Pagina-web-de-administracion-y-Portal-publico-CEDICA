@@ -2,22 +2,22 @@ from flask import Blueprint, request, jsonify, url_for
 from src.core.auth.models.model_empleado import Empleados
 from flask import render_template , flash, redirect, current_app
 from src.core.database import db
-from core.auth.decorators import login_required 
-from werkzeug.utils import secure_filename
 from sqlalchemy import asc, desc
+from src.core.auth.decorators import login_required 
+from werkzeug.utils import secure_filename
 import os
 
 empleados_bp = Blueprint('empleados', __name__, url_prefix="/menu_empleados", template_folder='../templates/empleados',static_folder="/admin/static")
 @empleados_bp.get("/empleados")
 
 def show_empleado_form():
-    return render_template("/empleados/menu_empleados.html")
+    return render_template("empleados/menu_empleados.html")
 
 #crear empleados
 
-@empleados_bp.get("/crear_empleado")
+@empleados_bp.get("/crear-empleado")
 def crear_empleado():
-    return render_template("/empleados/crear_empleado.html")
+    return render_template("empleados/crear_empleado.html")
 
 @empleados_bp.post("/crear_empleado")
 @login_required
@@ -72,14 +72,13 @@ def crear_empleado_listo():
     except Exception as e:
         db.session.rollback()
         flash('Ocurrió un error al crear el empleado: ' + str(e), 'danger')
-        return redirect("/menu_empleados/crear_empleado")
-
+        return redirect("/empleados/crear_empleado")
 
 
 
 
 # listar empleados
-@empleados_bp.route('/listar_empleados', methods=['GET'])
+@empleados_bp.route('/lista-empleados', methods=['GET'])
 def listar_empleados():
     nombre = request.args.get('nombre')  
     apellido = request.args.get('apellido')
@@ -87,7 +86,7 @@ def listar_empleados():
     puesto = request.args.get('puesto')
     ordenar_por = request.args.get('ordenar_por', 'nombre')  
     direccion_orden = request.args.get('direccion_orden', 'asc') 
-    query = db.session.query(Empleados)
+    query = Empleados.query
 
     if nombre:
         query = query.filter(Empleados.nombre.ilike(f'%{nombre}%')) #realiza busquedas insensibles a mayusculas y minuscula
@@ -126,7 +125,7 @@ def actualizar_empleados(id):
 # eliminar empleados
 @empleados_bp.route('/empleados/<int:id>', methods=['DELETE', 'POST'])
 def eliminar_empleados(id):
-    empleados = Empleados.query.get(id)
+    empleados = empleados.query.get(id)
     if empleados:
         db.session.delete(empleados)
         db.session.commit()

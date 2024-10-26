@@ -38,14 +38,9 @@
                 <label class="label" for="recipient">Beneficiario</label>
                 <select class="select" name="recipient" required>
                     <option value="" disabled="" selected="">Seleccione un beneficiario</option>
-                <!--
-                    {%for recipient in recipients_list %}
-                        <option value={{recipient.id}}>{{recipient.nombre}}</option>
+                    {%for emp in employees.keys() %}
+                        <option value={{emp}}>{{employees[emp]}}</option>
                     {% endfor %}
-                -->
-                    <option value=1>Carlos</option>
-                    <option value=2>Bianca</option>
-                    <option value=3>Faka</option>
                 </select>
                 <label class="label" for="observations">Observaciones</label>
                 <textarea class="textarea has-fixed-size textarea_style" name="observations"></textarea>

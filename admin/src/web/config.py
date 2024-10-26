@@ -1,4 +1,3 @@
-import os
 from os import environ
 import os 
 class Config(object):
@@ -11,6 +10,11 @@ class ProductionConfig(Config):
     MINIO_SECRET_KEY = environ.get("MINIO_SECRET_KEY")
     MINIO_SECURE = True
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_size": 10,
+        "pool_recycle": 60,
+        "pool_pre_ping": True,
+    }
 
 
 """ MINIO_SERVER = "minio.proyecto2024.linti.unlp.edu.ar"
@@ -26,10 +30,10 @@ class DevelopmentConfig(Config):
     MINIO_ACCESS_KEY = "9H3ZLLlZC4qX1vbZ1MJb"
     MINIO_SECRET_KEY = "mJGy8It49ebNNu2C1PaFMe5g1s6ObJ9adpzAHsWC"
     MINIO_SECURE = False
-    DB_USER = os.getenv("DB_USER", "postgres")
+    DB_USER = os.getenv("DB_USER", os.getlogin())
     DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
     DB_HOST = "localhost"
-    DB_PORT = "5433"
+    DB_PORT = "5432"
     DB_NAME = "grupo30"
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"

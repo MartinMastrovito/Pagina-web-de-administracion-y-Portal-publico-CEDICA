@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import session, redirect, url_for, flash
-from web.handlers.auth import check_permission
+from src.web.handlers.auth import check_permission
 
 def login_required(f):
     @wraps(f)

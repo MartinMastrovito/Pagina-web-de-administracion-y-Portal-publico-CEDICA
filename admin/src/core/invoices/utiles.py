@@ -1,6 +1,7 @@
 from src.core.database import db
 from src.core.invoices.invoices import Invoices
 from src.core.auth.models.model_JyA import JYA
+from src.core.auth.models.model_empleado import Empleados
 from sqlalchemy import desc
 
 payment_methods_list = [
@@ -58,7 +59,7 @@ def update_invoice(invoice_id,**kwargs):
         return False
     
     return True
-
+#Modulo para conseguir el nombre de todos los JYA y su respectivo ID 
 def get_all_ja():
     ja_query = JYA.query.all()
     ja_dictionary = {}
@@ -66,8 +67,23 @@ def get_all_ja():
         ja_dictionary[ja.id] = ja.nombre + " " + ja.apellido
     return ja_dictionary
 
+
+#Modulo para conseguir el nombre de un J&A por su ID
 def get_ja(ja_id):
     query = JYA.query.get_or_404(ja_id)
+    return query.nombre + " " + query.apellido
+
+#Modulo para conseguir el nombre de todos los empleados y su respectivo ID 
+def get_all_employees():
+    emp_query = Empleados.query.all()
+    emp_dictionary = {}
+    for emp in emp_query:
+        emp_dictionary[emp.id] = emp.nombre + " " + emp.apellido
+    return emp_dictionary
+
+#Modulo para conseguir el nombre de un empleado por su ID 
+def get_emp(emp_id):
+    query = Empleados.query.get_or_404(emp_id)
     return query.nombre + " " + query.apellido
 
 def get_statuses():
@@ -85,7 +101,6 @@ def change_status(id_change):
 def get_recipients():
     pass
 
-#De momento esta hecho con JYA porque queria probar como hacerlo. Cuando tenga para conectar con modelo de empleados cambiara.
 def select_filter(**kwargs):
     invoices = db.select(Invoices)
     if(kwargs['date_from'] != '') and (kwargs['date_to'] !=''):
@@ -93,10 +108,10 @@ def select_filter(**kwargs):
     if(kwargs['payment_method'] != ''):
         invoices = invoices.filter(Invoices.payment_method == kwargs['payment_method'])
     if(kwargs['first_name'] != ''):
-        id_filter = db.select(JYA.id).filter(JYA.nombre == kwargs["first_name"])
+        id_filter = db.select(Empleados.id).filter(Empleados.nombre == kwargs["first_name"])
         invoices = invoices.filter(Invoices.j_a.in_(id_filter))
     if(kwargs['last_name'] != ''):
-        id_filter = db.select(JYA.id).filter(JYA.apellido==kwargs["last_name"])
+        id_filter = db.select(Empleados.id).filter(Empleados.apellido==kwargs["last_name"])
         invoices = invoices.filter(Invoices.j_a.in_(id_filter))
     if(kwargs['order'] != ""):
         if(kwargs['order'] == 'ASC'):

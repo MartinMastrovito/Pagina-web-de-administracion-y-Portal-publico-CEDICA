@@ -25,8 +25,8 @@
             <li>
                 <a href="{{ url_for('static', filename=documento.archivo_url) }}">{{ documento.nombre }}</a>
                 ({{ documento.tipo_documento }})
-                <a href="{{ url_for('editar_documento', id=documento.id) }}">Editar</a>
-                <form action="{{ url_for('eliminar_documento', id=documento.id) }}" method="POST" style="display:inline;">
+                <a href="{{ url_for('caballos.editar_documento', id=documento.id) }}">Editar</a>
+                <form action="{{ url_for('caballos.eliminar_documento', id=documento.id) }}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este documento?')">Eliminar</button>
                 </form>
             </li>
@@ -35,16 +35,16 @@
         {% endfor %}
     </ul>
 
-    <a href="{{ url_for('subir_documento', id=caballo.id) }}">Adjuntar Nuevo Documento</a>
-    <a href="{{ url_for('mostrar_caballo', id=caballo.id) }}">Volver al Caballo</a>
+    <a href="{{ url_for('caballos.subir_documento', id=caballo.id) }}">Adjuntar Nuevo Documento</a>
+    <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}">Volver al Caballo</a>
 
     <!-- Paginación -->
     <div>
         {% if documentos.has_prev %}
-            <a href="{{ url_for('listar_documentos', id=caballo.id, page=documentos.prev_num, nombre=request.args.get('nombre', ''), tipo=request.args.get('tipo', '')) }}">Anterior</a>
+            <a href="{{ url_for('caballos.listar_documentos', id=caballo.id, page=documentos.prev_num, nombre=request.args.get('nombre', ''), tipo=request.args.get('tipo', '')) }}">Anterior</a>
         {% endif %}
         {% if documentos.has_next %}
-            <a href="{{ url_for('listar_documentos', id=caballo.id, page=documentos.next_num, nombre=request.args.get('nombre', ''), tipo=request.args.get('tipo', '')) }}">Siguiente</a>
+            <a href="{{ url_for('caballos.listar_documentos', id=caballo.id, page=documentos.next_num, nombre=request.args.get('nombre', ''), tipo=request.args.get('tipo', '')) }}">Siguiente</a>
         {% endif %}
     </div>
 </body>

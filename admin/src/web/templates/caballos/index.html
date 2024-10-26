@@ -1,14 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "layout.html" %}
+
+{% block title %}Listado de Caballos{% endblock %}
+
+{% block imports %}
+    {{ super() }}  <!-- Incluye las importaciones de layout.html -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/index.css') }}">
-    <title>Listado de Caballos</title>
-</head>
+{% endblock %}
+
+{% block content %}
+
 <body>
-    <h1>Listado de Caballos</h1>
-    <form action="{{ url_for('caballos.listar_caballos') }}" method="GET">
+    <header>
+        <h1>Listado de Caballos</h1>
+    </header>
+    <form action="{{ url_for('caballos.menu_caballos') }}" method="GET">
         <input type="text" name="nombre" placeholder="Buscar por nombre..." value="{{ request.args.get('nombre') }}">
         <button type="submit">Buscar</button>
     </form>
@@ -41,12 +46,12 @@
     <!-- Paginación -->
     <div class="pagination">
         {% if caballos.has_prev %}
-        <a href="{{ url_for('caballos.listar_caballos', page=caballos.prev_num, nombre=request.args.get('nombre')) }}">Anterior</a>
+        <a href="{{ url_for('caballos.menu_caballos', page=caballos.prev_num, nombre=request.args.get('nombre')) }}">Anterior</a>
         {% endif %}
         <span>Página {{ caballos.page }} de {{ caballos.pages }}</span>
         {% if caballos.has_next %}
-        <a href="{{ url_for('caballos.listar_caballos', page=caballos.next_num, nombre=request.args.get('nombre')) }}">Siguiente</a>
+        <a href="{{ url_for('caballos.menu_caballos', page=caballos.next_num, nombre=request.args.get('nombre')) }}">Siguiente</a>
         {% endif %}
     </div>
 </body>
-</html>
+{% endblock %}

@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "layout.html" %}
+
+{% block title %}Detalles del Caballo{% endblock %}
+
+{% block imports %}
+    {{ super() }}  
     <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/show.css') }}">
-    <title>Detalles del Caballo</title>
-</head>
+{% endblock %}
+
+{% block content %}
 <body>
     <h1>Detalles del Caballo: {{ caballo.nombre }}</h1>
 
@@ -36,7 +38,7 @@
     <ul>
         {% for documento in caballo.documentos %}
             <li>
-                <a href="{{ url_for('static', filename=documento.archivo_url) }}">{{ documento.nombre }}</a>
+                <a href="{{ url_for('static', filename=documento.nombre_documento) }}">{{ documento.nombre_documento }}</a>
                 ({{ documento.tipo_documento }})
             </li>
         {% else %}
@@ -48,8 +50,16 @@
     <form action="{{ url_for('caballos.eliminar_caballo', id=caballo.id) }}" method="POST">
         <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este caballo?')">Eliminar</button>
     </form>
+    <a href="{{ url_for('caballos.menu_caballos') }}">Volver al listado</a>
 
-    <a href="{{ url_for('caballos.listar_caballos') }}">Volver al listado</a>
-    <a href="{{ url_for('caballos.subir_documento', id=caballo.id) }}">Adjuntar Nuevo Documento</a>
+    <!-- Formulario para cargar nuevos documentos -->
+    <h3>Adjuntar Nuevo Documento</h3>
+    <form action="{{ url_for('caballos.subir_documento', id=caballo.id) }}" method="POST" enctype="multipart/form-data">
+        <label for="documento">Selecciona el documento:</label>
+        <input type="file" name="documento" id="documento" required>
+        <label for="tipo">Tipo de Documento:</label>
+        <input type="text" name="tipo" id="tipo" required>
+        <button type="submit">Cargar Documento</button>
+    </form>
 </body>
-</html>
+{% endblock %}

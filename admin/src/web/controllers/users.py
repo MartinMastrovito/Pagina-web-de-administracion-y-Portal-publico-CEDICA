@@ -1,10 +1,10 @@
 from flask import render_template, request, redirect, session, flash, url_for
 from src.core.database import db
 from flask import Blueprint
-from core.auth import utiles
-from core.auth.decorators import login_required  # Importamos el decorador
-from core.auth.decorators import check  # Importamos el decorador
-from core.bcrypt import check_password_hash
+from src.core.auth import utiles
+from src.core.auth.decorators import login_required  # Importamos el decorador
+from src.core.auth.decorators import check  # Importamos el decorador
+from src.core.bcrypt import check_password_hash
 
 bp = Blueprint("users", __name__, url_prefix="/usuarios")
 
@@ -82,7 +82,7 @@ def create_user():
         flash('Usuario creado exitosamente', 'success')
         return redirect('/usuarios')
     else:
-        flash('El usuario ya existe o ocurrió un error', 'danger')
+        flash('El usuario ya existe u ocurrió un error', 'danger')
         return redirect("/usuarios/crear_usuario")
 
 
@@ -103,8 +103,12 @@ def user_update(user_id):
         'enabled': 'enabled' in request.form,
         'role_id': request.form['role_id']
     }
-    utiles.update_user(user_id, **user_data)
-    return redirect('/usuarios')
+    mensaje = utiles.update_user(user_id, **user_data)
+    if mensaje:
+        flash(mensaje, 'danger')
+        return redirect(f'/usuarios/actualizar/{user_id}')
+    else:
+        return redirect("/usuarios")
 
 @bp.get("/eliminar/<int:user_id>")
 @login_required
@@ -134,7 +138,7 @@ def block(user_id):
     if utiles.block_user(user_id):
         flash("Usuario bloqueado exitosamente.")
     else:
-        flash("No se puede bloquear el usuario.")
+        flash("No se puede bloquear a un System Admin.")
     return redirect(url_for("users.index"))
 
 @bp.post("/unblock/<int:user_id>")
@@ -145,5 +149,5 @@ def unblock(user_id):
     if utiles.unblock_user(user_id):
         flash("Usuario desbloqueado exitosamente.")
     else:
-        flash("No se puede desbloquear el usuario.")
+        flash("No se puede desbloquear al usuario.")
     return redirect(url_for("users.index"))
