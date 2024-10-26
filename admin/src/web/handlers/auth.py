@@ -19,3 +19,6 @@ def check_permission(session, permission):
 
     # Verificamos si el permiso solicitado está en la lista de permisos del usuario
     return permission in permissions
+
+def check_authenticated(session):
+    return session.get("user") is not None
