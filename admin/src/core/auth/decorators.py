@@ -15,8 +15,8 @@ def check(permission):
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            #user_id = session.get("user_id")
-            if not check_permission(session, permission):
+            user_id = session.get("user_id")
+            if not check_permission(user_id, permission):
                 return redirect(url_for("users.show_home"))
             
             return f(*args, **kwargs)
