@@ -1,6 +1,6 @@
-from core.auth.models.model_user import User
-from core.bcrypt import bcrypt
-from core.database import db
+from src.core.auth.models.model_user import User
+from src.core.bcrypt import bcrypt
+from src.core.database import db
 
 def list_users():
     users = User.query.all()
