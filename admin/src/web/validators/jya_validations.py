@@ -67,7 +67,7 @@ def validator_fecha(campo):
 
 def validator_select_bool(campo):
     """Valida que el campo sea un valor booleano válido de select"""
-    return campo in ['true', 'false']
+    return campo in [True, False]
 
 def validator_select_opciones(campo, opciones_validas):
     """Valida que el campo esté entre las opciones válidas"""
@@ -107,16 +107,16 @@ def validate_jya_form(jya_data):
     if not validator_telefono(jya_data.get('telefono_actual')):
         errores.append("Teléfono actual no válido")
     
-    if not validator_telefono(jya_data.get('contacto_emergencia.telefono')):
+    if not validator_telefono(jya_data.get('contacto_emergencia')["telefono"]):
         errores.append("Teléfono de emergencia no válido")
 
     # Validación de emails
-    if not validator_email(jya_data.get('familiar1_email')):
+    if jya_data.get("familiares_tutores")[0]["email"] and not validator_email(jya_data.get("familiares_tutores")[0]["email"]):
         errores.append("Email del familiar 1 no válido")
     
-    if jya_data.get('familiar2_email') and not validator_email(jya_data.get('familiar2_email')):
+    if jya_data.get("familiares_tutores")[1]["email"] and not validator_email(jya_data.get("familiares_tutores")[1]["email"]):
         errores.append("Email del familiar 2 no válido")
-
+    
     # Validación de selects booleanos
     campos_bool = ['becado', 'certificado_discapacidad', 'asignacion_familiar', 'pension', 'curatela']
     for campo in campos_bool:
