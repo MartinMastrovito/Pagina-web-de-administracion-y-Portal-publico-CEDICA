@@ -5,6 +5,7 @@ from src.web import helpers
 from src.web.storage import storage
 from src.core.bcrypt import bcrypt
 from src.core.database import db_reset, init_app
+from src.core.seeds import db_seeds
 from src.core.database import db # Importar 'db' desde 'core.database'
 from src.web.config import config
 from src.web.handlers.error import not_found_error
@@ -51,5 +52,10 @@ def create_app(env="development", static_folder=''):
     def reset_db():
         """Comando para resetear la base de datos."""
         db_reset()
+
+    @app.cli.command(name="seeds-db")
+    def seeds_db():
+        """Comando para agregar datos la base de datos."""
+        db_seeds()
 
     return app
