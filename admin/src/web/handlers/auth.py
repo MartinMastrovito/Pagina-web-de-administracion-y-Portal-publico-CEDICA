@@ -18,4 +18,4 @@ def check_permission(session, permission):
     return permission in permissions
 
 def check_authenticated(session):
-    return session.get("user") is not None
+    return session.get("user_id") is not None
