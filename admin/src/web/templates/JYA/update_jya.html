@@ -29,6 +29,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="dni">DNI (sin puntos o espacios):</label>
+                    <input type="number" class="form-control" id="dni" name="dni" min="1000000" required value="{{ jya.dni }}">
+                </div>
+
+                <div class="form-group">
                     <label for="edad">Edad:</label>
                     <input type="number" class="form-control" id="edad" name="edad" required value="{{ jya.edad }}">
                 </div>
@@ -73,7 +78,7 @@
                 <!-- Teléfono actual -->
                 <div class="form-group">
                     <label for="telefono_actual">Teléfono Actual:</label>
-                    <input type="text" class="form-control" id="telefono_actual" name="telefono_actual" required value="{{ jya.telefono_actual }}">
+                    <input type="number" class="form-control" id="telefono_actual" name="telefono_actual" required value="{{ jya.telefono_actual }}">
                 </div>
 
                 <!-- Contacto de emergencia -->
@@ -83,7 +88,7 @@
                 </div>
                 <div class="form-group">
                     <label for="contacto_emergencia_telefono">Contacto de Emergencia - Teléfono:</label>
-                    <input type="text" class="form-control" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono" required value="{{ jya.contacto_emergencia['telefono'] }}">
+                    <input type="number" class="form-control" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono" required value="{{ jya.contacto_emergencia['telefono'] }}">
                 </div>
 
                 <!-- Becado y porcentaje de beca -->
@@ -154,8 +159,8 @@
                 <div class="form-group">
                     <label>¿Es beneficiario de alguna pensión?</label>
                     <select class="form-control" id="pension" name="pension">
-                        <option value="false" {% if jya.pension %} selected {% endif %}>No</option>
-                        <option value="true">Sí</option>
+                        <option value="true" {% if jya.pension %} selected {% endif %}>Sí</option>
+                        <option value="false" {% if not jya.pension %} selected {% endif %}>No</option>
                     </select>
                 </div>
 
@@ -201,7 +206,7 @@
 
                 <div class="form-group">
                     <label for="institucion_escolar_telefono">Teléfono:</label>
-                    <input type="text" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono" {% if jya.institucion_escolar["telefono"] %} value="{{ jya.institucion_escolar["telefono"] }}"{% endif %}>
+                    <input type="number" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono" {% if jya.institucion_escolar["telefono"] %} value="{{ jya.institucion_escolar["telefono"] }}"{% endif %}>
                 </div>
 
                 <div class="form-group">
@@ -359,11 +364,11 @@
                 </div>
                 <div class="form-group">
                     <label for="dias_asistencia">Días de Asistencia:</label><br>
-                        <input type="checkbox" name="dias_asistencia[]" value="Lunes"> Lunes<br>
-                        <input type="checkbox" name="dias_asistencia[]" value="Martes"> Martes<br>
-                        <input type="checkbox" name="dias_asistencia[]" value="Miércoles"> Miércoles<br>
-                        <input type="checkbox" name="dias_asistencia[]" value="Jueves"> Jueves<br>
-                        <input type="checkbox" name="dias_asistencia[]" value="Viernes"> Viernes<br>
+                        <input type="checkbox" name="dias_asistencia" value="Lunes"> Lunes<br>
+                        <input type="checkbox" name="dias_asistencia" value="Martes"> Martes<br>
+                        <input type="checkbox" name="dias_asistencia" value="Miércoles"> Miércoles<br>
+                        <input type="checkbox" name="dias_asistencia" value="Jueves"> Jueves<br>
+                        <input type="checkbox" name="dias_asistencia" value="Viernes"> Viernes<br>
                 </div>
                 <button type="submit" class="btn btn-primary">Actualizar usuario</button>
             </form>

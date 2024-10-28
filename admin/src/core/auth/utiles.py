@@ -1,11 +1,18 @@
-#aca se guardan todos los metodos que se van a usar en la base de datos
-#como la comprobacion de login, por ejemplo
 from src.core.bcrypt import bcrypt
 from src.core.database import db
-from src.core.auth.models.model_user import User , Role
-from src.core.auth.models.model_permission import  RolePermission, Permission
+from src.core.auth.models.model_user import User
+from src.core.auth.models.model_permission import RolePermission, Permission
 
 def get_permissions(user_id):
+    """
+    Obtiene los permisos asociados al rol de un usuario.
+
+    Args:
+        user_id: ID del usuario cuyas permisos se quieren obtener.
+
+    Returns:
+        Lista de nombres de permisos asociados al rol del usuario.
+    """
     user = get_user(user_id)
     # Obtenemos los permisos asociados al rol del usuario
     role_permissions = (
@@ -18,11 +25,31 @@ def get_permissions(user_id):
     return [perm.name for perm in role_permissions]
 
 def list_users():
-    users = User.query.all()
+    """
+    Lista todos los usuarios en la base de datos.
 
+    Returns:
+        Lista de instancias de User.
+    """
+    users = User.query.all()
     return users
 
 def search_users(email=None, enabled=None, role_id=None, sort_by='email', order='asc', page=1, per_page=25):
+    """
+    Busca usuarios en la base de datos aplicando varios filtros.
+
+    Args:
+        email: Email del usuario a buscar.
+        enabled: Estado activo/inactivo del usuario.
+        role_id: ID del rol del usuario a buscar.
+        sort_by: Columna por la que ordenar (por defecto es 'email').
+        order: Orden de la lista ('asc' o 'desc').
+        page: Página de resultados (por defecto es 1).
+        per_page: Número de resultados por página (por defecto es 25).
+
+    Returns:
+        Objeto de paginación con los usuarios encontrados.
+    """
     query = User.query
 
     # Filtro por email
@@ -55,7 +82,15 @@ def search_users(email=None, enabled=None, role_id=None, sort_by='email', order=
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
 def create_user(**kwargs):
-    
+    """
+    Crea un nuevo usuario en la base de datos.
+
+    Args:
+        **kwargs: Argumentos que representan los datos del nuevo usuario.
+
+    Returns:
+        Instancia del nuevo usuario si se creó exitosamente, None si ya existe.
+    """
     existing_user = get_user_by_email(kwargs["email"])
     if existing_user:
         return None  # Retorna None si el usuario ya existe
@@ -69,15 +104,35 @@ def create_user(**kwargs):
     return user
 
 def get_user(user_id):
+    """
+    Obtiene un usuario de la base de datos por su ID.
+
+    Args:
+        user_id: ID del usuario a obtener.
+
+    Returns:
+        Instancia del usuario.
+    """
     return User.query.get_or_404(user_id)
 
 def update_user(user_id, **kwargs):
+    """
+    Actualiza los datos de un usuario en la base de datos.
+
+    Args:
+        user_id: ID del usuario a actualizar.
+        **kwargs: Argumentos que representan los nuevos datos del usuario.
+
+    Returns:
+        str or False: Mensaje de error si el email ya está en uso, False si se actualizó correctamente.
+    """
     validation = User.query.filter_by(email=kwargs["email"]).first()
-    
-    if validation:
-        return "Este email está siendo utilizado, pruebe ingresar uno diferente."
-    # Actualizar los atributos del usuario con los valores proporcionados en kwargs
     user = get_user(user_id)
+    
+    if (validation) and (not (user.email == kwargs["email"])):
+        return "Este email está siendo utilizado, pruebe ingresar uno diferente."
+    
+    # Actualizar los atributos del usuario con los valores proporcionados en kwargs
     kwargs["enabled"] = True
     for key, value in kwargs.items():
         setattr(user, key, value)
@@ -88,19 +143,53 @@ def update_user(user_id, **kwargs):
     return False
 
 def delete_user(user_id):
+    """
+    Elimina un usuario de la base de datos.
+
+    Args:
+        user_id: ID del usuario a eliminar.
+    """
     db.session.query(User).filter(User.id==user_id).delete()
     db.session.commit()
 
 def get_user_by_email(email):
+    """
+    Obtiene un usuario de la base de datos por su email.
+
+    Args:
+        email: Email del usuario a buscar.
+
+    Returns:
+        User or None: Instancia del usuario si se encuentra, None si no.
+    """
     return User.query.filter_by(email=email).first()  # Usa el modelo para buscar el usuario
 
 def login_user(email, password):
+    """
+    Valida las credenciales de un usuario para iniciar sesión.
+
+    Args:
+        email: Email del usuario.
+        password: Contraseña del usuario.
+
+    Returns:
+        User or None: Instancia del usuario si las credenciales son válidas, None si no.
+    """
     user = get_user_by_email(email)
     if user and bcrypt.check_password_hash(user.password, password):
         return user  # Retorna el usuario si las credenciales son correctas
     return None  # Retorna None si las credenciales son incorrectas
 
 def block_user(user_id):
+    """
+    Bloquea un usuario en la base de datos.
+
+    Args:
+        user_id: ID del usuario a bloquear.
+
+    Returns:
+        bool: True si se bloqueó correctamente, False si no se pudo bloquear.
+    """
     user = get_user(user_id)
     if user and user.role_id != 5:  # 5 es el ID del rol System Admin
         user.enabled = False
@@ -109,6 +198,15 @@ def block_user(user_id):
     return False
 
 def unblock_user(user_id):
+    """
+    Desbloquea un usuario en la base de datos.
+
+    Args:
+        user_id: ID del usuario a desbloquear.
+
+    Returns:
+        bool: True si se desbloqueó correctamente, False si no se pudo desbloquear.
+    """
     user = get_user(user_id)
     if user:
         user.enabled = True

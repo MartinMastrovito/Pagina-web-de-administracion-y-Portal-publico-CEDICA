@@ -9,16 +9,22 @@ bp = Blueprint("crud_JyA", __name__, url_prefix="/JYA")
 @login_required
 @check("jya_index")
 def index():
-    nombre = request.args.get('nombre')
-    apellido = request.args.get('apellido')
-    dni = request.args.get('dni', type=int)
+    """
+    Renderiza la vista principal de JYA con los registros paginados de usuarios.
+    Se pueden filtrar resultados por nombre, apellido, dni y profesionales atendiendo.
+
+    Returns:
+        Renderizado de la plantilla list_jya.html con los resultados y la paginación.
+    """
+    nombre = request.args.get("nombre")
+    apellido = request.args.get("apellido")
+    dni = request.args.get("dni", type=int)
     profesionales_atendiendo = request.args.get("profesionales_atendiendo")
-    sort_by = request.args.get('sort_by', 'nombre')  # Cambié 'email' a 'nombre' para evitar errores
-    order = request.args.get('order', 'asc')
-    page = request.args.get('page', 1, type=int)
+    sort_by = request.args.get("sort_by", "nombre")
+    order = request.args.get("order", "asc")
+    page = request.args.get("page", 1, type=int)
     per_page = 25
 
-    # Obtener resultados paginados usando la búsqueda
     users_pagination = crud_JyA.search_JYA(
         nombre=nombre,
         apellido=apellido,
@@ -30,32 +36,56 @@ def index():
         per_page=per_page
     )
 
-    # Renderizar la plantilla con la lista de JYA y la paginación
     return render_template(
         "JYA/list_jya.html",
-        jyas=users_pagination.items,  # Lista de usuarios (jya) para el template
-        pagination=users_pagination    # Objeto de paginación para usar en la navegación
+        jyas=users_pagination.items,
+        pagination=users_pagination
     )
     
 @bp.get("/crear_jya")
 @login_required
 @check("jya_new")
 def show_create_jya_form():
+    """
+    Muestra el formulario para crear un nuevo JYA.
+    Verifica la existencia de empleados y caballos necesarios para la creación.
+
+    Returns:
+        Renderizado de la plantilla create_jya.html si existen los recursos requeridos,
+        de lo contrario redirige a la vista principal.
+    """
     empleados_terapeuta_profesor = crud_JyA.get_empleados_terapeuta_profesor()
     empleados_conductor = crud_JyA.get_empleados_conductor()
     empleados_auxiliar = crud_JyA.get_empleados_auxiliar()
     caballos = crud_JyA.get_caballos()
-    
-    if (not empleados_terapeuta_profesor) or (not empleados_conductor) or (not empleados_auxiliar) or (not caballos):
-        flash('Debe asegurarse de que exista por lo menos un empleado terapeuta/profesor, conductor, auxiliar de pista y un caballo en el sistema', 'danger')
+
+    if not (empleados_terapeuta_profesor and empleados_conductor and empleados_auxiliar and caballos):
+        flash(
+            "Debe asegurarse de que exista por lo menos un empleado terapeuta/profesor, "
+            "conductor, auxiliar de pista y un caballo en el sistema",
+            "danger"
+        )
         return redirect("/JYA")
-    else:
-        return render_template("JYA/create_jya.html", empleados_terapeuta_profesor=empleados_terapeuta_profesor, empleados_conductor=empleados_conductor, empleados_auxiliar=empleados_auxiliar, caballos=caballos)
+    
+    return render_template(
+        "JYA/create_jya.html",
+        empleados_terapeuta_profesor=empleados_terapeuta_profesor,
+        empleados_conductor=empleados_conductor,
+        empleados_auxiliar=empleados_auxiliar,
+        caballos=caballos
+    )
 
 @bp.post("/crear_jya")
 @login_required
 @check("jya_new")
 def create_jya():
+    """
+    Crea un nuevo JYA con los datos proporcionados por el formulario.
+    Valida los datos ingresados y redirige a la lista de JYA o muestra errores en caso de fallos.
+
+    Returns:
+        Redirige a la lista de JYA o a la vista de creación en caso de errores.
+    """
     jya_data = {
         "nombre": request.form['nombre'],
         "apellido": request.form['apellido'],
@@ -131,32 +161,34 @@ def create_jya():
 
     errores = validate_jya_form(jya_data)
     if errores:
-        flash('Ocurrió un error al completar los campos, intentelo nuevamente...', 'danger')
-        return redirect('/JYA/crear_jya')
+        flash("Ocurrió un error al completar los campos, intentelo nuevamente...", "danger")
+        return redirect("/JYA/crear_jya")
     
-    # Crear el JYA
     user = crud_JyA.create_jya(**jya_data)
-    
     if not user:
-        flash('El usuario ya existe o ocurrió un error', 'danger')
-        return redirect('/JYA/crear_jya')
+        flash("El usuario ya existe o ocurrió un error", "danger")
+        return redirect("/JYA/crear_jya")
     
-    # Asignar empleados (terapeuta, conductor, auxiliar) al JYA
-    terapeuta_id = request.form["profesor_terapeuta_id"]
-    conductor_id = request.form["conductor_caballo_id"]
-    auxiliar_id = request.form["auxiliar_id"]
+    crud_JyA.assign_employee_to_jya(user.id, request.form["profesor_terapeuta_id"], "terapeuta")
+    crud_JyA.assign_employee_to_jya(user.id, request.form["conductor_caballo_id"], "conductor")
+    crud_JyA.assign_employee_to_jya(user.id, request.form["auxiliar_id"], "auxiliar")
 
-    crud_JyA.assign_employee_to_jya(user.id, terapeuta_id, 'terapeuta')
-    crud_JyA.assign_employee_to_jya(user.id, conductor_id, 'conductor')
-    crud_JyA.assign_employee_to_jya(user.id, auxiliar_id, 'auxiliar')
-
-    flash('Usuario y empleados asignados correctamente', 'success')
-    return redirect('/JYA')
+    flash("Usuario y empleados asignados correctamente", "success")
+    return redirect("/JYA")
     
 @bp.get("/actualizar/<int:jya_dni>")
 @login_required
 @check("jya_update")
 def show_update_jya(jya_dni):
+    """
+    Muestra el formulario de actualización para un JYA específico.
+    
+    Args:
+        jya_dni: DNI del JYA a actualizar.
+    
+    Returns:
+        Renderizado de la plantilla update_jya.html con los datos del JYA.
+    """
     jya = crud_JyA.get_jya_by_dni(jya_dni)
     return render_template("JYA/update_jya.html", jya=jya)
 
@@ -164,9 +196,20 @@ def show_update_jya(jya_dni):
 @login_required
 @check("jya_update")
 def jya_update(jya_dni):
+    """
+    Actualiza los datos de un JYA existente.
+    Valida y procesa los datos del formulario de actualización.
+    
+    Args:
+        jya_dni: DNI del JYA a actualizar.
+    
+    Returns:
+        Redirige a la vista principal de JYA o muestra errores en caso de fallos.
+    """
     jya_data = {
         "nombre": request.form['nombre'],
         "apellido": request.form['apellido'],
+        "dni": request.form['dni'],
         "edad": request.form["edad"],
         "fecha_nacimiento": request.form["fecha_de_nacimiento"],
         "lugar_nacimiento": {
@@ -193,6 +236,7 @@ def jya_update(jya_dni):
         "tipo_discapacidad": request.form.get("tipo_discapacidad", None),
         "asignacion_familiar": request.form["asignacion_familiar"] == "true",
         "tipo_asignacion": request.form.get("tipo_asignacion", ""),
+        "pension": request.form["pension"] == "true",
         "tipo_pension": request.form.get("tipo_pension", ""),
         "obra_social": request.form.get("obra_social", ""),
         "numero_afiliado": request.form.get("numero_afiliado", ""),
@@ -237,17 +281,30 @@ def jya_update(jya_dni):
     
     errores = validate_jya_form(jya_data)
     if errores:
-        flash('Ocurrió un error al completar los campos, intentelo nuevamente...', 'danger')
-        return redirect('/JYA/crear_jya')
+        flash("Ocurrió un error al completar los campos, intentelo nuevamente...", "danger")
+        return redirect(f"/JYA/actualizar/{jya_dni}")
     
-    crud_JyA.update_jya(jya_dni, **jya_data)
-    
-    return redirect('/JYA')
+    new_unique_dni = crud_JyA.update_jya(jya_dni, **jya_data)
+    if new_unique_dni:
+        flash("Se modificó el JYA exitosamente", "success")
+        return redirect("/JYA")
+    else:
+        flash("El DNI ingresado ya se encuentra registrado en nuestro sistema", "danger")
+        return redirect(f"/JYA/actualizar/{jya_dni}")
 
 @bp.get("/eliminar/<int:jya_dni>")
 @login_required
 @check("jya_destroy")
 def show_delete_jya(jya_dni):
+    """
+    Muestra el formulario para confirmar la eliminación de un JYA específico.
+    
+    Args:
+        jya_dni: DNI del JYA a eliminar.
+    
+    Returns:
+        Renderizado de la plantilla delete_jya.html con los datos del JYA.
+    """
     jya = crud_JyA.get_jya_by_dni(jya_dni)
     return render_template("JYA/delete_jya.html", jya=jya)
 
@@ -255,12 +312,31 @@ def show_delete_jya(jya_dni):
 @login_required
 @check("jya_destroy")
 def jya_delete(jya_dni):
+    """
+    Elimina un JYA específico del sistema.
+    
+    Args:
+        jya_dni: DNI del JYA a eliminar.
+    
+    Returns:
+        Redirige a la vista principal de JYA después de la eliminación.
+    """
     crud_JyA.delete_jya(jya_dni)
-    return redirect('/JYA')
+    flash("Usuario eliminado correctamente", "success")
+    return redirect("/JYA")
 
 @bp.get("/detalles/<int:jya_dni>")
 @login_required
 @check("jya_show")
 def show_details_jya(jya_dni):
+    """
+    Muestra los detalles de un JYA específico.
+    
+    Args:
+        jya_dni: DNI del JYA a mostrar.
+    
+    Returns:
+        Renderizado de la plantilla show_jya.html con los detalles del JYA.
+    """
     jya = crud_JyA.get_jya_by_dni(jya_dni)
     return render_template("JYA/show_jya.html", jya=jya)
