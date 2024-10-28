@@ -78,15 +78,15 @@ def index():
 
 
 @bp.get("/crear_usuario")
-# @login_required
-# @check("user_new")
+@login_required
+@check("user_new")
 def show_create_user_form():
     """Muestra el formulario para crear un nuevo usuario."""
     return render_template("users/create_user.html")
 
 @bp.post("/crear_usuario")
-# @login_required
-# @check("user_new")
+@login_required
+@check("user_new")
 def create_user():
     """
     Crea un nuevo usuario en la base de datos.
