@@ -1,12 +1,12 @@
 from os import fstat
-from flask import render_template, request, send_file, Blueprint, current_app
+from flask import render_template, request, send_file, Blueprint, current_app, flash, redirect
 from src.core import crud_JyA
 from src.core.auth.decorators import login_required, check
 from io import BytesIO
 
 bp = Blueprint("documentos", __name__, url_prefix="/JYA/documentos")
 
-@bp.get("/documentos/<int:jya_dni>")
+@bp.get("/<int:jya_dni>")
 @login_required
 @check("jya_show")
 def index_documents_jya(jya_dni):
@@ -45,7 +45,7 @@ def index_documents_jya(jya_dni):
         pagination=documentos_pagination
     )
 
-@bp.get("documentos/cargar_documentos/<int:jya_dni>")
+@bp.get("/cargar_documentos/<int:jya_dni>")
 @login_required
 @check("jya_new")
 def show_upload_document(jya_dni):
@@ -61,7 +61,7 @@ def show_upload_document(jya_dni):
     jya = crud_JyA.get_jya_by_dni(jya_dni)
     return render_template("JYA/upload_document.html", jya=jya)
 
-@bp.post("documentos/cargar_documentos/<int:jya_dni>")
+@bp.post("/cargar_documentos/<int:jya_dni>")
 @login_required
 @check("jya_new")
 def upload_document(jya_dni):
@@ -95,10 +95,11 @@ def upload_document(jya_dni):
             "tipo_documento": request.form["tipo"]
         }
         crud_JyA.save_document(**doc_data)
-        
-    return render_template("JYA/show_jya.html", jya=jya)
+    
+    flash('Se ha subido el archivo exitosamente!.', 'success')
+    return redirect(f"/JYA/documentos/{jya_dni}")
 
-@bp.get("/documentos/actualizar/<int:jya_dni>/<int:documento_id>")
+@bp.get("/actualizar/<int:jya_dni>/<int:documento_id>")
 @login_required
 @check("jya_update")
 def show_update_document_jya(jya_dni, documento_id):
@@ -117,7 +118,7 @@ def show_update_document_jya(jya_dni, documento_id):
     
     return render_template("JYA/edit_document_jya.html", jya=jya, documento=documento)
 
-@bp.post("/documentos/actualizar/<int:jya_dni>/<int:documento_id>")
+@bp.post("/actualizar/<int:jya_dni>/<int:documento_id>")
 @login_required
 @check("jya_update")
 def update_document_jya(jya_dni, documento_id):
@@ -157,9 +158,10 @@ def update_document_jya(jya_dni, documento_id):
     
     jya = crud_JyA.get_jya_by_dni(jya_dni)
     
-    return render_template("JYA/show_jya.html", jya=jya)
+    flash('Se ha actualizado el archivo exitosamente!.', 'success')
+    return redirect(f"/JYA/documentos/{jya_dni}")
 
-@bp.get("/documentos/eliminar/<int:jya_dni>/<int:documento_id>")
+@bp.get("/eliminar/<int:jya_dni>/<int:documento_id>")
 @login_required
 @check("jya_destroy")
 def show_delete_document_jya(jya_dni, documento_id):
@@ -178,7 +180,7 @@ def show_delete_document_jya(jya_dni, documento_id):
     
     return render_template("JYA/delete_document_jya.html", jya=jya, documento=documento)
 
-@bp.post("/documentos/eliminar/<int:jya_dni>/<int:documento_id>")
+@bp.post("/eliminar/<int:jya_dni>/<int:documento_id>")
 @login_required
 @check("jya_destroy")
 def delete_document_jya(jya_dni, documento_id):
@@ -200,9 +202,10 @@ def delete_document_jya(jya_dni, documento_id):
     
     crud_JyA.delete_document(documento.id)
     
-    return render_template("JYA/show_jya.html", jya=jya)
+    flash('Se ha eliminado el archivo exitosamente!.', 'success')
+    return redirect(f"/JYA/documentos/{jya_dni}")
 
-@bp.get("/documentos/descargar/<int:documento_id>")
+@bp.get("/descargar/<int:documento_id>")
 @login_required
 @check("jya_show")
 def download_documento(documento_id):
