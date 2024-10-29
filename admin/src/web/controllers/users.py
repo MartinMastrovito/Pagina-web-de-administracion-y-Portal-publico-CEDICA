@@ -42,6 +42,16 @@ def login():
         flash('Email o contraseña incorrectos.', 'danger')
         return redirect(url_for('users.show_login_form'))
 
+@bp.get("/logout")
+def logout():
+    if session.get("user"):
+        del session["user"]
+        session.clear()
+        flash("¡La sesion se cerró!","info")
+    else:
+        flash("No hay una sesion activa", "error")
+    return redirect(url_for("users.login"))
+
 @bp.get("/")
 @login_required
 @check("user_index")
