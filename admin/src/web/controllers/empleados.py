@@ -20,7 +20,7 @@ def crear_empleado():
     return render_template("empleados/crear_empleado.html")
 
 @empleados_bp.post("/crear_empleado")
-@login_required
+#@login_required
 def crear_empleado_listo():
     # Obtener los datos del formulario
     empleado_data = {
@@ -65,10 +65,6 @@ def crear_empleado_listo():
                 content_type=file.content_type
             )
         return redirect("/menu_empleados/crear_empleado")
-
-
-
-
     except Exception as e:
         db.session.rollback()
         flash('Ocurrió un error al crear el empleado: ' + str(e), 'danger')

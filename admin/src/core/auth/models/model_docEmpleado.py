@@ -10,5 +10,7 @@ class Documento(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     empleado_id = db.Column(db.Integer, db.ForeignKey('empleados.id'), nullable=True) 
 
+    empleados = db.relationship('Empleados', back_populates='documentos')
+    
     def __repr__(self):
-        return f'<Documento {self.nombre}>'
+        return f'<Documento {self.nombre_documento}>'
