@@ -31,7 +31,7 @@ class DevelopmentConfig(Config):
     MINIO_SECRET_KEY = "mJGy8It49ebNNu2C1PaFMe5g1s6ObJ9adpzAHsWC"
     MINIO_SECURE = False
     DB_USER = os.getenv("DB_USER", os.getlogin())
-    DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
+    DB_PASSWORD = "os.getenv("DB_PASSWORD", "postgres")
     DB_HOST = "localhost"
     DB_PORT = "5432"
     DB_NAME = "grupo30"

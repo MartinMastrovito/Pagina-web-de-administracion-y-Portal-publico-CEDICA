@@ -199,7 +199,10 @@ def user_delete(user_id):
     Returns:
         Response: Redirige al índice de usuarios.
     """
-    utiles.delete_user(user_id)
+    if utiles.delete_user(user_id):
+        flash("Usuario eliminado exitosamente.")
+    else:
+        flash("No se puede eliminar a un System Admin.")
     return redirect('/usuarios')
 
 @bp.get("/block/<int:user_id>")
