@@ -15,7 +15,7 @@
     </header>
 
     <section>
-        <form action="{{ url_for('crud_JyA.upload_link', jya_dni=jya.dni) }}" method="POST">
+        <form action="{{ url_for('enlaces.upload_link', jya_dni=jya.dni) }}" method="POST">
             <div class="form-group">
                 <label for="tipo">Tipo de documento:</label>
                 <select class="form-control" id="tipo" name="tipo" required>

@@ -23,19 +23,22 @@
             <a class="button" href="{{ url_for('users.login') }}">Ingreso</a>
             <a class="button" href="{{ url_for('invoices.invoices_menu') }}">COBROS</a>
         </nav>
-        <div class="dropdown is-right is-hoverable">
-                <div class="dropdown-trigger">
-                        <figure class="image is-48x48">
-                            <img class="is-rounded" src="{{ url_for('static', filename='assets/profile_icon.png') }}">
-                        </figure>
-                </div>
-            <div class="dropdown-menu">
-                <div class="dropdown-content">
-                    <a href="#" class="dropdown-item">Perfil</a>
-                    <a href="#" class="dropdown-item">Cerrar sesión</a>
+        {% if check_authenticated(session) %}
+            <div class="dropdown is-right is-hoverable">
+                    <div class="dropdown-trigger">
+                            <figure class="image is-48x48">
+                                <img class="is-rounded" src="{{ url_for('static', filename='assets/profile_icon.png') }}">
+                            </figure>
+                    </div>
+                <div class="dropdown-menu">
+                    <div class="dropdown-content">
+                        <a href="{{url_for('users.logout')}}" class="dropdown-item">Cerrar sesión</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% else %}
+            <div></div>
+        {% endif %}
     </header>
     <main>
         {% block content %}
