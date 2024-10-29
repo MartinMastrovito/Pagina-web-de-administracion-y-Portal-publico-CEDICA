@@ -149,8 +149,12 @@ def delete_user(user_id):
     Args:
         user_id: ID del usuario a eliminar.
     """
-    db.session.query(User).filter(User.id==user_id).delete()
-    db.session.commit()
+    user = get_user(user_id)
+    if user and user.role_id != 5:
+        db.session.query(User).filter(User.id==user_id).delete()
+        db.session.commit()
+        return True
+    return False
 
 def get_user_by_email(email):
     """
