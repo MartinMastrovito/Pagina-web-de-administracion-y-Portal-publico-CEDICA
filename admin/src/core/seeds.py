@@ -211,7 +211,7 @@ Administración:
     invoice_index
     invoice_show
     invoice_update
-    invoice_create
+    invoice_new
     invoice_destroy
     invoice_menu
 Sysadmin:todo
