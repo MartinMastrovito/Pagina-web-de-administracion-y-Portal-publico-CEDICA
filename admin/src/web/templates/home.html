@@ -3,17 +3,80 @@
 {% block title %}
 Página de Inicio
 {% endblock %}
-
-{% block content %}
-<h2>¡Hola Mundo!</h2>
-<p>Bienvenido a la página de inicio.Esto ya es del home!</p>
-{% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <ul class="flashes">
-                    {% for category, message in messages %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+{% block imports %}
+    {{super()}}
+    <style>
+        .menu_home{
+            display:flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            flex-grow: inherit;
+            gap:10%;
+        }
+        .item_home{
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 300px;
+            height: 300px;
+        }
+    </style>
 {% endblock %}
+    <body>
+        {% block content %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <ul class="flashes">
+                                {% for category, message in messages %}
+                                    <li class="{{ category }}">{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
+                    <nav class="menu_home">
+                        <a class="card item_home " href="{{ url_for('caballos.menu_caballos') }}">
+                            <div class="card-image">
+                            <img class="image is-64x64" 
+                                src="{{ url_for('static', filename='assets/caballos.png') }}"
+                                alt="caballo icono">
+                            </div>
+                            <p class = "card-content is-size-3-mobile is-size-1-desktop is-size-1-tablet">Caballos</p>
+                        </a>
+                        <a class="card item_home" href="{{ url_for('empleados.show_empleado_form') }}">
+                            <div class="card-image">
+                                <img class="image is-64x64" 
+                                    src="{{ url_for('static', filename='assets/equipo.png') }}"
+                                    alt="equipo icono">
+                                </div>
+                            <p class = "card-content is-size-3-mobile is-size-1-desktop is-size-1-tablet">Equipo</p>
+                        </a>
+                        <a class="card item_home" href="{{ url_for('crud_JyA.index') }}">
+                            <div class="card-image">
+                                <img class="image is-64x64" 
+                                    src="{{ url_for('static', filename='assets/jya.png') }}"
+                                    alt="jinetes y amazonas icono">
+                                </div>
+                            <p class = "card-content is-size-3-mobile is-size-1-desktop is-size-1-tablet">J&A</p>
+                        </a>
+                        <a class="card item_home" href="{{ url_for('users.index') }}">
+                            <div class="card-image">
+                                <img class="image is-64x64" 
+                                    src="{{ url_for('static', filename='assets/usuarios.png') }}"
+                                    alt="usuarios icono">
+                                </div>
+                            <p class = "card-content is-size-3-mobile is-size-1-desktop is-size-1-tablet">Usuarios</p>
+                        </a>
+                        <a class="card item_home" href="{{ url_for('invoices.invoices_menu') }}">
+                            <div class="card-image">
+                                <img class="image is-64x64" 
+                                    src="{{ url_for('static', filename='assets/cobros.png') }}"
+                                    alt="cobros icono">
+                                </div>
+                            <p class = "card-content is-size-3-mobile is-size-1-desktop is-size-1-tablet ">Cobros</p>
+                        </a>
+                    </nav>
+        {% endblock %}
+    </body>
