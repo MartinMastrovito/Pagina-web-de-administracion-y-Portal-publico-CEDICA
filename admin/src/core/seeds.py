@@ -57,47 +57,52 @@ def permission_create():
         Permission(name="team_destroy"),
         Permission(name="team_update"),
         Permission(name="team_show"),
-        # permisos caballos 
+        # permisos caballos
         Permission(name="horse_index"),
         Permission(name="horse_new"),
         Permission(name="horse_destroy"),
         Permission(name="horse_update"),
         Permission(name="horse_show"),
-
     ]
     db.session.add_all(list_permission)
     db.session.commit()
 
+
 def tecnica_rol_create():
-    tecnica_id = Role.query.filter(Role.name =="tecnica").first().id
+    tecnica_id = Role.query.filter(Role.name == "tecnica").first().id
     permissions = Permission.query.filter(
-       db.or_(
-        Permission.name.contains("jya"),
-        Permission.name == "horse_index",
-        Permission.name == "horse_show",
-        Permission.name == "Invoice_menu",
-        Permission.name == "Invoice_index",
-        Permission.name == "Invoice_show"
-       )
+        db.or_(
+            Permission.name.contains("jya"),
+            Permission.name == "horse_index",
+            Permission.name == "horse_show",
+            Permission.name == "Invoice_menu",
+            Permission.name == "Invoice_index",
+            Permission.name == "Invoice_show",
+        )
     )
     tecnica_permissions = []
     for permission in permissions:
-        tecnica_permissions.append(RolePermission(role_id = tecnica_id ,permission_id= permission.id))
+        tecnica_permissions.append(
+            RolePermission(role_id=tecnica_id, permission_id=permission.id)
+        )
     db.session.add_all(tecnica_permissions)
     db.session.commit()
 
+
 def ecuestre_rol_create():
-    ecuestre_id = Role.query.filter(Role.name =="ecuestre").first().id
+    ecuestre_id = Role.query.filter(Role.name == "ecuestre").first().id
     permissions = Permission.query.filter(
-       db.or_(
-        Permission.name.contains("horse"),
-        Permission.name == "jya_index",
-        Permission.name == "jya_show"
-       )
+        db.or_(
+            Permission.name.contains("horse"),
+            Permission.name == "jya_index",
+            Permission.name == "jya_show",
+        )
     )
     ecuestre_permissions = []
     for permission in permissions:
-        ecuestre_permissions.append(RolePermission(role_id = ecuestre_id ,permission_id= permission.id))
+        ecuestre_permissions.append(
+            RolePermission(role_id=ecuestre_id, permission_id=permission.id)
+        )
     db.session.add_all(ecuestre_permissions)
     db.session.commit()
 
@@ -105,29 +110,33 @@ def ecuestre_rol_create():
 def administracion_rol_create():
     administrator_id = Role.query.filter(Role.name == "administracion").first().id
     permissions = Permission.query.filter(
-       db.or_(
-        Permission.name.contains("team"),
-        Permission.name.contains("invoice"),
-        Permission.name.contains("payment"),
-        Permission.name.contains("jya"),
-        Permission.name == "horse_index",
-        Permission.name == "horse_show"
-       )
+        db.or_(
+            Permission.name.contains("team"),
+            Permission.name.contains("invoice"),
+            Permission.name.contains("payment"),
+            Permission.name.contains("jya"),
+            Permission.name == "horse_index",
+            Permission.name == "horse_show",
+        )
     )
     administration_permissions = []
     for permission in permissions:
-        administration_permissions.append(RolePermission(role_id = administrator_id ,permission_id= permission.id))
+        administration_permissions.append(
+            RolePermission(role_id=administrator_id, permission_id=permission.id)
+        )
     db.session.add_all(administration_permissions)
     db.session.commit()
+
 
 def sysadmin_rol_create():
     permissions = Permission.query.all()
     sysadmin_permissions = []
     for permission in permissions:
-        sysadmin_permissions.append(RolePermission(role_id = 5, permission_id = permission.id))
+        sysadmin_permissions.append(
+            RolePermission(role_id=5, permission_id=permission.id)
+        )
     db.session.add_all(sysadmin_permissions)
     db.session.commit()
-    
 
 
 def rolePermission_create():
@@ -165,7 +174,6 @@ def db_seeds():
     permission_create()
     user_create()
     rolePermission_create()
-
 
 
 """
