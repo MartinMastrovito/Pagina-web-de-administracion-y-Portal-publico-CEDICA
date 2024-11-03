@@ -15,12 +15,13 @@ caballos_bp = Blueprint('caballos', __name__, url_prefix='/caballos')
 def menu_caballos():
     page = request.args.get('page', 1, type=int)
     nombre = request.args.get('nombre', '', type=str)
+    tipo_ja = request.args.get('tipo_ja', '', type=str)  # Nuevo parámetro
     orden = request.args.get('orden', 'nombre')
     direction = request.args.get('direction', 'asc')
-    
-    caballos_paginados = search_caballos(nombre=nombre, sort_by=orden, order=direction, page=page)
 
-    return render_template('caballos/index.html', caballos=caballos_paginados)
+    caballos_paginados = search_caballos(nombre=nombre, tipo_ja=tipo_ja, sort_by=orden, order=direction, page=page)
+
+    return render_template('caballos/index.html', caballos=caballos_paginados, nombre=nombre, tipo_ja=tipo_ja, orden=orden, direction=direction)
 
 @caballos_bp.route('/<int:id>', methods=['GET'])
 @login_required
