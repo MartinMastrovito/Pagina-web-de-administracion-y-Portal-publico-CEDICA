@@ -15,13 +15,13 @@ caballos_bp = Blueprint('caballos', __name__, url_prefix='/caballos')
 def menu_caballos():
     page = request.args.get('page', 1, type=int)
     nombre = request.args.get('nombre', '', type=str)
-    tipo_ja = request.args.get('tipo_ja', '', type=str)  # Nuevo parámetro
+    tipo_ja_asignado = request.args.get('tipo_ja_asignado', '', type=str)  
     orden = request.args.get('orden', 'nombre')
     direction = request.args.get('direction', 'asc')
 
-    caballos_paginados = search_caballos(nombre=nombre, tipo_ja=tipo_ja, sort_by=orden, order=direction, page=page)
+    caballos_paginados = search_caballos(nombre=nombre, tipo_ja_asignado=tipo_ja_asignado, sort_by=orden, order=direction, page=page)
 
-    return render_template('caballos/index.html', caballos=caballos_paginados, nombre=nombre, tipo_ja=tipo_ja, orden=orden, direction=direction)
+    return render_template('caballos/index.html', caballos=caballos_paginados, nombre=nombre, tipo_ja_asignado=tipo_ja_asignado, orden=orden, direction=direction)
 
 @caballos_bp.route('/<int:id>', methods=['GET'])
 @login_required
@@ -33,6 +33,8 @@ def mostrar_caballo(id):
 @caballos_bp.route('/nuevo', methods=['GET', 'POST'])
 @login_required
 def crear_caballo():
+    opciones_ja = ["Hipoterapia", "Monta_Terapéutica", "Deporte_Ecuestre_Adaptado", "Actividades_Recreativas", "Equitación"]
+    
     if request.method == 'POST':
         datos_caballo = {
             'nombre': request.form['nombre'],
@@ -43,11 +45,14 @@ def crear_caballo():
             'tipo_ingreso': request.form['tipo_ingreso'],
             'fecha_ingreso': request.form['fecha_ingreso'],
             'sede_asignada': request.form['sede_asignada'],
+            'tipo_ja_asignado_asignado': request.form.getlist('tipo_ja_asignado_asignado')  # Recoge la selección
         }
+        datos_caballo['tipo_ja_asignado_asignado'] = ', '.join(datos_caballo['tipo_ja_asignado_asignado'])  # Convierte la lista a string
         nuevo_caballo = create_caballo(**datos_caballo)
         flash('Caballo creado exitosamente.', 'success')
         return redirect(url_for('caballos.menu_caballos'))
-    return render_template('caballos/nuevo.html')
+    
+    return render_template('caballos/nuevo.html', opciones_ja=opciones_ja)
 
 @caballos_bp.route('/<int:id>/eliminar', methods=['POST'])
 @login_required

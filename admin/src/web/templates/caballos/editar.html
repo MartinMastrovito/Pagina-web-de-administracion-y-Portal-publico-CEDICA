@@ -49,22 +49,21 @@
             {% endfor %}
         </select>
 
-        <label for="JYA">Tipos de J&A:</label>
-        <select name="JYA" multiple>
-            {% for tipo_ja in JYA %}
-            <option value="{{ tipo_ja.id }}" {% if tipo_ja in caballo.JYA %} selected {% endif %}>
-                {{ tipo_ja.nombre }}
-            </option>
-            {% endfor %}
+        <label for="JYA">Tipo de J&A Asignados:</label>
+        <select name="tipo_ja_asignado" multiple>
+            <option value="Hipoterapia" {% if 'Hipoterapia' in caballo.tipo_ja_asignado %} selected {% endif %}>Hipoterapia</option>
+            <option value="Monta Terapéutica" {% if 'Monta Terapéutica' in caballo.tipo_ja_asignado %} selected {% endif %}>Monta Terapéutica</option>
+            <option value="Deporte Ecuestre Adaptado" {% if 'Deporte Ecuestre Adaptado' in caballo.tipo_ja_asignado %} selected {% endif %}>Deporte Ecuestre Adaptado</option>
+            <option value="Actividades Recreativas" {% if 'Actividades Recreativas' in caballo.tipo_ja_asignado %} selected {% endif %}>Actividades Recreativas</option>
+            <option value="Equitación" {% if 'Equitación' in caballo.tipo_ja_asignado %} selected {% endif %}>Equitación</option>
         </select>
 
-        <!-- Nuevo campo para subir documentos -->
         <label for="documentos">Adjuntar Documentos:</label>
         <input type="file" name="documentos" multiple>
 
         <button type="submit">Guardar Cambios</button>
     </form>
 
-    <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}">Cancelar</a>
+    <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn btn-cancel">Cancelar</a>
 </body>
 </html>

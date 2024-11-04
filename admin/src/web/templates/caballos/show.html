@@ -9,33 +9,40 @@
 
 {% block content %}
 <body>
-    <h1>Detalles del Caballo: {{ caballo.nombre }}</h1>
+    <h4><strong>Detalles del Caballo: {{ caballo.nombre }}</strong></h4>
 
-    <p><strong>Nombre:</strong> {{ caballo.nombre }}</p>
-    <p><strong>Fecha de Nacimiento:</strong> {{ caballo.fecha_nacimiento }}</p>
-    <p><strong>Sexo:</strong> {{ caballo.sexo }}</p>
-    <p><strong>Raza:</strong> {{ caballo.raza }}</p>
-    <p><strong>Pelaje:</strong> {{ caballo.pelaje }}</p>
-    <p><strong>Tipo de Ingreso:</strong> {{ caballo.tipo_ingreso }}</p>
-    <p><strong>Fecha de Ingreso:</strong> {{ caballo.fecha_ingreso }}</p>
-    <p><strong>Sede Asignada:</strong> {{ caballo.sede_asignada }}</p>
+    <h4><p><strong>Nombre:</strong> {{ caballo.nombre }}</p></h4>
+    <h4><p><strong>Fecha de Nacimiento:</strong> {{ caballo.fecha_nacimiento }}</p></h4>
+    <h4><p><strong>Sexo:</strong> {{ caballo.sexo }}</p></h4>
+    <h4><p><strong>Raza:</strong> {{ caballo.raza }}</p></h4>
+    <h4><p><strong>Pelaje:</strong> {{ caballo.pelaje }}</p></h4>
+    <h4><p><strong>Tipo de Ingreso:</strong> {{ caballo.tipo_ingreso }}</p></h4>
+    <h4><p><strong>Fecha de Ingreso:</strong> {{ caballo.fecha_ingreso }}</p></h4>
+    <h4><p><strong>Sede Asignada:</strong> {{ caballo.sede_asignada }}</p></h4>
 
-    <h3>Entrenadores</h3>
-    <ul>
+    <h3><strong>Entrenadores :</strong></h3>
+    <h4><ul>
         {% for entrenador in caballo.entrenadores %}
         <li>{{ entrenador.nombre }}</li>
+        {% else %}
+        <li>No hay entrenadores asignados.</li>
         {% endfor %}
-    </ul>
+    </ul></h4>
 
-    <h3>Tipos de J&A Asignados</h3>
-    <ul>
-        {% for tipo_ja in caballo.JYA %}
-        <li>{{ tipo_ja.nombre }}</li>
-        {% endfor %}
-    </ul>
+    <h3><strong>Tipo de J&A Asignados : </strong></h3>
+    <h4><ul>
+        {% if caballo.tipo_ja_asignado %}
+            {% for tipo_ja in caballo.tipo_ja_asignado.split(',') %}
+            <li>{{ tipo_ja }}</li>
+            {% endfor %}
+        {% else %}
+            <li>No hay tipos de J&A asignados.</li>
+        {% endif %}
+    </ul></h4>
 
-    <h3>Documentos Adjuntos</h3>
-    <ul>
+
+    <h3><strong>Documentos :</strong></h3>
+    <h4><ul>
         {% for documento in caballo.documentos %}
             <li>
                 <a href="{{ url_for('static', filename=documento.nombre_documento) }}">{{ documento.nombre_documento }}</a>
@@ -44,22 +51,17 @@
         {% else %}
             <li>No hay documentos adjuntos.</li>
         {% endfor %}
-    </ul>
-
-    <a href="{{ url_for('caballos.editar_caballo', id=caballo.id) }}">Editar</a>
+    </ul></h4>
+    <div class="center">
+        <a href="{{ url_for('caballos.editar_caballo', id=caballo.id) }}" class="btn" >Editar</a>
+    </div>
+    
     <form action="{{ url_for('caballos.eliminar_caballo', id=caballo.id) }}" method="POST">
         <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este caballo?')">Eliminar</button>
     </form>
-    <a href="{{ url_for('caballos.menu_caballos') }}">Volver al listado</a>
-
-    <!-- Formulario para cargar nuevos documentos -->
-    <h3>Adjuntar Nuevo Documento</h3>
-    <form action="{{ url_for('caballos.subir_documento', id=caballo.id) }}" method="POST" enctype="multipart/form-data">
-        <label for="documento">Selecciona el documento:</label>
-        <input type="file" name="documento" id="documento" required>
-        <label for="tipo">Tipo de Documento:</label>
-        <input type="text" name="tipo" id="tipo" required>
-        <button type="submit">Cargar Documento</button>
-    </form>
+    <div class="center">
+        <a href="{{ url_for('caballos.menu_caballos') }}" class="btn">Volver al listado</a>
+    </div>
 </body>
 {% endblock %}
+

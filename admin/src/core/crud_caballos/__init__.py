@@ -11,17 +11,17 @@ minio_client = Minio(
     "MINIO_ENDPOINT",
     access_key="MINIO_ACCESS_KEY",
     secret_key="MINIO_SECRET_KEY",
-    secure=False  # Cambia a True si usas HTTPS
+    secure=True  # Cambia a True si usas HTTPS
 )
 
-def search_caballos(nombre=None, tipo_ja=None, sort_by='nombre', order='asc', page=1, per_page=10):
+def search_caballos(nombre=None, tipo_ja_asignado=None, sort_by='nombre', order='asc', page=1, per_page=10):
     query = db.session.query(Caballo)
 
     if nombre:
         query = query.filter(Caballo.nombre.ilike(f"%{nombre}%"))
     
-    if tipo_ja:
-        query = query.filter(Caballo.tipo_ja.ilike(f"%{tipo_ja}%"))  # Asegúrate de que el modelo `Caballo` tenga este campo
+    if tipo_ja_asignado:
+        query = query.filter(Caballo.tipo_ja_asignado.ilike(f"%{tipo_ja_asignado}%"))  
 
     sort_column = getattr(Caballo, sort_by, Caballo.nombre)
     query = query.order_by(asc(sort_column) if order == 'asc' else desc(sort_column))

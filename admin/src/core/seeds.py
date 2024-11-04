@@ -164,6 +164,14 @@ def user_create():
             role_id=4,
             created_at="2024-10-29",
         ),
+        User(
+            email="ecuestre@test.com",
+            password=bcrypt.generate_password_hash("ecuestre"),
+            alias="ecuestre",
+            enabled=True,
+            role_id=2,
+            created_at="2024-10-15",
+        ),
     ]
     db.session.add_all(list_user)
     db.session.commit()
