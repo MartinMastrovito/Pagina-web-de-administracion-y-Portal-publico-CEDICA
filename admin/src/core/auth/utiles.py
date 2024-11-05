@@ -52,20 +52,16 @@ def search_users(email=None, enabled=None, role_id=None, sort_by='email', order=
     """
     query = User.query
 
-    # Filtro por email
     if email:
-        query = query.filter_by(email=email)
+        query = query.filter(User.email.ilike(f"%{email}%"))
 
-    # Filtro por estado activo/inactivo
     if enabled is not None and enabled != '':
         is_enabled = True if enabled.lower() == 'si' else False
         query = query.filter_by(enabled=is_enabled)
 
-    # Filtro por rol usando el ID
     if role_id is not None and role_id != '':
         query = query.filter_by(role_id=role_id)
-
-    # Ordenación
+        
     if sort_by == 'email':
         sort_column = User.email
     elif sort_by == "created_at":
@@ -78,7 +74,6 @@ def search_users(email=None, enabled=None, role_id=None, sort_by='email', order=
     else:
         query = query.order_by(sort_column.desc())
 
-    # Paginación
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
 def create_user(**kwargs):
