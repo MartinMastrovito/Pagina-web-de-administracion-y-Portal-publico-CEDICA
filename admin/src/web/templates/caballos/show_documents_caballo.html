@@ -10,7 +10,7 @@
         <h2>Documentos registrados</h2>
 
         <!-- Formulario de búsqueda -->
-        <form method="get" action="{{ url_for('documentos.index_documents_caballo', caballo_id=caballo.id) }}">
+        <form method="get" action="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id) }}">
             
             <label for="nombre_documento">Nombre del Documento:</label>
             <input type="text" class="form-control" name="nombre_documento" value="{{ request.args.get('nombre_documento', '') }}">
@@ -33,7 +33,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th>
-                        <a href="{{ url_for('documentos.index_documents_caballo', caballo_id=caballo.id, sort_by='nombre_documento', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                        <a href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id, sort_by='nombre_documento', order='asc' if request.args.get('order') == 'desc' else 'desc', 
                             nombre_documento=request.args.get('nombre_documento', '')) }}">
                             Nombre
                             {% if request.args.get('sort_by') == 'nombre_documento' %}
@@ -45,7 +45,7 @@
                             Tipo
                     </th>
                     <th>
-                        <a href="{{ url_for('documentos.index_documents_caballo', caballo_id=caballo.id, sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                        <a href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id, sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
                             nombre_documento=request.args.get('nombre_documento', '')) }}">
                             Fecha
                             {% if request.args.get('sort_by') == 'created_at' %}
@@ -67,11 +67,11 @@
                         {% set is_file = documento.nombre_documento.split('.')[-1] in file_extensions %}
 
                         {% if is_file %}
-                            <a href="{{ url_for('documentos.show_update_document_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
-                            <a href="{{ url_for('documentos.show_delete_document_caballo, caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a> 
-                            
+                            <a href="{{ url_for('caballos_documentos.show_update_document_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
+                            <a href="{{ url_for('caballos_documentos.show_delete_document_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a> 
+                            <a href="{{ url_for('caballos_documentos.download_documento', documento_id=documento.id) }}" class="btn btn-success">Descargar</a>
                         {% else %}
-                            <h3>Enlace</h3>
+                            <h3>Seccion de enlaces</h3>
                         {% endif %}
                     </td>
                 </tr>
@@ -84,19 +84,20 @@
             <ul class="pagination">
                 {% if pagination.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id, page=pagination.prev_num, 
+                    <a class="page-link" href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id, documento_id=documento.id, page=pagination.prev_num, 
                         nombre_documento=request.args.get('nombre_documento', ''), 
                         tipo_documento=request.args.get('tipo_documento', ''), 
                         sort_by=request.args.get('sort_by', ''), 
                         order=request.args.get('order', '') ) }}" aria-label="Previous">
                         Anterior
+                        <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 {% endif %}
                 <li class="page-item disabled"><span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span></li>
                 {% if pagination.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('documentos.index_documents_caballo', caballo_id=caballo.id, page=pagination.next_num, 
+                    <a class="page-link" href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id, page=pagination.next_num, 
                         nombre_documento=request.args.get('nombre_documento', ''), 
                         tipo_documento=request.args.get('tipo_documento', ''), 
                         sort_by=request.args.get('sort_by', ''), 
@@ -110,10 +111,10 @@
         </nav>
 
         <div style="margin-top: 20px;">
-            <a href="{{ url_for('documentos.show_upload_document', caballo_id=caballo.id) }}" class="btn btn-secondary">Subir documento</a>
+            <a href="{{ url_for('caballos_documentos.show_upload_document', caballo_id=caballo.id) }}" class="btn btn-secondary">Subir documento</a>
         </div>
         <div style="margin-top: 20px;">
-            <a href="{{ url_for('enlaces.show_upload_link', caballo_id=caballo.id) }}" class="btn btn-secondary">Subir enlace</a>
+            <h4>Seccion de enlaces</h4>
         <div>
         <div style="margin-top: 20px;">
             <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn">Volver</a>

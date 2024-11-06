@@ -6,13 +6,7 @@ from werkzeug.utils import secure_filename
 from minio import Minio
 from minio.error import S3Error
 
-# Configura tu cliente de MinIO
-minio_client = Minio(
-    "MINIO_ENDPOINT",
-    access_key="MINIO_ACCESS_KEY",
-    secret_key="MINIO_SECRET_KEY",
-    secure=True  # Cambia a True si usas HTTPS
-)
+
 
 def search_caballos(nombre=None, tipo_ja_asignado=None, sort_by='nombre', order='asc', page=1, per_page=10):
     query = db.session.query(Caballo)
@@ -49,7 +43,7 @@ def delete_caballo(id):
     caballo = get_caballo_by_id(id)
     db.session.delete(caballo)
     db.session.commit()
-
+#cumple la funcion de list and search
 def list_documents(caballo_id, nombre_documento=None, tipo_documento=None, sort_by='nombre_documento', order='asc', page=1, per_page=10):
     query = Documento.query.filter(Documento.caballo_id == caballo_id)
     
@@ -63,46 +57,64 @@ def list_documents(caballo_id, nombre_documento=None, tipo_documento=None, sort_
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
-def upload_document(caballo_id, archivo, nombre_documento, tipo_documento):
-    filename = secure_filename(archivo.filename)
-    file_path = f"{caballo_id}/{filename}"  # Define el path en MinIO
-    minio_client.put_object("nombre_bucket", file_path, archivo, archivo.content_length)
-    
-    nuevo_documento = Documento(
-        nombre_documento=nombre_documento,
-        tipo_documento=tipo_documento,
-        archivo_url=f"URL_DE_MINIO/nombre_bucket/{file_path}",
-        caballo_id=caballo_id
-    )
-    db.session.add(nuevo_documento)
-    db.session.commit()
 
-def update_document(documento_id, archivo=None, nombre_documento=None, tipo_documento=None):
-    documento = Documento.query.get_or_404(documento_id)
-    
-    if archivo:
-        filename = secure_filename(archivo.filename)
-        file_path = f"{documento.caballo_id}/{filename}"  # Define el path en MinIO
-        minio_client.put_object("nombre_bucket", file_path, archivo, archivo.content_length)
-        documento.archivo_url = f"URL_DE_MINIO/nombre_bucket/{file_path}"
-    
-    if nombre_documento:
-        documento.nombre_documento = nombre_documento
-    if tipo_documento:
-        documento.tipo_documento = tipo_documento
-    
-    db.session.commit()
 
-def delete_document(documento_id):
-    documento = Documento.query.get_or_404(documento_id)
-    try:
-        minio_client.remove_object("nombre_bucket", documento.archivo_url.split("/")[-1])
-    except S3Error as e:
-        print("Error al eliminar el documento de MinIO:", e)
-    
-    db.session.delete(documento)
+def update_document(document_id, **kwargs):
+    """
+    Actualiza un documento existente en la base de datos.
+
+    Args:
+        document_id: ID del documento a actualizar.
+        **kwargs: Nuevos atributos del documento.
+
+    Returns:
+        El documento actualizado.
+    """
+    document = get_document_by_id(document_id)
+
+    for key, value in kwargs.items():
+        setattr(document, key, value)
+
+    db.session.commit()
+    return document
+
+def delete_document(document_id):
+    """
+    Elimina un documento de la base de datos.
+
+    Args:
+        document_id: ID del documento a eliminar.
+    """
+    db.session.query(Documento).filter(Documento.id == str(document_id)).delete()
     db.session.commit()
 
 def get_document_by_id(documento_id):
-    return Documento.query.get_or_404(documento_id)
+    document = Documento.query.get_or_404(documento_id)
+    return document
+
+
+def save_document(**kwargs):
+    """
+    Guarda un nuevo documento en la base de datos.
+
+    Args:
+        **kwargs: Atributos del documento a guardar.
+    """
+    document = Documento(**kwargs)
+    db.session.add(document)
+    db.session.commit()
+
+
+def get_caballo_by_document(document):
+    """
+    Busca el caballo asociado a un documento.
+
+    Args:
+        document: El documento del cual se busca el caballo.
+
+    Returns:
+        caballo or None: Retorna el objeto caballo encontrado o None si no existe.
+    """
+    caballo = Caballo.query.filter_by(id=document.caballo_id).first()
+    return caballo
 

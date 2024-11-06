@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from src.core.crud_caballos import (
     search_caballos, create_caballo, get_caballo_by_id,
-    update_caballo, delete_caballo, list_documents, upload_document, delete_document
+    update_caballo, delete_caballo, list_documents
 )
 from src.core.auth.models.model_documento import Documento
 from src.core.auth.decorators import login_required
@@ -81,32 +81,3 @@ def editar_caballo(id):
         return redirect(url_for('caballos.menu_caballos'))
     return render_template('caballos/editar.html', caballo=caballo)
 
-@caballos_bp.route('/<int:id>/documentos/nuevo', methods=['GET', 'POST'])
-@login_required
-def subir_documento(id):
-    if request.method == 'POST':
-        if 'archivo' not in request.files:
-            flash('No se ha subido ningún archivo.', 'error')
-            return redirect(url_for('caballos.mostrar_caballo', id=id))
-
-        archivo = request.files['archivo']
-        if archivo.filename == '':
-            flash('No se ha seleccionado ningún archivo.', 'error')
-            return redirect(url_for('caballos.mostrar_caballo', id=id))
-
-        nombre_documento = request.form['nombre']
-        tipo_documento = request.form['tipo_documento']
-        
-        # Usar MinIO para subir el archivo
-        upload_document(id, archivo, nombre_documento, tipo_documento)
-        flash('Documento subido exitosamente.', 'success')
-        return redirect(url_for('caballos.mostrar_caballo', id=id))
-
-    return render_template('caballos/nuevo_documento.html', caballo=get_caballo_by_id(id))
-
-@caballos_bp.route('/<int:caballo_id>/documentos/<int:documento_id>/eliminar', methods=['POST'])
-@login_required
-def eliminar_documento(caballo_id, documento_id):
-    delete_document(documento_id)
-    flash('Documento eliminado exitosamente.', 'success')
-    return redirect(url_for('caballos.mostrar_caballo', id=caballo_id))

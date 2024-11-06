@@ -8,7 +8,7 @@ caballos_documentos_bp = Blueprint("caballos_documentos", __name__, url_prefix="
 
 @caballos_documentos_bp.get("/<int:caballo_id>")
 @login_required
-@check("horse_document_index")
+@check("horse_index")
 def index_documents_caballo(caballo_id):
     """
     Muestra la lista de documentos asociados a un caballo específico, 
@@ -47,7 +47,7 @@ def index_documents_caballo(caballo_id):
 
 @caballos_documentos_bp.get("/documentos/cargar_documentos/<int:caballo_id>")
 @login_required
-@check("horse_document_new")
+@check("horse_new")
 def show_upload_document(caballo_id):
     """
     Muestra el formulario para cargar un nuevo documento asociado a un caballo.
@@ -63,7 +63,7 @@ def show_upload_document(caballo_id):
 
 @caballos_documentos_bp.post("/documentos/cargar_documentos/<int:caballo_id>")
 @login_required
-@check("horse_document_new")
+@check("horse_new")
 def upload_document(caballo_id):
     """
     Carga un documento asociado a un caballo en el almacenamiento y lo guarda en la base de datos.
@@ -100,7 +100,7 @@ def upload_document(caballo_id):
 
 @caballos_documentos_bp.get("/documentos/actualizar/<int:caballo_id>/<int:documento_id>")
 @login_required
-@check("horse_document_update")
+@check("horse_update")
 def show_update_document_caballo(caballo_id, documento_id):
     """
     Muestra el formulario para actualizar un documento específico de un caballo.
@@ -119,7 +119,7 @@ def show_update_document_caballo(caballo_id, documento_id):
 
 @caballos_documentos_bp.post("/documentos/actualizar/<int:caballo_id>/<int:documento_id>")
 @login_required
-@check("horse_document_update")
+@check("horse_update")
 def update_document_caballo(caballo_id, documento_id):
     """
     Actualiza un documento de un caballo, reemplazándolo en el almacenamiento 
@@ -161,7 +161,7 @@ def update_document_caballo(caballo_id, documento_id):
 
 @caballos_documentos_bp.get("/documentos/eliminar/<int:caballo_id>/<int:documento_id>")
 @login_required
-@check("horse_document_destroy")
+@check("horse_destroy")
 def show_delete_document_caballo(caballo_id, documento_id):
     """
     Muestra la confirmación para eliminar un documento específico de un caballo.
@@ -180,7 +180,7 @@ def show_delete_document_caballo(caballo_id, documento_id):
 
 @caballos_documentos_bp.post("/documentos/eliminar/<int:caballo_id>/<int:documento_id>")
 @login_required
-@check("horse_document_destroy")
+@check("horse_destroy")
 def delete_document_caballo(caballo_id, documento_id):
     """
     Elimina un documento de un caballo tanto del almacenamiento como de la base de datos.
@@ -204,7 +204,7 @@ def delete_document_caballo(caballo_id, documento_id):
 
 @caballos_documentos_bp.get("/documentos/descargar/<int:documento_id>")
 @login_required
-@check("horse_document_show")
+@check("horse_show")
 def download_documento(documento_id):
     """
     Permite la descarga de un documento específico asociado a un caballo.

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}Editar Documento de J&A{% endblock %}</title>
+    <title>{% block title %}Editar Documento del Caballo{% endblock %}</title>
 </head>
 <body>
     {% block content %}
@@ -15,17 +15,16 @@
     </header>
 
     <section>
-        <form action="{{ url_for('documentos.update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url_for('caballos_documentos.update_document_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="tipo">Tipo de documento:</label>
                 <select class="form-control" id="tipo" name="tipo" required>
                     <option value="" disabled selected>Seleccione una opción</option>
-                    <option value="entrevista" {% if documento.tipo == 'entrevista' %}selected{% endif %}>Entrevista</option>
-                    <option value="evaluacion" {% if documento.tipo == 'evaluacion' %}selected{% endif %}>Evaluación</option>
-                    <option value="planificaciones" {% if documento.tipo == 'planificaciones' %}selected{% endif %}>Planificaciones</option>
-                    <option value="evolucion" {% if documento.tipo == 'evolucion' %}selected{% endif %}>Evolución</option>
-                    <option value="cronicas" {% if documento.tipo == 'cronicas' %}selected{% endif %}>Crónicas</option>
-                    <option value="documental" {% if documento.tipo == 'documental' %}selected{% endif %}>Documental</option>
+                    <option value="Ficha general del caballo" {% if documento.tipo == 'Ficha general del caballo' %}selected{% endif %}>Ficha general del caballo</option>
+                    <option value="Planificación de Entrenamiento"  {% if documento.tipo == 'Planificación de Entrenamiento' %}selected{% endif %}>Planificación de Entrenamiento</option>
+                    <option value="Informe de Evolución" {% if documento.tipo == 'Informe de Evolución' %}selected{% endif %}>Informe de Evolución</option>
+                    <option value="Carga de Imágenes" {% if documento.tipo == 'Carga de Imágenes' %}selected{% endif %}>Carga de Imágenes</option>
+                    <option value="Registro veterinario" {% if documento.tipo == 'Registro veterinario' %}selected{% endif %}>Registro veterinario</option>
                 </select>
             </div>
             <div class="form-group">
@@ -33,7 +32,7 @@
                 <input type="file" name="documento" id="documento" class="form-control-file" required>
             </div>
             <button type="submit" class="btn btn-primary">Actualizar Documento</button>
-            <a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
+            <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn">Volver</a>
         </form>        
     </section>
     
