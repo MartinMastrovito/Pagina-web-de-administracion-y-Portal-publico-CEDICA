@@ -5,15 +5,60 @@ Página de Inicio
 {% endblock %}
 
 {% block content %}
-<h2>¡Hola Mundo!</h2>
-<p>Bienvenido a la página de inicio.Esto ya es del home!</p>
-{% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <ul class="flashes">
-                    {% for category, message in messages %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert alert-info" role="alert">
+                {% for category, message in messages %}
+                    <div class="alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="menu_home">
+        <a class="card item_home text-center" href="{{ url_for('caballos.menu_caballos') }}">
+            <img class="card-img-top" src="{{ url_for('static', filename='assets/caballos.png') }}" alt="caballo icono">
+            <div class="card-body">
+                <p class="card-text h4">Caballos</p>
+            </div>
+        </a>
+        <a class="card item_home text-center" href="{{ url_for('empleados.show_empleado_form') }}">
+            <img class="card-img-top" src="{{ url_for('static', filename='assets/equipo.png') }}" alt="equipo icono">
+            <div class="card-body">
+                <p class="card-text h4">Equipo</p>
+            </div>
+        </a>
+        <a class="card item_home text-center" href="{{ url_for('crud_JyA.index') }}">
+            <img class="card-img-top" src="{{ url_for('static', filename='assets/jya.png') }}" alt="jinetes y amazonas icono">
+            <div class="card-body">
+                <p class="card-text h4">J&A</p>
+            </div>
+        </a>
+        <a class="card item_home text-center" href="{{ url_for('users.index') }}">
+            <img class="card-img-top" src="{{ url_for('static', filename='assets/usuarios.png') }}" alt="usuarios icono">
+            <div class="card-body">
+                <p class="card-text h4">Usuarios</p>
+            </div>
+        </a>
+        <a class="card item_home text-center" href="{{ url_for('invoices.invoices_menu') }}">
+            <img class="card-img-top" src="{{ url_for('static', filename='assets/cobros.png') }}" alt="cobros icono">
+            <div class="card-body">
+                <p class="card-text h4">Cobros</p>
+            </div>
+        </a>
+    </div>
+
+
+<style>
+        .menu_home {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .item_home {
+            width: 300px;
+        }
+</style>
+
 {% endblock %}
