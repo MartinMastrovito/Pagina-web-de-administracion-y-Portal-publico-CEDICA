@@ -40,6 +40,9 @@
         {% endif %}
     </ul></h4>
 
+    <div class="center">
+        <a href="{{ url_for('caballos.editar_caballo', id=caballo.id) }}" class="btn" >Editar Informacion del Caballo</a>
+    </div>
 
     <h3><strong>Documentos :</strong></h3>
     <h4><ul>
@@ -56,13 +59,14 @@
     
         
     </ul></h4>
+    
+
     <div class="center">
-        <a href="{{ url_for('caballos.editar_caballo', id=caballo.id) }}" class="btn" >Editar</a>
-        <a href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id) }}" class="btn btn-info">Documentos Adjuntos</a>
+        <a href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id) }}" class="btn btn-info">Administrar Documentos Adjuntos</a>
     </div>
     
     <form action="{{ url_for('caballos.eliminar_caballo', id=caballo.id) }}" method="POST">
-        <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este caballo?')">Eliminar</button>
+        <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este caballo?')">Eliminar Caballo</button>
     </form>
     <div class="center">
         <a href="{{ url_for('caballos.menu_caballos') }}" class="btn">Volver al listado</a>

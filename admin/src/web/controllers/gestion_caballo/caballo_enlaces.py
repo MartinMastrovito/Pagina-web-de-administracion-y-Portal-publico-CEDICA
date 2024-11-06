@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from src.core import crud_caballos as crud_caballo
+from src.core import crud_caballos as crud_caballo 
 from src.core.auth.decorators import login_required, check
 
 bp = Blueprint("caballo_enlaces", __name__, url_prefix="/caballos/documentos")
@@ -48,10 +48,10 @@ def upload_link(caballo_id):
     }
     
     crud_caballo.save_document(**doc_data)
-        
-    return redirect(url_for("caballos.mostrar_caballo", caballo_id=caballo_id))
+    documentos = crud_caballo.list_documents(caballo_id=caballo.id)    
+    return render_template('caballos/show.html', caballo=caballo, documentos=documentos)
 
-@bp.get("/enlaces/actualizar/<int:caballo_id>/<int:enlace_id>")
+@bp.get("/enlaces/actualizar/<int:caballo_id>/<int:documento_id>")
 @login_required
 @check("horse_update")
 def show_update_link_caballo(caballo_id, documento_id):
@@ -60,7 +60,7 @@ def show_update_link_caballo(caballo_id, documento_id):
 
     Args:
         caballo_id: ID del caballo al que pertenece el enlace.
-        enlace_id: ID del enlace a actualizar.
+        documento_id: ID del enlace a actualizar.
 
     Returns:
         Renderizado de la plantilla edit_link_caballo.html.
@@ -69,7 +69,7 @@ def show_update_link_caballo(caballo_id, documento_id):
     caballo = crud_caballo.get_caballo_by_id(caballo_id)
     return render_template("caballos/edit_link_caballo.html", caballo=caballo, documento=documento)
 
-@bp.post("/enlaces/actualizar/<int:caballo_id>/<int:enlace_id>")
+@bp.post("/enlaces/actualizar/<int:caballo_id>/<int:documento_id>")
 @login_required
 @check("horse_update")
 def update_link_caballo(caballo_id, documento_id):
@@ -78,7 +78,7 @@ def update_link_caballo(caballo_id, documento_id):
 
     Args:
         caballo_id: ID del caballo al que pertenece el enlace.
-        enlace_id: ID del enlace a actualizar.
+        documento_id: ID del enlace a actualizar.
 
     Returns:
         Redirección a la vista de enlaces del caballo.
@@ -100,9 +100,10 @@ def update_link_caballo(caballo_id, documento_id):
     
     caballo = crud_caballo.get_caballo_by_id(caballo_id)
     
-    return redirect(url_for("caballos.index_links_caballo", caballo=caballo))
+    documentos = crud_caballo.list_documents(caballo_id=caballo.id)
+    return render_template('caballos/show.html', caballo=caballo, documentos=documentos)
   
-@bp.get("/enlaces/eliminar/<int:caballo_id>/<int:enlace_id>")
+@bp.get("/enlaces/eliminar/<int:caballo_id>/<int:documento_id>")
 @login_required
 @check("horse_destroy")
 def show_delete_link_caballo(caballo_id, documento_id):
@@ -111,7 +112,7 @@ def show_delete_link_caballo(caballo_id, documento_id):
 
     Args:
         caballo_id: ID del caballo al que pertenece el enlace.
-        enlace_id: ID del enlace a eliminar.
+        documento_id: ID del enlace a eliminar.
 
     Returns:
         Renderizado de la plantilla delete_link_caballo.html.
@@ -119,9 +120,9 @@ def show_delete_link_caballo(caballo_id, documento_id):
     documento = crud_caballo.get_document_by_id(documento_id)
     caballo = crud_caballo.get_caballo_by_id(caballo_id)
     
-    return render_template("JYA/delete_link_jya.html", caballo=caballo, documento=documento)
+    return render_template("caballos/delete_link_caballo.html", caballo=caballo, documento=documento)
 
-@bp.post("/enlaces/eliminar/<int:caballo_id>/<int:enlace_id>")
+@bp.post("/enlaces/eliminar/<int:caballo_id>/<int:documento_id>")
 @login_required
 @check("horse_destroy")
 def delete_link_caballo(caballo_id, documento_id):
@@ -130,7 +131,7 @@ def delete_link_caballo(caballo_id, documento_id):
 
     Args:
         caballo_id: ID del caballo al que pertenece el enlace.
-        enlace_id: ID del enlace a eliminar.
+        documento_id: ID del enlace a eliminar.
 
     Returns:
         Redirección a la vista de enlaces del caballo.
@@ -142,4 +143,5 @@ def delete_link_caballo(caballo_id, documento_id):
     caballo = crud_caballo.get_caballo_by_id(caballo_id)
 
     
-    return render_template("JYA/show_jya.html", caballo=caballo)
+    documentos = crud_caballo.list_documents(caballo_id=caballo.id)
+    return render_template('caballos/show.html', caballo=caballo, documentos=documentos)

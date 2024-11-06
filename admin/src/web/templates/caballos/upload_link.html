@@ -1,31 +1,35 @@
 {% extends "layout.html" %}
 
+{% block imports %}
+    {{ super() }}  
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/show.css') }}">
+{% endblock %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}Subir Enlace de J&A{% endblock %}</title>
+    <title>{% block title %}Subir Enlace del Caballo{% endblock %}</title>
 </head>
 <body>
     {% block content %}
     <header>
-        <h1>Subir Enlace para {{ jya.nombre }} {{ jya.apellido }}</h1>
+        <h1>Subir Enlace para {{ caballo.nombre }}</h1>
     </header>
 
     <section>
-        <form action="{{ url_for('enlaces.upload_link', jya_dni=jya.dni) }}" method="POST">
+        <form action="{{ url_for('caballo_enlaces.upload_link', caballo_id=caballo.id) }}" method="POST">
             <div class="form-group">
                 <label for="tipo">Tipo de documento:</label>
                 <select class="form-control" id="tipo" name="tipo" required>
                     <option value="" disabled selected>Seleccione una opción</option> <!-- Opción por defecto -->
-                    <option value="entrevista">Entrevista</option>
-                    <option value="evaluacion">Evaluación</option>
-                    <option value="planificaciones">Planifiaciones</option>
-                    <option value="evolucion">Evolución</option>
-                    <option value="cronicas">Crónicas</option>
-                    <option value="documental">Documental</option>
+                    <option value="Ficha general del caballo">Ficha general del caballo</option>
+                    <option value="Planificación de Entrenamiento">Planificación de Entrenamiento</option>
+                    <option value="Informe de Evolución">Informe de Evolución</option>
+                    <option value="Carga de Imágenes">Carga de Imágenes</option>
+                    <option value="Registro veterinario">Registro veterinario</option>
                 </select>
             </div>
             <div class="form-group">
@@ -33,8 +37,7 @@
                 <input type="text" name="documento" id="documento" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary">Subir Documento</button>
-            <a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
-        </form>
+            <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn">Volver</a>        </form>
     </section>
     
 

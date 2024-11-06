@@ -1,8 +1,13 @@
 {% extends "layout.html" %}
 
+{% block imports %}
+    {{ super() }}  
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/show.css') }}">
+{% endblock %}
+
 {% block content %}
 <header>
-    <h1>Documentos del Caballo</h1>
+    <h3>Documentos del Caballo {{caballo.nombre}}</h3>
 </header>
 
 <section>
@@ -17,7 +22,7 @@
             
             <label for="tipo_documento">Tipo de Documento:</label>
             <select class="form-control" id="tipo_documento" name="tipo_documento">
-                <option value="" disabled selected>Seleccione una opción</option>
+                <option value="">-- Todos los tipos --</option>
                 <option value="Ficha general del caballo" {% if request.args.get('tipo_documento') == 'Ficha general del caballo' %}selected{% endif %}>Ficha general del caballo</option>
                 <option value="Planificación de Entrenamiento" {% if request.args.get('tipo_documento') == 'Planificación de Entrenamiento' %}selected{% endif %}>Planificación de Entrenamiento</option>
                 <option value="Informe de Evolución" {% if request.args.get('tipo_documento') == 'Informe de Evolución' %}selected{% endif %}>Informe de Evolución</option>
@@ -71,7 +76,9 @@
                             <a href="{{ url_for('caballos_documentos.show_delete_document_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a> 
                             <a href="{{ url_for('caballos_documentos.download_documento', documento_id=documento.id) }}" class="btn btn-success">Descargar</a>
                         {% else %}
-                            <h3>Seccion de enlaces</h3>
+                            <a href="{{ url_for('caballo_enlaces.show_update_link_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
+                            <a href="{{ url_for('caballo_enlaces.show_delete_link_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a>
+                            <a href="{{ documento.nombre_documento }}" class="btn btn-primary">Ver Enlace</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -112,11 +119,7 @@
 
         <div style="margin-top: 20px;">
             <a href="{{ url_for('caballos_documentos.show_upload_document', caballo_id=caballo.id) }}" class="btn btn-secondary">Subir documento</a>
-        </div>
-        <div style="margin-top: 20px;">
-            <h4>Seccion de enlaces</h4>
-        <div>
-        <div style="margin-top: 20px;">
+            <a href="{{ url_for('caballo_enlaces.show_upload_link', caballo_id=caballo.id) }}" class="btn btn-secondary">Subir enlace</a>
             <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn">Volver</a>
         </div>
     </article>
