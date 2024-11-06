@@ -126,7 +126,7 @@ def create_user():
         flash('Usuario creado exitosamente', 'success')
         return redirect('/usuarios')
     else:
-        flash('El usuario ya existe u ocurrió un error', 'danger')
+        flash('El email ingresado ya está siendo usado, por favor ingrese uno distinto', 'danger')
         return redirect("/usuarios/crear_usuario")
 
 @bp.get("/actualizar/<int:user_id>")
@@ -168,9 +168,11 @@ def user_update(user_id):
         'role_id': request.form['role_id']
     }
     
-    if (not validator_texto(user_data["alias"]) and 
-            not validator_email(user_data["email"])):
-        flash('Ocurrió un error al ingresar los campos, por favor intente nuevamente', 'danger')
+    if not validator_texto(user_data["alias"]):
+        flash('Ocurrió un error al ingresar el alias, por favor intente nuevamente.', 'danger')
+        return redirect(f"/usuarios/actualizar/{user_id}")
+    if not validator_email(user_data["email"]):
+        flash('Ocurrió un error al ingresar el email, por favor intente nuevamente.', 'danger')
         return redirect(f"/usuarios/actualizar/{user_id}")
     
     mensaje = utiles.update_user(user_id, **user_data)
