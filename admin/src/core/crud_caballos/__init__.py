@@ -50,13 +50,13 @@ def delete_caballo(id):
     db.session.delete(caballo)
     db.session.commit()
 
-def list_documents(caballo_id, nombre=None, tipo=None, sort_by='nombre', order='asc', page=1, per_page=10):
+def list_documents(caballo_id, nombre_documento=None, tipo_documento=None, sort_by='nombre_documento', order='asc', page=1, per_page=10):
     query = Documento.query.filter(Documento.caballo_id == caballo_id)
     
-    if nombre:
-        query = query.filter(Documento.nombre.ilike(f"%{nombre}%"))
-    if tipo:
-        query = query.filter(Documento.tipo_documento.ilike(f"%{tipo}%"))
+    if nombre_documento:
+        query = query.filter(Documento.nombre_documento.ilike(f"%{nombre_documento}%"))
+    if tipo_documento:
+        query = query.filter(Documento.tipo_documento.ilike(f"%{tipo_documento}%"))
 
     sort_column = getattr(Documento, sort_by, Documento.nombre_documento)
     query = query.order_by(asc(sort_column) if order == 'asc' else desc(sort_column))
@@ -69,7 +69,7 @@ def upload_document(caballo_id, archivo, nombre_documento, tipo_documento):
     minio_client.put_object("nombre_bucket", file_path, archivo, archivo.content_length)
     
     nuevo_documento = Documento(
-        nombre=nombre_documento,
+        nombre_documento=nombre_documento,
         tipo_documento=tipo_documento,
         archivo_url=f"URL_DE_MINIO/nombre_bucket/{file_path}",
         caballo_id=caballo_id
@@ -77,8 +77,24 @@ def upload_document(caballo_id, archivo, nombre_documento, tipo_documento):
     db.session.add(nuevo_documento)
     db.session.commit()
 
-def delete_document(id):
-    documento = Documento.query.get_or_404(id)
+def update_document(documento_id, archivo=None, nombre_documento=None, tipo_documento=None):
+    documento = Documento.query.get_or_404(documento_id)
+    
+    if archivo:
+        filename = secure_filename(archivo.filename)
+        file_path = f"{documento.caballo_id}/{filename}"  # Define el path en MinIO
+        minio_client.put_object("nombre_bucket", file_path, archivo, archivo.content_length)
+        documento.archivo_url = f"URL_DE_MINIO/nombre_bucket/{file_path}"
+    
+    if nombre_documento:
+        documento.nombre_documento = nombre_documento
+    if tipo_documento:
+        documento.tipo_documento = tipo_documento
+    
+    db.session.commit()
+
+def delete_document(documento_id):
+    documento = Documento.query.get_or_404(documento_id)
     try:
         minio_client.remove_object("nombre_bucket", documento.archivo_url.split("/")[-1])
     except S3Error as e:
@@ -86,3 +102,7 @@ def delete_document(id):
     
     db.session.delete(documento)
     db.session.commit()
+
+def get_document_by_id(documento_id):
+    return Documento.query.get_or_404(documento_id)
+

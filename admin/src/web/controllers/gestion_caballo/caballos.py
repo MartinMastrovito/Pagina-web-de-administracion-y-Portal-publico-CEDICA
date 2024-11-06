@@ -45,9 +45,9 @@ def crear_caballo():
             'tipo_ingreso': request.form['tipo_ingreso'],
             'fecha_ingreso': request.form['fecha_ingreso'],
             'sede_asignada': request.form['sede_asignada'],
-            'tipo_ja_asignado_asignado': request.form.getlist('tipo_ja_asignado_asignado')  # Recoge la selección
+            'tipo_ja_asignado': request.form.getlist('tipo_ja_asignado')  # Recoge la selección
         }
-        datos_caballo['tipo_ja_asignado_asignado'] = ', '.join(datos_caballo['tipo_ja_asignado_asignado'])  # Convierte la lista a string
+        datos_caballo['tipo_ja_asignado'] = ', '.join(datos_caballo['tipo_ja_asignado'])  # Convierte la lista a string
         nuevo_caballo = create_caballo(**datos_caballo)
         flash('Caballo creado exitosamente.', 'success')
         return redirect(url_for('caballos.menu_caballos'))
