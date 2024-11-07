@@ -84,7 +84,7 @@ def invoice_update(invoice_id):
 #Rutas del creador de cobros
 @invoices_bp.get("/crear-cobro")
 @login_required
-@check("invoice_create")
+@check("invoice_new")
 def invoice_create():
     ja_dictionary = utiles.get_all_ja()
     emp_dictionary = utiles.get_all_employees()
@@ -92,7 +92,7 @@ def invoice_create():
 
 @invoices_bp.post("/crear-cobro")
 @login_required
-@check("invoice_create")
+@check("invoice_new")
 def create_invoice():                
     invoice_information = {
         "pay_date": request.form['pay_date'],

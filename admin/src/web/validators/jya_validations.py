@@ -111,11 +111,14 @@ def validate_jya_form(jya_data):
         errores.append("Teléfono de emergencia no válido")
 
     # Validación de emails
-    if jya_data.get("familiares_tutores")[0]["email"] and not validator_email(jya_data.get("familiares_tutores")[0]["email"]):
-        errores.append("Email del familiar 1 no válido")
-    
-    if jya_data.get("familiares_tutores")[1]["email"] and not validator_email(jya_data.get("familiares_tutores")[1]["email"]):
-        errores.append("Email del familiar 2 no válido")
+    if len(jya_data.get("familiares_tutores", [])) > 0:
+        if jya_data["familiares_tutores"][0]["email"] and not validator_email(jya_data["familiares_tutores"][0]["email"]):
+            errores.append("Email del familiar 1 no válido")
+
+# Verificar si existe un familiar 2 y si su email es válido
+    if len(jya_data.get("familiares_tutores", [])) > 1:
+        if jya_data["familiares_tutores"][1]["email"] and not validator_email(jya_data["familiares_tutores"][1]["email"]):
+            errores.append("Email del familiar 2 no válido")
     
     # Validación de selects booleanos
     campos_bool = ['becado', 'certificado_discapacidad', 'asignacion_familiar', 'pension', 'curatela']
