@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate  # Importar Migrate
+from flask_cors import CORS
 from src.web import routes
 from src.web import helpers
 from src.web.storage import storage
@@ -11,6 +12,7 @@ from src.web.config import config
 from src.web.handlers.error import not_found_error
 from src.web.handlers.error import internal_server_error
 from src.web.handlers.auth import check_permission, check_authenticated
+
 
 # Inicializa Migrate aquí para poder usarlo en create_app
 migrate = Migrate()  
@@ -24,8 +26,9 @@ def create_app(env="development", static_folder=''):
     # Cargar la configuración del entorno
     app.config.from_object(config[env])
 
+    #Habilitar CORS
+    CORS(app)
     
-
     # Inicializar la base de datos y migraciones
     init_app(app)  # Inicializa SQLAlchemy con la app
     migrate.init_app(app, db)  # Inicializa Migrate con la app y db
