@@ -28,10 +28,8 @@ def invoices_index(page,**order):
         invoices = utiles.select_filter(**order)
     else:
         invoices = utiles.select_all()
-    ja_dictionary = utiles.get_all_ja()
-    emp_dictionary = utiles.get_all_employees()
     invoices = db.paginate(invoices,page=page,max_per_page=10)
-    return render_template("list_invoices.html", invoices=invoices,jinetes_amazonas = ja_dictionary, employees=emp_dictionary)
+    return render_template("list_invoices.html", invoices=invoices)
 
 
 @invoices_bp.post("/lista-cobros/")
@@ -109,21 +107,21 @@ def create_invoice():
     return redirect('/cobros/crear-cobro')
 
 #rutas para el listado de los estados de deuda
-@invoices_bp.get("/deudores")
+@invoices_bp.get("/deudores/<int:page>")
 @login_required
 @check("invoice_index")
-def invoice_statuses():
-    ja_dictionary = utiles.get_all_ja()
-    statuses_dictionary = utiles.get_statuses()
-    return render_template("statuses_list.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary, statuses = statuses_dictionary)
+def invoice_statuses(page,**order):
+    ja_query = utiles.get_all_ja()
+    ja_query = db.paginate(ja_query,page=page,max_per_page=10)
+    return render_template("statuses_list.html",invoices=invoices_bp,jinetes_amazonas=ja_query, page = page)
 
-@invoices_bp.post("/deudores")
+@invoices_bp.post("/deudores/<int:page>")
 @login_required
 @check("invoice_update")
-def update_status():
+def update_status(page,**order):
     ja_update = request.form['id']
     utiles.change_status(ja_update)
-    return redirect('/cobros/deudores')
+    return invoice_statuses(page)
 
 #rutas para la muestra de un cobro especifico.
 @invoices_bp.get("/mostrar-cobro/<int:invoice_id>")

@@ -60,11 +60,8 @@ def update_invoice(invoice_id,**kwargs):
     return True
 #Modulo para conseguir el nombre de todos los JYA y su respectivo ID 
 def get_all_ja():
-    ja_query = JYA.query.all()
-    ja_dictionary = {}
-    for ja in ja_query:
-        ja_dictionary[ja.id] = ja.nombre + " " + ja.apellido
-    return ja_dictionary
+    ja_query = db.select(JYA)
+    return ja_query
 
 
 #Modulo para conseguir el nombre de un J&A por su ID
