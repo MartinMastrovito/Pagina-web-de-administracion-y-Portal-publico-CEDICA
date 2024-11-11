@@ -28,8 +28,6 @@ def validate_create(**datos):
         return False
     if(datos.get("amount")<0):
         return False
-    JYA.query.get_or_404(datos.get("j_a"))
-    #empleados.query.get_or_404(datos.get("recipient"))
     return True 
 
 def get_invoice(id):

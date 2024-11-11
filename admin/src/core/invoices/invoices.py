@@ -6,11 +6,11 @@ from sqlalchemy import Enum, ForeignKey
 class Invoices(db.Model):
     __tablename__="invoices"
     id = db.Column(db.Integer, primary_key=True)
-    j_a = db.Column(db.Integer, db.ForeignKey("JYA.id"))
+    j_a = db.Column(db.String)
     pay_date = db.Column(db.Date)
     payment_method = db.Column(db.String)
     amount = db.Column(db.Float)
-    recipient = db.Column(db.Integer,db.ForeignKey("empleados.id"))
+    recipient = db.Column(db.String)
     observations = db.Column(db.Text, nullable=True)
 
 

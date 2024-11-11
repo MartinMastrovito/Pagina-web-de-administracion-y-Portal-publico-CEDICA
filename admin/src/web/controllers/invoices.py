@@ -131,6 +131,4 @@ def update_status():
 @check("invoice_show")
 def show_invoice(invoice_id):
     invoice = utiles.get_invoice(invoice_id)
-    ja_name = utiles.get_ja(invoice.j_a)
-    emp_name = utiles.get_emp(invoice.recipient)
-    return render_template("show_invoice.html",invoice=invoice, ja_name= ja_name, emp_name = emp_name)
+    return render_template("show_invoice.html",invoice=invoice)

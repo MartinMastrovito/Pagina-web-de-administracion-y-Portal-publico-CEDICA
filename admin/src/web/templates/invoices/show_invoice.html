@@ -17,15 +17,33 @@
     <main>
         {% block content %}
         <h1>El cobro corresponde al ID {{invoice.id}}</h1>
-            <section class="box is-size-5-mobile is-size-4-tablet is-size-3-desktop " >
-                <span>j&a: {{ja_name}}</span>
-                <span>Fecha de pago: {{invoice.pay_date}}</span>
-                <span>Metodo de pago: {{invoice.payment_method}}</span>
-                <span>Monto: {{invoice.amount}}</span>
-                <span>Beneficiario: {{emp_name}}</span>
-                <p>Descripcion: {{invoice.observations}}</p>
-            </section>
-            <a class="button" href="{{url_for('invoices.invoices_index', page = 1)}}">Ir al listado</a>     
+        <table class="table">
+            <tr>
+                <th>J&A</th>
+                <td>{{invoice.j_a}}</td>
+            </tr>
+            <tr>
+                <th>Fecha de pago</th>
+                <td>{{invoice.pay_date}}</td>
+            </tr>
+            <tr>
+                <th>Metodo de pago</th>
+                <td>{{invoice.payment_method}}</td>
+            </tr>
+            <tr>
+                <th>Monto</th>
+                <td>{{invoice.amount}}</td>
+            </tr>
+            <tr>
+                <th>Beneficiario</th>
+                <td>{{invoice.recipient}}</td>
+            </tr>
+            <tr>
+                <th>Observaciones</th>
+                <td>{{invoice.observations}}</td>
+            </tr>
+        </table>
+        <a class="button" href="{{url_for('invoices.invoices_index', page = 1)}}">Ir al listado</a>     
         {% endblock %}
     </main>
 </body>
