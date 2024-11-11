@@ -1,5 +1,7 @@
 from src.core.auth.models.model_user import Role, User
 from src.core.auth.models.model_permission import Permission, RolePermission
+from src.core.auth.models.model_empleado import Empleados
+from src.core.auth.models.model_JyA import JYA
 from src.core.database import db
 from src.core import bcrypt
 from src.core.auth import utiles
@@ -209,12 +211,162 @@ def user_create():
     db.session.commit()
 
 
+def employee_create():
+    list_employees = [
+        Empleados(
+            nombre = "Carlos",
+            apellido = "Test",
+            dni = "43251231",
+            domicilio = "6 1571",
+            email = "carlos@test.com",
+            localidad = "La Plata",
+            telefono = "2215868884",
+            profesion = "investigador",
+            puesto = "Asistente Administrativo",
+            fecha_inicio = "2022-03-15",
+            fecha_cese = None,
+            contacto_emergencia = "+5491123456789",
+            obra_social = "OSDE",
+            numero_afiliado = "123456789",
+            condicion = "Empleado Permanente",
+            activo = True,           
+       ),
+        Empleados(
+            nombre="Laura",
+            apellido="González",
+            dni="41567890",
+            domicilio="25 1025",
+            email="laura.gonzalez@example.com",
+            localidad="Buenos Aires",
+            telefono="1145678910",
+            profesion="ingeniera civil",
+            puesto="Gerente de Proyectos",
+            fecha_inicio="2019-07-01",
+            fecha_cese="2023-02-28",
+            contacto_emergencia="+5491134567890",
+            obra_social="Medicus",
+            numero_afiliado="456789123",
+            condicion="Empleado Permanente",
+            activo=False,
+        ),
+
+        Empleados(
+            nombre="Martín",
+            apellido="Pérez",
+            dni="40256789",
+            domicilio="12 854",
+            email="martin.perez@example.com",
+            localidad="Rosario",
+            telefono="3414567890",
+            profesion="Conductor",
+            puesto="Conductor",
+            fecha_inicio="2021-06-10",
+            fecha_cese=None,
+            contacto_emergencia="+5493412345678",
+            obra_social="OSDE",
+            numero_afiliado="789123456",
+            condicion="Empleado Temporal",
+            activo=True,
+        ),
+
+        Empleados(
+            nombre="Ana",
+            apellido="López",
+            dni="40987654",
+            domicilio="8 1923",
+            email="ana.lopez@example.com",
+            localidad="Mar del Plata",
+            telefono="2234567891",
+            profesion="Profesor",
+            puesto="Profesor",
+            fecha_inicio="2020-09-05",
+            fecha_cese="2023-09-01",
+            contacto_emergencia="+5492234567891",
+            obra_social="Swiss Medical",
+            numero_afiliado="321654987",
+            condicion="Empleado Contratado",
+            activo=False,
+        ),
+
+        Empleados(
+            nombre="José",
+            apellido="Martínez",
+            dni="38865432",
+            domicilio="14 1420",
+            email="jose.martinez@example.com",
+            localidad="Cordoba",
+            telefono="3514567892",
+            profesion="Corredor",
+            puesto="Auxiliar de pista",
+            fecha_inicio="2023-01-10",
+            fecha_cese=None,
+            contacto_emergencia="+5493514567892",
+            obra_social="OSDE",
+            numero_afiliado="654987321",
+            condicion="Empleado Permanente",
+            activo=True,
+        ),
+
+        Empleados(
+            nombre="Clara",
+            apellido="Ramírez",
+            dni="41678945",
+            domicilio="20 567",
+            email="clara.ramirez@example.com",
+            localidad="Mendoza",
+            telefono="2614567893",
+            profesion="Terapeuta",
+            puesto="Terapeuta",
+            fecha_inicio="2018-04-20",
+            fecha_cese="2022-12-15",
+            contacto_emergencia="+5492614567893",
+            obra_social="Medicus",
+            numero_afiliado="112233445",
+            condicion="Empleado Contratado",
+            activo=False,
+        ),
+    ]
+    db.session.add_all(list_employees)
+    db.session.commit()
+
+def JYA_create():
+    jya_list = [
+        JYA(
+            nombre = "carlos",
+            apellido = "Serebi",
+            dni = "43251551",
+            edad = 25,
+            fecha_nacimiento = "2022-12-15",
+            lugar_nacimiento = {
+                "localidad": "La Plata",
+                "provincia": "Buenos Aires",
+            },
+            domicilio_actual = {
+                "calle": 6,
+                "numero": 330,
+                "localidad": "La Plata",
+                "provincia": "Buenos Aires",
+            },
+            telefono_actual = "2215869112",
+            contacto_emergencia = {
+                "nombre":"maria",
+                "telefono": "2215969991",
+            },
+            becado = False,
+            profesionales_atendiendo = "Carlos test",
+            certificado_discapacidad = False,
+        ),
+    ]
+    db.session.add_all(jya_list)
+    db.session.commit()
+
 def db_seeds():
     role_create()
     permission_create()
     user_create()
     rolePermission_create()
-
+    JYA_create()
+    employee_create()
 
 """
 Técnica
