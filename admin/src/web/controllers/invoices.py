@@ -6,6 +6,7 @@ from src.core.invoices.invoices import Invoices
 from src.core.database import db
 from src.core.invoices import utiles
 from src.core.auth.decorators import login_required, check
+from src.core import crud_JyA
 
 
 
@@ -111,9 +112,27 @@ def create_invoice():
 @login_required
 @check("invoice_index")
 def invoice_statuses(page,**order):
+    if(len(order) != 0):
+        ja_query = crud_JyA.search_JYA(**order)
     ja_query = utiles.get_all_ja()
     ja_query = db.paginate(ja_query,page=page,max_per_page=5)
     return render_template("statuses_list.html",invoices=invoices_bp,jinetes_amazonas=ja_query, page = page)
+
+
+@invoices_bp.post("/deudores/<int:page>")
+@login_required
+@check("invoice_index")
+def order_statuses_list(page):
+    if("id" in request.form):
+        return update_status(page)
+    else:
+        order_information = {
+            "nombre": request.form['first_name'],
+            "apellido": request.form['last_name'],
+            "per_page": 5,
+        }
+        return invoice_statuses(page,**order_information)
+
 
 @invoices_bp.post("/deudores/<int:page>")
 @login_required
