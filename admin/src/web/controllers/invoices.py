@@ -112,7 +112,7 @@ def create_invoice():
 @check("invoice_index")
 def invoice_statuses(page,**order):
     ja_query = utiles.get_all_ja()
-    ja_query = db.paginate(ja_query,page=page,max_per_page=10)
+    ja_query = db.paginate(ja_query,page=page,max_per_page=5)
     return render_template("statuses_list.html",invoices=invoices_bp,jinetes_amazonas=ja_query, page = page)
 
 @invoices_bp.post("/deudores/<int:page>")
