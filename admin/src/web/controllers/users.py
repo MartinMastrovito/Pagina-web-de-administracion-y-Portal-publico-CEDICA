@@ -44,8 +44,8 @@ def login():
 
 @bp.get("/logout")
 def logout():
-    if session.get("user"):
-        del session["user"]
+    if session.get("user_id"):
+        del session["user_id"]
         session.clear()
         flash("¡La sesion se cerró!","info")
     else:
