@@ -32,7 +32,9 @@
     <table>
         <thead>
             <tr>
-                <th><a href="{{ url_for('consultas.menu_consultas', orden='fecha', direction='asc' if direction == 'desc' else 'desc') }}">Fecha</a></th>
+                <th><a href="{{ url_for('consultas.menu_consultas', orden='fecha', direction='asc' if direction == 'desc' else 'desc') }}">
+                    Fecha {% if orden == 'fecha' %}{{ '▲' if direction == 'asc' else '▼' }}{% endif %}
+                </a></th>
                 <th>Nombre</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -45,8 +47,8 @@
                 <td>{{ consulta.nombre_completo }}</td>
                 <td>{{ consulta.estado }}</td>
                 <td>
-                    <a href="{{ url_for('consultas.mostrar_consulta', id=consulta.id) }}">Ver</a>
-                    <a href="{{ url_for('consultas.editar_consulta', id=consulta.id) }}">Editar</a>
+                    <a href="{{ url_for('consultas.mostrar_consulta', id=consulta.id) }}" class="btn btn-primary">Ver</a>
+                    <a href="{{ url_for('consultas.editar_consulta', id=consulta.id) }}" class="btn btn-primary" >Editar</a>
                     <form action="{{ url_for('consultas.eliminar_consulta', id=consulta.id) }}" method="POST" style="display:inline;">
                         <button type="submit">Eliminar</button>
                     </form>

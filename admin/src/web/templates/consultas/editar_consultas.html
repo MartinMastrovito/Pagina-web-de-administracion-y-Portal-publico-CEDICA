@@ -2,11 +2,10 @@
 
 {% extends "layout.html" %}
 
-{% block title %}Listado de Caballos{% endblock %}
 
 {% block imports %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/editar.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -34,7 +33,7 @@
         </div>
         <div>
             <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="10" required>{{ consulta.descripcion }}</textarea>
+            <textarea id="descripcion" name="descripcion" rows="10" cols="50" required>{{ consulta.descripcion }}</textarea>
         </div>
         <div>
             <label for="estado">Estado:</label>
@@ -45,7 +44,7 @@
             </select>
         </div>
         <button type="submit">Actualizar Consulta</button>
-        <a href="{{ url_for('consultas.menu_consultas') }}" class="btn">Volver</a>
+        <a href="{{ url_for('consultas.menu_consultas') }}" class="btn btn-primary">Volver</a>
     </form>
 </body>
 </html>
