@@ -123,3 +123,10 @@ def select_filter(**kwargs):
 
 def select_all():
     return db.select(Invoices)
+
+def filtrar_cobros(empleado_id, fecha_inicio, fecha_fin):
+    return Invoices.query.filter(
+        Invoices.recipient == empleado_id,
+        Invoices.pay_date >= fecha_inicio,
+        Invoices.pay_date <= fecha_fin
+    ).all()

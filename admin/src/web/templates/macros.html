@@ -27,6 +27,9 @@
                 <li class="nav-item">
                     <a class="btn btn-primary mx-2" href="{{ url_for('invoices.invoices_menu') }}">COBROS</a>
                 </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary mx-2" href="{{ url_for('reportes.menu') }}">Reportes</a>
+                </li>
             </ul>
             {% if check_authenticated(session) %}
             <div class="dropdown">
