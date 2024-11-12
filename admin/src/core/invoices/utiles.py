@@ -130,3 +130,6 @@ def filtrar_cobros(empleado_id, fecha_inicio, fecha_fin):
         Invoices.pay_date >= fecha_inicio,
         Invoices.pay_date <= fecha_fin
     ).all()
+
+def get_all_list():
+    return db.session.query(Invoices).all()

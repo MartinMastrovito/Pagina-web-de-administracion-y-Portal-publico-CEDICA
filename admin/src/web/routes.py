@@ -8,6 +8,7 @@ from src.web.controllers.caballos import caballos_bp
 from src.web.controllers.pagos import pago_bp
 from src.web.controllers.empleados import empleados_bp
 from src.web.controllers.reportes import bp as reportes_bp
+from src.web.api.articles import bp as articles_api_bp
 
 def register(app):
     # Crear un Blueprint para las rutas
@@ -54,3 +55,5 @@ def register(app):
     app.register_blueprint(empleados_bp)
     
     app.register_blueprint(reportes_bp)
+
+    app.register_blueprint(articles_api_bp)
