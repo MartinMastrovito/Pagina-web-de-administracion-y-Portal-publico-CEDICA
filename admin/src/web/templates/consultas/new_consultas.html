@@ -1,0 +1,47 @@
+<!-- templates/consultas/nuevo.html -->
+
+{% extends "layout.html" %}
+
+
+
+{% block imports %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/nuevo.css') }}">
+{% endblock %}
+
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Consulta</title>
+</head>
+<body>
+    <h1>Nueva Consulta</h1>
+    <form method="POST" action="{{ url_for('consultas.nueva_consulta') }}">
+        <div>
+            <label for="nombre_completo">Nombre Completo:</label>
+            <input type="text" id="nombre_completo" name="nombre_completo" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" value="{{ current_date }}" required>
+        </div>
+        <div>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="10" required></textarea>
+        </div>
+        <input type="hidden" id="estado" name="estado" value="Pendiente">
+        <button type="submit">Crear Consulta</button>
+        <a href="{{ url_for('consultas.menu_consultas') }}" class="btn">Volver</a>
+    </form>
+</body>
+</html>
+
+{% endblock %}

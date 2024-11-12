@@ -4,7 +4,7 @@ from src.core.crud_caballos import (
     update_caballo, delete_caballo, list_documents
 )
 from src.core.auth.models.model_documento import Documento
-from src.core.auth.decorators import login_required
+from src.core.auth.decorators import login_required, check
 from src.core.auth.models.model_miembroEquipo import MiembroEquipo
 
 # Definir el blueprint para caballos
@@ -12,6 +12,7 @@ caballos_bp = Blueprint('caballos', __name__, url_prefix='/caballos')
 
 @caballos_bp.route('/', methods=['GET'])
 @login_required
+@check("horse_index")
 def menu_caballos():
     page = request.args.get('page', 1, type=int)
     nombre = request.args.get('nombre', '', type=str)
@@ -25,6 +26,7 @@ def menu_caballos():
 
 @caballos_bp.route('/<int:id>', methods=['GET'])
 @login_required
+@check("horse_show")
 def mostrar_caballo(id):
     caballo = get_caballo_by_id(id)
     documentos = list_documents(caballo_id=caballo.id)
@@ -32,6 +34,7 @@ def mostrar_caballo(id):
 
 @caballos_bp.route('/nuevo', methods=['GET', 'POST'])
 @login_required
+@check("horse_create")
 def crear_caballo():
     opciones_ja = ["Hipoterapia", "Monta_Terapéutica", "Deporte_Ecuestre_Adaptado", "Actividades_Recreativas", "Equitación"]
     
@@ -56,6 +59,7 @@ def crear_caballo():
 
 @caballos_bp.route('/<int:id>/eliminar', methods=['POST'])
 @login_required
+@check("horse_delete")
 def eliminar_caballo(id):
     delete_caballo(id)
     flash('Caballo eliminado exitosamente.', 'success')
@@ -63,6 +67,7 @@ def eliminar_caballo(id):
 
 @caballos_bp.route('/<int:id>/editar', methods=['GET', 'POST'])
 @login_required
+@check("horse_update")
 def editar_caballo(id):
     caballo = get_caballo_by_id(id)
     if request.method == 'POST':
