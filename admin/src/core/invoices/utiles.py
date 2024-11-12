@@ -60,7 +60,7 @@ def update_invoice(invoice_id,**kwargs):
     return True
 #Modulo para conseguir el nombre de todos los JYA y su respectivo ID 
 def get_all_ja():
-    ja_query = db.select(JYA)
+    ja_query = db.select(JYA).order_by(JYA.apellido)
     return ja_query
 
 
