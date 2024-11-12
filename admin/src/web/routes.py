@@ -7,6 +7,7 @@ from src.web.controllers.gestion_jya.jya_enlaces import bp as jya_enlaces_bp
 from src.web.controllers.caballos import caballos_bp
 from src.web.controllers.pagos import pago_bp
 from src.web.controllers.empleados import empleados_bp
+from src.web.controllers.reportes import bp as reportes_bp
 
 def register(app):
     # Crear un Blueprint para las rutas
@@ -51,19 +52,5 @@ def register(app):
     app.register_blueprint(pago_bp) 
 
     app.register_blueprint(empleados_bp)
-
-
-    #de
-    # f pages_list():
-        
-     #   pages = [
-      #      {
-       #         "name":"home","url":url_for("home")
-        #    }
-        #]
-        
-       # return pages
-
-	
-
-	
+    
+    app.register_blueprint(reportes_bp)

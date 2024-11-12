@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>{% block title %}Panel de Reportes{% endblock %}</title>
+    <style>
+        .menu-container {
+            max-width: 400px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .menu-title {
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    {% block content %}
+    <div class="menu-container">
+        <h1 class="display-6">Panel de Opciones - Gráficos</h1>
+        <div class="d-grid gap-3">
+            <a href="{{ url_for('reportes.grafico_becados') }}" class="btn btn-primary btn-lg">Cantidad de las J&A becados</a>
+            <a href="{{ url_for('reportes.grafico_discapacidades_totales') }}" class="btn btn-primary btn-lg">Discapacidad</a>
+            <a href="{{ url_for('reportes.grafico_tipo_discapacidad') }}" class="btn btn-primary btn-lg">Tipo de Discapacidad</a>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

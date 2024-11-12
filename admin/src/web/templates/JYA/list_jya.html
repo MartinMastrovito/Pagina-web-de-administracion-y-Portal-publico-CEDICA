@@ -3,17 +3,6 @@
 {% block title %}Lista de J&A{% endblock %}
 
 {% block content %}
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-{{ category if category in ['success', 'error', 'info', 'warning'] else 'primary' }} alert-dismissible fade show mt-3" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
 <header class="d-flex justify-content-between align-items-center mt-4 mb-3">
     <h4 class="display-4">J&A registrados</h4>
     <a class="btn btn-secondary" href="{{ url_for('users.show_home') }}">Volver</a>

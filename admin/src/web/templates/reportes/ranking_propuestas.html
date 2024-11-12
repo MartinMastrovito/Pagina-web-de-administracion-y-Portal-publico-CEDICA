@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Ranking de Propuestas de Trabajo{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Ranking de Propuestas de Trabajo Más Solicitadas</h2>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Propuesta de Trabajo</th>
+                <th>Cantidad de Solicitudes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for propuesta, cantidad in ranking %}
+            <tr>
+                <td>{{ propuesta or "No especificada" }}</td>
+                <td>{{ cantidad }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
