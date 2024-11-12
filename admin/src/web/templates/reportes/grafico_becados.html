@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}Gráfico de Becados{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-4">
+    <h2 class="mb-4">Proporción de JYA Becados</h2>
+    <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfico de Becados" class="img-fluid">
+    
+    <div class="mt-4">
+        <h5>Guía de Colores</h5>
+        <ul class="list-unstyled">
+            {% for label, color in legend.items() %}
+                <li>
+                    <span class="badge" style="background-color: {{ color }}; width: 20px; height: 20px; display: inline-block; margin-right: 10px;"></span> 
+                    {{ label }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
