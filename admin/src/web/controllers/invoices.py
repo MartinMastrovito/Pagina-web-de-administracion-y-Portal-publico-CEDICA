@@ -14,15 +14,15 @@ invoices_bp = Blueprint("invoices", __name__,url_prefix="/cobros", template_fold
 
 #Ruta del menu principal
 @invoices_bp.route("/")
-@login_required
-@check("invoice_menu")
+#@login_required
+#@check("invoice_menu")
 def invoices_menu():
     return render_template("invoices_menu.html",invoices=invoices_bp)
 
 #Rutas del listado de cobros
 @invoices_bp.get("/lista-cobros/<int:page>")
-@login_required
-@check("invoice_index")
+#@login_required
+#@check("invoice_index")
 def invoices_index(page,**order):
     if(len(order) != 0):
         invoices = utiles.select_filter(**order)
@@ -35,8 +35,8 @@ def invoices_index(page,**order):
 
 
 @invoices_bp.post("/lista-cobros/")
-@login_required
-@check("invoice_index")
+#@login_required
+#@check("invoice_index")
 def order_list():
     if("id" in request.form):
         return delete_invoice()
@@ -52,8 +52,8 @@ def order_list():
         return invoices_index(1,**order_information)
 
 @invoices_bp.post("/lista-cobros/")
-@login_required
-@check("invoice_destroy")
+#@login_required
+#@check("invoice_destroy")
 def delete_invoice():
     id_delete = request.form['id']
     utiles.delete(id_delete)
@@ -62,15 +62,15 @@ def delete_invoice():
 
 #Ruta para actualizar cobro
 @invoices_bp.get("/actualizar-cobro/<int:invoice_id>")
-@login_required
-@check("invoice_update")
+#@login_required
+#@check("invoice_update")
 def update_invoice(invoice_id):
     invoice = utiles.get_invoice(invoice_id)
     return render_template("update_invoice.html",invoice=invoice)
 
 @invoices_bp.post("/actualizar-cobro/<int:invoice_id>")
-@login_required
-@check("invoice_update")
+#@login_required
+#@check("invoice_update")
 def invoice_update(invoice_id):
     invoice_information = {
         "pay_date":request.form['pay_date'],
@@ -83,16 +83,16 @@ def invoice_update(invoice_id):
 
 #Rutas del creador de cobros
 @invoices_bp.get("/crear-cobro")
-@login_required
-@check("invoice_create")
+#@login_required
+#@check("invoice_create")
 def invoice_create():
     ja_dictionary = utiles.get_all_ja()
     emp_dictionary = utiles.get_all_employees()
     return render_template("create_invoice.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary,employees = emp_dictionary)
 
 @invoices_bp.post("/crear-cobro")
-@login_required
-@check("invoice_create")
+#@login_required
+#@check("invoice_create")
 def create_invoice():                
     invoice_information = {
         "pay_date": request.form['pay_date'],
@@ -110,16 +110,16 @@ def create_invoice():
 
 #rutas para el listado de los estados de deuda
 @invoices_bp.get("/deudores")
-@login_required
-@check("invoice_index")
+#@login_required
+#@check("invoice_index")
 def invoice_statuses():
     ja_dictionary = utiles.get_all_ja()
     statuses_dictionary = utiles.get_statuses()
     return render_template("statuses_list.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary, statuses = statuses_dictionary)
 
 @invoices_bp.post("/deudores")
-@login_required
-@check("invoice_update")
+#@login_required
+#@check("invoice_update")
 def update_status():
     ja_update = request.form['id']
     utiles.change_status(ja_update)
@@ -127,8 +127,8 @@ def update_status():
 
 #rutas para la muestra de un cobro especifico.
 @invoices_bp.get("/mostrar-cobro/<int:invoice_id>")
-@login_required
-@check("invoice_show")
+#@login_required
+#@check("invoice_show")
 def show_invoice(invoice_id):
     invoice = utiles.get_invoice(invoice_id)
     ja_name = utiles.get_ja(invoice.j_a)
