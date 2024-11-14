@@ -6,6 +6,7 @@ from src.core.invoices.invoices import Invoices
 from src.core.database import db
 from src.core.invoices import utiles
 from src.core.auth.decorators import login_required, check
+from src.core import crud_JyA
 
 
 
@@ -28,10 +29,8 @@ def invoices_index(page,**order):
         invoices = utiles.select_filter(**order)
     else:
         invoices = utiles.select_all()
-    ja_dictionary = utiles.get_all_ja()
-    emp_dictionary = utiles.get_all_employees()
     invoices = db.paginate(invoices,page=page,max_per_page=10)
-    return render_template("list_invoices.html", invoices=invoices,jinetes_amazonas = ja_dictionary, employees=emp_dictionary)
+    return render_template("list_invoices.html", invoices=invoices)
 
 
 @invoices_bp.post("/lista-cobros/")
@@ -84,15 +83,15 @@ def invoice_update(invoice_id):
 #Rutas del creador de cobros
 @invoices_bp.get("/crear-cobro")
 @login_required
-@check("invoice_create")
+@check("invoice_new")
 def invoice_create():
-    ja_dictionary = utiles.get_all_ja()
-    emp_dictionary = utiles.get_all_employees()
-    return render_template("create_invoice.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary,employees = emp_dictionary)
+    jinetes_amazonas = utiles.get_all_ja()
+    employees = utiles.get_all_employees()
+    return render_template("create_invoice.html",invoices=invoices_bp,jinetes_amazonas=jinetes_amazonas,employees = employees)
 
 @invoices_bp.post("/crear-cobro")
 @login_required
-@check("invoice_create")
+@check("invoice_new")
 def create_invoice():                
     invoice_information = {
         "pay_date": request.form['pay_date'],
@@ -109,21 +108,45 @@ def create_invoice():
     return redirect('/cobros/crear-cobro')
 
 #rutas para el listado de los estados de deuda
-@invoices_bp.get("/deudores")
+@invoices_bp.get("/deudores/<int:page>")
 @login_required
 @check("invoice_index")
-def invoice_statuses():
-    ja_dictionary = utiles.get_all_ja()
-    statuses_dictionary = utiles.get_statuses()
-    return render_template("statuses_list.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary, statuses = statuses_dictionary)
+def invoice_statuses(page,**order):
+    per_page = 5
+    if(len(order) != 0):
+        ja_query = crud_JyA.search_JYA(
+            nombre=order["nombre"],
+            apellido=order["apellido"],
+            page=1,
+            per_page=per_page
+        )
+    else:
+        ja_query = utiles.get_all_ja()
+        ja_query = db.paginate(ja_query,page=page,max_per_page=5)
+    return render_template("statuses_list.html",invoices=invoices_bp,jinetes_amazonas=ja_query, page = page)
 
-@invoices_bp.post("/deudores")
+
+@invoices_bp.post("/deudores/<int:page>")
+@login_required
+@check("invoice_index")
+def order_statuses_list(page):
+    if("id" in request.form):
+        return update_status(page)
+    else:
+        order_information = {
+            "nombre": request.form['first_name'],
+            "apellido": request.form['last_name'],
+        }
+        return invoice_statuses(page,**order_information)
+
+
+@invoices_bp.post("/deudores/<int:page>")
 @login_required
 @check("invoice_update")
-def update_status():
+def update_status(page,**order):
     ja_update = request.form['id']
     utiles.change_status(ja_update)
-    return redirect('/cobros/deudores')
+    return invoice_statuses(page)
 
 #rutas para la muestra de un cobro especifico.
 @invoices_bp.get("/mostrar-cobro/<int:invoice_id>")
@@ -131,6 +154,4 @@ def update_status():
 @check("invoice_show")
 def show_invoice(invoice_id):
     invoice = utiles.get_invoice(invoice_id)
-    ja_name = utiles.get_ja(invoice.j_a)
-    emp_name = utiles.get_emp(invoice.recipient)
-    return render_template("show_invoice.html",invoice=invoice, ja_name= ja_name, emp_name = emp_name)
+    return render_template("show_invoice.html",invoice=invoice)

@@ -44,8 +44,8 @@ def login():
 
 @bp.get("/logout")
 def logout():
-    if session.get("user"):
-        del session["user"]
+    if session.get("user_id"):
+        del session["user_id"]
         session.clear()
         flash("¡La sesion se cerró!","info")
     else:
@@ -126,7 +126,7 @@ def create_user():
         flash('Usuario creado exitosamente', 'success')
         return redirect('/usuarios')
     else:
-        flash('El usuario ya existe u ocurrió un error', 'danger')
+        flash('El email ingresado ya está siendo usado, por favor ingrese uno distinto', 'danger')
         return redirect("/usuarios/crear_usuario")
 
 @bp.get("/actualizar/<int:user_id>")
@@ -168,9 +168,11 @@ def user_update(user_id):
         'role_id': request.form['role_id']
     }
     
-    if (not validator_texto(user_data["alias"]) and 
-            not validator_email(user_data["email"])):
-        flash('Ocurrió un error al ingresar los campos, por favor intente nuevamente', 'danger')
+    if not validator_texto(user_data["alias"]):
+        flash('Ocurrió un error al ingresar el alias, por favor intente nuevamente.', 'danger')
+        return redirect(f"/usuarios/actualizar/{user_id}")
+    if not validator_email(user_data["email"]):
+        flash('Ocurrió un error al ingresar el email, por favor intente nuevamente.', 'danger')
         return redirect(f"/usuarios/actualizar/{user_id}")
     
     mensaje = utiles.update_user(user_id, **user_data)
@@ -178,23 +180,8 @@ def user_update(user_id):
         flash(mensaje, 'danger')
         return redirect(f'/usuarios/actualizar/{user_id}')
     else:
+        flash('Usuario actualizado correctamente', 'success')
         return redirect("/usuarios")
-
-@bp.get("/eliminar/<int:user_id>")
-@login_required
-@check("user_destroy")
-def show_delete_user(user_id):
-    """
-    Muestra la confirmación de eliminación de un usuario.
-
-    Args:
-        user_id: ID del usuario a eliminar.
-
-    Returns:
-        Renderiza la plantilla de confirmación de eliminación.
-    """
-    user = utiles.get_user(user_id)
-    return render_template("users/delete_user.html", user=user)
 
 @bp.post("/eliminar/<int:user_id>")
 @login_required
@@ -209,25 +196,11 @@ def user_delete(user_id):
     Returns:
         Response: Redirige al índice de usuarios.
     """
-    utiles.delete_user(user_id)
+    if utiles.delete_user(user_id):
+        flash("Usuario eliminado exitosamente.")
+    else:
+        flash("No se puede eliminar a un System Admin.")
     return redirect('/usuarios')
-
-@bp.get("/block/<int:user_id>")
-@login_required
-@check("user_update")
-def confirm_block(user_id):
-    """
-    Muestra la confirmación para bloquear un usuario.
-
-    Args:
-        user_id: ID del usuario a bloquear.
-
-    Returns:
-        Renderiza la plantilla de confirmación para bloquear usuario.
-    """
-    user = utiles.get_user(user_id)
-    return render_template("users/confirm_block.html", user=user)
-
 
 @bp.post("/block/<int:user_id>")
 @login_required

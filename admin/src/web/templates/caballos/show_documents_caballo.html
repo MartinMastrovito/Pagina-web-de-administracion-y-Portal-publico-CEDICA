@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block imports %}
+    {{ super() }}  
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/show.css') }}">
+{% endblock %}
+
+{% block content %}
+<header>
+    <h3>Documentos del Caballo {{caballo.nombre}}</h3>
+</header>
+
+<section>
+    <article>
+        <h2>Documentos registrados</h2>
+
+        <!-- Formulario de búsqueda -->
+        <form method="get" action="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id) }}">
+            
+            <label for="nombre_documento">Nombre del Documento:</label>
+            <input type="text" class="form-control" name="nombre_documento" value="{{ request.args.get('nombre_documento', '') }}">
+            
+            <label for="tipo_documento">Tipo de Documento:</label>
+            <select class="form-control" id="tipo_documento" name="tipo_documento">
+                <option value="">-- Todos los tipos --</option>
+                <option value="Ficha general del caballo" {% if request.args.get('tipo_documento') == 'Ficha general del caballo' %}selected{% endif %}>Ficha general del caballo</option>
+                <option value="Planificación de Entrenamiento" {% if request.args.get('tipo_documento') == 'Planificación de Entrenamiento' %}selected{% endif %}>Planificación de Entrenamiento</option>
+                <option value="Informe de Evolución" {% if request.args.get('tipo_documento') == 'Informe de Evolución' %}selected{% endif %}>Informe de Evolución</option>
+                <option value="Carga de Imágenes" {% if request.args.get('tipo_documento') == 'Carga de Imágenes' %}selected{% endif %}>Carga de Imágenes</option>
+                <option value="Registro veterinario" {% if request.args.get('tipo_documento') == 'Registro veterinario' %}selected{% endif %}>Registro veterinario</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary btn-block">Buscar</button>
+        </form>
+                        
+        <!-- Tabla de resultados -->
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        <a href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id, sort_by='nombre_documento', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                            nombre_documento=request.args.get('nombre_documento', '')) }}">
+                            Nombre
+                            {% if request.args.get('sort_by') == 'nombre_documento' %}
+                                {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                            Tipo
+                    </th>
+                    <th>
+                        <a href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id, sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                            nombre_documento=request.args.get('nombre_documento', '')) }}">
+                            Fecha
+                            {% if request.args.get('sort_by') == 'created_at' %}
+                                {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for documento in documentos %}
+                <tr>
+                    <td>{{ documento.nombre_documento }}</td>
+                    <td>{{ documento.tipo_documento }}</td>
+                    <td>{{ documento.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        {% set file_extensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpeg', 'jpg'] %}
+                        {% set is_file = documento.nombre_documento.split('.')[-1] in file_extensions %}
+
+                        {% if is_file %}
+                            <a href="{{ url_for('caballos_documentos.show_update_document_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
+                            <a href="{{ url_for('caballos_documentos.show_delete_document_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a> 
+                            <a href="{{ url_for('caballos_documentos.download_documento', documento_id=documento.id) }}" class="btn btn-success">Descargar</a>
+                        {% else %}
+                            <a href="{{ url_for('caballo_enlaces.show_update_link_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
+                            <a href="{{ url_for('caballo_enlaces.show_delete_link_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a>
+                            <a href="{{ documento.nombre_documento }}" class="btn btn-primary">Ver Enlace</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>                     
+        
+        <!-- Paginación -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id, documento_id=documento.id, page=pagination.prev_num, 
+                        nombre_documento=request.args.get('nombre_documento', ''), 
+                        tipo_documento=request.args.get('tipo_documento', ''), 
+                        sort_by=request.args.get('sort_by', ''), 
+                        order=request.args.get('order', '') ) }}" aria-label="Previous">
+                        Anterior
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+                <li class="page-item disabled"><span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span></li>
+                {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id, page=pagination.next_num, 
+                        nombre_documento=request.args.get('nombre_documento', ''), 
+                        tipo_documento=request.args.get('tipo_documento', ''), 
+                        sort_by=request.args.get('sort_by', ''), 
+                        order=request.args.get('order', '') ) }}" aria-label="Next">
+                        Siguiente
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div style="margin-top: 20px;">
+            <a href="{{ url_for('caballos_documentos.show_upload_document', caballo_id=caballo.id) }}" class="btn btn-secondary">Subir documento</a>
+            <a href="{{ url_for('caballo_enlaces.show_upload_link', caballo_id=caballo.id) }}" class="btn btn-secondary">Subir enlace</a>
+            <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn">Volver</a>
+        </div>
+    </article>
+</section>
+
+<footer>
+    <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
+</footer>
+
+{% endblock %}

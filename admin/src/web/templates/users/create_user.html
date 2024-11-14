@@ -7,23 +7,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/create_user.css') }}">
 </head>
 <body>
-    <!-- Header -->
     <header>
         <img id='logo' alt="logo" src="{{ url_for('static', filename='assets/logo.png') }}">
         <a class="btn" href="{{ url_for('users.show_home') }}">Volver al Inicio</a>
     </header>
 
     {% block content %}
-    <!-- Mostrar mensajes flash -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <ul class="flashes">
-            {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% endwith %}
+
     <div class="container">
         <h2>Crear Nuevo Usuario</h2>
         <form action="{{ url_for('users.create_user') }}" method="POST">

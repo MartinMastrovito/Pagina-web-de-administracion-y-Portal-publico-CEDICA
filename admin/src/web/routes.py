@@ -4,9 +4,14 @@ from src.web.controllers.invoices import invoices_bp
 from src.web.controllers.gestion_jya.crud_JyA import bp as crud_JyA_bp
 from src.web.controllers.gestion_jya.jya_archivos import bp as jya_archivos_bp
 from src.web.controllers.gestion_jya.jya_enlaces import bp as jya_enlaces_bp
-from src.web.controllers.caballos import caballos_bp
+from src.web.controllers.gestion_caballo.caballos import caballos_bp
+from src.web.controllers.gestion_caballo.caballo_archivos import caballos_documentos_bp as caballo_documentos_bp
+from src.web.controllers.gestion_caballo.caballo_enlaces import bp as caballo_enlaces_bp
 from src.web.controllers.pagos import pago_bp
 from src.web.controllers.empleados import empleados_bp
+from src.web.controllers.consultas import consultas_bp
+from src.web.controllers.reportes import bp as reportes_bp
+from src.web.controllers.publicacion import bp as publicacion_bp
 
 def register(app):
     # Crear un Blueprint para las rutas
@@ -48,9 +53,19 @@ def register(app):
 
     app.register_blueprint(caballos_bp) 
 
+    app.register_blueprint(caballo_documentos_bp) 
+    
+    app.register_blueprint(caballo_enlaces_bp) 
+
     app.register_blueprint(pago_bp) 
 
     app.register_blueprint(empleados_bp)
+
+    app.register_blueprint(reportes_bp)
+
+    app.register_blueprint(consultas_bp)
+    
+    app.register_blueprint(publicacion_bp)
 
 
     #de

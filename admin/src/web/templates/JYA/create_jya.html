@@ -1,131 +1,152 @@
 {% extends "layout.html" %}
 
 <!DOCTYPE html>
-<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>{% block title %}Crear J&A{% endblock %}</title>
 </head>
 <body>
     {% block content %}
-    <!-- Mostrar mensajes flash -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <ul class="flashes">
-            {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% endwith %}
     <header>
-        <h1>Crear Nuevo J&A</h1>
+        <h4 class="display-4">Crear Nuevo J&A</h4>
     </header>
 
     <section>
         <article>
             <form method="post" action="{{ url_for('crud_JyA.create_jya') }}" enctype="multipart/form-data">
-                <!-- Datos personales -->
-                <div class="form-group">
-                    <label for="nombre">Nombre:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="nombre" name="nombre" required>
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="nombre" name="nombre" required>
+                    <small id="nombreHelp" class="form-text text-muted">
+                        El campo es obligatorio y solo debe contener letras y espacios.
+                    </small>
                 </div>
                 
-                <div class="form-group">
-                    <label for="apellido">Apellido:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ'\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="apellido" name="apellido" required>
+                <div class="mb-3">
+                    <label for="apellido" class="form-label">Apellido:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ'\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="apellido" name="apellido" required>
+                    <small id="apellidoHelp" class="form-text text-muted">
+                        El campo es obligatorio y solo debe contener letras y espacios.
+                    </small>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="dni" class="form-label">DNI (sin puntos o espacios):</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input type="number" class="form-control" id="dni" name="dni" min="1000000" required>
+                    <small id="dniHelp" class="form-text text-muted">
+                        El campo es obligatorio y debe contener un número de 7 o 8 dígitos.
+                    </small>
                 </div>
 
-                <div class="form-group">
-                    <label for="dni">DNI (sin puntos o espacios):</label>
-                    <input type="number" class="form-control" id="dni" name="dni" min="1000000"required>
-                </div>
-
-                <div class="form-group">
-                    <label for="edad">Edad:</label>
+                <div class="mb-3">
+                    <label for="edad" class="form-label">Edad:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="number" class="form-control" id="edad" name="edad" min="18" max="100" title="Por favor ingrese una edad entre 18-100" required>
+                    <small id="edadHelp" class="form-text text-muted">
+                        El campo es obligatorio y debe estar entre 18 y 100 años.
+                    </small>
                 </div>
-
-                <div class="form-group">
-                    <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_de_nacimiento" required>
+                
+                <div class="mb-3">
+                    <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                    <small id="fechaNacimientoHelp" class="form-text text-muted">
+                        El campo es obligatorio y debe ingresar una fecha válida.
+                    </small>
                 </div>
-
-                <!-- Lugar de nacimiento -->
-                <div class="form-group">
-                    <label for="lugar_nacimiento_localidad">Lugar de Nacimiento:</label>
+                
+                <div class="mb-3">
+                    <label for="lugar_nacimiento_localidad" class="form-label">Lugar de Nacimiento:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="text" class="form-control" id="lugar_nacimiento_localidad" name="lugar_nacimiento_localidad" placeholder="Localidad" required>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control mt-2" id="lugar_nacimiento_provincia" name="lugar_nacimiento_provincia" placeholder="Provincia" required>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control mt-2" id="lugar_nacimiento_provincia" name="lugar_nacimiento_provincia" placeholder="Provincia" required>
+                    <small id="lugarNacimientoHelp" class="form-text text-muted">
+                        Solo se permiten letras y espacios en blanco.
+                    </small>
                 </div>
-
-                <!-- Domicilio actual -->
-                <div class="form-group">
-                    <label for="domicilio_actual_calle">Domicilio Actual:</label>
+                
+                <div class="mb-3">
+                    <label for="domicilio_actual_calle" class="form-label">Domicilio Actual:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="text" class="form-control" id="domicilio_actual_calle" name="domicilio_actual_calle" placeholder="Calle" required>
                     <input type="number" class="form-control mt-2" id="domicilio_actual_numero" name="domicilio_actual_numero" placeholder="Número" required>
                     <input type="text" class="form-control mt-2" id="domicilio_actual_departamento" name="domicilio_actual_departamento" placeholder="Departamento (opcional)">
+                    <small id="domicilioDepartamentoHelp" class="form-text text-muted">
+                        Este campo es opcional.
+                    </small>
                     <input type="text" class="form-control mt-2" id="domicilio_actual_localidad" name="domicilio_actual_localidad" placeholder="Localidad" required>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control mt-2" id="domicilio_actual_provincia" name="domicilio_actual_provincia" placeholder="Provincia" required>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control mt-2" id="domicilio_actual_provincia" name="domicilio_actual_provincia" placeholder="Provincia" required>
                 </div>
 
-                <!-- Teléfono actual -->
-                <div class="form-group">
-                    <label for="telefono_actual">Teléfono Actual (sin guiones o espacios):</label>
-                    <input type="number" class="form-control" id="telefono_actual" name="telefono_actual" min="0" title="Por favor ingrese un numero valido" required>
+                <div class="mb-3">
+                    <label for="telefono_actual" class="form-label">Teléfono Actual (sin guiones o espacios):</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input type="number" class="form-control" id="telefono_actual" name="telefono_actual" min="0" title="Por favor ingrese un número válido" required>
+                    <small id="telefonoHelp" class="form-text text-muted">
+                        Solo se permiten números, sin guiones ni espacios.
+                    </small>
                 </div>
 
-                <!-- Contacto de emergencia -->
-                <div class="form-group">
-                    <label for="contacto_emergencia_nombre">Contacto de Emergencia:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="contacto_emergencia_nombre" name="contacto_emergencia_nombre" placeholder="Nombre" required>
-                    <input type="number" class="form-control mt-2" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono" placeholder="Teléfono" min="0" title="Por favor ingrese un numero valido" required>
+                <div class="mb-3">
+                    <label for="contacto_emergencia_nombre" class="form-label">Contacto de Emergencia:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="contacto_emergencia_nombre" name="contacto_emergencia_nombre" placeholder="Nombre" required>
+                    <small id="nombreEmergenciaHelp" class="form-text text-muted">
+                        Solo se permiten letras y espacios.
+                    </small>
+                    <input type="number" class="form-control mt-2" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono" placeholder="Teléfono" min="0" title="Por favor ingrese un número válido" required>
+                    <small id="telefonoEmergenciaHelp" class="form-text text-muted">
+                        Solo se permiten números, sin guiones ni espacios.
+                    </small>
                 </div>
 
-                <!-- Becado y porcentaje de beca -->
-                <div class="form-group">
-                    <label for="becado">Becado:</label>
-                    <select class="form-control" id="becado" name="becado" required>
+                <div class="mb-3">
+                    <label for="becado" class="form-label">Becado:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <select class="form-select" id="becado" name="becado" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
                         <option value="false">No</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="porcentaje_beca">Porcentaje de Beca:</label>
-                    <input type="number" step="0.01" class="form-control" id="porcentaje_beca" name="porcentaje_beca" min="0" max="1" title="Por favor ingrese un porcentaje entre 0.1-1">
+                <div class="mb-3">
+                    <label for="porcentaje_beca" class="form-label">Porcentaje de Beca:</label>
+                    <input type="number" step="0.01" class="form-control" id="porcentaje_beca" name="porcentaje_beca" min="0" max="1" title="Por favor ingrese un porcentaje entre 0.00 y 1.00" required>
                 </div>
 
-                <!-- Discapacidad -->
-                <div class="form-group">
-                    <label>¿Posee Certificado de Discapacidad?</label>
-                    <select class="form-control" id="certificado_discapacidad" name="certificado_discapacidad" required>
+                <div class="mb-3">
+                    <label for="certificado_discapacidad" class="form-label">¿Posee Certificado de Discapacidad?</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <select class="form-select" id="certificado_discapacidad" name="certificado_discapacidad" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
                         <option value="false">No</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="diagnostico_discapacidad">Diagnóstico de Discapacidad (si posee):</label>
-                    <select class="form-control" id="diagnostico_discapacidad" name="diagnostico_discapacidad">
+                <div class="mb-3">
+                    <label for="diagnostico_discapacidad" class="form-label">Diagnóstico de Discapacidad (si posee):</label>
+                    <select class="form-select" id="diagnostico_discapacidad" name="diagnostico_discapacidad">
                         <option value="" disabled selected>Seleccione un diagnóstico</option>
                         <option value="ECNE">ECNE</option>
                         <option value="Lesión post-traumática">Lesión post-traumática</option>
                         <option value="Mielomeningocele">Mielomeningocele</option>
                         <option value="Esclerosis Múltiple">Esclerosis Múltiple</option>
                         <option value="Escoliosis Leve">Escoliosis Leve</option>
-                        <!-- Más opciones aquí -->
                         <option value="OTRO">Otro</option>
                     </select>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control mt-2" id="otro_diagnostico" name="otro_diagnostico" placeholder="Si eligió OTRO, indique cuál">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control mt-2" id="otro_diagnostico" name="otro_diagnostico" placeholder="Si eligió OTRO, indique cuál" aria-describedby="diagnosticoHelp" />
+                    <small id="diagnosticoHelp" class="form-text text-muted">Si selecciona "Otro", ingrese el diagnóstico específico.</small>
                 </div>
 
-                <div class="form-group">
-                    <label>Tipo de Discapacidad:</label>
-                    <select class="form-control" id="tipo_discapacidad" name="tipo_discapacidad">
+                <div class="mb-3">
+                    <label for="tipo_discapacidad" class="form-label">Tipo de Discapacidad:</label>
+                    <select class="form-select" id="tipo_discapacidad" name="tipo_discapacidad">
                         <option value="" disabled selected>Seleccione un tipo</option>
                         <option value="Mental">Mental</option>
                         <option value="Motora">Motora</option>
@@ -134,19 +155,19 @@
                     </select>
                 </div>
 
-                <!-- Asignaciones familiares -->
-                <div class="form-group">
-                    <label>¿Percibe alguna Asignación Familiar?</label>
-                    <select class="form-control" id="asignacion_familiar" name="asignacion_familiar">
+                <div class="mb-3">
+                    <label for="asignacion_familiar" class="form-label">¿Percibe alguna Asignación Familiar?</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <select class="form-select" id="asignacion_familiar" name="asignacion_familiar" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
                         <option value="false">No</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="tipo_asignacion">Tipo de Asignación:</label>
-                    <select class="form-control" id="tipo_asignacion" name="tipo_asignacion">
+                <div class="mb-3">
+                    <label for="tipo_asignacion" class="form-label">Tipo de Asignación:</label>
+                    <select class="form-select" id="tipo_asignacion" name="tipo_asignacion">
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="Asignación Universal por hijo">Asignación Universal por hijo</option>
                         <option value="Asignación Universal por hijo con Discapacidad">Asignación Universal por hijo con Discapacidad</option>
@@ -154,208 +175,193 @@
                     </select>
                 </div>
 
-                <!-- Pensión -->
-                <div class="form-group">
-                    <label>¿Es beneficiario de alguna pensión?</label>
-                    <select class="form-control" id="pension" name="pension">
+                <div class="mb-3">
+                    <label for="pension" class="form-label">¿Es beneficiario de alguna pensión?</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <select class="form-select" id="pension" name="pension" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
                         <option value="false">No</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="tipo_pension">Tipo de Pensión (si corresponde):</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ#\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="tipo_pension" name="tipo_pension" placeholder="Indique si es Provincial o Nacional">
+                <div class="mb-3">
+                    <label for="tipo_pension" class="form-label">Tipo de Pensión (si corresponde):</label>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ#\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="tipo_pension" name="tipo_pension" placeholder="Indique si es Provincial o Nacional">
                 </div>
 
-                <!-- Situación previsional -->
-                <div class="form-group">
-                    <label for="obra_social">Obra Social:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="obra_social" name="obra_social">
+                <div class="mb-3">
+                    <label for="obra_social" class="form-label">Obra Social:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="obra_social" name="obra_social" required>
+                    <small id="obraSocialHelp" class="form-text text-muted">
+                        Por favor, ingrese solo letras válidas (sin números ni caracteres especiales).
+                    </small>
                 </div>
 
-                <div class="form-group">
-                    <label for="numero_afiliado">Número de Afiliado:</label>
-                    <input type="number" class="form-control" id="numero_afiliado" name="numero_afiliado" min="0" title="Ingrese un valor positivo">
+                <div class="mb-3">
+                    <label for="numero_afiliado" class="form-label">Número de Afiliado:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input type="number" class="form-control" id="numero_afiliado" name="numero_afiliado" min="0" title="Ingrese un valor positivo" required>
+                    <small id="afiliadoHelp" class="form-text text-muted">
+                        Por favor ingrese un número positivo (sin decimales ni caracteres especiales).
+                    </small>
                 </div>
 
-                <div class="form-group">
-                    <label for="curatela">¿Posee curatela?</label>
-                    <select class="form-control" id="curatela" name="curatela">
+                <div class="mb-3">
+                    <label for="curatela" class="form-label">¿Posee curatela?</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <select class="form-select" id="curatela" name="curatela" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
                         <option value="false">No</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="observaciones_previsionales">Observaciones Previsionales:</label>
-                    <textarea class="form-control" id="observaciones_previsionales" name="observaciones_previsionales" rows="3"></textarea>
-                </div>
-
-                <!-- Institución escolar -->
-                <div class="form-group">
-                    <label for="institucion_escolar_nombre">Nombre de la Institución Escolar:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="institucion_escolar_nombre" name="institucion_escolar_nombre">
-                </div>
-
-                <div class="form-group">
-                    <label for="institucion_escolar_direccion">Dirección:</label>
-                    <input type="text" class="form-control" id="institucion_escolar_direccion" name="institucion_escolar_direccion">
-                </div>
-
-                <div class="form-group">
-                    <label for="institucion_escolar_telefono">Teléfono:</label>
-                    <input type="number" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono" min="0" title="Por favor ingrese un numero valido">
-                </div>
-
-                <div class="form-group">
-                    <label for="grado_actual">Grado/Año Actual:</label>
-                    <input type="text" class="form-control" id="grado_actual" name="grado_actual">
-                </div>
-
-                <div class="form-group">
-                    <label for="institucion_escolar_observaciones">Observaciones:</label>
-                    <textarea class="form-control" id="institucion_escolar_observaciones" name="institucion_escolar_observaciones" rows="3"></textarea>
-                </div>
-
-                <!-- Profesionales que lo atienden -->
-                <div class="form-group">
-                    <label for="profesionales_atendiendo">Profesionales que lo atienden:</label>
-                    <textarea class="form-control" id="profesionales_atendiendo" name="profesionales_atendiendo" rows="3"></textarea>
-                </div>
-
-                <!-- Familiares o tutores responsables -->
-                <h3>Datos del Familiar o Tutor Responsable</h3>
-                <div class="form-group">
-                    <label for="familiar1_parentesco">Parentesco:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar1_parentesco" name="familiar1_parentesco">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar1_nombre">Nombre:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar1_nombre" name="familiar1_nombre">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar1_apellido">Apellido:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar1_apellido" name="familiar1_apellido">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar1_dni">DNI (sin puntos o espacios):</label>
-                    <input type="number" class="form-control" id="familiar1_dni" name="familiar1_dni" min="1000000" title="Por favor ingrese un DNI valido">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar1_domicilio_actual">Domicilio Actual:</label>
-                    <input type="text" class="form-control" id="familiar1_domicilio_actual" name="familiar1_domicilio_actual">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar1_celular_actual">Celular Actual (sin guiones o espacios):</label>
-                    <input type="number" class="form-control" id="familiar1_celular_actual" name="familiar1_celular_actual" min="0" title="Por favor ingrese un numero valido">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar1_email">Email:</label>
-                    <input type="email" class="form-control" id="familiar1_email" name="familiar1_email">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar1_nivel_escolaridad">Nivel de Escolaridad:</label>
-                    <select class="form-control" id="familiar1_nivel_escolaridad" name="familiar1_nivel_escolaridad">
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Primario">Primario</option>
-                        <option value="Secundario">Secundario</option>
-                        <option value="Terciario">Terciario</option>
-                        <option value="Universitario">Universitario</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar1_ocupacion">Ocupación:</label>
-                    <input type="text" class="form-control" id="familiar1_ocupacion" name="familiar1_ocupacion">
-                </div>
-
-                <!-- Segundo familiar/tutor (opcional) -->
-                <h3>Datos de otro Familiar o Tutor (opcional)</h3>
-                <div class="form-group">
-                    <label for="familiar2_parentesco">Parentesco:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar2_parentesco" name="familiar2_parentesco">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar2_nombre">Nombre:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas"type="text" class="form-control" id="familiar2_nombre" name="familiar2_nombre">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar2_apellido">Apellido:</label>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar2_apellido" name="familiar2_apellido">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar2_dni">DNI (sin puntos o espacios):</label>
-                    <input type="number" class="form-control" id="familiar2_dni" name="familiar2_dni" min="1000000" title="Por favor ingrese un DNI valido">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar2_domicilio_actual">Domicilio Actual:</label>
-                    <input type="text" class="form-control" id="familiar2_domicilio_actual" name="familiar2_domicilio_actual">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar2_celular_actual">Celular Actual (sin guiones o espacios):</label>
-                    <input type="number" class="form-control" id="familiar2_celular_actual" name="familiar2_celular_actual" min="0" title="Por favor ingrese un numero valido">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar2_email">Email:</label>
-                    <input type="email" class="form-control" id="familiar2_email" name="familiar2_email">
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar2_nivel_escolaridad">Nivel de Escolaridad:</label>
-                    <select class="form-control" id="familiar2_nivel_escolaridad" name="familiar2_nivel_escolaridad">
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Primario">Primario</option>
-                        <option value="Secundario">Secundario</option>
-                        <option value="Terciario">Terciario</option>
-                        <option value="Universitario">Universitario</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="familiar2_ocupacion">Ocupación:</label>
-                    <input type="text" class="form-control" id="familiar2_ocupacion" name="familiar2_ocupacion">
+                <div class="mb-3">
+                    <label for="observaciones_previsionales" class="form-label">Observaciones Previsionales:</label>
+                    <textarea class="form-control" id="observaciones_previsionales" name="observaciones_previsionales" rows="3" placeholder="Ingrese observaciones adicionales"></textarea>
                 </div>
                 
-                <div class="form-group">
+                <div class="mb-3">
+                    <label for="institucion_escolar_nombre" class="form-label">Nombre de la Institución Escolar:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="institucion_escolar_nombre" name="institucion_escolar_nombre" required placeholder="Nombre de la institución">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="institucion_escolar_direccion" class="form-label">Dirección:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input type="text" class="form-control" id="institucion_escolar_direccion" name="institucion_escolar_direccion" required placeholder="Dirección de la institución">
+                </div>                
+
+                <div class="mb-3">
+                    <label for="institucion_escolar_telefono" class="form-label">Teléfono:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input type="number" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono" min="0" title="Por favor ingrese un número válido" required placeholder="Número de teléfono de la institución">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="grado_actual" class="form-label">Grado/Año Actual:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <input type="text" class="form-control" id="grado_actual" name="grado_actual" required placeholder="Indique el grado o año">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="institucion_escolar_observaciones" class="form-label">Observaciones:</label>
+                    <textarea class="form-control" id="institucion_escolar_observaciones" name="institucion_escolar_observaciones" rows="3" placeholder="Ingrese observaciones adicionales"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="profesionales_atendiendo" class="form-label">Profesionales que lo atienden:</label>
+                    <textarea class="form-control" id="profesionales_atendiendo" name="profesionales_atendiendo" rows="3" placeholder="Ingrese los nombres de los profesionales"></textarea>
+                </div>                
+
+                <h6 class="display-6">Datos del Familiar o Tutor Responsable</h6>
+
+                <button type="button" class="btn btn-primary" id="agregar_familiar">+ Agregar Familiar</button>
+
+                <div id="familiares_container"></div>
+
+                <script>
+                    let contadorFamiliares = 0;
+                    const maxFamiliares = 2;
+
+                    document.getElementById('agregar_familiar').addEventListener('click', function() {
+                        if (contadorFamiliares < maxFamiliares) {
+                            contadorFamiliares++;
+
+                            const nuevoFormulario = document.createElement('div');
+                            nuevoFormulario.classList.add('familiar_formulario', 'mt-3');
+
+                            nuevoFormulario.innerHTML = `
+                                <h4>Familiar o tutor responsable ${contadorFamiliares}</h4>
+                                <div class="form-group">
+                                    <label for="familiar${contadorFamiliares}_parentesco">Parentesco:</label>
+                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar${contadorFamiliares}_parentesco" name="familiar${contadorFamiliares}_parentesco">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="familiar${contadorFamiliares}_nombre">Nombre:</label>
+                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar${contadorFamiliares}_nombre" name="familiar${contadorFamiliares}_nombre">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="familiar${contadorFamiliares}_apellido">Apellido:</label>
+                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar${contadorFamiliares}_apellido" name="familiar${contadorFamiliares}_apellido">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="familiar${contadorFamiliares}_dni">DNI (sin puntos o espacios):</label>
+                                    <input type="number" class="form-control" id="familiar${contadorFamiliares}_dni" name="familiar${contadorFamiliares}_dni" min="1000000" title="Por favor ingrese un DNI valido">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="familiar${contadorFamiliares}_domicilio_actual">Domicilio Actual:</label>
+                                    <input type="text" class="form-control" id="familiar${contadorFamiliares}_domicilio_actual" name="familiar${contadorFamiliares}_domicilio_actual">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="familiar${contadorFamiliares}_celular_actual">Celular Actual (sin guiones o espacios):</label>
+                                    <input type="number" class="form-control" id="familiar${contadorFamiliares}_celular_actual" name="familiar${contadorFamiliares}_celular_actual" min="0" title="Por favor ingrese un numero valido">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="familiar${contadorFamiliares}_email">Email:</label>
+                                    <input type="email" class="form-control" id="familiar${contadorFamiliares}_email" name="familiar${contadorFamiliares}_email">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="familiar${contadorFamiliares}_nivel_escolaridad">Nivel de Escolaridad:</label>
+                                    <select class="form-control" id="familiar${contadorFamiliares}_nivel_escolaridad" name="familiar${contadorFamiliares}_nivel_escolaridad">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                        <option value="Primario">Primario</option>
+                                        <option value="Secundario">Secundario</option>
+                                        <option value="Terciario">Terciario</option>
+                                        <option value="Universitario">Universitario</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="familiar${contadorFamiliares}_ocupacion">Ocupación:</label>
+                                    <input type="text" class="form-control" id="familiar${contadorFamiliares}_ocupacion" name="familiar${contadorFamiliares}_ocupacion">
+                                </div>
+                            `;
+
+                            document.getElementById('familiares_container').appendChild(nuevoFormulario);
+                        } else {
+                            alert('Solo puedes agregar hasta 2 familiares.');
+                        }
+                    });
+                </script>
+                
+                <div class="form-group mb-3">
                     <label for="propuesta_trabajo">Propuesta de trabajo institucional:</label>
-                    <select class="form-control" id="propuesta_trabajo" name="propuesta_trabajo">
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <select class="form-control custom-select" id="propuesta_trabajo" name="propuesta_trabajo">
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="Hipoterapia">Hipoterapia</option>
                         <option value="Monta Terápeutica">Monta Terápeutica</option>
                         <option value="Deporte">Deporte</option>
-                        <option value="Encuetre adaptado">Encuetre adaptado</option>
+                        <option value="Encuentre adaptado">Encuentre adaptado</option>
                         <option value="Actividades Recreativas">Actividades Recreativas</option>
                         <option value="Equitación">Equitación</option>
                     </select>
                 </div>
                 
-                <div class="form-group">
-                    <label>Condicion:</label>
-                    <select class="form-control" id="condicion_trabajo" name="condicion_trabajo">
+                <div class="form-group mb-3">
+                    <label for="condicion_trabajo">Condición:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                    <select class="form-control custom-select" id="condicion_trabajo" name="condicion_trabajo">
                         <option value="" disabled selected>Seleccione un tipo</option>
                         <option value="REGULAR">REGULAR</option>
                         <option value="DE BAJA">DE BAJA</option>
                     </select>
-                </div>
+                </div>                                
                 
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="sede">Sede:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="sede" name="sede">
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="CASJ">CASJ</option>
@@ -363,20 +369,36 @@
                         <option value="OTRO">OTRO</option>
                     </select>
                 </div>
-                <div class="form-group">
+                
+                <div class="form-group mb-3">
                     <label for="dias_asistencia">Días de Asistencia:</label><br>
-                        <input type="checkbox" name="dias_asistencia[]" value="Lunes"> Lunes<br>
-                        <input type="checkbox" name="dias_asistencia[]" value="Martes"> Martes<br>
-                        <input type="checkbox" name="dias_asistencia[]" value="Miércoles"> Miércoles<br>
-                        <input type="checkbox" name="dias_asistencia[]" value="Jueves"> Jueves<br>
-                        <input type="checkbox" name="dias_asistencia[]" value="Viernes"> Viernes<br>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="dias_asistencia[]" value="Lunes" id="lunes">
+                        <label class="form-check-label" for="lunes">Lunes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="dias_asistencia[]" value="Martes" id="martes">
+                        <label class="form-check-label" for="martes">Martes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="dias_asistencia[]" value="Miércoles" id="miercoles">
+                        <label class="form-check-label" for="miercoles">Miércoles</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="dias_asistencia[]" value="Jueves" id="jueves">
+                        <label class="form-check-label" for="jueves">Jueves</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="dias_asistencia[]" value="Viernes" id="viernes">
+                        <label class="form-check-label" for="viernes">Viernes</label>
+                    </div>
                 </div>
-                <!-- Profesionales/Conductor del Caballo/Profesor -->
-                <h3>Datos de Profesores y Conductores</h3>
+                
+                <h6 class="display-6">Datos de Profesores y Conductores</h6>
 
-                <!-- Profesor/a o Terapeuta -->
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="profesor_terapeuta_id">Profesor/a o Terapeuta:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="profesor_terapeuta_id" name="profesor_terapeuta_id" required>
                         <option value="" disabled selected>Seleccione un Profesor o Terapeuta</option>
                         {% for empleado in empleados_terapeuta_profesor %}
@@ -384,39 +406,40 @@
                         {% endfor %}
                     </select>
                 </div>
-
-                <!-- Conductor/a del Caballo -->
-                <div class="form-group">
+                
+                <div class="form-group mb-3">
                     <label for="conductor_caballo_id">Conductor/a del Caballo:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="conductor_caballo_id" name="conductor_caballo_id" required>
                         <option value="" disabled selected>Seleccione un Conductor</option>
                         {% for empleado in empleados_conductor %}
                             <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
                         {% endfor %}
                     </select>
-                </div>
+                </div>                
 
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="auxiliar_id">Auxiliar de pista:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="auxiliar_id" name="auxiliar_id" required>
-                        <option value="" disabled selected>Seleccione un Conductor</option>
+                        <option value="" disabled selected>Seleccione un Auxiliar</option>
                         {% for empleado in empleados_auxiliar %}
                             <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
                         {% endfor %}
                     </select>
                 </div>
-
-                <div class="form-group">
+                
+                <div class="form-group mb-3">
                     <label for="caballo_id">Caballo:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="caballo_id" name="caballo_id" required>
                         <option value="" disabled selected>Seleccione un Caballo</option>
                         {% for caballo in caballos %}
                             <option value="{{ caballo.id }}">{{ caballo.nombre }}</option>
                         {% endfor %}
                     </select>
-                </div>
-
-                <!-- Botón de creación -->
+                </div>                
+                
                 <button type="submit" class="btn btn-primary">Crear Usuario</button>
             </form>
         </article>

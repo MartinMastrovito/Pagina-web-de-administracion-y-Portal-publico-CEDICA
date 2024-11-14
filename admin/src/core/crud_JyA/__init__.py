@@ -36,12 +36,11 @@ def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=No
     """
     query = JYA.query
 
-    # Filtros
     if nombre:
-        query = query.filter_by(nombre=nombre)
+        query = query.filter(JYA.nombre.ilike(f"%{nombre}%"))
 
     if apellido:
-        query = query.filter_by(apellido=apellido)
+        query = query.filter(JYA.apellido.ilike(f"%{apellido}%"))
 
     if dni is not None:
         query = query.filter_by(dni=str(dni))
@@ -49,7 +48,6 @@ def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=No
     if profesionales_atendiendo:
         query = query.filter(JYA.profesionales_atendiendo.ilike(f"%{profesionales_atendiendo}%"))
 
-    # Ordenación
     sort_column = {
         'nombre': JYA.nombre,
         'apellido': JYA.apellido,
@@ -61,7 +59,6 @@ def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=No
     else:
         query = query.order_by(sort_column.desc())
 
-    # Paginación
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
 def create_jya(**kwargs):
@@ -76,7 +73,7 @@ def create_jya(**kwargs):
     """
     existing_jya = get_jya_by_dni(kwargs["dni"])
     if existing_jya:
-        return None  # Retorna None si el usuario ya existe
+        return None
 
     jya = JYA(**kwargs)
     db.session.add(jya)
@@ -116,9 +113,8 @@ def update_jya(jya_dni, **kwargs):
     validation = JYA.query.filter_by(dni=kwargs["dni"]).first()
 
     if validation and (not (jya.dni == kwargs["dni"])):
-        return None  # Retorna None si el usuario ya existe
+        return None
 
-    # Actualizar los atributos del JYA con los nuevos valores
     for key, value in kwargs.items():
         setattr(jya, key, value)
 
@@ -153,10 +149,8 @@ def delete_jya(jya_dni):
     """
     jya = get_jya_by_dni(jya_dni)
 
-    # Eliminar registros relacionados en JYAEmpleado
     db.session.query(JYAEmpleado).filter_by(jya_id=jya.id).delete(synchronize_session=False)
 
-    # Eliminar el JYA
     db.session.delete(jya)
     db.session.commit()
     

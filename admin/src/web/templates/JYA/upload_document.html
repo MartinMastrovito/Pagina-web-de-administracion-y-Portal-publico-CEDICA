@@ -33,7 +33,7 @@
                 <input type="file" name="documento" id="documento" class="form-control-file" required>
             </div>
             <button type="submit" class="btn btn-primary">Subir Documento</button>
-            <a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
+            <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
         </form>
     </section>
     

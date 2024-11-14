@@ -1,10 +1,10 @@
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, flash, redirect
 from src.core import crud_JyA
 from src.core.auth.decorators import login_required, check
 
 bp = Blueprint("enlaces", __name__, url_prefix="/JYA/documentos")
 
-@bp.get("/documentos/cargar_enlace/<int:jya_dni>")
+@bp.get("/cargar_enlace/<int:jya_dni>")
 @login_required
 @check("jya_new")
 def show_upload_link(jya_dni):
@@ -20,7 +20,7 @@ def show_upload_link(jya_dni):
     jya = crud_JyA.get_jya_by_dni(jya_dni)
     return render_template("JYA/upload_link.html", jya=jya)
 
-@bp.post("/documentos/cargar_enlace/<int:jya_dni>")
+@bp.post("/cargar_enlace/<int:jya_dni>")
 @login_required
 @check("jya_new")
 def upload_link(jya_dni):
@@ -38,7 +38,7 @@ def upload_link(jya_dni):
     documento = request.form["documento"]
 
     if not documento.startswith(("http://", "https://")):
-        documento = "http://" + documento
+        documento = "https://" + documento
 
     doc_data = {
         "nombre_documento": documento,
@@ -47,10 +47,11 @@ def upload_link(jya_dni):
     }
     
     crud_JyA.save_document(**doc_data)
-        
-    return render_template("JYA/show_jya.html", jya=jya)
+    
+    flash('Se ha subido el enlace exitosamente!.', 'success')
+    return redirect(f"/JYA/documentos/{jya_dni}")
 
-@bp.get("/documentos/actualizar_link/<int:jya_dni>/<int:documento_id>")
+@bp.get("/actualizar_link/<int:jya_dni>/<int:documento_id>")
 @login_required
 @check("jya_update")
 def show_update_link_jya(jya_dni, documento_id):
@@ -69,7 +70,7 @@ def show_update_link_jya(jya_dni, documento_id):
     
     return render_template("JYA/edit_link_jya.html", jya=jya, documento=documento)
 
-@bp.post("/documentos/actualizar_link/<int:jya_dni>/<int:documento_id>")
+@bp.post("/actualizar_link/<int:jya_dni>/<int:documento_id>")
 @login_required
 @check("jya_update")
 def update_link_jya(jya_dni, documento_id):
@@ -88,7 +89,7 @@ def update_link_jya(jya_dni, documento_id):
     enlace = request.form["documento"]
 
     if not enlace.startswith(("http://", "https://")):
-        enlace = "http://" + enlace
+        enlace = "https://" + enlace
 
     doc_data = {
         "nombre_documento": enlace,
@@ -99,9 +100,10 @@ def update_link_jya(jya_dni, documento_id):
     
     jya = crud_JyA.get_jya_by_dni(jya_dni)
     
-    return render_template("JYA/show_jya.html", jya=jya)
+    flash('Se ha actualizado el enlace exitosamente!.', 'success')
+    return redirect(f"/JYA/documentos/{jya_dni}")
 
-@bp.get("/documentos/eliminar_link/<int:jya_dni>/<int:documento_id>")
+@bp.get("/eliminar_link/<int:jya_dni>/<int:documento_id>")
 @login_required
 @check("jya_destroy")
 def show_delete_link_jya(jya_dni, documento_id):
@@ -120,7 +122,7 @@ def show_delete_link_jya(jya_dni, documento_id):
     
     return render_template("JYA/delete_link_jya.html", jya=jya, documento=documento)
 
-@bp.post("/documentos/eliminar_link/<int:jya_dni>/<int:documento_id>")
+@bp.post("/eliminar_link/<int:jya_dni>/<int:documento_id>")
 @login_required
 @check("jya_destroy")
 def delete_link_jya(jya_dni, documento_id):
@@ -140,4 +142,5 @@ def delete_link_jya(jya_dni, documento_id):
 
     jya = crud_JyA.get_jya_by_dni(jya_dni)
     
-    return render_template("JYA/show_jya.html", jya=jya)
+    flash('Se ha eliminado el enlace exitosamente!.', 'success')
+    return redirect(f"/JYA/documentos/{jya_dni}")
