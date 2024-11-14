@@ -60,22 +60,15 @@ def update_invoice(invoice_id,**kwargs):
     return True
 #Modulo para conseguir el nombre de todos los JYA y su respectivo ID 
 def get_all_ja():
-    ja_query = db.select(JYA).order_by(JYA.apellido)
+    ja_query = JYA.query.order_by(JYA.apellido)
     return ja_query
 
 
-#Modulo para conseguir el nombre de un J&A por su ID
-def get_ja(ja_id):
-    query = JYA.query.get_or_404(ja_id)
-    return query.nombre + " " + query.apellido
 
 #Modulo para conseguir el nombre de todos los empleados y su respectivo ID 
 def get_all_employees():
-    emp_query = Empleados.query.all()
-    emp_dictionary = {}
-    for emp in emp_query:
-        emp_dictionary[emp.id] = emp.nombre + " " + emp.apellido
-    return emp_dictionary
+    emp_query = Empleados.query.order_by(Empleados.apellido)
+    return emp_query
 
 #Modulo para conseguir el nombre de un empleado por su ID 
 def get_emp(emp_id):

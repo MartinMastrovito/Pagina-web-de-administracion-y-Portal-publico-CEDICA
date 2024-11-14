@@ -32,15 +32,15 @@
                 <label class="label" for="j&a">J&A</label>
                 <select class="select" name="j&a" required>
                     <option value="" disabled="" selected="">Seleccione un J&A</option>
-                    {% for ja in jinetes_amazonas.keys() %}
-                        <option value="{{jinetes_amazonas[ja]}}">{{jinetes_amazonas[ja]}}</option>
+                    {% for ja in jinetes_amazonas%}
+                        <option value="{{ja.nombre}} {{ja.apellido}}">{{ja.nombre}} {{ja.apellido}}</option>
                     {% endfor %}
                 </select>
                 <label class="label" for="recipient">Beneficiario</label>
                 <select class="select" name="recipient" required>
                     <option value="" disabled="" selected="">Seleccione un beneficiario</option>
-                    {%for emp in employees.keys() %}
-                        <option value="{{employees[emp]}}">{{employees[emp]}}</option>
+                    {%for emp in employees %}
+                        <option value="{{emp.nombre}} {{emp.apellido}}">{{emp.nombre}} {{emp.apellido}}</option>
                     {% endfor %}
                 </select>
                 <label class="label" for="observations">Observaciones</label>

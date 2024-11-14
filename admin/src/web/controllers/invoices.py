@@ -85,9 +85,9 @@ def invoice_update(invoice_id):
 @login_required
 @check("invoice_new")
 def invoice_create():
-    ja_dictionary = utiles.get_all_ja()
-    emp_dictionary = utiles.get_all_employees()
-    return render_template("create_invoice.html",invoices=invoices_bp,jinetes_amazonas=ja_dictionary,employees = emp_dictionary)
+    jinetes_amazonas = utiles.get_all_ja()
+    employees = utiles.get_all_employees()
+    return render_template("create_invoice.html",invoices=invoices_bp,jinetes_amazonas=jinetes_amazonas,employees = employees)
 
 @invoices_bp.post("/crear-cobro")
 @login_required
@@ -112,10 +112,17 @@ def create_invoice():
 @login_required
 @check("invoice_index")
 def invoice_statuses(page,**order):
+    per_page = 5
     if(len(order) != 0):
-        ja_query = crud_JyA.search_JYA(**order)
-    ja_query = utiles.get_all_ja()
-    ja_query = db.paginate(ja_query,page=page,max_per_page=5)
+        ja_query = crud_JyA.search_JYA(
+            nombre=order["nombre"],
+            apellido=order["apellido"],
+            page=1,
+            per_page=per_page
+        )
+    else:
+        ja_query = utiles.get_all_ja()
+        ja_query = db.paginate(ja_query,page=page,max_per_page=5)
     return render_template("statuses_list.html",invoices=invoices_bp,jinetes_amazonas=ja_query, page = page)
 
 
@@ -129,7 +136,6 @@ def order_statuses_list(page):
         order_information = {
             "nombre": request.form['first_name'],
             "apellido": request.form['last_name'],
-            "per_page": 5,
         }
         return invoice_statuses(page,**order_information)
 
