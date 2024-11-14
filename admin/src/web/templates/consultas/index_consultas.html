@@ -1,0 +1,70 @@
+<!-- templates/consultas/index.html -->
+
+{% extends "layout.html" %}
+
+{% block title %}Listado de Consultas{% endblock %}
+
+{% block imports %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultas</title>
+</head>
+<body>
+    <h1>Consultas</h1>
+    <form method="GET" action="{{ url_for('consultas.menu_consultas') }}">
+        <input type="text" name="nombre_completo" placeholder="Nombre" value="{{ nombre_completo }}">
+        <select name="estado">
+            <option value="">--Todos los Estados--</option>
+            <option value="Pendiente" {% if estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+            <option value="Contestado" {% if estado == 'Contestado' %}selected{% endif %}>Contestado</option>
+            <option value="Revisar" {% if estado == 'Revisar' %}selected{% endif %}>Revisar</option>
+        </select>
+        <button type="submit">Buscar</button>
+    </form>
+    <a href="{{ url_for('consultas.nueva_consulta') }}" class="btn btn-primary">Crear Consulta</a>
+    <table>
+        <thead>
+            <tr>
+                <th><a href="{{ url_for('consultas.menu_consultas', orden='fecha', direction='asc' if direction == 'desc' else 'desc') }}">
+                    Fecha {% if orden == 'fecha' %}{{ '▲' if direction == 'asc' else '▼' }}{% endif %}
+                </a></th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for consulta in consultas.items %}
+            <tr>
+                <td>{{ consulta.fecha }}</td>
+                <td>{{ consulta.nombre_completo }}</td>
+                <td>{{ consulta.estado }}</td>
+                <td>
+                    <a href="{{ url_for('consultas.mostrar_consulta', id=consulta.id) }}" class="btn btn-primary">Ver</a>
+                    <a href="{{ url_for('consultas.editar_consulta', id=consulta.id) }}" class="btn btn-primary" >Editar</a>
+                    <form action="{{ url_for('consultas.eliminar_consulta', id=consulta.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div>
+        {% if consultas.has_prev %}
+        <a href="{{ url_for('consultas.menu_consultas', page=consultas.prev_num) }}">Anterior</a>
+        {% endif %}
+        {% if consultas.has_next %}
+        <a href="{{ url_for('consultas.menu_consultas', page=consultas.next_num) }}">Siguiente</a>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

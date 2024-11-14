@@ -65,6 +65,12 @@ def permission_create():
         Permission(name="horse_destroy"),
         Permission(name="horse_update"),
         Permission(name="horse_show"),
+        # permisos consultas
+        Permission(name="consulta_index"),
+        Permission(name="consulta_new"),
+        Permission(name="consulta_destroy"),
+        Permission(name="consulta_update"),
+        Permission(name="consulta_show"),
     ]
     db.session.add_all(list_permission)
     db.session.commit()
@@ -119,6 +125,11 @@ def administracion_rol_create():
             Permission.name.contains("jya"),
             Permission.name == "horse_index",
             Permission.name == "horse_show",
+            Permission.name == "consulta_show",
+            Permission.name == "consulta_index",
+            Permission.name == "consulta_new",
+            Permission.name == "consulta_destroy",
+            Permission.name == "consulta_update",
         )
     )
     administration_permissions = []
@@ -197,6 +208,14 @@ def user_create():
             enabled=False,
             role_id=Role.query.filter(Role.name == "voluntariado").first().id,
             created_at="2024-10-29",
+        ),
+        User(
+            email="ecuestre2@test.com",
+            password=bcrypt.generate_password_hash("ecuestre"),
+            alias="ecuestre",
+            enabled=True,
+            role_id=2,
+            created_at="2024-10-15",
         ),
     ]
     db.session.add_all(list_user)
