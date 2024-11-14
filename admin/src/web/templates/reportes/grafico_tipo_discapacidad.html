@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block title %}Gráfico de Tipo de Discapacidad{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-4">
+    <h2 class="mb-4">Distribución de tipos de discapacidad</h2>
+    <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfico de Tipo de Discapacidad" class="img-fluid">
+</div>
+{% endblock %}

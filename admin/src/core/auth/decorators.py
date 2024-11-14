@@ -12,16 +12,22 @@ def login_required(f):
     return decorated_function
 
 def check(permission):
+    """
+    Decorador que verifica si un usuario tiene un permiso específico para acceder a una vista.
+
+    Args:
+        permission (str): El nombre del permiso que se desea verificar.
+
+    Returns:
+        function: La función decorada que realiza la verificación de permisos.
+    """
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
             user_id = session.get("user_id")
-            print(f"Email del usuario: {user_id}")
             if not check_permission(user_id, permission):
-                print(f"Permiso {permission} no encontrado para el usuario.")
                 return redirect(url_for("users.show_home"))
             
-            print(f"Permiso {permission} encontrado para el usuario.")
             return f(*args, **kwargs)
         
         return wrapper

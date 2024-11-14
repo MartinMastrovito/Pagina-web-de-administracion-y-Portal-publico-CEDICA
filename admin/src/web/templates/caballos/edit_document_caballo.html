@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block imports %}
+    {{ super() }}  
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/show.css') }}">
+{% endblock %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>{% block title %}Editar Documento del Caballo{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <header>
+        <h1>Editar Documento</h1>
+    </header>
+
+    <section>
+        <form action="{{ url_for('caballos_documentos.update_document_caballo', caballo_id=caballo.id, documento_id=documento.id) }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="tipo">Tipo de documento:</label>
+                <select class="form-control" id="tipo" name="tipo" required>
+                    <option value="" disabled selected>Seleccione una opción</option>
+                    <option value="Ficha general del caballo" {% if documento.tipo == 'Ficha general del caballo' %}selected{% endif %}>Ficha general del caballo</option>
+                    <option value="Planificación de Entrenamiento"  {% if documento.tipo == 'Planificación de Entrenamiento' %}selected{% endif %}>Planificación de Entrenamiento</option>
+                    <option value="Informe de Evolución" {% if documento.tipo == 'Informe de Evolución' %}selected{% endif %}>Informe de Evolución</option>
+                    <option value="Carga de Imágenes" {% if documento.tipo == 'Carga de Imágenes' %}selected{% endif %}>Carga de Imágenes</option>
+                    <option value="Registro veterinario" {% if documento.tipo == 'Registro veterinario' %}selected{% endif %}>Registro veterinario</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="documento">Selecciona el documento a subir:</label>
+                <input type="file" name="documento" id="documento" class="form-control-file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Actualizar Documento</button>
+            <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn">Volver</a>
+        </form>        
+    </section>
+    
+
+    {% endblock %}
+
+    <footer>
+        <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
+    </footer>
+
+</body>
+</html>

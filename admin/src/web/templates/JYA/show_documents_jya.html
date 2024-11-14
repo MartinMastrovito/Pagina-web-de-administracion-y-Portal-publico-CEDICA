@@ -8,9 +8,7 @@
 <section>
     <article>
         <h2>Documentos registrados</h2>
-
-        <!-- Formulario de búsqueda -->
-        <form method="get" action="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni) }}">
+        <form method="get" action="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}">
             
             <label for="nombre_documento">Nombre del Documento:</label>
             <input type="text" class="form-control" name="nombre_documento" value="{{ request.args.get('nombre_documento', '') }}">
@@ -34,7 +32,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th>
-                        <a href="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni, sort_by='nombre_documento', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                        <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni, sort_by='nombre_documento', order='asc' if request.args.get('order') == 'desc' else 'desc', 
                             nombre_documento=request.args.get('nombre_documento', '')) }}">
                             Nombre
                             {% if request.args.get('sort_by') == 'nombre_documento' %}
@@ -46,7 +44,7 @@
                             Tipo
                     </th>
                     <th>
-                        <a href="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni, sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                        <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni, sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
                             nombre_documento=request.args.get('nombre_documento', '')) }}">
                             Fecha
                             {% if request.args.get('sort_by') == 'created_at' %}
@@ -68,12 +66,12 @@
                         {% set is_file = documento.nombre_documento.split('.')[-1] in file_extensions %}
 
                         {% if is_file %}
-                            <a href="{{ url_for('crud_JyA.show_update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
-                            <a href="{{ url_for('crud_JyA.show_delete_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a> 
-                            <a href="{{ url_for('crud_JyA.download_documento', documento_id=documento.id) }}" class="btn btn-success">Descargar</a>
+                            <a href="{{ url_for('documentos.show_update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
+                            <a href="{{ url_for('documentos.show_delete_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a> 
+                            <a href="{{ url_for('documentos.download_documento', documento_id=documento.id) }}" class="btn btn-success">Descargar</a>
                         {% else %}
-                            <a href="{{ url_for('crud_JyA.show_update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
-                            <a href="{{ url_for('crud_JyA.show_delete_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a>
+                            <a href="{{ url_for('enlaces.show_update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
+                            <a href="{{ url_for('enlaces.show_delete_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a>
                             <a href="{{ documento.nombre_documento }}" class="btn btn-primary">Ver Enlace</a>
                         {% endif %}
                     </td>
@@ -87,7 +85,7 @@
             <ul class="pagination">
                 {% if pagination.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni, page=pagination.prev_num, 
+                    <a class="page-link" href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni, page=pagination.prev_num, 
                         nombre_documento=request.args.get('nombre_documento', ''), 
                         tipo_documento=request.args.get('tipo_documento', ''), 
                         sort_by=request.args.get('sort_by', ''), 
@@ -100,7 +98,7 @@
                 <li class="page-item disabled"><span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span></li>
                 {% if pagination.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('crud_JyA.index_documents_jya', jya_dni=jya.dni, page=pagination.next_num, 
+                    <a class="page-link" href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni, page=pagination.next_num, 
                         nombre_documento=request.args.get('nombre_documento', ''), 
                         tipo_documento=request.args.get('tipo_documento', ''), 
                         sort_by=request.args.get('sort_by', ''), 
@@ -114,10 +112,10 @@
         </nav>
 
         <div style="margin-top: 20px;">
-            <a href="{{ url_for('crud_JyA.show_upload_document', jya_dni=jya.dni) }}" class="btn btn-secondary">Subir documento</a>
+            <a href="{{ url_for('documentos.show_upload_document', jya_dni=jya.dni) }}" class="btn btn-secondary">Subir documento</a>
         </div>
         <div style="margin-top: 20px;">
-            <a href="{{ url_for('crud_JyA.show_upload_link', jya_dni=jya.dni) }}" class="btn btn-secondary">Subir enlace</a>
+            <a href="{{ url_for('enlaces.show_upload_link', jya_dni=jya.dni) }}" class="btn btn-secondary">Subir enlace</a>
         <div>
         <div style="margin-top: 20px;">
             <a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>

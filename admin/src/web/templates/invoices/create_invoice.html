@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 <head>
     {% block imports %}
+        {{super()}}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_create.css') }}">
     {% endblock %}
 </head>
@@ -31,15 +32,15 @@
                 <label class="label" for="j&a">J&A</label>
                 <select class="select" name="j&a" required>
                     <option value="" disabled="" selected="">Seleccione un J&A</option>
-                    {% for ja in jinetes_amazonas.keys() %}
-                        <option value={{ja}}>{{jinetes_amazonas[ja]}}</option>
+                    {% for ja in jinetes_amazonas%}
+                        <option value="{{ja.nombre}} {{ja.apellido}}">{{ja.nombre}} {{ja.apellido}}</option>
                     {% endfor %}
                 </select>
                 <label class="label" for="recipient">Beneficiario</label>
                 <select class="select" name="recipient" required>
                     <option value="" disabled="" selected="">Seleccione un beneficiario</option>
-                    {%for emp in employees.keys() %}
-                        <option value={{emp}}>{{employees[emp]}}</option>
+                    {%for emp in employees %}
+                        <option value="{{emp.nombre}} {{emp.apellido}}">{{emp.nombre}} {{emp.apellido}}</option>
                     {% endfor %}
                 </select>
                 <label class="label" for="observations">Observaciones</label>

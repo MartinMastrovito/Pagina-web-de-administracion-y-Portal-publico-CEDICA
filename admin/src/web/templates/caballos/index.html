@@ -3,27 +3,68 @@
 {% block title %}Listado de Caballos{% endblock %}
 
 {% block imports %}
-    {{ super() }}  <!-- Incluye las importaciones de layout.html -->
+    {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/index.css') }}">
 {% endblock %}
 
 {% block content %}
-
 <body>
     <header>
         <h1>Listado de Caballos</h1>
     </header>
+
+    <!-- Formulario de búsqueda por nombre -->
     <form action="{{ url_for('caballos.menu_caballos') }}" method="GET">
-        <input type="text" name="nombre" placeholder="Buscar por nombre..." value="{{ request.args.get('nombre') }}">
-        <button type="submit">Buscar</button>
+        <input type="text" name="nombre" placeholder="Buscar por nombre..." value="{{ request.args.get('nombre') or '' }}">
+        <button type="submit-b">Buscar</button>
     </form>
-    <a href="{{ url_for('caballos.crear_caballo') }}">Agregar Nuevo Caballo</a>
+
+    <!-- Formulario de búsqueda por tipo de J&A -->
+    <form action="{{ url_for('caballos.menu_caballos') }}" method="GET">
+        <label for="tipo_ja_asignado">Buscar por Tipo de J&A Asignado:</label>
+        <select name="tipo_ja_asignado">
+            <option value="">-- Todos los tipos --</option>
+            <option value="Hipoterapia" {% if request.args.get('tipo_ja_asignado') == 'Hipoterapia' %}selected{% endif %}>Hipoterapia</option>
+            <option value="Monta Terapéutica" {% if request.args.get('tipo_ja_asignado') == 'Monta Terapéutica' %}selected{% endif %}>Monta Terapéutica</option>
+            <option value="Deporte Ecuestre Adaptado" {% if request.args.get('tipo_ja_asignado') == 'Deporte Ecuestre Adaptado' %}selected{% endif %}>Deporte Ecuestre Adaptado</option>
+            <option value="Actividades Recreativas" {% if request.args.get('tipo_ja_asignado') == 'Actividades Recreativas' %}selected{% endif %}>Actividades Recreativas</option>
+            <option value="Equitación" {% if request.args.get('tipo_ja_asignado') == 'Equitación' %}selected{% endif %}>Equitación</option>
+        </select>
+        <button type="submit-b">Buscar</button>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+
+    <a href="{{ url_for('caballos.crear_caballo') }}" class="btn btn-edit">Agregar Nuevo Caballo</a>
+
     <table>
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Fecha Nacimiento</th>
-                <th>Acciones</th>
+                <th>
+                    <a href="{{ url_for('caballos.menu_caballos', orden='nombre', direction='asc' if orden != 'nombre' or direction == 'desc' else 'desc', nombre=request.args.get('nombre')) }}">
+                        Nombre {% if orden == 'nombre' %}{{ '▲' if direction == 'asc' else '▼' }}{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ url_for('caballos.menu_caballos', orden='fecha_nacimiento', direction='asc' if orden != 'fecha_nacimiento' or direction == 'desc' else 'desc', nombre=request.args.get('nombre')) }}">
+                        Fecha Nacimiento {% if orden == 'fecha_nacimiento' %}{{ '▲' if direction == 'asc' else '▼' }}{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ url_for('caballos.menu_caballos', orden='fecha_ingreso', direction='asc' if orden != 'fecha_ingreso' or direction == 'desc' else 'desc', nombre=request.args.get('nombre')) }}">
+                        Fecha Ingreso {% if orden == 'fecha_ingreso' %}{{ '▲' if direction == 'asc' else '▼' }}{% endif %}
+                    </a>
+                </th>
+                <th>Tipo J&A Asignado</th>
+                <th>Opciones</th>
             </tr>
         </thead>
         <tbody>
@@ -31,9 +72,11 @@
             <tr>
                 <td>{{ caballo.nombre }}</td>
                 <td>{{ caballo.fecha_nacimiento }}</td>
+                <td>{{ caballo.fecha_ingreso }}</td>
+                <td>{{ caballo.tipo_ja_asignado }}</td>
                 <td>
-                    <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}">Ver</a>
-                    <a href="{{ url_for('caballos.editar_caballo', id=caballo.id) }}">Editar</a>
+                    <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn">Ver</a>
+                    <a href="{{ url_for('caballos.editar_caballo', id=caballo.id) }}" class="btn btn-edit">Editar</a>
                     <form action="{{ url_for('caballos.eliminar_caballo', id=caballo.id) }}" method="POST" style="display:inline;">
                         <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este caballo?')">Eliminar</button>
                     </form>

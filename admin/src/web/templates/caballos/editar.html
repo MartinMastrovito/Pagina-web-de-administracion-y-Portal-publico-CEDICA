@@ -11,19 +11,22 @@
 
     <form action="{{ url_for('caballos.editar_caballo', id=caballo.id) }}" method="POST" enctype="multipart/form-data">
         <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" value="{{ caballo.nombre }}" required>
+        <input type="text" name="nombre" value="{{ caballo.nombre }}" required minlength="3" maxlength="50">
 
         <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
         <input type="date" name="fecha_nacimiento" value="{{ caballo.fecha_nacimiento }}" required>
 
         <label for="sexo">Sexo:</label>
-        <input type="text" name="sexo" value="{{ caballo.sexo }}" required>
+        <select name="sexo" required>
+            <option value="Macho" {% if caballo.sexo == "Macho" %} selected {% endif %}>Macho</option>
+            <option value="Hembra" {% if caballo.sexo == "Hembra" %} selected {% endif %}>Hembra</option>
+        </select>
 
         <label for="raza">Raza:</label>
-        <input type="text" name="raza" value="{{ caballo.raza }}">
+        <input type="text" name="raza" value="{{ caballo.raza }}" maxlength="50">
 
         <label for="pelaje">Pelaje:</label>
-        <input type="text" name="pelaje" value="{{ caballo.pelaje }}">
+        <input type="text" name="pelaje" value="{{ caballo.pelaje }}" maxlength="50">
 
         <label for="tipo_ingreso">Tipo de Ingreso:</label>
         <select name="tipo_ingreso" required>
@@ -46,22 +49,20 @@
             {% endfor %}
         </select>
 
-        <label for="JYA">Tipos de J&A:</label>
-        <select name="JYA" multiple>
-            {% for tipo_ja in JYA %}
-            <option value="{{ tipo_ja.id }}" {% if tipo_ja in caballo.JYA %} selected {% endif %}>
-                {{ tipo_ja.nombre }}
-            </option>
-            {% endfor %}
+        <label for="JYA">Tipo de J&A Asignados:</label>
+        <select name="tipo_ja_asignado" multiple>
+            <option value="Hipoterapia" {% if 'Hipoterapia' in caballo.tipo_ja_asignado %} selected {% endif %}>Hipoterapia</option>
+            <option value="Monta Terapéutica" {% if 'Monta Terapéutica' in caballo.tipo_ja_asignado %} selected {% endif %}>Monta Terapéutica</option>
+            <option value="Deporte Ecuestre Adaptado" {% if 'Deporte Ecuestre Adaptado' in caballo.tipo_ja_asignado %} selected {% endif %}>Deporte Ecuestre Adaptado</option>
+            <option value="Actividades Recreativas" {% if 'Actividades Recreativas' in caballo.tipo_ja_asignado %} selected {% endif %}>Actividades Recreativas</option>
+            <option value="Equitación" {% if 'Equitación' in caballo.tipo_ja_asignado %} selected {% endif %}>Equitación</option>
         </select>
 
-        <!-- Nuevo campo para subir documentos -->
-        <label for="documentos">Adjuntar Documentos:</label>
-        <input type="file" name="documentos" multiple>
+        
 
         <button type="submit">Guardar Cambios</button>
     </form>
 
-    <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}">Cancelar</a>
+    <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn btn-cancel">Cancelar</a>
 </body>
 </html>

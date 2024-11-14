@@ -1,21 +1,56 @@
 {% extends "layout.html" %}
+{% block imports %}
+    {{super()}}
+    <style>
+        main{
+            display:flex;
+            flex-direction: column;
+            flex-wrap:nowrap;
+            gap:30px
+        }
+    </style>
+{% endblock %}
 <body>
     {% block content %}
-        {% for ja in jinetes_amazonas.keys() %}
-            <div class="box has-background">
-                <p>nombre: {{jinetes_amazonas[ja]}}</p>
-                {%if statuses[ja] == True %}
-                    <p>Estado de deuda: Deudor</p>
+        <h1 class="fw-bold">Estado de deuda de los J&A</h1>
+        <main>
+            <form class="form search" method="POST" id="search-form" action="{{ url_for('invoices.order_statuses_list',page=page) }}">
+                <input type="search" placeholder="Nombre" name="first_name">
+                <input type="search" placeholder="Apellido" name="last_name">
+               <button type="submit" form="search-form" class="btn" style="background-color:#78b9bf">BUSCAR</button>
+            </form>
+            {% for ja in jinetes_amazonas %}
+                <div class="card">
+                    <p class="fw-bold">nombre: {{ja.nombre}} {{ja.apellido}}</p>
+                    {%if ja.debts == True %}
+                        <p class="fw-bold">Estado de deuda: Deudor</p>
+                    {% else %}
+                        <p class="fw-bold">Estado de deuda: No deudor</p>
+                    {% endif %}
+                    {%if check_permission(session.get("user_id"),"invoice_update") %}
+                        <form action="{{url_for('invoices.invoice_statuses', page = page)}}"id="status_update" class="form_style" method="POST">
+                            <input type="hidden" value={{ja.id}} name="id">
+                            <button class="btn" name="update" style="background-color:#f5be6b">Cambiar estado deuda</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </main>
+        <div class="page-items">
+            <p>{{jinetes_amazonas.first}} - {{jinetes_amazonas.last}} of {{jinetes_amazonas.total}} </p>
+        </div>
+        <div class="pagination">
+            {% for page in jinetes_amazonas.iter_pages() %}
+                {% if page %}
+                    {% if page != jinetes_amazonas.page %}
+                        <a class="btn" href="{{ url_for('invoices.invoice_statuses',page=page) }}">{{page}}</a>
+                    {% else %}
+                        <strong>{{page}}</strong>
+                    {% endif %}
                 {% else %}
-                    <p>Estado de deuda: No deudor</p>
+                    <span class="ellipsis">...</span>
                 {% endif %}
-                {%if check_permission(session,"invoice_update") %}
-                    <form action="{{ url_for('invoices.update_status') }}" id="status_update" class="form_style" method="POST">
-                        <input type="hidden" value={{ja}} name="id">
-                        <button class="button" name="update" style="background-color:#f5be6b">Cambiar estado deuda</button>
-                    </form>
-                {% endif %}
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     {% endblock %}
 </body>

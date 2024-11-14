@@ -11,19 +11,22 @@
 
     <form action="{{ url_for('caballos.crear_caballo') }}" method="POST">
         <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" required>
+        <input type="text" name="nombre" required minlength="3" maxlength="50>
 
         <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
         <input type="date" name="fecha_nacimiento" required>
 
         <label for="sexo">Sexo:</label>
-        <input type="text" name="sexo" required>
+        <select name="sexo" required>
+            <option value="Macho">Macho</option>
+            <option value="Hembra">Hembra</option>
+        </select>
 
         <label for="raza">Raza:</label>
-        <input type="text" name="raza">
+        <input type="text" name="raza" maxlength="50>
 
         <label for="pelaje">Pelaje:</label>
-        <input type="text" name="pelaje">
+        <input type="text" name="pelaje" maxlength="50>
 
         <label for="tipo_ingreso">Tipo de Ingreso:</label>
         <select name="tipo_ingreso" required>
@@ -44,10 +47,10 @@
             {% endfor %}
         </select>
 
-        <label for="JYA">Tipos de J&A:</label>
-        <select name="JYA" multiple>
-            {% for tipo_ja in JYA %}
-            <option value="{{ tipo_ja.id }}">{{ tipo_ja.nombre }}</option>
+        <label for="tipo_ja_asignado">Tipo de J&A Asignados:</label>
+        <select name="tipo_ja_asignado" id="tipo_ja_asignado" multiple>
+            {% for opcion in opciones_ja %}
+               <option value="{{ opcion }}">{{ opcion }}</option>
             {% endfor %}
         </select>
 

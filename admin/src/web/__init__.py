@@ -1,15 +1,18 @@
 from flask import Flask
 from flask_migrate import Migrate  # Importar Migrate
+from flask_cors import CORS
 from src.web import routes
 from src.web import helpers
 from src.web.storage import storage
 from src.core.bcrypt import bcrypt
 from src.core.database import db_reset, init_app
+from src.core.seeds import db_seeds
 from src.core.database import db # Importar 'db' desde 'core.database'
 from src.web.config import config
 from src.web.handlers.error import not_found_error
 from src.web.handlers.error import internal_server_error
-from src.web.handlers.auth import check_permission
+from src.web.handlers.auth import check_permission, check_authenticated
+
 
 # Inicializa Migrate aquí para poder usarlo en create_app
 migrate = Migrate()  
@@ -23,8 +26,9 @@ def create_app(env="development", static_folder=''):
     # Cargar la configuración del entorno
     app.config.from_object(config[env])
 
+    #Habilitar CORS
+    CORS(app)
     
-
     # Inicializar la base de datos y migraciones
     init_app(app)  # Inicializa SQLAlchemy con la app
     migrate.init_app(app, db)  # Inicializa Migrate con la app y db
@@ -45,10 +49,16 @@ def create_app(env="development", static_folder=''):
     # Register functions on jinja
     app.jinja_env.globals.update(check_permission=check_permission)
     app.jinja_env.globals.update(document_url=helpers.document_url)
+    app.jinja_env.globals.update(check_authenticated=check_authenticated)
     
     @app.cli.command(name="reset-db")
     def reset_db():
         """Comando para resetear la base de datos."""
         db_reset()
+
+    @app.cli.command(name="seeds-db")
+    def seeds_db():
+        """Comando para agregar datos la base de datos."""
+        db_seeds()
 
     return app

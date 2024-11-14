@@ -15,7 +15,7 @@
     </header>
 
     <section>
-        <form action="{{ url_for('crud_JyA.upload_document', jya_dni=jya.dni) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url_for('documentos.upload_document', jya_dni=jya.dni) }}" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="tipo">Tipo de documento:</label>
                 <select class="form-control" id="tipo" name="tipo" required>
@@ -33,7 +33,7 @@
                 <input type="file" name="documento" id="documento" class="form-control-file" required>
             </div>
             <button type="submit" class="btn btn-primary">Subir Documento</button>
-            <a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
+            <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
         </form>
     </section>
     
