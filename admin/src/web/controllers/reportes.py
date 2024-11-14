@@ -28,7 +28,7 @@ def menu_reportes():
 def menu_graficos():
     return render_template("reportes/menu_graficos.html")
 
-@bp.route("/ranking/ranking_propuestas")
+@bp.route("/ranking_propuestas")
 @login_required
 #@check("show_reporte")
 def ranking_propuestas():
@@ -108,7 +108,7 @@ def grafico_tipo_discapacidad():
 
     return render_template("reportes/grafico_tipo_discapacidad.html", data=data)
 
-@bp.route('/reportes/historico_cobros')
+@bp.route('/historico_cobros')
 @login_required
 #@check("show_reporte")
 def historico_cobros():
@@ -128,3 +128,10 @@ def historico_cobros():
 
     return render_template("reportes/historico_cobros.html", cobros=cobros, total_cobros=total_cobros, 
                            fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, empleados=empleados)
+    
+@bp.route('/deudores')
+@login_required
+#@check("show_reporte")
+def reporte_deudores():
+    deudores = reportes.obtener_deudores()
+    return render_template('reportes/reporte_deudores.html', deudores=deudores)

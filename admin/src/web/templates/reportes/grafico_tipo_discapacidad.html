@@ -8,7 +8,7 @@
     {% if data[0] %}
         <img src="data:image/png;base64,{{ data[1] }}" alt="Gráfico de Tipo de Discapacidad" class="img-fluid">
     {% else %}
-        <h1 class="display-6">No hay personas discapacitadas registradas en nuestro sistema.</h1>
+        <h6 class="display-6 text-danger mt-3">No hay personas discapacitadas registradas en nuestro sistema.</h6>
     {% endif %}
 </div>
 {% endblock %}
