@@ -3,6 +3,7 @@
 {% block title %}Histórico de Cobros{% endblock %}
 
 {% block content %}
+{% if empleados %}
 <form method="get" action="{{ url_for('reportes.historico_cobros') }}">
     <div class="form-group">
         <label for="fecha_inicio">Fecha Inicio:</label>
@@ -60,4 +61,7 @@
         <p>No hay cobros en este rango de fechas.</p>
     {% endif %}
 </div>
+{% else %}
+    <h6 class="display-6 text-danger text-center mt-3">No hay empleados que hayan cobrado.</h6>
+{% endif %}
 {% endblock %}

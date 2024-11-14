@@ -4,11 +4,7 @@
 
 {% block content %}
 <div class="container text-center mt-4">
-    <h2 class="mb-4">Distribución de Tipos de Discapacidad</h2>
-    {% if data[0] %}
-        <img src="data:image/png;base64,{{ data[1] }}" alt="Gráfico de Tipo de Discapacidad" class="img-fluid">
-    {% else %}
-        <h1 class="display-6">No hay personas discapacitadas registradas en nuestro sistema.</h1>
-    {% endif %}
+    <h2 class="mb-4">Distribución de tipos de discapacidad</h2>
+    <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfico de Tipo de Discapacidad" class="img-fluid">
 </div>
 {% endblock %}
