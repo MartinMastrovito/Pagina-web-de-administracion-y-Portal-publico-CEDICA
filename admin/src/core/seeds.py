@@ -227,7 +227,7 @@ def employee_create():
         Empleados(
             nombre = "Carlos",
             apellido = "Test",
-            dni = "43251231",
+            dni = "43251238",
             domicilio = "6 1571",
             email = "carlos@test.com",
             localidad = "La Plata",
@@ -345,7 +345,7 @@ def JYA_create():
         JYA(
             nombre = "carlos",
             apellido = "Serebi",
-            dni = "43251551",
+            dni = "43251556",
             edad = 25,
             fecha_nacimiento = "2022-12-15",
             lugar_nacimiento = {
@@ -367,6 +367,188 @@ def JYA_create():
             profesionales_atendiendo = "Carlos test",
             certificado_discapacidad = False,
         ),
+        JYA(
+    nombre = "Carlos",
+    apellido = "Serebi",
+    dni = "43251551",
+    edad = 25,
+    fecha_nacimiento = "2022-12-15",
+    lugar_nacimiento = {
+        "localidad": "La Plata",
+        "provincia": "Buenos Aires",
+    },
+    domicilio_actual = {
+        "calle": 6,
+        "numero": 330,
+        "localidad": "La Plata",
+        "provincia": "Buenos Aires",
+    },
+    telefono_actual = "2215869112",
+    contacto_emergencia = {
+        "nombre":"Maria",
+        "telefono": "2215969991",
+    },
+    becado = False,
+    profesionales_atendiendo = "Carlos test",
+    certificado_discapacidad = False,
+),
+
+        JYA(
+    nombre = "Lucía",
+    apellido = "González",
+    dni = "39123548",
+    edad = 29,
+    fecha_nacimiento = "1993-08-19",
+    lugar_nacimiento = {
+        "localidad": "Mar del Plata",
+        "provincia": "Buenos Aires",
+    },
+    domicilio_actual = {
+        "calle": 38,
+        "numero": 745,
+        "localidad": "Mar del Plata",
+        "provincia": "Buenos Aires",
+    },
+    telefono_actual = "2234567890",
+    contacto_emergencia = {
+        "nombre":"Jorge",
+        "telefono": "2234123456",
+    },
+    becado = True,
+    profesionales_atendiendo = "Lucía test",
+    certificado_discapacidad = True,
+),
+
+        JYA(
+    nombre = "Juan",
+    apellido = "Perez",
+    dni = "40325679",
+    edad = 34,
+    fecha_nacimiento = "1989-03-25",
+    lugar_nacimiento = {
+        "localidad": "Rosario",
+        "provincia": "Santa Fe",
+    },
+    domicilio_actual = {
+        "calle": 12,
+        "numero": 123,
+        "localidad": "Rosario",
+        "provincia": "Santa Fe",
+    },
+    telefono_actual = "3415987654",
+    contacto_emergencia = {
+        "nombre":"Ana",
+        "telefono": "3415123456",
+    },
+    becado = False,
+    profesionales_atendiendo = "Juan test",
+    certificado_discapacidad = False,
+),
+
+        JYA(
+    nombre = "Valentina",
+    apellido = "Lopez",
+    dni = "41234569",
+    edad = 27,
+    fecha_nacimiento = "1996-07-12",
+    lugar_nacimiento = {
+        "localidad": "Córdoba",
+        "provincia": "Córdoba",
+    },
+    domicilio_actual = {
+        "calle": 21,
+        "numero": 458,
+        "localidad": "Córdoba",
+        "provincia": "Córdoba",
+    },
+    telefono_actual = "3514561234",
+    contacto_emergencia = {
+        "nombre":"Diego",
+        "telefono": "3514891234",
+    },
+    becado = True,
+    profesionales_atendiendo = "Valentina test",
+    certificado_discapacidad = False,
+),
+
+        JYA(
+    nombre = "Santiago",
+    apellido = "Martinez",
+    dni = "40321599",
+    edad = 31,
+    fecha_nacimiento = "1992-04-10",
+    lugar_nacimiento = {
+        "localidad": "Mendoza",
+        "provincia": "Mendoza",
+    },
+    domicilio_actual = {
+        "calle": 54,
+        "numero": 798,
+        "localidad": "Mendoza",
+        "provincia": "Mendoza",
+    },
+    telefono_actual = "2614098765",
+    contacto_emergencia = {
+        "nombre":"Laura",
+        "telefono": "2614109876",
+    },
+    becado = False,
+    profesionales_atendiendo = "Santiago test",
+    certificado_discapacidad = False,
+),
+
+        JYA(
+    nombre = "Agustina",
+    apellido = "Ramirez",
+    dni = "41432567",
+    edad = 28,
+    fecha_nacimiento = "1995-01-03",
+    lugar_nacimiento = {
+        "localidad": "San Juan",
+        "provincia": "San Juan",
+    },
+    domicilio_actual = {
+        "calle": 23,
+        "numero": 678,
+        "localidad": "San Juan",
+        "provincia": "San Juan",
+    },
+    telefono_actual = "2645123456",
+    contacto_emergencia = {
+        "nombre":"Roberto",
+        "telefono": "2645125678",
+    },
+    becado = True,
+    profesionales_atendiendo = "Agustina test",
+    certificado_discapacidad = True,
+),
+
+        JYA(
+    nombre = "Rodrigo",
+    apellido = "Sosa",
+    dni = "42345123",
+    edad = 36,
+    fecha_nacimiento = "1987-02-16",
+    lugar_nacimiento = {
+        "localidad": "Salta",
+        "provincia": "Salta",
+    },
+    domicilio_actual = {
+        "calle": 15,
+        "numero": 341,
+        "localidad": "Salta",
+        "provincia": "Salta",
+    },
+    telefono_actual = "3875432190",
+    contacto_emergencia = {
+        "nombre":"Elena",
+        "telefono": "3875321098",
+    },
+    becado = False,
+    profesionales_atendiendo = "Rodrigo test",
+    certificado_discapacidad = False,
+),
+
     ]
     db.session.add_all(jya_list)
     db.session.commit()
