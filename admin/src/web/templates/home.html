@@ -5,16 +5,6 @@ Página de Inicio
 {% endblock %}
 
 {% block content %}
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="alert alert-info" role="alert">
-                {% for category, message in messages %}
-                    <div class="alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-
     <div class="menu_home">
         <a class="card item_home text-center" href="{{ url_for('caballos.menu_caballos') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/caballos.png') }}" alt="caballo icono">

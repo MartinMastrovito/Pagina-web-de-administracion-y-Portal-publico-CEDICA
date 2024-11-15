@@ -1,12 +1,58 @@
 from flask import render_template, request, redirect, session, flash, url_for
-from src.core.database import db
 from flask import Blueprint
 from src.core.auth import utiles
 from src.core.auth.decorators import login_required, check
 from src.core.bcrypt import check_password_hash
 from src.web.validators.jya_validations import validator_email, validator_texto
+from src.web.autenticacion_google import oauth
 
 bp = Blueprint("users", __name__, url_prefix="/usuarios")
+    
+google = oauth.register(
+        name='google',
+        client_id="41501282078-0df5crdiivgj0a5no3ke67rhf718t1rb.apps.googleusercontent.com",
+        client_secret="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",
+        access_token_url='https://accounts.google.com/o/oauth2/token',
+        access_token_params=None,
+        authorize_url='https://accounts.google.com/o/oauth2/auth',
+        authorize_params=None,
+        api_base_url='https://www.googleapis.com/oauth2/v1/',
+        userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',  # This is only needed if using openId to fetch user info
+        client_kwargs={'scope': 'email profile'},
+        server_metadata_url='https://accounts.google.com/.well-known/openid-configuration'
+    )    
+    
+@bp.route('/login_google')
+def login_google():
+    google = oauth.create_client('google')
+    redirect_uri = url_for('users.authorize', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+@bp.route('/authorize')
+def authorize():
+    google = oauth.create_client('google')
+    token = google.authorize_access_token()
+    resp = google.get('userinfo')
+    user_info = resp.json()
+    
+    existing_user = utiles.get_user_by_email(user_info['email'])
+    
+    if not existing_user:
+        utiles.create_google_user(user_info['email'], f"{user_info['given_name']} {user_info['family_name']}")
+        flash('Se ha registrado su solicitud. Espere la aprobacion de un System Admin.', 'success')
+        session['profile'] = user_info
+        session.permanent = True
+    else:
+        session['user_id'] = existing_user.id  # Asocia el usuario con la sesión
+        session['email'] = existing_user.email
+        session['profile'] = user_info  # Guarda los datos del perfil de Google
+        session.permanent = True
+        if existing_user.enabled:
+            flash('Inicio de sesión exitoso.', 'success')
+        else:
+            flash('Aun no ha sido aprobado por un System Admin. Vuelve a intentarlo más tarde.', 'danger')
+    return redirect('/')
 
 @bp.get("/login")
 def show_login_form():
@@ -34,12 +80,15 @@ def login():
     password = request.form['password']
     user = utiles.get_user_by_email(email) 
 
-    if user and check_password_hash(user.password, password): 
-        session['user_id'] = user.id  # Guardamos el ID del usuario en la sesión
+    if user and user.enabled and check_password_hash(user.password, password): 
+        session['user_id'] = user.id
         flash('Inicio de sesión exitoso.', 'success')
-        return redirect(url_for('users.index'))  # Redirige a la lista de usuarios
+        return redirect(url_for('users.show_home'))
     else:
-        flash('Email o contraseña incorrectos.', 'danger')
+        if user and not user.enabled:
+            flash('Esta cuenta se encuentra bloqueada del sistema.', 'danger')
+        else:
+            flash('Email o contraseña incorrectos.', 'danger')
         return redirect(url_for('users.show_login_form'))
 
 @bp.get("/logout")
@@ -164,7 +213,6 @@ def user_update(user_id):
     user_data = {
         'email': request.form['email'],
         'alias': request.form['alias'],
-        'enabled': 'enabled' in request.form,
         'role_id': request.form['role_id']
     }
     
