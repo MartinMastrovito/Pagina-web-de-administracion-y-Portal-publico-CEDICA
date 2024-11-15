@@ -14,6 +14,6 @@
     {% if check_permission(session.get("user_id"),"invoice_new") %}
         <a class="button" href="{{url_for('invoices.invoice_create')}}">CREAR COBRO</a>
     {% endif %}
-    <a class="button" href="{{url_for('invoices.invoice_statuses')}}">Estado deudores</a>
+    <a class="button" href="{{url_for('invoices.invoice_statuses', page = 1)}}">Estado deudores</a>
 </nav>
 {% endblock %}

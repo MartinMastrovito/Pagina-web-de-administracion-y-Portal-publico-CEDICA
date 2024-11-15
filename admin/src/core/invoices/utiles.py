@@ -28,8 +28,6 @@ def validate_create(**datos):
         return False
     if(datos.get("amount")<0):
         return False
-    JYA.query.get_or_404(datos.get("j_a"))
-    #empleados.query.get_or_404(datos.get("recipient"))
     return True 
 
 def get_invoice(id):
@@ -62,25 +60,15 @@ def update_invoice(invoice_id,**kwargs):
     return True
 #Modulo para conseguir el nombre de todos los JYA y su respectivo ID 
 def get_all_ja():
-    ja_query = JYA.query.all()
-    ja_dictionary = {}
-    for ja in ja_query:
-        ja_dictionary[ja.id] = ja.nombre + " " + ja.apellido
-    return ja_dictionary
+    ja_query = JYA.query.order_by(JYA.apellido)
+    return ja_query
 
 
-#Modulo para conseguir el nombre de un J&A por su ID
-def get_ja(ja_id):
-    query = JYA.query.get_or_404(ja_id)
-    return query.nombre + " " + query.apellido
 
 #Modulo para conseguir el nombre de todos los empleados y su respectivo ID 
 def get_all_employees():
-    emp_query = Empleados.query.all()
-    emp_dictionary = {}
-    for emp in emp_query:
-        emp_dictionary[emp.id] = emp.nombre + " " + emp.apellido
-    return emp_dictionary
+    emp_query = Empleados.query.order_by(Empleados.apellido)
+    return emp_query
 
 #Modulo para conseguir el nombre de un empleado por su ID 
 def get_emp(emp_id):
@@ -130,3 +118,10 @@ def filtrar_cobros(empleado_id, fecha_inicio, fecha_fin):
         Invoices.pay_date >= fecha_inicio,
         Invoices.pay_date <= fecha_fin
     ).all()
+    
+def get_empleados_con_cobros():
+    empleados_cobradores = db.session.query(Empleados).join(
+        Invoices, Empleados.dni == Invoices.recipient
+    ).distinct().all()
+
+    return empleados_cobradores
