@@ -79,3 +79,10 @@ def actualizar_publicacion(id):
     publicacion.actualizar_publicacion(id, **pub_data)
     flash("Publicacion actualizada correctamente", "success")
     return redirect("/publicacion")
+
+@bp.get("/detalles/<int:id>")
+@login_required
+#@check("publicacion_show")
+def show_publicacion(id):
+    pub = publicacion.get_publicacion(id)
+    return render_template("publicaciones/show_publicacion.html", pub=pub)

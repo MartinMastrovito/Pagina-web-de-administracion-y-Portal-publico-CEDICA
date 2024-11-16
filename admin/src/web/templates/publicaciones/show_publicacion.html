@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}Detalles de la publicación{% endblock %}
+
+{% block content %}
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <h4 class="display-4">Detalles de la publicación</h4>
+    <a class="btn btn-secondary" href="{{ url_for('publicacion.index') }}">Volver</a>
+</header>
+<body>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ pub.titulo }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Titulo</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ pub.fecha_creacion }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Fecha de creación</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ pub.fecha_actualizacion }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Fecha de actalización</label>
+    </div>
+    {% if pub.estado == "Publicado" %}
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ pub.fecha_publicacion }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Fecha de actalización</label>
+    </div>
+    {% endif %}
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ pub.estado }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Estado</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ pub.autor.nombre }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Autor</label>
+    </div>
+    <div class="form-floating mb-3">
+        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>{{ pub.copete }}</textarea>
+        <label for="floatingTextarea2Disabled">Copete</label>
+    </div>
+    <div class="form-floating mb-3">
+        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>{{ pub.contenido }}</textarea>
+        <label for="floatingTextarea2Disabled">Contenido</label>
+    </div>
+</body>
+
+{% endblock %}

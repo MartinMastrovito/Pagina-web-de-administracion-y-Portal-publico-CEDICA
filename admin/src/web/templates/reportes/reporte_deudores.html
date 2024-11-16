@@ -3,6 +3,9 @@
 {% block title %}Reporte de Personas con Deudas{% endblock %}
 
 {% block content %}
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <a class="btn btn-secondary" href="{{ url_for('reportes.menu_reportes') }}">Volver</a>
+</header>
 <div class="container text-center mt-4">
     <h2 class="text-center">Personas que Adeudan Pagos</h2>
     {% if deudores %}
