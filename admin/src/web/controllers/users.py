@@ -17,7 +17,7 @@ google = oauth.register(
         authorize_url='https://accounts.google.com/o/oauth2/auth',
         authorize_params=None,
         api_base_url='https://www.googleapis.com/oauth2/v1/',
-        userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',  # This is only needed if using openId to fetch user info
+        userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
         client_kwargs={'scope': 'email profile'},
         server_metadata_url='https://accounts.google.com/.well-known/openid-configuration'
     )    
@@ -39,19 +39,23 @@ def authorize():
     existing_user = utiles.get_user_by_email(user_info['email'])
     
     if not existing_user:
-        utiles.create_google_user(user_info['email'], f"{user_info['given_name']} {user_info['family_name']}")
+        given_name = user_info['given_name'].strip().replace(" ", "")
+        alias = f"{given_name}"
+        utiles.create_google_user(user_info['email'], alias)
         flash('Se ha registrado su solicitud. Espere la aprobacion de un System Admin.', 'success')
         session['profile'] = user_info
         session.permanent = True
     else:
-        session['user_id'] = existing_user.id  # Asocia el usuario con la sesión
+        session['user_id'] = existing_user.id
         session['email'] = existing_user.email
-        session['profile'] = user_info  # Guarda los datos del perfil de Google
+        session['profile'] = user_info
         session.permanent = True
         if existing_user.enabled:
             flash('Inicio de sesión exitoso.', 'success')
+        elif not existing_user.role_id:
+            flash("Aun no ha sido aprobado por un System Admin. Vuelve a intentarlo más tarde.", "danger")
         else:
-            flash('Aun no ha sido aprobado por un System Admin. Vuelve a intentarlo más tarde.', 'danger')
+            flash('Esta cuenta se encuentra bloqueada del sistema.', 'danger')
     return redirect('/')
 
 @bp.get("/login")
@@ -119,6 +123,11 @@ def index():
     page = request.args.get('page', 1, type=int)
     per_page = 25
 
+    unaccepted_users = utiles.unaccepted_users()
+
+    if unaccepted_users > 0:
+        flash(f"Hay {unaccepted_users} usuario(s) pendiente(s) de aceptación.", "info")
+
     users_pagination = utiles.search_users(
         email=email,
         enabled=enabled,
@@ -132,9 +141,38 @@ def index():
     return render_template(
         "users/list_users.html",
         users=users_pagination.items,
-        pagination=users_pagination
+        pagination=users_pagination,
+        unaccepted_users=unaccepted_users,
     )
 
+
+@bp.get("/unaccepted")
+@login_required
+@check("user_index")
+def index_unaccepted():
+    """
+    Muestra la lista de usuarios no aceptados con paginación y filtrado.
+
+    Returns:
+        Renderiza la plantilla con la lista de usuarios no aceptados.
+    """
+    email = request.args.get('email')
+    order = request.args.get('order', 'asc')
+    page = request.args.get('page', 1, type=int)
+    per_page = 25
+
+    users_pagination = utiles.search_unaccepted_users(
+        email=email,
+        order=order,
+        page=page,
+        per_page=per_page
+    )
+
+    return render_template(
+        "users/list_unaccepted_users.html",
+        users=users_pagination.items,
+        pagination=users_pagination
+    )
 
 @bp.get("/crear_usuario")
 @login_required
@@ -178,6 +216,31 @@ def create_user():
         flash('El email ingresado ya está siendo usado, por favor ingrese uno distinto', 'danger')
         return redirect("/usuarios/crear_usuario")
 
+@bp.get("/accept/<int:user_id>")
+@login_required
+@check("user_update")
+def show_user_accept(user_id):
+    """
+    Muestra el formulario para aceptar a un usuario.
+
+    Args:
+        user_id (int): ID del usuario a aceptar.
+
+    Returns:
+        Renderiza la plantilla de la aceptacion de usuario.
+    """
+    user = utiles.get_user(user_id)
+    return render_template("users/accept_user.html", user=user)
+
+@bp.post("/accept/<int:user_id>")
+@login_required
+@check("user_update")
+def user_accept(user_id):
+    role_id = request.form['role_id']
+    utiles.accept_user(user_id, role_id)
+    flash('Usuario aceptado exitosamente', 'success')
+    return redirect("/usuarios/unaccepted")
+    
 @bp.get("/actualizar/<int:user_id>")
 @login_required
 @check("user_update")
@@ -245,7 +308,7 @@ def user_delete(user_id):
         Response: Redirige al índice de usuarios.
     """
     if utiles.delete_user(user_id):
-        flash("Usuario eliminado exitosamente.")
+        flash("Usuario eliminado del sistema exitosamente.")
     else:
         flash("No se puede eliminar a un System Admin.")
     return redirect('/usuarios')
