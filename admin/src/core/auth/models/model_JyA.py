@@ -67,7 +67,6 @@ class JYA(db.Model):
     # Relación con empleados (a través de la tabla intermedia JYAEmpleado)
     empleados = db.relationship('JYAEmpleado', back_populates='jya', cascade="all, delete-orphan")
     
-    caballos = db.relationship('Caballo', secondary='caballo_tipoja', back_populates='JYA')
     documentos = db.relationship('Documento', backref='jya', lazy=True)
 
     def __repr__(self):

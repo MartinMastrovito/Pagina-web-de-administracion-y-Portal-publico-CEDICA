@@ -47,10 +47,10 @@
             {% endfor %}
         </select>
 
-        <label for="JYA">Tipos de J&A:</label>
-        <select name="JYA" multiple>
-            {% for tipo_ja in JYA %}
-            <option value="{{ tipo_ja.id }}">{{ tipo_ja.nombre }}</option>
+        <label for="tipo_ja_asignado">Tipo de J&A Asignados:</label>
+        <select name="tipo_ja_asignado" id="tipo_ja_asignado" multiple>
+            {% for opcion in opciones_ja %}
+               <option value="{{ opcion }}">{{ opcion }}</option>
             {% endfor %}
         </select>
 

@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block imports %}
+    {{ super() }}  
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/show.css') }}">
+{% endblock %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>{% block title %}Subir Documentos del Caballo{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <header>
+        <h1>Subir Documentos para {{ caballo.nombre }}</h1>
+    </header>
+
+    <section>
+        <form action="{{ url_for('caballos_documentos.upload_document', caballo_id=caballo.id) }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="tipo">Tipo de documento:</label>
+                <select class="form-control" id="tipo" name="tipo" required>
+                    <option value="" disabled selected>Seleccione una opción</option> <!-- Opción por defecto -->
+                    <option value="Ficha general del caballo">Ficha general del caballo</option>
+                    <option value="Planificación de Entrenamiento">Planificación de Entrenamiento</option>
+                    <option value="Informe de Evolución">Informe de Evolución</option>
+                    <option value="Carga de Imágenes">Carga de Imágenes</option>
+                    <option value="cronicas">Crónicas</option>
+                    <option value="Registro veterinario">Registro veterinario</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="documento">Selecciona el documento a subir:</label>
+                <input type="file" name="documento" id="documento" class="form-control-file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Subir Documento</button>
+            <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn">Volver</a>
+        </form>
+    </section>
+    
+
+    {% endblock %}
+
+    <footer>
+        <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
+    </footer>
+
+</body>
+</html>

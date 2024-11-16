@@ -98,6 +98,18 @@ def create_user(**kwargs):
 
     return user
 
+def create_google_user(email, alias):
+    """
+    Crea un nuevo usuario en la base de datos mediante las credenciales de google.
+
+    Args:
+        **kwargs: Argumentos que representan los datos del nuevo usuario.
+    """
+
+    user = User(email=email, alias=alias, enabled=False)
+    db.session.add(user)
+    db.session.commit()
+
 def get_user(user_id):
     """
     Obtiene un usuario de la base de datos por su ID.
@@ -127,8 +139,6 @@ def update_user(user_id, **kwargs):
     if (validation) and (not (user.email == kwargs["email"])):
         return "Este email está siendo utilizado, pruebe ingresar uno diferente."
     
-    # Actualizar los atributos del usuario con los valores proporcionados en kwargs
-    kwargs["enabled"] = True
     for key, value in kwargs.items():
         setattr(user, key, value)
     
@@ -161,7 +171,7 @@ def get_user_by_email(email):
     Returns:
         User or None: Instancia del usuario si se encuentra, None si no.
     """
-    return User.query.filter_by(email=email).first()  # Usa el modelo para buscar el usuario
+    return User.query.filter_by(email=email).first()
 
 def login_user(email, password):
     """

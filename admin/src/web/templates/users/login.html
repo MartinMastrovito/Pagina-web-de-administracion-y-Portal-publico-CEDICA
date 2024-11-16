@@ -39,10 +39,14 @@
 
             <button type="submit" class="btn">Iniciar Sesión</button>
         </form>
+        <br>
+        <div class="text-center mb-4">
+            <a href="{{ url_for('users.login_google') }}"><button class="btn">Iniciar sesión con Google</button></a>
+        </div>
 
         <p>¿No tienes una cuenta? Ponte en contacto con un administrador!</a>.</p>
     </div>
-    <!-- Footer -->
+
     <footer>
         <div class="container">
             <p>&copy; {{ current_year }} Mi Aplicación. Todos los derechos reservados.</p>
