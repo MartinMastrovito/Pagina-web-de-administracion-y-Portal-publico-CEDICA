@@ -24,9 +24,9 @@ class Empleados(db.Model):
 
     jyas_roles = db.relationship('JYAEmpleado', back_populates='empleado')
 
-
+    beneficiary = db.relationship('Pago', secondary = 'beneficiary', back_populates='empleados')
     
-    pagos = db.relationship('Pago', back_populates='empleados', cascade='all, delete-orphan')
+
     def __repr__(self):
         return f'<Empleado {self.nombre},{self.id}>'
 
