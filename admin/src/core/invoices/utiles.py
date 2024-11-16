@@ -118,3 +118,10 @@ def filtrar_cobros(empleado_id, fecha_inicio, fecha_fin):
         Invoices.pay_date >= fecha_inicio,
         Invoices.pay_date <= fecha_fin
     ).all()
+    
+def get_empleados_con_cobros():
+    empleados_cobradores = db.session.query(Empleados).join(
+        Invoices, Empleados.dni == Invoices.recipient
+    ).distinct().all()
+
+    return empleados_cobradores

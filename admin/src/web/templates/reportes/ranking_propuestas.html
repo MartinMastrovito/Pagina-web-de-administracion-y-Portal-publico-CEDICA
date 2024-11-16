@@ -3,8 +3,9 @@
 {% block title %}Ranking de Propuestas de Trabajo{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container text-center mt-4">
     <h2 class="text-center">Ranking de Propuestas de Trabajo Más Solicitadas</h2>
+    {% if ranking %}
     <table class="table table-striped mt-4">
         <thead>
             <tr>
@@ -21,5 +22,8 @@
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+            <h6 class="display-6 text-danger mt-3">No hay trabajos solicitados.</h6>
+    {% endif %}
 </div>
 {% endblock %}

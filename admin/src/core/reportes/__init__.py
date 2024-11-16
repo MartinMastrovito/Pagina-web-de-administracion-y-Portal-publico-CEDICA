@@ -27,3 +27,6 @@ def tipo_discapacidad():
     return db.session.query(JYA.tipo_discapacidad, db.func.count(JYA.id)).\
         filter(JYA.certificado_discapacidad == True).\
         group_by(JYA.tipo_discapacidad).all()
+        
+def obtener_deudores():
+    return JYA.query.filter_by(debts=True).all()
