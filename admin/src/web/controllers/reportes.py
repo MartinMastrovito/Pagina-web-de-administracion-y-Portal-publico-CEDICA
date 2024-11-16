@@ -108,9 +108,27 @@ def grafico_tipo_discapacidad():
     # Filtrar los tipos de discapacidad vacíos para evitar mostrar "Sin datos"
     tipos_discapacidad = [tipo for tipo in tipos_discapacidad if tipo[0] is not None]
 
-    # Si no hay datos después de filtrar, asignamos una lista vacía
+    # Si no hay datos después de filtrar, mostramos un gráfico con el mensaje "No hay datos"
     if not tipos_discapacidad:
-        return render_template("reportes/grafico_tipo_discapacidad.html", plot_url=None)
+        # Crear el gráfico con el mensaje "No hay datos"
+        plt.figure(figsize=(10, 6))
+        plt.bar(["No hay datos"], [1], color=['#D3D3D3'])
+        plt.xlabel('Tipo de Discapacidad')
+        plt.ylabel('Cantidad de Registros')
+        plt.title('Distribución de Tipos de Discapacidad en JYA')
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+        # Ajustar el gráfico para que no se solapen las etiquetas
+        plt.tight_layout()
+
+        # Guardar el gráfico como imagen y convertirlo a base64
+        img = io.BytesIO()
+        plt.savefig(img, format='png', bbox_inches='tight')
+        img.seek(0)
+        plot_url = base64.b64encode(img.getvalue()).decode()
+
+        # Renderizar la plantilla y pasar el gráfico
+        return render_template("reportes/grafico_tipo_discapacidad.html", plot_url=plot_url)
 
     # Separar los datos en etiquetas (tipos de discapacidad) y tamaños (conteos)
     labels = [tipo[0] if tipo[0] else "Sin datos" for tipo in tipos_discapacidad]
@@ -123,6 +141,7 @@ def grafico_tipo_discapacidad():
     # Añadir etiquetas y título
     plt.xlabel('Tipo de Discapacidad')
     plt.ylabel('Cantidad de Registros')
+    plt.title('Distribución de Tipos de Discapacidad en JYA')
     plt.grid(axis='y', linestyle='--', alpha=0.7)
 
     # Ajustar el gráfico para que no se solapen las etiquetas
