@@ -51,6 +51,8 @@ def search_users(email=None, enabled=None, role_id=None, sort_by='email', order=
         Objeto de paginación con los usuarios encontrados.
     """
     query = User.query
+    
+    query = query.filter(User.role_id.isnot(None))
 
     if email:
         query = query.filter(User.email.ilike(f"%{email}%"))
@@ -68,6 +70,34 @@ def search_users(email=None, enabled=None, role_id=None, sort_by='email', order=
         sort_column = User.created_at
     else:
         sort_column = User.email
+
+    if order == 'asc':
+        query = query.order_by(sort_column.asc())
+    else:
+        query = query.order_by(sort_column.desc())
+
+    return query.paginate(page=page, per_page=per_page, error_out=False)
+
+def search_unaccepted_users(email=None, order='asc', page=1, per_page=25):
+    """
+    Busca usuarios no aceptados en la base de datos aplicando varios filtros.
+
+    Args:
+        email: Email del usuario a buscar.
+        order: Orden de la lista ('asc' o 'desc').
+        page: Página de resultados (por defecto es 1).
+        per_page: Número de resultados por página (por defecto es 25).
+
+    Returns:
+        Objeto de paginación con los usuarios encontrados.
+    """
+
+    query = User.query.filter(User.role_id.is_(None))
+
+    if email:
+        query = query.filter(User.email.ilike(f"%{email}%"))
+
+    sort_column = User.email
 
     if order == 'asc':
         query = query.order_by(sort_column.asc())
@@ -147,6 +177,21 @@ def update_user(user_id, **kwargs):
     
     return False
 
+def accept_user(user_id, role_id):
+    """
+    Actualiza los datos de un usuario en la base de datos para aceptarlo.
+
+    Args:
+        user_id: ID del usuario a actualizar.
+        user_data: Argumentos que representa el role_id del usuario.
+    """
+    user = get_user(user_id)
+    
+    user.role_id = role_id
+    user.enabled = True
+    
+    db.session.commit()
+
 def delete_user(user_id):
     """
     Elimina un usuario de la base de datos.
@@ -222,3 +267,6 @@ def unblock_user(user_id):
         db.session.commit()
         return True
     return False
+
+def unaccepted_users():
+    return User.query.filter(User.role_id.is_(None)).count()
