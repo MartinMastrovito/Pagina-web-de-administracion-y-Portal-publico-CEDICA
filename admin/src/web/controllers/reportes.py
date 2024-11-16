@@ -60,7 +60,8 @@ def grafico_becados():
         colors = ['#D3D3D3']
 
     plt.figure(figsize=(7, 7))
-    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
+    # Crear el gráfico de dona con un ancho de dona especificado por 'width'
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors, wedgeprops={'width': 0.3})
     plt.axis('equal')
 
     img = io.BytesIO()
@@ -68,13 +69,7 @@ def grafico_becados():
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
 
-    legend = {}
-    if becados:
-        legend['Becados'] = '#4CAF50'
-    if no_becados:
-        legend['No Becados'] = '#FFC107'
-
-    return render_template("reportes/grafico_becados.html", plot_url=plot_url, legend=legend)
+    return render_template("reportes/grafico_becados.html", plot_url=plot_url)
 
 @bp.route('/graficos/discapacidades_totales')
 @login_required
@@ -82,67 +77,65 @@ def grafico_becados():
 def grafico_discapacidades_totales():
     discapacitados_count, no_discapacitados_count = reportes.contador_discapacidades()
 
-    labels = []
-    sizes = []
-    colors = []
+    labels = ['Discapacitados', 'No Discapacitados']
+    values = [discapacitados_count or 0, no_discapacitados_count or 0]
+    colors = ['#FF5733', '#33FF57']
 
-    if discapacitados_count:
-        labels.append('Discapacitados')
-        sizes.append(discapacitados_count)
-        colors.append('#FF5733')
-
-    if no_discapacitados_count:
-        labels.append('No Discapacitados')
-        sizes.append(no_discapacitados_count)
-        colors.append('#33FF57')
-    
-    if not sizes:
-        labels = ["Sin datos"]
-        sizes = [1]
+    if not any(values):
+        labels = ['Sin datos']
+        values = [1]
         colors = ['#D3D3D3']
 
     plt.figure(figsize=(7, 7))
-    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
-    plt.axis('equal')
+    # Usamos plt.pie() para crear un gráfico de torta
+    plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
+    plt.axis('equal')  # Para asegurarnos que el gráfico se vea circular
 
+    # Guardar gráfico como imagen en base64
     img = io.BytesIO()
-    plt.savefig(img, format='png')
+    plt.savefig(img, format='png', bbox_inches='tight')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
 
-    legend = {}
-    if discapacitados_count:
-        legend['Discapacitados'] = '#FF5733'
-    if no_discapacitados_count:
-        legend['No Discapacitados'] = '#33FF57'
-
-    return render_template("reportes/grafico_discapacidades.html", plot_url=plot_url, legend=legend)
-
+    return render_template("reportes/grafico_discapacidades.html", plot_url=plot_url)
 
 @bp.route('/graficos/tipo_discapacidad')
 @login_required
 #@check("show_reporte")
 def grafico_tipo_discapacidad():
-    tipo_discapacidad_counts = reportes.tipo_discapacidad()
+    tipos_discapacidad = reportes.tipo_discapacidad()
 
-    if tipo_discapacidad_counts:
-        labels = [discapacidad[0] for discapacidad in tipo_discapacidad_counts]
-        sizes = [discapacidad[1] for discapacidad in tipo_discapacidad_counts]
-        colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A6'][:len(labels)]
-    else:
-        labels = ["Sin datos"]
-        sizes = [1]
-        colors = ["#d3d3d3"]
+    # Filtrar los tipos de discapacidad vacíos para evitar mostrar "Sin datos"
+    tipos_discapacidad = [tipo for tipo in tipos_discapacidad if tipo[0] is not None]
 
-    plt.figure(figsize=(7, 7))
-    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
-    plt.axis('equal')
+    # Si no hay datos después de filtrar, asignamos una lista vacía
+    if not tipos_discapacidad:
+        return render_template("reportes/grafico_tipo_discapacidad.html", plot_url=None)
 
+    # Separar los datos en etiquetas (tipos de discapacidad) y tamaños (conteos)
+    labels = [tipo[0] if tipo[0] else "Sin datos" for tipo in tipos_discapacidad]
+    sizes = [tipo[1] for tipo in tipos_discapacidad]
+
+    # Crear el gráfico de barras
+    plt.figure(figsize=(10, 6))
+    plt.bar(labels, sizes, color=['#FF5733', '#33FF57', '#3357FF', '#FF33A6'][:len(labels)])
+
+    # Añadir etiquetas y título
+    plt.xlabel('Tipo de Discapacidad')
+    plt.ylabel('Cantidad de Registros')
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Ajustar el gráfico para que no se solapen las etiquetas
+    plt.xticks(rotation=45, ha="right")
+    plt.tight_layout()
+
+    # Guardar el gráfico como imagen y convertirlo a base64
     img = io.BytesIO()
-    plt.savefig(img, format='png')
+    plt.savefig(img, format='png', bbox_inches='tight')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
 
+    # Renderizar la plantilla y pasar el gráfico
     return render_template("reportes/grafico_tipo_discapacidad.html", plot_url=plot_url)
 
 @bp.route('/historico_cobros')

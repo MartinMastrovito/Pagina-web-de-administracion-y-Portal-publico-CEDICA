@@ -390,7 +390,8 @@ def JYA_create():
     },
     becado = False,
     profesionales_atendiendo = "Carlos test",
-    certificado_discapacidad = False,
+    certificado_discapacidad = True,
+    tipo_discapacidad = "Sensorial",
 ),
 
         JYA(
@@ -417,6 +418,7 @@ def JYA_create():
     becado = True,
     profesionales_atendiendo = "Lucía test",
     certificado_discapacidad = True,
+    tipo_discapacidad = "Mental",
 ),
 
         JYA(
@@ -468,7 +470,8 @@ def JYA_create():
     },
     becado = True,
     profesionales_atendiendo = "Valentina test",
-    certificado_discapacidad = False,
+    certificado_discapacidad = True,
+    tipo_discapacidad = "Motora"
 ),
 
         JYA(
@@ -521,6 +524,7 @@ def JYA_create():
     becado = True,
     profesionales_atendiendo = "Agustina test",
     certificado_discapacidad = True,
+    tipo_discapacidad = "Mental"
 ),
 
         JYA(
