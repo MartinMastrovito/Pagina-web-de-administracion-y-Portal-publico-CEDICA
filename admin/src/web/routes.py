@@ -12,7 +12,7 @@ from src.web.controllers.empleados import empleados_bp
 from src.web.controllers.consultas import consultas_bp
 from src.web.controllers.reportes import bp as reportes_bp
 from src.web.controllers.publicacion import bp as publicacion_bp
-
+from src.web.api.articles import bp as articles_api_bp
 def register(app):
     # Crear un Blueprint para las rutas
     main = Blueprint('main', __name__)
@@ -67,6 +67,7 @@ def register(app):
     
     app.register_blueprint(publicacion_bp)
 
+    app.register_blueprint(articles_api_bp)
 
     #de
     # f pages_list():
