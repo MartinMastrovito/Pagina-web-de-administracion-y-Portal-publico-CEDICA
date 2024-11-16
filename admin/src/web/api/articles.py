@@ -8,4 +8,4 @@ def index():
     """Lo estoy probando con cobros porque no tengo el modelo"""
     publicaciones = publicacion.obtener_publicaciones(1,5)
     data = articles_schema.dump(publicaciones)
-    return {"data":data},200
+    return data,200
