@@ -1,4 +1,5 @@
 <script setup>
+    import articleItem from '../components/articleItem.vue'
     import { useArticlesStore } from '../stores/articles';
     import { storeToRefs } from 'pinia';
     import { onMounted } from 'vue';
@@ -21,25 +22,23 @@
         <h2>Lista de articulos</h2>
         <p v-if="loading">Cargando...</p>
         <p v-if="error">{{ error }}</p>
-
-        <table v-if="!loading && articles.length">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Fecha publicacion</th>
-                    <th>Titulo</th>
-                    <th>Copete</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="article in articles" :key="article.id">
-                    <td>{{ article.id }}</td>
-                    <td>{{ article.fecha_publicacion }}</td>
-                    <td>{{ article.titulo }}</td>
-                    <td>{{ article.copete }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div v-if="!loading && articles.length">
+            <div class="listado">
+                <articleItem 
+                    v-for="article in articles" :key="article.id"
+                    :titulo="article.titulo"
+                    :año="article.fecha_publicacion" 
+                    :copete="article.copete"
+                />
+            </div>
+        </div>
         <p v-if="!loading && !articles.length">No hay articulos para mostrar</p>
     </div>
 </template>
+<style>
+    .listado{
+        display:flex;
+        flex-direction: column;
+        gap:20px;
+    }
+</style>
