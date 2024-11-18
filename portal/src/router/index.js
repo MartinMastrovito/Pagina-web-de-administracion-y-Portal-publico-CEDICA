@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import apiTest from '../views/apiTest.vue'
+import articleShow from '../views/articleShow.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,11 @@ const router = createRouter({
       name:'api-test',
       component: apiTest,
     },
+    {
+      path:'/noticia/:id',
+      name:'Noticia',
+      component: articleShow,
+    }
   ],
 })
 

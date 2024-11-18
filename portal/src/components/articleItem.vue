@@ -1,8 +1,11 @@
 <script setup>
 defineProps({
+    id:Number,
     año:String,
     titulo:String,
-    copete:String
+    copete:String,
+    contenido:String
+
 })
 </script>
 <template>
@@ -14,9 +17,14 @@ defineProps({
         <div class="copete">
             <p>copete: {{ copete }}</p>
         </div>
+        <div class="btn">
+            <RouterLink :to="`/noticia/${id}`">
+            Ver mas
+            </RouterLink>
+        </div>
     </div>
 </template>
-<style>
+<style scoped>
 
     .item{
         background-color: antiquewhite;

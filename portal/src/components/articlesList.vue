@@ -25,17 +25,20 @@
         <div v-if="!loading && articles.length">
             <div class="listado">
                 <articleItem 
-                    v-for="article in articles" :key="article.id"
+                    v-for="article in articles" 
+                    :id="article.id"
                     :titulo="article.titulo"
                     :año="article.fecha_publicacion" 
                     :copete="article.copete"
+                    :contenido="article.contenido"
                 />
             </div>
         </div>
         <p v-if="!loading && !articles.length">No hay articulos para mostrar</p>
     </div>
 </template>
-<style>
+
+<style scoped >
     .listado{
         display:flex;
         flex-direction: column;
