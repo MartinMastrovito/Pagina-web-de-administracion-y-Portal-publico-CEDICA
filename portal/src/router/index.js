@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import Noticias from '../views/Noticias.vue';
 import Contacto from '../views/Contacto.vue';
+import articleShow from '../views/articleShow.vue';
 
 const routes = [
   {
@@ -13,6 +14,11 @@ const routes = [
     path: '/noticias',
     name: 'Noticias',
     component: Noticias
+  },
+  {
+    path: '/noticia/:id',
+    name:'Noticia',
+    component: articleShow,
   },
   {
     path: '/contacto',
