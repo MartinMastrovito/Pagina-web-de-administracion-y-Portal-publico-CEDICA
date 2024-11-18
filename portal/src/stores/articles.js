@@ -8,11 +8,12 @@ export const useArticlesStore = defineStore('articlesStore', {
         error: null,
     }),
     actions: {
-        async fetchArticles(){
+        async fetchArticles( filters = {}){
             try {
                 this.loading = true
                 this.error = null
-                const response = await axios.get('http://localhost:5000/api/articles')
+                const queryParams = new URLSearchParams(filters).toString();
+                const response = await axios.get(`http://localhost:5000/api/articles?${queryParams}`)
                 this.articles = response.data
             } 
             catch{
