@@ -17,8 +17,8 @@ defineProps({
         <div class="copete">
             <p>copete: {{ copete }}</p>
         </div>
-        <div class="btn">
-            <RouterLink :to="`/noticia/${id}`">
+        <div>
+            <RouterLink class="btn" :to="`/noticia/${id}`">
             Ver mas
             </RouterLink>
         </div>

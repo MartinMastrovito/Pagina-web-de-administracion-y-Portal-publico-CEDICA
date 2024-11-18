@@ -22,9 +22,14 @@
 </script>
 
 <template>
-    <h1>ID: {{route.params.id}}</h1>
     <h1>{{articles.titulo}}</h1>
     <h2>{{articles.copete}}</h2>
     <span>{{articles.año}}</span>
     <p>{{articles.contenido}}</p>
 </template>
+
+<style scoped>
+    template{
+        text-align: start;
+    }
+</style>

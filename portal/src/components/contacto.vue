@@ -117,7 +117,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .contacto {
   max-width: 600px;
   margin: 0 auto;
