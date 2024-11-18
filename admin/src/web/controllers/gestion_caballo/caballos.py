@@ -34,7 +34,7 @@ def mostrar_caballo(id):
 
 @caballos_bp.route('/nuevo', methods=['GET', 'POST'])
 @login_required
-@check("horse_create")
+@check("horse_new")
 def crear_caballo():
     opciones_ja = ["Hipoterapia", "Monta_Terapéutica", "Deporte_Ecuestre_Adaptado", "Actividades_Recreativas", "Equitación"]
     
