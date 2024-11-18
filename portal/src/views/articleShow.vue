@@ -1,16 +1,15 @@
 <script setup>
     import { useArticlesStore } from '../stores/articles';
     import { storeToRefs } from 'pinia';
-    import { onMounted } from 'vue';
-    
-    const filter = {
-        id: this.$route.params.id
-    }
+    import { onMounted, onBeforeMount} from 'vue';
 
     const store = useArticlesStore();
     const { articles, loading, error} = storeToRefs(store);
 
     const fetchArticles = async() => {
+        const filter = {
+            id:params.id,
+        }
         await store.fetchArticles(filter);
     };
     onMounted(() => {
