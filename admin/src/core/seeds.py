@@ -9,20 +9,23 @@ from src.core.auth import utiles
 
 
 def role_create():
-    """
-    Carga los roles en la base de datos
-    """
-
-    # Roles del sistema
-    list_role = [
-        Role(name="tecnica"),
-        Role(name="ecuestre"),
-        Role(name="voluntariado"),
-        Role(name="administracion"),
-        Role(name="sysadmin"),
+    roles = [
+        {"name": "tecnica"},
+        {"name": "ecuestre"},
+        {"name": "voluntariado"},
+        {"name": "administracion"},
+        {"name": "sysadmin"}
     ]
 
-    db.session.add_all(list_role)
+    for role_data in roles:
+        existing_role = Role.query.filter_by(name=role_data["name"]).first()
+        if existing_role:
+            print(f"Role with name {role_data['name']} already exists. Skipping.")
+            continue
+
+        role = Role(name=role_data["name"])
+        db.session.add(role)
+
     db.session.commit()
 
 
@@ -391,7 +394,8 @@ def JYA_create():
     },
     becado = False,
     profesionales_atendiendo = "Carlos test",
-    certificado_discapacidad = False,
+    certificado_discapacidad = True,
+    tipo_discapacidad = "Sensorial",
 ),
 
         JYA(
@@ -418,6 +422,7 @@ def JYA_create():
     becado = True,
     profesionales_atendiendo = "Lucía test",
     certificado_discapacidad = True,
+    tipo_discapacidad = "Mental",
 ),
 
         JYA(
@@ -469,7 +474,8 @@ def JYA_create():
     },
     becado = True,
     profesionales_atendiendo = "Valentina test",
-    certificado_discapacidad = False,
+    certificado_discapacidad = True,
+    tipo_discapacidad = "Motora"
 ),
 
         JYA(
@@ -522,6 +528,7 @@ def JYA_create():
     becado = True,
     profesionales_atendiendo = "Agustina test",
     certificado_discapacidad = True,
+    tipo_discapacidad = "Mental"
 ),
 
         JYA(

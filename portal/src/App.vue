@@ -1,83 +1,66 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
+  <div id="app">
+    <header>
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/api_test">Api test</RouterLink>
+        <ul>
+          <li><router-link to="/">Home</router-link></li>
+          <li><router-link to="/noticias">Noticias</router-link></li>
+          <li><router-link to="/contacto">Contacto</router-link></li>
+        </ul>
       </nav>
-    </div>
-  </header>
-  <RouterView />
+    </header>
+    <main>
+      <router-view />
+    </main>
+    <footer>
+      <p>© 2023 Mi Aplicación</p>
+    </footer>
+  </div>
 </template>
 
+<script>
+export default {
+  name: 'App'
+};
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
+/* Estilos específicos para App.vue */
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  margin-top: 2rem;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+header {
+  background-color: #42b983;
+  padding: 20px;
+  color: white;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+nav ul {
+  list-style: none;
+  padding: 0;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+nav ul li {
+  display: inline;
+  margin-right: 10px;
 }
 
-nav a:first-of-type {
-  border: 0;
+main {
+  padding: 20px;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+footer {
+  background-color: #42b983;
+  padding: 10px;
+  color: white;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
 }
 </style>

@@ -55,6 +55,7 @@
                                 Menú
                             </button>
                             <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('publicacion.show_publicacion', id=publicacion.id) }}" class="dropdown-item">Ver más</a><li>
                                 <li><a href="{{ url_for('publicacion.show_actualizar_publicacion', id=publicacion.id) }}" class="dropdown-item">Editar</a><li>
                                 <li><a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ url_for('publicacion.eliminar_publicacion', id=publicacion.id) }}" class="dropdown-item">Eliminar</a><li>
                             </ul>
