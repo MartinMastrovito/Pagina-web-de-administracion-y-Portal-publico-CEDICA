@@ -2,6 +2,7 @@ from src.core.auth.models.model_user import Role, User
 from src.core.auth.models.model_permission import Permission, RolePermission
 from src.core.auth.models.model_empleado import Empleados
 from src.core.auth.models.model_JyA import JYA
+from src.core.auth.models.model_publicacion import Publicacion
 from src.core.database import db
 from src.core import bcrypt
 from src.core.auth import utiles
@@ -560,6 +561,64 @@ def JYA_create():
     db.session.add_all(jya_list)
     db.session.commit()
 
+def articles_create():
+    articles_list = [
+        Publicacion(
+            fecha_publicacion = "2024-10-10",
+            fecha_creacion = "2024-10-09",
+            titulo = "Hola, soy una noticia",
+            copete = "Copetin de noticia",
+            contenido = "Contenido de noticia",
+            autor_id = 1
+        ),
+        Publicacion(
+            fecha_publicacion = "2024-10-11",
+            fecha_creacion = "2024-10-10",
+            titulo = "Nuevo avance en IA",
+            copete = "Investigadores logran un avance significativo en el campo de la inteligencia artificial, mejorando la precisión de los algoritmos.",
+            contenido = "El avance de hoy permite que los sistemas de IA puedan procesar información de manera más eficiente, reduciendo el tiempo de respuesta en un 40%. Se espera que esta mejora impacte positivamente en sectores como la salud, educación y transporte.",
+            autor_id = 2
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-10-12",
+            fecha_creacion = "2024-10-11",
+            titulo = "Receta fácil y rápida",
+            copete = "Te compartimos una receta deliciosa y fácil de preparar en solo 20 minutos.",
+            contenido = "Esta receta de pasta con salsa cremosa de aguacate es perfecta para una cena rápida pero nutritiva. Solo necesitas unos pocos ingredientes como aguacate, pasta y limón. ¡Ideal para los días ajetreados!",
+            autor_id = 3
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-10-13",
+            fecha_creacion = "2024-10-12",
+            titulo = "Cambio climático y salud",
+            copete = "Estudios recientes sugieren que el cambio climático podría tener un impacto directo en la salud humana, exacerbando enfermedades respiratorias.",
+            contenido = "El aumento de las temperaturas globales y la contaminación del aire están provocando un incremento en los casos de enfermedades respiratorias y cardiovasculares. Se recomienda la implementación de políticas más estrictas para mitigar estos efectos.",
+            autor_id = 4
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-10-14",
+            fecha_creacion = "2024-10-13",
+            titulo = "Tecnología en la educación",
+            copete = "La tecnología está transformando la forma en que aprendemos, desde clases virtuales hasta el uso de IA en la educación.",
+            contenido = "Las herramientas digitales están revolucionando el sector educativo, permitiendo una personalización del aprendizaje y facilitando el acceso a materiales de estudio desde cualquier lugar del mundo.",
+            autor_id = 5
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-10-15",
+            fecha_creacion = "2024-10-14",
+            titulo = "Viaje a la Antártida",
+            copete = "Un grupo de científicos ha emprendido un viaje a la Antártida para estudiar los efectos del cambio climático en los glaciares.",
+            contenido = "Este viaje, que durará seis meses, tiene como objetivo obtener datos clave sobre el derretimiento de los glaciares y su impacto en los niveles del mar. Los investigadores esperan lograr avances significativos en la comprensión del cambio climático.",
+            autor_id = 6
+        ),
+    ]
+    db.session.add_all(articles_list)
+    db.session.commit()
+
 def db_seeds():
     role_create()
     permission_create()
@@ -567,6 +626,7 @@ def db_seeds():
     rolePermission_create()
     JYA_create()
     employee_create()
+    articles_create()
 
 """
 Técnica
