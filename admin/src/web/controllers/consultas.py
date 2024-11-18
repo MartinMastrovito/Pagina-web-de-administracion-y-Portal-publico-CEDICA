@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from src.core import crud_consultas as crud_consulta
 from src.core.auth.decorators import login_required, check
 from datetime import datetime
@@ -118,3 +118,6 @@ def eliminar_consulta(id):
     crud_consulta.delete_consulta(id)
     flash('Consulta eliminada exitosamente.', 'success')
     return redirect(url_for('consultas.menu_consultas'))
+
+
+
