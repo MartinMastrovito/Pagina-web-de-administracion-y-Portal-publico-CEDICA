@@ -24,6 +24,7 @@ import { RouterLink, RouterView } from 'vue-router';
 export default {
   name: 'App'
 };
+console.log(import.meta.env.VITE_ARTICLES_API);
 </script>
 
 <style>

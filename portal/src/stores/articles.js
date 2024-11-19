@@ -10,10 +10,11 @@ export const useArticlesStore = defineStore('articlesStore', {
     actions: {
         async fetchArticles( filters = {}){
             try {
+                const urlApi = import.meta.env.VITE_ARTICLES_API
                 this.loading = true
                 this.error = null
                 const queryParams = new URLSearchParams(filters).toString();
-                const response = await axios.get(`http://localhost:5000/api/articles?${queryParams}`)
+                const response = await axios.get(`${urlApi}?${queryParams}`)
                 this.articles = response.data
             } 
             catch{
