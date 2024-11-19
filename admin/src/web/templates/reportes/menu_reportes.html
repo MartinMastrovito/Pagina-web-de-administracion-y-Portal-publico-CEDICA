@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>{% block title %}Panel de Reportes{% endblock %}</title>
+    <style>
+        .menu-container {
+            max-width: 400px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .menu-title {
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    {% block content %}
+    <header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+        <a class="btn btn-secondary" href="{{ url_for('reportes.menu') }}">Volver</a>
+    </header>
+    <div class="menu-container">
+        <h1 class="display-6">Panel de Opciones - Reportes</h1>
+        <div class="d-grid gap-3">
+            <a href="{{ url_for('reportes.ranking_propuestas') }}" class="btn btn-primary btn-lg">Propuestas de trabajos más solicitadas</a>
+            <a href="{{ url_for('reportes.reporte_deudores') }}" class="btn btn-primary btn-lg">Personas que adeudan pagos</a>
+            <a href="{{ url_for('reportes.historico_cobros') }}" class="btn btn-primary btn-lg">Cobros en un rango de fechas asociado a una persona</a>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

@@ -4,149 +4,195 @@ header img#logo {
     height: auto; /* Mantiene la proporción de la imagen */
 }
 
-/* General Styles */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9f9f9;
-    margin: 0;
-    padding: 20px;
+/* Archivo: index.css */
+
+/* Estilo para la cabecera */
+
+
+
+
+header h1 {
+    font-size: 2.5rem;
     color: #333;
+    margin: 0;
 }
 
-h1 {
-    text-align: center;
-    color: #4CAF50;
-    margin-bottom: 20px;
-}
-
-/* Container for centering */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Table Styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-th, td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #4CAF50;
-    color: white;
-    font-size: 16px;
-}
-
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-tr:hover {
-    background-color: #e2e2e2;
-}
-
-/* Form Styles */
+/* Estilo para el formulario de búsqueda */
 form {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin: 20px 0;
 }
 
-form input[type="text"] {
-    padding: 10px;
-    width: 350px;
-    border: 1px solid #ccc;
+input[type="text"] {
+    width: 300px;
+    padding: 8px;
     border-radius: 5px;
-    font-size: 16px;
-    margin-right: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
 }
 
-form button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
+select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+button[type="submit"] {
+    background-color: #fc0000;
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+
+
+
+button[type="submit-b"] {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 15px;
+    margin: 5px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo específico para el botón de editar */
+.btn-edit {
+    background-color: #28a745;
+}
+
+.btn-edit:hover {
+    background-color: #218838;
+}
+
+/* Estilo para los mensajes flash */
+.flashes {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px auto;
+    width: 50%;
+    text-align: center;
+}
+
+.flashes li {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.flashes .success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.flashes .error {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+/* Estilo para la tabla */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #f4f4f9;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #e2e2e2;
+    color: #333;
     cursor: pointer;
 }
 
-form button:hover {
-    background-color: #45a049;
+td {
+    background-color: #fff;
 }
 
-/* Links */
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Estilo para enlaces de acciones */
 a {
-    color: #4CAF50;
+    color: #337ab7;
     text-decoration: none;
-    font-weight: bold;
-    margin-top: 20px;
-    display: inline-block;
 }
 
 a:hover {
     text-decoration: underline;
 }
 
-/* Pagination Styles */
+/* Botones de eliminación */
+form button {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+form button:hover {
+    background-color: #000000;
+}
+
+/* Paginación */
 .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    text-align: center;
+    margin: 20px 0;
 }
 
 .pagination a {
-    padding: 10px 15px;
     margin: 0 5px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
     border-radius: 5px;
+    color: #337ab7;
+    text-decoration: none;
 }
 
 .pagination a:hover {
-    background-color: #45a049;
+    background-color: #f4f4f9;
 }
 
 .pagination span {
-    padding: 10px 15px;
-}
-
-/* Button Styles */
-button[type="submit"] {
-    background-color: #f44336;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button[type="submit"]:hover {
-    background-color: #e53935;
-}
-
-/* Align center for the form and the table */
-.center {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-header {
-    background-color: rgb(174, 235, 225);
-    display: flex;
-    justify-content: space-between;
-    gap: 50px;
-    padding: 20px;
+    margin: 0 5px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #e2e2e2;
 }

@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}Reporte de Personas con Deudas{% endblock %}
+
+{% block content %}
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <a class="btn btn-secondary" href="{{ url_for('reportes.menu_reportes') }}">Volver</a>
+</header>
+<div class="container text-center mt-4">
+    <h2 class="text-center">Personas que Adeudan Pagos</h2>
+    {% if deudores %}
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Teléfono</th>
+                <th>Observaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for deudor in deudores %}
+                    <tr>
+                        <td>{{ deudor.nombre }}</td>
+                        <td>{{ deudor.apellido }}</td>
+                        <td>{{ deudor.dni }}</td>
+                        <td>{{ deudor.telefono_actual or "No disponible" }}</td>
+                        <td>{{ deudor.observaciones_previsionales or "Sin observaciones" }}</td>
+                    </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+            <h6 class="display-6 text-danger mt-3">No hay personas con deudas registradas.</h6>
+    {% endif %}
+        
+</div>
+{% endblock %}

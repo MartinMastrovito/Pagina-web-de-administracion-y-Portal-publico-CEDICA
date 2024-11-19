@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}Gráfico de Tipo de Discapacidad{% endblock %}
+
+{% block content %}
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <a class="btn btn-secondary" href="{{ url_for('reportes.menu_graficos') }}">Volver</a>
+</header>
+<div class="container text-center mt-4">
+    <h2 class="mb-4">Distribución de tipos de discapacidad</h2>
+    <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfico de Tipo de Discapacidad" class="img-fluid">
+</div>
+{% endblock %}

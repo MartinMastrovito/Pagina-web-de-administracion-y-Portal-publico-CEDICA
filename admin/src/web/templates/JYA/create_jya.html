@@ -16,57 +16,97 @@
             <form method="post" action="{{ url_for('crud_JyA.create_jya') }}" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="nombre" name="nombre" required>
+                    <small id="nombreHelp" class="form-text text-muted">
+                        El campo es obligatorio y solo debe contener letras y espacios.
+                    </small>
                 </div>
                 
                 <div class="mb-3">
                     <label for="apellido" class="form-label">Apellido:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ'\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="apellido" name="apellido" required>
+                    <small id="apellidoHelp" class="form-text text-muted">
+                        El campo es obligatorio y solo debe contener letras y espacios.
+                    </small>
                 </div>
                 
                 <div class="mb-3">
                     <label for="dni" class="form-label">DNI (sin puntos o espacios):</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="number" class="form-control" id="dni" name="dni" min="1000000" required>
+                    <small id="dniHelp" class="form-text text-muted">
+                        El campo es obligatorio y debe contener un número de 7 o 8 dígitos.
+                    </small>
                 </div>
 
                 <div class="mb-3">
                     <label for="edad" class="form-label">Edad:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="number" class="form-control" id="edad" name="edad" min="18" max="100" title="Por favor ingrese una edad entre 18-100" required>
+                    <small id="edadHelp" class="form-text text-muted">
+                        El campo es obligatorio y debe estar entre 18 y 100 años.
+                    </small>
                 </div>
                 
                 <div class="mb-3">
                     <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                    <small id="fechaNacimientoHelp" class="form-text text-muted">
+                        El campo es obligatorio y debe ingresar una fecha válida.
+                    </small>
                 </div>
                 
                 <div class="mb-3">
                     <label for="lugar_nacimiento_localidad" class="form-label">Lugar de Nacimiento:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="text" class="form-control" id="lugar_nacimiento_localidad" name="lugar_nacimiento_localidad" placeholder="Localidad" required>
                     <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control mt-2" id="lugar_nacimiento_provincia" name="lugar_nacimiento_provincia" placeholder="Provincia" required>
+                    <small id="lugarNacimientoHelp" class="form-text text-muted">
+                        Solo se permiten letras y espacios en blanco.
+                    </small>
                 </div>
                 
                 <div class="mb-3">
                     <label for="domicilio_actual_calle" class="form-label">Domicilio Actual:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="text" class="form-control" id="domicilio_actual_calle" name="domicilio_actual_calle" placeholder="Calle" required>
                     <input type="number" class="form-control mt-2" id="domicilio_actual_numero" name="domicilio_actual_numero" placeholder="Número" required>
                     <input type="text" class="form-control mt-2" id="domicilio_actual_departamento" name="domicilio_actual_departamento" placeholder="Departamento (opcional)">
+                    <small id="domicilioDepartamentoHelp" class="form-text text-muted">
+                        Este campo es opcional.
+                    </small>
                     <input type="text" class="form-control mt-2" id="domicilio_actual_localidad" name="domicilio_actual_localidad" placeholder="Localidad" required>
                     <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control mt-2" id="domicilio_actual_provincia" name="domicilio_actual_provincia" placeholder="Provincia" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="telefono_actual" class="form-label">Teléfono Actual (sin guiones o espacios):</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="number" class="form-control" id="telefono_actual" name="telefono_actual" min="0" title="Por favor ingrese un número válido" required>
+                    <small id="telefonoHelp" class="form-text text-muted">
+                        Solo se permiten números, sin guiones ni espacios.
+                    </small>
                 </div>
 
                 <div class="mb-3">
                     <label for="contacto_emergencia_nombre" class="form-label">Contacto de Emergencia:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="contacto_emergencia_nombre" name="contacto_emergencia_nombre" placeholder="Nombre" required>
+                    <small id="nombreEmergenciaHelp" class="form-text text-muted">
+                        Solo se permiten letras y espacios.
+                    </small>
                     <input type="number" class="form-control mt-2" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono" placeholder="Teléfono" min="0" title="Por favor ingrese un número válido" required>
+                    <small id="telefonoEmergenciaHelp" class="form-text text-muted">
+                        Solo se permiten números, sin guiones ni espacios.
+                    </small>
                 </div>
 
                 <div class="mb-3">
                     <label for="becado" class="form-label">Becado:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-select" id="becado" name="becado" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
@@ -81,6 +121,7 @@
 
                 <div class="mb-3">
                     <label for="certificado_discapacidad" class="form-label">¿Posee Certificado de Discapacidad?</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-select" id="certificado_discapacidad" name="certificado_discapacidad" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
@@ -116,6 +157,7 @@
 
                 <div class="mb-3">
                     <label for="asignacion_familiar" class="form-label">¿Percibe alguna Asignación Familiar?</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-select" id="asignacion_familiar" name="asignacion_familiar" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
@@ -135,6 +177,7 @@
 
                 <div class="mb-3">
                     <label for="pension" class="form-label">¿Es beneficiario de alguna pensión?</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-select" id="pension" name="pension" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
@@ -149,16 +192,25 @@
 
                 <div class="mb-3">
                     <label for="obra_social" class="form-label">Obra Social:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="obra_social" name="obra_social" required>
+                    <small id="obraSocialHelp" class="form-text text-muted">
+                        Por favor, ingrese solo letras válidas (sin números ni caracteres especiales).
+                    </small>
                 </div>
 
                 <div class="mb-3">
                     <label for="numero_afiliado" class="form-label">Número de Afiliado:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="number" class="form-control" id="numero_afiliado" name="numero_afiliado" min="0" title="Ingrese un valor positivo" required>
+                    <small id="afiliadoHelp" class="form-text text-muted">
+                        Por favor ingrese un número positivo (sin decimales ni caracteres especiales).
+                    </small>
                 </div>
 
                 <div class="mb-3">
                     <label for="curatela" class="form-label">¿Posee curatela?</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-select" id="curatela" name="curatela" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
@@ -173,21 +225,25 @@
                 
                 <div class="mb-3">
                     <label for="institucion_escolar_nombre" class="form-label">Nombre de la Institución Escolar:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="institucion_escolar_nombre" name="institucion_escolar_nombre" required placeholder="Nombre de la institución">
                 </div>
                 
                 <div class="mb-3">
                     <label for="institucion_escolar_direccion" class="form-label">Dirección:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="text" class="form-control" id="institucion_escolar_direccion" name="institucion_escolar_direccion" required placeholder="Dirección de la institución">
                 </div>                
 
                 <div class="mb-3">
                     <label for="institucion_escolar_telefono" class="form-label">Teléfono:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="number" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono" min="0" title="Por favor ingrese un número válido" required placeholder="Número de teléfono de la institución">
                 </div>
                 
                 <div class="mb-3">
                     <label for="grado_actual" class="form-label">Grado/Año Actual:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input type="text" class="form-control" id="grado_actual" name="grado_actual" required placeholder="Indique el grado o año">
                 </div>
                 
@@ -281,6 +337,7 @@
                 
                 <div class="form-group mb-3">
                     <label for="propuesta_trabajo">Propuesta de trabajo institucional:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control custom-select" id="propuesta_trabajo" name="propuesta_trabajo">
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="Hipoterapia">Hipoterapia</option>
@@ -294,6 +351,7 @@
                 
                 <div class="form-group mb-3">
                     <label for="condicion_trabajo">Condición:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control custom-select" id="condicion_trabajo" name="condicion_trabajo">
                         <option value="" disabled selected>Seleccione un tipo</option>
                         <option value="REGULAR">REGULAR</option>
@@ -303,6 +361,7 @@
                 
                 <div class="form-group mb-3">
                     <label for="sede">Sede:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="sede" name="sede">
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="CASJ">CASJ</option>
@@ -339,6 +398,7 @@
 
                 <div class="form-group mb-3">
                     <label for="profesor_terapeuta_id">Profesor/a o Terapeuta:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="profesor_terapeuta_id" name="profesor_terapeuta_id" required>
                         <option value="" disabled selected>Seleccione un Profesor o Terapeuta</option>
                         {% for empleado in empleados_terapeuta_profesor %}
@@ -349,6 +409,7 @@
                 
                 <div class="form-group mb-3">
                     <label for="conductor_caballo_id">Conductor/a del Caballo:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="conductor_caballo_id" name="conductor_caballo_id" required>
                         <option value="" disabled selected>Seleccione un Conductor</option>
                         {% for empleado in empleados_conductor %}
@@ -359,6 +420,7 @@
 
                 <div class="form-group mb-3">
                     <label for="auxiliar_id">Auxiliar de pista:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="auxiliar_id" name="auxiliar_id" required>
                         <option value="" disabled selected>Seleccione un Auxiliar</option>
                         {% for empleado in empleados_auxiliar %}
@@ -369,6 +431,7 @@
                 
                 <div class="form-group mb-3">
                     <label for="caballo_id">Caballo:</label>
+                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="caballo_id" name="caballo_id" required>
                         <option value="" disabled selected>Seleccione un Caballo</option>
                         {% for caballo in caballos %}
