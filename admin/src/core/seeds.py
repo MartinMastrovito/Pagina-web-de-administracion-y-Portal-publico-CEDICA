@@ -615,6 +615,51 @@ def articles_create():
             contenido = "Este viaje, que durará seis meses, tiene como objetivo obtener datos clave sobre el derretimiento de los glaciares y su impacto en los niveles del mar. Los investigadores esperan lograr avances significativos en la comprensión del cambio climático.",
             autor_id = 6
         ),
+
+        Publicacion(
+            fecha_publicacion = "2024-11-20",
+            fecha_creacion = "2024-11-19",
+            titulo = "Descubren fósil raro",
+            copete = "Un hallazgo único en un yacimiento arqueológico.",
+            contenido = "Un equipo de arqueólogos encontró un fósil excepcionalmente bien conservado en un yacimiento en Sudamérica. Este descubrimiento podría proporcionar información valiosa sobre especies extintas y su entorno.",
+            autor_id = 4
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-12-01",
+            fecha_creacion = "2024-11-30",
+            titulo = "Nueva misión espacial",
+            copete = "Se lanza un satélite para monitorear climas.",
+            contenido = "La agencia espacial internacional lanzó un satélite diseñado para monitorear cambios climáticos y desastres naturales en tiempo real. Este avance permitirá una mejor preparación ante emergencias.",
+            autor_id = 5
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-12-15",
+            fecha_creacion = "2024-12-14",
+            titulo = "Avance en medicina",
+            copete = "Desarrollan vacuna contra enfermedad rara.",
+            contenido = "Un grupo de científicos ha desarrollado una vacuna innovadora para combatir una enfermedad rara que afecta a miles de personas en todo el mundo. Los ensayos iniciales muestran resultados prometedores.",
+            autor_id = 1
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2025-01-10",
+            fecha_creacion = "2025-01-09",
+            titulo = "Robots submarinos",
+            copete = "Exploran el océano para investigar vida marina.",
+            contenido = "Un equipo de ingenieros presentó robots submarinos diseñados para explorar las profundidades del océano. Estas máquinas avanzadas están recopilando datos sobre ecosistemas marinos aún desconocidos.",
+            autor_id = 3
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2025-01-20",
+            fecha_creacion = "2025-01-19",
+            titulo = "Nuevo récord solar",
+            copete = "Paneles solares logran eficiencia sin precedentes.",
+            contenido = "Una empresa tecnológica ha desarrollado paneles solares capaces de alcanzar niveles de eficiencia sin precedentes, lo que podría revolucionar el mercado de las energías renovables en los próximos años.",
+            autor_id = 2
+        ),
     ]
     db.session.add_all(articles_list)
     db.session.commit()
