@@ -100,8 +100,10 @@ def get_recipients():
 
 def select_filter(**kwargs):
     invoices = db.select(Invoices)
-    if(kwargs['date_from'] != '') and (kwargs['date_to'] !=''):
-        invoices = invoices.filter(Invoices.pay_date.between(kwargs["date_from"],kwargs["date_to"]))
+    if(kwargs['date_from'] != ''):
+        invoices = invoices.filter(Invoices.pay_date >= kwargs["date_from"])
+    if(kwargs['date_to'] != ''):
+        invoices = invoices.filter(Invoices.pay_date <= kwargs["date_to"])
     if(kwargs['payment_method'] != ''):
         invoices = invoices.filter(Invoices.payment_method == kwargs['payment_method'])
     if(kwargs['first_name'] != ''):
