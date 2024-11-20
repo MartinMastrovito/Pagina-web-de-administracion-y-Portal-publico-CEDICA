@@ -1,85 +1,86 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
-<template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
+<template id="app">
+    <header class="header">
+      <div class="header-content">
+        <h1>Centro de equitación</h1>
+        <p>La Plata, buenos Aires</p>
+        <img src="@/assets/logo.png" alt="Logo de CEDICA" class="logo" />
+      </div>
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+          <RouterLink class="btn" to="/">Home</RouterLink>
+          <RouterLink class="btn" to="/noticias">Noticias</RouterLink>
+          <RouterLink class="btn" to="/contacto">Contacto</RouterLink>
       </nav>
-    </div>
-  </header>
-
-  <RouterView />
+    </header>
+    <main>
+      <RouterView/>
+    </main>
+    <footer class="footer">
+      <p>&copy; 2024 CEDICA. Todos los derechos reservados.</p>
+    </footer>
 </template>
 
-<style scoped>
+<script>
+import { RouterLink, RouterView } from 'vue-router';
+export default {
+  name: 'App'
+};
+console.log(import.meta.env.VITE_ARTICLES_API);
+</script>
+
+<style>
+/* Estilos específicos para App.vue */
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+
 header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
+  background-color: #4842b935;
+  padding: 20px;
+  color: white;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+footer {
+  background-color: #42b983;
+  padding: 10px;
+  color: white;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.logo{
+  max-width: 50%;
+  margin-top:15px;
 }
 
-nav a {
+nav{
+  display:flex;
+  justify-content: space-around;
+}
+
+.btn {
   display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #007bff;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-nav a:first-of-type {
-  border: 0;
+.btn:hover {
+  background-color: #0056b3;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.btn-primary {
+  background-color: #007bff;
 }
 </style>

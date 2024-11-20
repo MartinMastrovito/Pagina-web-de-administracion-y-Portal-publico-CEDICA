@@ -97,8 +97,8 @@ def create_invoice():
         "pay_date": request.form['pay_date'],
         "amount": float(request.form['amount']),
         "payment_method": request.form['payment_method'],
-        "j_a": request.form['j&a'],
-        "recipient": request.form['recipient'],
+        "j_a": int(request.form['j&a']),
+        "recipient": int(request.form['recipient']),
         "observations": request.form['observations'],
     }
     if(utiles.validate_create(**invoice_information)):

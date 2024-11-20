@@ -2,26 +2,30 @@ from src.core.auth.models.model_user import Role, User
 from src.core.auth.models.model_permission import Permission, RolePermission
 from src.core.auth.models.model_empleado import Empleados
 from src.core.auth.models.model_JyA import JYA
+from src.core.auth.models.model_publicacion import Publicacion
 from src.core.database import db
 from src.core import bcrypt
 from src.core.auth import utiles
 
 
 def role_create():
-    """
-    Carga los roles en la base de datos
-    """
-
-    # Roles del sistema
-    list_role = [
-        Role(name="tecnica"),
-        Role(name="ecuestre"),
-        Role(name="voluntariado"),
-        Role(name="administracion"),
-        Role(name="sysadmin"),
+    roles = [
+        {"name": "tecnica"},
+        {"name": "ecuestre"},
+        {"name": "voluntariado"},
+        {"name": "administracion"},
+        {"name": "sysadmin"}
     ]
 
-    db.session.add_all(list_role)
+    for role_data in roles:
+        existing_role = Role.query.filter_by(name=role_data["name"]).first()
+        if existing_role:
+            print(f"Role with name {role_data['name']} already exists. Skipping.")
+            continue
+
+        role = Role(name=role_data["name"])
+        db.session.add(role)
+
     db.session.commit()
 
 
@@ -564,6 +568,109 @@ def JYA_create():
     db.session.add_all(jya_list)
     db.session.commit()
 
+def articles_create():
+    articles_list = [
+        Publicacion(
+            fecha_publicacion = "2024-10-10",
+            fecha_creacion = "2024-10-09",
+            titulo = "Hola, soy una noticia",
+            copete = "Copetin de noticia",
+            contenido = "Contenido de noticia",
+            autor_id = 1
+        ),
+        Publicacion(
+            fecha_publicacion = "2024-10-11",
+            fecha_creacion = "2024-10-10",
+            titulo = "Nuevo avance en IA",
+            copete = "Investigadores logran un avance significativo en el campo de la inteligencia artificial, mejorando la precisión de los algoritmos.",
+            contenido = "El avance de hoy permite que los sistemas de IA puedan procesar información de manera más eficiente, reduciendo el tiempo de respuesta en un 40%. Se espera que esta mejora impacte positivamente en sectores como la salud, educación y transporte.",
+            autor_id = 2
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-10-12",
+            fecha_creacion = "2024-10-11",
+            titulo = "Receta fácil y rápida",
+            copete = "Te compartimos una receta deliciosa y fácil de preparar en solo 20 minutos.",
+            contenido = "Esta receta de pasta con salsa cremosa de aguacate es perfecta para una cena rápida pero nutritiva. Solo necesitas unos pocos ingredientes como aguacate, pasta y limón. ¡Ideal para los días ajetreados!",
+            autor_id = 3
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-10-13",
+            fecha_creacion = "2024-10-12",
+            titulo = "Cambio climático y salud",
+            copete = "Estudios recientes sugieren que el cambio climático podría tener un impacto directo en la salud humana, exacerbando enfermedades respiratorias.",
+            contenido = "El aumento de las temperaturas globales y la contaminación del aire están provocando un incremento en los casos de enfermedades respiratorias y cardiovasculares. Se recomienda la implementación de políticas más estrictas para mitigar estos efectos.",
+            autor_id = 4
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-10-14",
+            fecha_creacion = "2024-10-13",
+            titulo = "Tecnología en la educación",
+            copete = "La tecnología está transformando la forma en que aprendemos, desde clases virtuales hasta el uso de IA en la educación.",
+            contenido = "Las herramientas digitales están revolucionando el sector educativo, permitiendo una personalización del aprendizaje y facilitando el acceso a materiales de estudio desde cualquier lugar del mundo.",
+            autor_id = 5
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-10-15",
+            fecha_creacion = "2024-10-14",
+            titulo = "Viaje a la Antártida",
+            copete = "Un grupo de científicos ha emprendido un viaje a la Antártida para estudiar los efectos del cambio climático en los glaciares.",
+            contenido = "Este viaje, que durará seis meses, tiene como objetivo obtener datos clave sobre el derretimiento de los glaciares y su impacto en los niveles del mar. Los investigadores esperan lograr avances significativos en la comprensión del cambio climático.",
+            autor_id = 6
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-11-20",
+            fecha_creacion = "2024-11-19",
+            titulo = "Descubren fósil raro",
+            copete = "Un hallazgo único en un yacimiento arqueológico.",
+            contenido = "Un equipo de arqueólogos encontró un fósil excepcionalmente bien conservado en un yacimiento en Sudamérica. Este descubrimiento podría proporcionar información valiosa sobre especies extintas y su entorno.",
+            autor_id = 4
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-12-01",
+            fecha_creacion = "2024-11-30",
+            titulo = "Nueva misión espacial",
+            copete = "Se lanza un satélite para monitorear climas.",
+            contenido = "La agencia espacial internacional lanzó un satélite diseñado para monitorear cambios climáticos y desastres naturales en tiempo real. Este avance permitirá una mejor preparación ante emergencias.",
+            autor_id = 5
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2024-12-15",
+            fecha_creacion = "2024-12-14",
+            titulo = "Avance en medicina",
+            copete = "Desarrollan vacuna contra enfermedad rara.",
+            contenido = "Un grupo de científicos ha desarrollado una vacuna innovadora para combatir una enfermedad rara que afecta a miles de personas en todo el mundo. Los ensayos iniciales muestran resultados prometedores.",
+            autor_id = 1
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2025-01-10",
+            fecha_creacion = "2025-01-09",
+            titulo = "Robots submarinos",
+            copete = "Exploran el océano para investigar vida marina.",
+            contenido = "Un equipo de ingenieros presentó robots submarinos diseñados para explorar las profundidades del océano. Estas máquinas avanzadas están recopilando datos sobre ecosistemas marinos aún desconocidos.",
+            autor_id = 3
+        ),
+
+        Publicacion(
+            fecha_publicacion = "2025-01-20",
+            fecha_creacion = "2025-01-19",
+            titulo = "Nuevo récord solar",
+            copete = "Paneles solares logran eficiencia sin precedentes.",
+            contenido = "Una empresa tecnológica ha desarrollado paneles solares capaces de alcanzar niveles de eficiencia sin precedentes, lo que podría revolucionar el mercado de las energías renovables en los próximos años.",
+            autor_id = 2
+        ),
+    ]
+    db.session.add_all(articles_list)
+    db.session.commit()
+
 def db_seeds():
     role_create()
     permission_create()
@@ -571,6 +678,7 @@ def db_seeds():
     rolePermission_create()
     JYA_create()
     employee_create()
+    articles_create()
 
 """
 Técnica

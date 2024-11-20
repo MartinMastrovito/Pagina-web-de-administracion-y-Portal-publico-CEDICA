@@ -7,6 +7,9 @@
     {% block content %}
 <header class="d-flex justify-content-between align-items-center mt-4 mb-3">
     <h4 class="display-4">Usuarios registrados</h4>
+    {% if unaccepted_users %}
+    <a class="btn btn-danger" href="{{ url_for('users.index_unaccepted') }}">Aceptar usuarios</a>
+    {% endif %}
     <a class="btn btn-secondary" href="{{ url_for('users.show_home') }}">Volver</a>
 </header>
 

@@ -2,7 +2,6 @@
 
 {% extends "layout.html" %}
 
-
 {% block imports %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/editar.css') }}">
@@ -29,7 +28,7 @@
         </div>
         <div>
             <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" name="fecha" value="{{ consulta.fecha }}" required>
+            <input type="date" id="fecha" name="fecha" value="{{ consulta.fecha.strftime('%Y-%m-%d') }}" required>
         </div>
         <div>
             <label for="descripcion">Descripción:</label>
@@ -48,5 +47,5 @@
     </form>
 </body>
 </html>
-    
+
 {% endblock %}
