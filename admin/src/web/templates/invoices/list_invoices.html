@@ -50,11 +50,11 @@
             {% for invoice in invoices %}
                 <tr>
                     <td>{{invoice.id}}</td>
-                    <td>{{invoice.j_a}}</td>
+                    <td>{{invoice.ja_first_name}} {{invoice.ja_last_name}}</td>
                     <td>{{invoice.pay_date}}</td>
                     <td>{{invoice.payment_method}}</td>
                     <td>{{invoice.amount}}</td>
-                    <td>{{invoice.recipient}}</td>
+                    <td>{{invoice.recipient_first_name}} {{invoice.recipient_last_name}}</td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
