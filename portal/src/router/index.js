@@ -11,7 +11,7 @@ const routes = [
     component: Home
   },
   {
-    path: '/noticias',
+    path: '/noticias/:page',
     name: 'Noticias',
     component: Noticias
   },

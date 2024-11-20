@@ -7,7 +7,7 @@
       </div>
       <nav>
           <RouterLink class="btn" to="/">Home</RouterLink>
-          <RouterLink class="btn" to="/noticias">Noticias</RouterLink>
+          <RouterLink class="btn" to="/noticias/1">Noticias</RouterLink>
           <RouterLink class="btn" to="/contacto">Contacto</RouterLink>
       </nav>
     </header>
