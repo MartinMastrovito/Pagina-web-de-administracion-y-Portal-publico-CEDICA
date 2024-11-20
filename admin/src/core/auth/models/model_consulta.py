@@ -8,7 +8,7 @@ class Consulta(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     nombre_completo = db.Column(db.String(255), nullable=False)
     descripcion = db.Column(db.Text, nullable=False)
-    fecha = db.Column(db.DateTime, default=db.func.current_timestamp())
+    fecha = db.Column(db.Date, default=db.func.current_date())
     estado = db.Column(db.String(50), nullable=False, default='pendiente')
     def __repr__(self):
         return f'<Consulta ID {self.id}>'
