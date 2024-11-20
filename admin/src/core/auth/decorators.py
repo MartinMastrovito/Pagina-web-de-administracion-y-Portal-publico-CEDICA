@@ -5,7 +5,7 @@ from src.web.handlers.auth import check_permission
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:  # Verificamos si hay una sesión activa, esperemos que no rompa todo
+        if 'user_id' not in session:
             flash('Debes iniciar sesión para acceder a esta página.', 'warning')
             return redirect(url_for('users.show_login_form'))
         return f(*args, **kwargs)

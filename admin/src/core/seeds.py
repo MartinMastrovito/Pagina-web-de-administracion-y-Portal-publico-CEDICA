@@ -71,6 +71,9 @@ def permission_create():
         Permission(name="consulta_destroy"),
         Permission(name="consulta_update"),
         Permission(name="consulta_show"),
+        # permisos reportes
+        Permission(name="reporte_index"),
+        Permission(name="show_reporte"),
     ]
     db.session.add_all(list_permission)
     db.session.commit()
@@ -86,6 +89,8 @@ def tecnica_rol_create():
             Permission.name == "Invoice_menu",
             Permission.name == "Invoice_index",
             Permission.name == "Invoice_show",
+            Permission.name == "reporte_index",
+            Permission.name == "show_reporte",
         )
     )
     tecnica_permissions = []
@@ -130,6 +135,8 @@ def administracion_rol_create():
             Permission.name == "consulta_new",
             Permission.name == "consulta_destroy",
             Permission.name == "consulta_update",
+            Permission.name == "reporte_index",
+            Permission.name == "show_reporte",
         )
     )
     administration_permissions = []
