@@ -42,3 +42,11 @@ a {
     color: #3498db;
     text-decoration: none;
 }
+
+.btn-edit {
+    background-color: #cad4db;
+}
+
+.btn-edit:hover {
+    background-color: #4a584d;
+}

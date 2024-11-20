@@ -26,7 +26,7 @@
             <option value="Contestado" {% if estado == 'Contestado' %}selected{% endif %}>Contestado</option>
             <option value="Revisar" {% if estado == 'Revisar' %}selected{% endif %}>Revisar</option>
         </select>
-        <button type="submit">Buscar</button>
+        <button type="submit-b">Buscar</button>
     </form>
     <a href="{{ url_for('consultas.nueva_consulta') }}" class="btn btn-primary">Crear Consulta</a>
     <table>
