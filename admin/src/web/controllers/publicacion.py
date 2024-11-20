@@ -8,7 +8,7 @@ bp = Blueprint("publicacion", __name__, url_prefix="/publicacion")
 
 @bp.get("/")
 @login_required
-#@check("publicacion_index")
+@check("publicacion_index")
 def index():
     page = request.args.get("page", 1, type=int)
     per_page = 10
@@ -22,14 +22,14 @@ def index():
 
 @bp.get("/crear")
 @login_required
-#@check("publicacion_new")
+@check("publicacion_new")
 def show_crear_publicacion():
     empleados = get_empleados()
     return render_template("publicaciones/crear_publicacion.html", empleados=empleados)
 
 @bp.post("/crear")
 @login_required
-#@check("publicacion_new")
+@check("publicacion_new")
 def crear_publicacion():
     pub_data = {
         "titulo": request.form["titulo"],
@@ -48,7 +48,7 @@ def crear_publicacion():
 
 @bp.post("/eliminar/<int:id>")
 @login_required
-#@check("publicacion_delete")
+@check("publicacion_delete")
 def eliminar_publicacion(id):
     publicacion.eliminar_publicacion(id)
     flash("Publicacion eliminada correctamente", "success")
@@ -56,7 +56,7 @@ def eliminar_publicacion(id):
 
 @bp.get("/actualizar/<int:id>")
 @login_required
-#@check("publicacion_update")
+@check("publicacion_update")
 def show_actualizar_publicacion(id):
     empleados = get_empleados()
     pub = publicacion.get_publicacion(id)
@@ -64,7 +64,7 @@ def show_actualizar_publicacion(id):
 
 @bp.post("/actualizar/<int:id>")
 @login_required
-#@check("publicacion_update")
+@check("publicacion_update")
 def actualizar_publicacion(id):
     pub_data = {
         "titulo": request.form["titulo"],
@@ -82,7 +82,7 @@ def actualizar_publicacion(id):
 
 @bp.get("/detalles/<int:id>")
 @login_required
-#@check("publicacion_show")
+@check("publicacion_show")
 def show_publicacion(id):
     pub = publicacion.get_publicacion(id)
     return render_template("publicaciones/show_publicacion.html", pub=pub)
