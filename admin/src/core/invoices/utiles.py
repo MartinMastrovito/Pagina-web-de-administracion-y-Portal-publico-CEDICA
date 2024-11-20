@@ -19,7 +19,7 @@ def create(**kwargs):
     return invoice
 
 def delete(id_delete):
-    db.session.query(Invoices).filter(Invoices.id==id_delete).delete()
+    db.session.query(Invoices).filter_by(id=id_delete).delete()
     db.session.commit()
 
 def validate_create(**datos):

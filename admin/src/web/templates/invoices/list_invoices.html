@@ -39,6 +39,7 @@
     </form>
     <table class="table table-striped mt-4">
         <thead class="thead-dark">
+            <th>id</th>
             <th>J&A</th>
             <th>Fecha de pago</th>
             <th>Metodo de pago</th>
@@ -48,6 +49,7 @@
         <tbody>
             {% for invoice in invoices %}
                 <tr>
+                    <td>{{invoice.id}}</td>
                     <td>{{invoice.j_a}}</td>
                     <td>{{invoice.pay_date}}</td>
                     <td>{{invoice.payment_method}}</td>
@@ -70,9 +72,9 @@
                     </td>
                     <td>
                         {%if check_permission(session.get("user_id"),"invoice_destroy") %}
-                            <form action="{{ url_for('invoices.delete_invoice') }}" id="invoice_delete_form" class="form_style" method="POST">
+                            <form action="{{ url_for('invoices.delete_invoice') }}"  class="form_style" method="POST">
                                 <input type="hidden" value={{invoice.id}} name="id">
-                                <button type="button" class="btn btn-danger">Eliminar</button>
+                                <button  class="btn btn-danger">Eliminar</button>
                             </form>
                         {% endif %}
                     </td>
