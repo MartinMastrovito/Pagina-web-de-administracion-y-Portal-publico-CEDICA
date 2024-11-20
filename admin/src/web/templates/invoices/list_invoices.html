@@ -13,6 +13,10 @@
                 flex-wrap: wrap;
                 gap:1%;
             }
+            label{
+                display:flex;
+                flex-direction: column;
+            }
         </style>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_list.css') }}">
     {% endblock %}
@@ -20,21 +24,39 @@
 <body>
     {% block content %}
     <form class="form search" method="POST" id="search-form" action="{{ url_for('invoices.order_list') }}">
-        <input type="search" placeholder="Nombre" name="first_name">
-        <input type="search" placeholder="Apellido" name="last_name">
-        <input type="date" name="from" value="">
-        <input type="date" name="to" value="">
-        <select class="select" name="payment_method" >
-            <option value="">Todos</option>
-            <option value="Efectivo">Efectivo</option>
-            <option value="Tarjeta de credito">Tarjeta de credito</option>
-            <option value="Tarjeta de debito">Tarjeta de debito</option>
-            <option value="Otro">Otro</option>
-        </select>
-        <select class="select" name="order">
-            <option value="ASC">Ascendente</option>
-            <option value="DESC">Descendente</option>
-        </select>
+        <label for="first_name">
+            <span>Nombre empleado</span>
+            <input type="search" placeholder="Nombre" name="first_name">
+        </label>
+        <label for="last_name">
+            <span>Apellido empleado</span>
+            <input type="search" placeholder="Apellido" name="last_name">
+        </label>
+        <label for="from">
+            <span>Desde</span>
+            <input type="date" name="from" value="">
+        </label>
+        <label for="to">
+            <span>Hasta</span>
+            <input type="date" name="to" value="">
+        </label>
+        <label for="payment_method">
+            <span>Tipo de pago</span>
+            <select class="select" name="payment_method" >
+                <option value="">Todos</option>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta de credito">Tarjeta de credito</option>
+                <option value="Tarjeta de debito">Tarjeta de debito</option>
+                <option value="Otro">Otro</option>
+            </select>
+        </label>
+        <label>
+            <span>Orden</span>
+            <select class="select" name="order">
+                    <option value="ASC">Ascendente</option>
+                    <option value="DESC">Descendente</option>
+            </select>
+        </label>
        <button type="submit" form="search-form" class="btn" style="background-color:#78b9bf">BUSCAR</button>
     </form>
     <table class="table table-striped mt-4">
