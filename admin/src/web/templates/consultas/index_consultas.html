@@ -43,7 +43,7 @@
         <tbody>
             {% for consulta in consultas.items %}
             <tr>
-                <td>{{ consulta.fecha }}</td>
+                <td>{{ consulta.fecha.strftime('%Y-%m-%d') }}</td>
                 <td>{{ consulta.nombre_completo }}</td>
                 <td>{{ consulta.estado }}</td>
                 <td>
