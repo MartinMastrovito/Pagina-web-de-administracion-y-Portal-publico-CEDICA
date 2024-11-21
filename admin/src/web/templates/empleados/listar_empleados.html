@@ -87,16 +87,23 @@
                     <td>{{ empleado.activo }}</td>
 
                     <td>
-                        <a href="{{ url_for('empleados.actualizar_empleados', id=empleado.id ) }}">Actualizar</a> | 
-                        <form action="{{ url_for('empleados.eliminar_empleados', id=empleado.id) }}" method="post" style="display:inline;">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit">Eliminar</button>
-                        </form>
-
+                        <a href="/menu_empleados/actualizar/{{ empleado.dni }}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="/menu_empleados/eliminar/{{ empleado.dni }}" class="btn btn-sm btn-danger">Eliminar</a>
                     </td>
-                </tr>
                 {% endfor %}
             </table>
+            <div>
+                <p>Página {{ paginacion.page }} de {{ paginacion.pages }}</p>
+                {% if paginacion.has_prev %}
+                <a href="?page={{ paginacion.prev_num }}">Anterior</a>
+                {% endif %}
+                {% if paginacion.has_next %}
+                <a href="?page={{ paginacion.next_num }}">Siguiente</a>
+                {% endif %}
+            </div>
         {% endblock %}
     </main>
+    <footer>
+        <p>© 2024 Mi Aplicación - Administración de empleados</p>
+    </footer>
 </body>

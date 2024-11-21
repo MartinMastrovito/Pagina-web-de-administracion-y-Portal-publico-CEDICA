@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, flash, redirect, url_for
 from src.core import publicacion
-from src.core.empleados import get_empleados
+#from src.core.empleados import get_empleados
 from src.core.auth.decorators import login_required, check
 from datetime import datetime, timezone
 
@@ -20,12 +20,12 @@ def index():
         pagination=publicaciones
     )
 
-@bp.get("/crear")
-@login_required
-#@check("publicacion_new")
-def show_crear_publicacion():
-    empleados = get_empleados()
-    return render_template("publicaciones/crear_publicacion.html", empleados=empleados)
+# @bp.get("/crear")
+# @login_required
+# #@check("publicacion_new")
+# def show_crear_publicacion():
+#     empleados = get_empleados()
+#     return render_template("publicaciones/crear_publicacion.html", empleados=empleados)
 
 @bp.post("/crear")
 @login_required
@@ -54,13 +54,13 @@ def eliminar_publicacion(id):
     flash("Publicacion eliminada correctamente", "success")
     return redirect("/publicacion")
 
-@bp.get("/actualizar/<int:id>")
-@login_required
-#@check("publicacion_update")
-def show_actualizar_publicacion(id):
-    empleados = get_empleados()
-    pub = publicacion.get_publicacion(id)
-    return render_template("publicaciones/actualizar_publicacion.html", empleados=empleados, publicacion=pub)
+# @bp.get("/actualizar/<int:id>")
+# @login_required
+# #@check("publicacion_update")
+# def show_actualizar_publicacion(id):
+#     empleados = get_empleados()
+#     pub = publicacion.get_publicacion(id)
+#     return render_template("publicaciones/actualizar_publicacion.html", empleados=empleados, publicacion=pub)
 
 @bp.post("/actualizar/<int:id>")
 @login_required

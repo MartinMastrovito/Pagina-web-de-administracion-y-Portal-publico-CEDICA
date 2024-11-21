@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Empleado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <main>
+        <h1>Eliminar Empleado</h1>
+        <p>¿Estás seguro de que deseas eliminar al siguiente empleado?</p>
+        <ul>
+            <li><strong>Nombre:</strong> {{ empleado.nombre }}</li>
+            <li><strong>Apellido:</strong> {{ empleado.apellido }}</li>
+            <li><strong>DNI:</strong> {{ empleado.dni }}</li>
+            <li><strong>Email:</strong> {{ empleado.email }}</li>
+            <li><strong>Puesto:</strong> {{ empleado.puesto }}</li>
+        </ul>
+        
+        <form action="{{ url_for('empleados.delete_employee', empleado_dni=empleado.dni) }}" method="POST">
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a href="{{ url_for('empleados.listar_empleados') }}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </main>
+</body>
+</html>

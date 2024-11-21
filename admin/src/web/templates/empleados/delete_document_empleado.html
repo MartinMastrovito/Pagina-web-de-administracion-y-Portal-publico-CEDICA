@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>{% block title %}Eliminar Documento{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h2>Confirmación de eliminación</h2>
+            </div>
+            <div class="card-body">
+                <p>¿Estás seguro de que deseas eliminar el documento <strong>{{ documento.nombre_documento }}</strong>?</p>
+                <form action="{{ url_for('empleados.eliminar_documento', empleado_dni=empleado.dni, documento_id=documento.id) }}" method="POST">
+                    <div class="d-flex justify-content-between">
+                        <!-- Botón para eliminar -->
+                        <button type="submit" class="btn btn-danger">Eliminar documento</button>
+                        <!-- Botón para cancelar -->
+                        <a href="{{ url_for('empleados.listar_documentos', empleado_dni=empleado.dni) }}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    <footer class="text-center mt-5">
+        <p>© 2024 Mi Aplicación - Gestión de Empleados</p>
+    </footer>
+</body>
+</html>

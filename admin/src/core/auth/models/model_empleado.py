@@ -1,7 +1,7 @@
 from src.core.database import db
 
 class Empleados(db.Model):
-    __tablename__ = "empleados"
+    __tablename__ = 'empleados'
     __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True, index=True)
@@ -22,7 +22,7 @@ class Empleados(db.Model):
     condicion = db.Column(db.String)
     activo = db.Column(db.Boolean, default=True)
 
-    documentos = db.relationship('Documento', backref='empleados', lazy=True)
+    documentos = db.relationship('Documento', backref='empleado', lazy=True, cascade='all, delete-orphan')
     jyas_roles = db.relationship('JYAEmpleado', back_populates='empleado')
     pagos = db.relationship('Pago', back_populates='empleados', cascade='all, delete-orphan')
     def __repr__(self):
