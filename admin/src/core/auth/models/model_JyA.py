@@ -37,6 +37,8 @@ class JYA(db.Model):
     sede = db.Column(db.String, nullable=True)
     dias_asistencia = db.Column(JSON, nullable=True)
     empleados = db.relationship('JYAEmpleado', back_populates='jya', cascade="all, delete-orphan")
+    caballo_id = db.Column(db.Integer, db.ForeignKey('caballos.id'), nullable=True)
+    caballo = db.relationship('Caballo', back_populates='jyas')
     documentos = db.relationship('Documento', backref='jya', lazy=True)
 
     def __repr__(self):
