@@ -2,10 +2,7 @@
 <head>
     {% block imports %}
         {{super()}}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_create.css') }}">
-        <header>
-            <a class="btn" href="{{ url_for('users.show_home') }}">Volver al Inicio</a>
-        </header>  
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_create.css') }}">  
     {% endblock %}
 </head>
 <body>

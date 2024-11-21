@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, flash
 from src.core.database import db
 from src.core.auth.models.model_pago import Pago
+from src.core.auth.models.model_empleado import Empleados
 from src.core.invoices import utiles
 from datetime import datetime
 from sqlalchemy import asc, desc
@@ -14,7 +15,7 @@ def listar_pago():
     fecha_fin = request.args.get('fecha_fin')
     tipo_pago = request.args.get('tipo_pago')
     orden = request.args.get('orden', 'asc')
-    query = db.query(Pago)
+    query = Pago.query
     if fecha_inicio and fecha_fin:
         query = query.filter(Pago.fecha_pago.between(fecha_inicio, fecha_fin))
     if tipo_pago:
@@ -24,7 +25,7 @@ def listar_pago():
     else:
         query = query.order_by(Pago.fecha_pago.desc())
     pagos = query.all()
-    return render_template('pagos/listar_pago.html')
+    return render_template('pagos/listar_pago.html',pagos=pagos)
 
 @pago_bp.route('/crear', methods=['GET'])
 def crear_pago_form():
@@ -40,6 +41,9 @@ def crear_pago():
         "tipo_pago": request.form['tipo_pago'],
         "descripcion": request.form.get('descripcion', "")
     }
+    empleado = Empleados.query.get_or_404(nuevo_pago['beneficiario_id'])
+    nuevo_pago['beneficiario_nombre'] = empleado.nombre
+    nuevo_pago['beneficiario_apellido'] = empleado.apellido
     pago = Pago(**nuevo_pago)
     db.session.add(pago)
     db.session.commit()
