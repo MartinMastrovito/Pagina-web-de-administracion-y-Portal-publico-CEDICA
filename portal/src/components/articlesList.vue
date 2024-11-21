@@ -2,11 +2,11 @@
     import articleItem from '../components/articleItem.vue'
     import { useArticlesStore } from '../stores/articles';
     import { storeToRefs } from 'pinia';
-    import { onMounted } from 'vue';
-    import { useRoute } from 'vue-router';
+    import { onMounted, } from 'vue';
+    import { RouterLink, useRoute } from 'vue-router';
 
     const store = useArticlesStore();
-    const { articles, loading, error} = storeToRefs(store);
+    const { articles, pages,loading, error} = storeToRefs(store);
     const route = useRoute();
     
     const fetchArticles = async() => {
@@ -20,6 +20,9 @@
             fetchArticles();
         }
     });
+
+
+
 </script>
 
 <template>
@@ -38,6 +41,14 @@
                     :contenido="article.contenido"
                 />
             </div>
+            <nav>
+                <RouterLink
+                    v-for="page in pages"
+                    class="btn" 
+                    :to="`/noticias/${page}`">   
+                        {{ page }}
+                </RouterLink>
+            </nav>
         </div>
         <p v-if="!loading && !articles.length">No hay articulos para mostrar</p>
     </div>

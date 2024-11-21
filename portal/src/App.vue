@@ -19,11 +19,8 @@
     </footer>
 </template>
 
-<script>
+<script setup>
 import { RouterLink, RouterView } from 'vue-router';
-export default {
-  name: 'App'
-};
 console.log(import.meta.env.VITE_ARTICLES_API);
 </script>
 
@@ -47,7 +44,6 @@ footer {
   background-color: #42b983;
   padding: 10px;
   color: white;
-  position: fixed;
   width: 100%;
   bottom: 0;
 }

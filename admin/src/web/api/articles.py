@@ -12,11 +12,20 @@ def index():
         id = int(id)
         pub = publicacion.get_publicacion(id)
         data = article_schema.dump(pub)
-        return data,200
+        retorno = {
+            "articles": data
+        }
+        return retorno,200
     if page:
         page = int(page)
     if per_page:
         per_page = int(per_page)
     publicaciones = publicacion.obtener_publicaciones(page, per_page)
+    pages = publicaciones.pages
     data = articles_schema.dump(publicaciones)
-    return data,200
+    retorno = {
+        "articles": data,
+        "pages": pages,
+    }
+    retorno = jsonify(retorno)
+    return retorno,200
