@@ -330,7 +330,7 @@ def block(user_id):
         flash("Usuario bloqueado exitosamente.")
     else:
         flash("No se puede bloquear a un System Admin.")
-    return redirect(url_for("users.index"))
+    return redirect("/usuarios")
 
 
 @bp.post("/unblock/<int:user_id>")

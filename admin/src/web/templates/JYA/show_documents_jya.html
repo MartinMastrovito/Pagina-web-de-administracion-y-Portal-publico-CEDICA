@@ -1,88 +1,101 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<header>
-    <h1>Documentos del J&A</h1>
+<header class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 mb-3">
+    <h1 class="display-3 text-md-start">Documentos del J&A</h1>
+    <a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
 </header>
-
 <section>
     <article>
-        <h2>Documentos registrados</h2>
-        <form method="get" action="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}">
-            
-            <label for="nombre_documento">Nombre del Documento:</label>
-            <input type="text" class="form-control" name="nombre_documento" value="{{ request.args.get('nombre_documento', '') }}">
-            
-            <label for="tipo_documento">Tipo de Documento:</label>
-            <select class="form-control" id="tipo_documento" name="tipo_documento">
-                <option value="" disabled selected>Seleccione una opción</option>
-                <option value="entrevista" {% if request.args.get('tipo_documento') == 'entrevista' %}selected{% endif %}>Entrevista</option>
-                <option value="evaluacion" {% if request.args.get('tipo_documento') == 'evaluacion' %}selected{% endif %}>Evaluación</option>
-                <option value="planificaciones" {% if request.args.get('tipo_documento') == 'planificaciones' %}selected{% endif %}>Planificaciones</option>
-                <option value="evolucion" {% if request.args.get('tipo_documento') == 'evolucion' %}selected{% endif %}>Evolución</option>
-                <option value="cronicas" {% if request.args.get('tipo_documento') == 'cronicas' %}selected{% endif %}>Crónicas</option>
-                <option value="documental" {% if request.args.get('tipo_documento') == 'documental' %}selected{% endif %}>Documental</option>
-            </select>
-
-            <button type="submit" class="btn btn-primary btn-block">Buscar</button>
+        <form method="get" action="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="mb-4">
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label for="nombre_documento" class="form-label">Nombre del Documento:</label>
+                    <input type="text" class="form-control" name="nombre_documento" value="{{ request.args.get('nombre_documento', '') }}">
+                </div>
+                <div class="col-12 col-md-6">
+                    <label for="tipo_documento" class="form-label">Tipo de Documento:</label>
+                    <select class="form-control" id="tipo_documento" name="tipo_documento">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="entrevista" {% if request.args.get('tipo_documento') == 'entrevista' %}selected{% endif %}>Entrevista</option>
+                        <option value="evaluacion" {% if request.args.get('tipo_documento') == 'evaluacion' %}selected{% endif %}>Evaluación</option>
+                        <option value="planificaciones" {% if request.args.get('tipo_documento') == 'planificaciones' %}selected{% endif %}>Planificaciones</option>
+                        <option value="evolucion" {% if request.args.get('tipo_documento') == 'evolucion' %}selected{% endif %}>Evolución</option>
+                        <option value="cronicas" {% if request.args.get('tipo_documento') == 'cronicas' %}selected{% endif %}>Crónicas</option>
+                        <option value="documental" {% if request.args.get('tipo_documento') == 'documental' %}selected{% endif %}>Documental</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                </div>
+            </div>
         </form>
-                        
-        <!-- Tabla de resultados -->
-        <table class="table table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>
-                        <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni, sort_by='nombre_documento', order='asc' if request.args.get('order') == 'desc' else 'desc', 
-                            nombre_documento=request.args.get('nombre_documento', '')) }}">
-                            Nombre
-                            {% if request.args.get('sort_by') == 'nombre_documento' %}
-                                {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni, sort_by='nombre_documento', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                nombre_documento=request.args.get('nombre_documento', '')) }}">
+                                Nombre
+                                {% if request.args.get('sort_by') == 'nombre_documento' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>Tipo</th>
+                        <th>
+                            <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni, sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                nombre_documento=request.args.get('nombre_documento', '')) }}">
+                                Fecha
+                                {% if request.args.get('sort_by') == 'created_at' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for documento in documentos %}
+                    <tr>
+                        <td>{{ documento.nombre_documento }}</td>
+                        <td>{{ documento.tipo_documento }}</td>
+                        <td>{{ documento.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            {% set file_extensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpeg', 'jpg'] %}
+                            {% set is_file = documento.nombre_documento.split('.')[-1] in file_extensions %}
+                            {% if is_file %}
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Menú
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ url_for('documentos.download_documento', documento_id=documento.id) }}" class="dropdown-item">Descargar</a></li>
+                                        <li><a href="{{ url_for('documentos.show_update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Editar</a></li>
+                                        <li><a href="{{ url_for('documentos.show_delete_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Eliminar</a></li>
+                                    </ul>
+                                </div>
+                            {% else %}
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Menú
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ documento.nombre_documento }}" class="dropdown-item">Ver Enlace</a></li>
+                                        <li><a href="{{ url_for('enlaces.show_update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Editar</a></li>
+                                        <li><a href="{{ url_for('enlaces.show_delete_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Eliminar</a></li>
+                                    </ul>
+                                </div>
                             {% endif %}
-                        </a>
-                    </th>
-                    <th>
-                            Tipo
-                    </th>
-                    <th>
-                        <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni, sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
-                            nombre_documento=request.args.get('nombre_documento', '')) }}">
-                            Fecha
-                            {% if request.args.get('sort_by') == 'created_at' %}
-                                {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
-                            {% endif %}
-                        </a>
-                    </th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for documento in documentos %}
-                <tr>
-                    <td>{{ documento.nombre_documento }}</td>
-                    <td>{{ documento.tipo_documento }}</td>
-                    <td>{{ documento.created_at.strftime('%Y-%m-%d') }}</td>
-                    <td>
-                        {% set file_extensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpeg', 'jpg'] %}
-                        {% set is_file = documento.nombre_documento.split('.')[-1] in file_extensions %}
-
-                        {% if is_file %}
-                            <a href="{{ url_for('documentos.show_update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
-                            <a href="{{ url_for('documentos.show_delete_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a> 
-                            <a href="{{ url_for('documentos.download_documento', documento_id=documento.id) }}" class="btn btn-success">Descargar</a>
-                        {% else %}
-                            <a href="{{ url_for('enlaces.show_update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Editar</a>
-                            <a href="{{ url_for('enlaces.show_delete_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="btn btn-primary">Eliminar</a>
-                            <a href="{{ documento.nombre_documento }}" class="btn btn-primary">Ver Enlace</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>                     
-        
-        <!-- Paginación -->
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation example" class="mt-4">
+            <ul class="pagination justify-content-center flex-wrap">
                 {% if pagination.has_prev %}
                 <li class="page-item">
                     <a class="page-link" href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni, page=pagination.prev_num, 
@@ -110,21 +123,11 @@
                 {% endif %}
             </ul>
         </nav>
-
-        <div style="margin-top: 20px;">
+        <div class="d-flex flex-wrap gap-3 mt-4">
             <a href="{{ url_for('documentos.show_upload_document', jya_dni=jya.dni) }}" class="btn btn-secondary">Subir documento</a>
-        </div>
-        <div style="margin-top: 20px;">
             <a href="{{ url_for('enlaces.show_upload_link', jya_dni=jya.dni) }}" class="btn btn-secondary">Subir enlace</a>
-        <div>
-        <div style="margin-top: 20px;">
-            <a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
         </div>
     </article>
 </section>
-
-<footer>
-    <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
-</footer>
 
 {% endblock %}
