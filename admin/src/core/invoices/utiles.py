@@ -13,13 +13,21 @@ payment_methods_list = [
     ]
 
 def create(**kwargs):
+    j_a = JYA.query.get_or_404(kwargs['j_a'])
+    emp = Empleados.query.get_or_404(kwargs['recipient'])
+    kwargs['ja_first_name'] = j_a.nombre
+    kwargs['ja_last_name'] = j_a.apellido
+    kwargs['recipient_first_name'] = emp.nombre
+    kwargs['recipient_last_name'] = emp.apellido
+    del kwargs['j_a']
+    del kwargs['recipient']
     invoice = Invoices(**kwargs)
     db.session.add(invoice)
     db.session.commit()
     return invoice
 
 def delete(id_delete):
-    db.session.query(Invoices).filter(Invoices.id==id_delete).delete()
+    db.session.query(Invoices).filter_by(id=id_delete).delete()
     db.session.commit()
 
 def validate_create(**datos):
@@ -58,14 +66,14 @@ def update_invoice(invoice_id,**kwargs):
         return False
     flash("Se actualizo con exito un cobro",'true')
     return True
-#Modulo para conseguir el nombre de todos los JYA y su respectivo ID 
+#Modulo para conseguir el nombre de todos los JYA 
 def get_all_ja():
     ja_query = JYA.query.order_by(JYA.apellido)
     return ja_query
 
 
 
-#Modulo para conseguir el nombre de todos los empleados y su respectivo ID 
+#Modulo para conseguir el nombre de todos los empleados 
 def get_all_employees():
     emp_query = Empleados.query.order_by(Empleados.apellido)
     return emp_query
@@ -92,16 +100,18 @@ def get_recipients():
 
 def select_filter(**kwargs):
     invoices = db.select(Invoices)
-    if(kwargs['date_from'] != '') and (kwargs['date_to'] !=''):
-        invoices = invoices.filter(Invoices.pay_date.between(kwargs["date_from"],kwargs["date_to"]))
+    if(kwargs['date_from'] != ''):
+        invoices = invoices.filter(Invoices.pay_date >= kwargs["date_from"])
+    if(kwargs['date_to'] != ''):
+        invoices = invoices.filter(Invoices.pay_date <= kwargs["date_to"])
     if(kwargs['payment_method'] != ''):
         invoices = invoices.filter(Invoices.payment_method == kwargs['payment_method'])
     if(kwargs['first_name'] != ''):
-        id_filter = db.select(Empleados.id).filter(Empleados.nombre == kwargs["first_name"])
-        invoices = invoices.filter(Invoices.j_a.in_(id_filter))
+        first_name_filter = db.select(Empleados.nombre).filter(Empleados.nombre == kwargs["first_name"])
+        invoices = invoices.filter(Invoices.recipient_first_name.in_(first_name_filter))
     if(kwargs['last_name'] != ''):
-        id_filter = db.select(Empleados.id).filter(Empleados.apellido==kwargs["last_name"])
-        invoices = invoices.filter(Invoices.j_a.in_(id_filter))
+        last_name_filter = db.select(Empleados.apellido).filter(Empleados.apellido==kwargs["last_name"])
+        invoices = invoices.filter(Invoices.recipient_last_name.in_(last_name_filter))
     if(kwargs['order'] != ""):
         if(kwargs['order'] == 'ASC'):
             invoices = invoices.order_by((Invoices.pay_date))

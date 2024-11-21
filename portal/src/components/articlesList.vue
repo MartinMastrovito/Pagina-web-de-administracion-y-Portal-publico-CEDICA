@@ -1,28 +1,15 @@
 <script setup>
     import articleItem from '../components/articleItem.vue'
-    import { useArticlesStore } from '../stores/articles';
-    import { storeToRefs } from 'pinia';
-    import { onMounted } from 'vue';
-
-    const store = useArticlesStore();
-    const { articles, loading, error} = storeToRefs(store);
-
-    const fetchArticles = async() => {
-        await store.fetchArticles();
-    };
-    onMounted(() => {
-        if(!articles.length){
-            fetchArticles();
-        }
-    });
+    defineProps({
+        articles:Array,
+        pages:Number
+    })
 </script>
 
 <template>
     <div>
         <h2>Lista de articulos</h2>
-        <p v-if="loading">Cargando...</p>
-        <p v-if="error">{{ error }}</p>
-        <div v-if="!loading && articles.length">
+        <div v-if="articles.length">
             <div class="listado">
                 <articleItem 
                     v-for="article in articles" 
@@ -34,7 +21,6 @@
                 />
             </div>
         </div>
-        <p v-if="!loading && !articles.length">No hay articulos para mostrar</p>
     </div>
 </template>
 

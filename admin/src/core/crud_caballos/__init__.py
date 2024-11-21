@@ -6,9 +6,21 @@ from werkzeug.utils import secure_filename
 from minio import Minio
 from minio.error import S3Error
 
-
-
 def search_caballos(nombre=None, tipo_ja_asignado=None, sort_by='nombre', order='asc', page=1, per_page=10):
+    """
+    Busca caballos con filtros opcionales y paginación.
+
+    Args:
+        nombre (str, optional): Nombre del caballo para filtrar.
+        tipo_ja_asignado (str, optional): Tipo de actividad asignada para filtrar.
+        sort_by (str, optional): Columna por la cual ordenar los resultados. Por defecto es 'nombre'.
+        order (str, optional): Orden de la columna ('asc' para ascendente, 'desc' para descendente). Por defecto es 'asc'.
+        page (int, optional): Número de página para la paginación. Por defecto es 1.
+        per_page (int, optional): Número de elementos por página. Por defecto es 10.
+
+    Returns:
+        Pagination: Objeto de paginación con los caballos filtrados y ordenados.
+    """
     query = db.session.query(Caballo)
 
     if nombre:
@@ -22,17 +34,44 @@ def search_caballos(nombre=None, tipo_ja_asignado=None, sort_by='nombre', order=
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
-
 def create_caballo(**kwargs):
+    """
+    Crea un nuevo caballo.
+
+    Args:
+        **kwargs: Atributos del caballo a crear.
+
+    Returns:
+        Caballo: El caballo creado.
+    """
     caballo = Caballo(**kwargs)
     db.session.add(caballo)
     db.session.commit()
     return caballo
 
 def get_caballo_by_id(id):
+    """
+    Obtiene un caballo por su ID.
+
+    Args:
+        id (int): ID del caballo a obtener.
+
+    Returns:
+        Caballo: El caballo obtenido.
+    """
     return Caballo.query.get_or_404(id)
 
 def update_caballo(id, **kwargs):
+    """
+    Actualiza un caballo existente.
+
+    Args:
+        id (int): ID del caballo a actualizar.
+        **kwargs: Atributos del caballo a actualizar.
+
+    Returns:
+        Caballo: El caballo actualizado.
+    """
     caballo = get_caballo_by_id(id)
     for key, value in kwargs.items():
         setattr(caballo, key, value)
@@ -40,11 +79,32 @@ def update_caballo(id, **kwargs):
     return caballo
 
 def delete_caballo(id):
+    """
+    Elimina un caballo por su ID.
+
+    Args:
+        id (int): ID del caballo a eliminar.
+    """
     caballo = get_caballo_by_id(id)
     db.session.delete(caballo)
     db.session.commit()
-#cumple la funcion de list and search
+
 def list_documents(caballo_id, nombre_documento=None, tipo_documento=None, sort_by='nombre_documento', order='asc', page=1, per_page=10):
+    """
+    Lista y busca documentos asociados a un caballo con filtros opcionales y paginación.
+
+    Args:
+        caballo_id (int): ID del caballo cuyos documentos se buscan.
+        nombre_documento (str, optional): Nombre del documento para filtrar.
+        tipo_documento (str, optional): Tipo de documento para filtrar.
+        sort_by (str, optional): Columna por la cual ordenar los resultados. Por defecto es 'nombre_documento'.
+        order (str, optional): Orden de la columna ('asc' para ascendente, 'desc' para descendente). Por defecto es 'asc'.
+        page (int, optional): Número de página para la paginación. Por defecto es 1.
+        per_page (int, optional): Número de elementos por página. Por defecto es 10.
+
+    Returns:
+        Pagination: Objeto de paginación con los documentos filtrados y ordenados.
+    """
     query = Documento.query.filter(Documento.caballo_id == caballo_id)
     
     if nombre_documento:
@@ -57,8 +117,6 @@ def list_documents(caballo_id, nombre_documento=None, tipo_documento=None, sort_
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
-
-
 def update_document(document_id, **kwargs):
     """
     Actualiza un documento existente en la base de datos.
@@ -68,7 +126,7 @@ def update_document(document_id, **kwargs):
         **kwargs: Nuevos atributos del documento.
 
     Returns:
-        El documento actualizado.
+        Documento: El documento actualizado.
     """
     document = get_document_by_id(document_id)
 
@@ -89,9 +147,16 @@ def delete_document(document_id):
     db.session.commit()
 
 def get_document_by_id(documento_id):
-    document = Documento.query.get_or_404(documento_id)
-    return document
+    """
+    Obtiene un documento por su ID.
 
+    Args:
+        documento_id (int): ID del documento a obtener.
+
+    Returns:
+        Documento: El documento obtenido.
+    """
+    return Documento.query.get_or_404(documento_id)
 
 def save_document(**kwargs):
     """
@@ -104,7 +169,6 @@ def save_document(**kwargs):
     db.session.add(document)
     db.session.commit()
 
-
 def get_caballo_by_document(document):
     """
     Busca el caballo asociado a un documento.
@@ -113,8 +177,7 @@ def get_caballo_by_document(document):
         document: El documento del cual se busca el caballo.
 
     Returns:
-        caballo or None: Retorna el objeto caballo encontrado o None si no existe.
+        Caballo or None: Retorna el objeto caballo encontrado o None si no existe.
     """
     caballo = Caballo.query.filter_by(id=document.caballo_id).first()
     return caballo
-

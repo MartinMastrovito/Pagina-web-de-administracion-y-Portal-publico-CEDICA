@@ -82,7 +82,7 @@ form input[type="text"] {
 
 form button {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #337ab7;
     color: white;
     border: none;
     border-radius: 5px;
@@ -91,7 +91,7 @@ form button {
 }
 
 form button:hover {
-    background-color: #45a049;
+    background-color: #337ab7;
 }
 
 /* Links */
@@ -161,7 +161,7 @@ button[type="submit"]:hover {
     display: inline-block;
     padding: 8px 15px;
     margin: 5px;
-    background-color: #28a745;
+    background-color: #007bff;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
@@ -170,4 +170,35 @@ button[type="submit"]:hover {
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    table {
+        font-size: 14px;
+        box-shadow: none;
+    }
+
+    th, td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    form input[type="text"], form button {
+        width: 100%;
+    }
+
+    .pagination {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    h1, h3, h4 {
+        font-size: 1.2rem;
+    }
+
+    table {
+        font-size: 12px;
+    }
 }

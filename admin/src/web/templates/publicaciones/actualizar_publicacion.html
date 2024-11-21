@@ -40,9 +40,7 @@
                 <label for="autor_id">Autor:</label>
                 <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                 <select class="form-control" id="autor_id" name="autor_id" required>
-                    <!-- Mostrar el autor actual con nombre y apellido -->
                     <option value="{{ publicacion.autor_id }}" selected>{{ publicacion.autor.nombre }} {{ publicacion.autor.apellido }}</option>
-                    <!-- Lista de todos los empleados -->
                     {% for empleado in empleados %}
                         {% if empleado.id != publicacion.autor_id%}
                             <option value="{{ empleado.id }}" {% if empleado.id == publicacion.autor_id.id %}selected{% endif %}>{{ empleado.nombre }} {{ empleado.apellido }}</option>

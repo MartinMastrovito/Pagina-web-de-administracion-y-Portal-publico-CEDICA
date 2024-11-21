@@ -29,7 +29,7 @@ def check(permission):
             user_id = session.get("user_id")
             user_google = session.get('profile')
             if user_id:
-                if not check_permission(user_id, permission):
+                if not check_permission(session, permission):
                     return redirect(url_for("users.show_home"))
             elif user_google:
                 user_email = user_google["email"]

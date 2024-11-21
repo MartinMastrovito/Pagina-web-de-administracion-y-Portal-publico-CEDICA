@@ -57,6 +57,8 @@
         <button type="submit">Registrar Caballo</button>
     </form>
 
-    <a href="{{ url_for('caballos.menu_caballos') }}">Volver al listado</a>
+    <form action="{{ url_for('caballos.menu_caballos') }}" method="GET" style="display:inline;">
+        <button type="submit" class="submit">Volver al listado</button>
+    </form>
 </body>
 </html>
