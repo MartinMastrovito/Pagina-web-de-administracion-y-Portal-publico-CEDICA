@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, flash
 from src.core.database import db
 from src.core.auth.models.model_pago import Pago
-from sqlalchemy.orm import Session
+from src.core.invoices import utiles
 from datetime import datetime
 from sqlalchemy import asc, desc
 
@@ -28,20 +28,23 @@ def listar_pago():
 
 @pago_bp.route('/crear', methods=['GET'])
 def crear_pago_form():
-    return render_template('pagos/crear_pago.html')
+    employees = utiles.get_all_employees()
+    return render_template('pagos/crear_pago.html',pago=pago_bp,empleados = employees)
 
 @pago_bp.route('/crear', methods=['POST'])
 def crear_pago():
     nuevo_pago = {
         "beneficiario_id": request.form.get('beneficiario_id'),
         "monto": request.form['monto'],
+        "fecha_pago": request.form['fecha_pago'],
         "tipo_pago": request.form['tipo_pago'],
         "descripcion": request.form.get('descripcion', "")
     }
     pago = Pago(**nuevo_pago)
-    db.add(pago)
-    db.commit()
-    return redirect('/pago')
+    db.session.add(pago)
+    db.session.commit()
+    flash("Se creo el cobro",'true')
+    return redirect('/pago/crear')
 
 @pago_bp.route('/actualizar/<int:pago_id>', methods=['POST'])
 def actualizar_pago(pago_id):
@@ -51,7 +54,6 @@ def actualizar_pago(pago_id):
     pago.fecha = datetime.now()
     pago.tipo_pago = request.form['tipo_pago']
     pago.descripcion = request.form.get('descripcion', "")
-    
     db.commit()
     return redirect('/pago')
 

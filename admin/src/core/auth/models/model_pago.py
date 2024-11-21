@@ -15,7 +15,7 @@ class Pago(db.Model):
     monto = db.Column(db.Float, nullable=False)
     fecha_pago = db.Column(db.Date)
     tipo_pago = db.Column(db.String, nullable=False)  # Honorarios, proveedor o gastos varios
-    description = db.Column(db.String, nullable=True)
+    descripcion = db.Column(db.String, nullable=True)
     
     
     empleados = db.relationship("Empleados", secondary='beneficiary', back_populates='beneficiary')
