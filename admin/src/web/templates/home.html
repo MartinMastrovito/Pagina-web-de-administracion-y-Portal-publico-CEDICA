@@ -49,6 +49,22 @@ Página de Inicio
                 <p class="card-text h4">Cobros</p>
             </div>
         </a>
+        {% if check_permission(session, "publicacion_index") %}
+        <a class="card item_home text-center" href="{{ url_for('publicacion.index') }}">
+            <img class="card-img-top" src="{{ url_for('static', filename='assets/publicacion.png') }}" alt="publicaciones icono">
+            <div class="card-body">
+                <p class="card-text h4">Publicaciones</p>
+            </div>
+        </a>
+        {% endif %}
+        {% if check_permission(session, "reporte_index") %}
+        <a class="card item_home text-center" href="{{ url_for('reportes.menu') }}">
+            <img class="card-img-top" src="{{ url_for('static', filename='assets/reportes.png') }}" alt="reportes icono">
+            <div class="card-body">
+                <p class="card-text h4">Reportes</p>
+            </div>
+        </a>
+        {% endif %}
     </div>
 {% else%}
     <h6 class="display-6 text-danger mt-3">Por favor, inicie sesión para acceder a las funciones de la página.</h6>

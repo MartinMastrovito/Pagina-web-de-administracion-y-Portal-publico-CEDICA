@@ -1,48 +1,38 @@
 {% extends "layout.html" %}
 
-<!DOCTYPE html>
-<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>{% block title %}Subir Documentos de J&A{% endblock %}</title>
 </head>
 <body>
     {% block content %}
-    <header>
+    <header class="text-center my-4">
         <h1>Subir Documentos para {{ jya.nombre }} {{ jya.apellido }}</h1>
     </header>
 
-    <section>
-        <form action="{{ url_for('documentos.upload_document', jya_dni=jya.dni) }}" method="POST" enctype="multipart/form-data">
+    <section class="container">
+        <form action="{{ url_for('documentos.upload_document', jya_dni=jya.dni) }}" method="POST" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
             <div class="form-group">
-                <label for="tipo">Tipo de documento:</label>
+                <label for="tipo" class="form-label">Tipo de documento:</label>
                 <select class="form-control" id="tipo" name="tipo" required>
-                    <option value="" disabled selected>Seleccione una opción</option> <!-- Opción por defecto -->
+                    <option value="" disabled selected>Seleccione una opción</option>
                     <option value="entrevista">Entrevista</option>
                     <option value="evaluacion">Evaluación</option>
-                    <option value="planificaciones">Planifiaciones</option>
+                    <option value="planificaciones">Planificaciones</option>
                     <option value="evolucion">Evolución</option>
                     <option value="cronicas">Crónicas</option>
                     <option value="documental">Documental</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="documento">Selecciona el documento a subir:</label>
+                <label for="documento" class="form-label">Selecciona el documento a subir:</label>
                 <input type="file" name="documento" id="documento" class="form-control-file" required>
             </div>
-            <button type="submit" class="btn btn-primary">Subir Documento</button>
-            <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
+            <div class="d-flex flex-wrap gap-3 justify-content-between mt-4">
+                <button type="submit" class="btn btn-primary flex-grow-1">Subir Documento</button>
+                <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-secondary flex-grow-1">Volver</a>
+            </div>
         </form>
     </section>
-    
-
     {% endblock %}
-
-    <footer>
-        <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
-    </footer>
-
 </body>
 </html>
