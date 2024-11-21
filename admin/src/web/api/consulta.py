@@ -1,11 +1,14 @@
 import requests
 from flask import Blueprint, jsonify, request
 from src.core import crud_consultas as crud_consulta
+from flask_cors import CORS
 
 consulta_api_bp = Blueprint("consulta_api", __name__, url_prefix="/api/consulta")
 
 # Tu clave secreta de reCAPTCHA
 RECAPTCHA_SECRET_KEY = "6LfMIYYqAAAAAG9SdB6g7AfOJaALFZVDfl37N2ci"
+
+CORS(consulta_api_bp)
 
 @consulta_api_bp.route('', methods=['POST'])
 def crear_consulta_portal():
