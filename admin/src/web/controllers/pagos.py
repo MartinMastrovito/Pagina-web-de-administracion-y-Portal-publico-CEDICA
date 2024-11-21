@@ -43,7 +43,7 @@ def crear_pago():
     pago = Pago(**nuevo_pago)
     db.session.add(pago)
     db.session.commit()
-    flash("Se creo el cobro",'true')
+    flash("Se creo el pago",'true')
     return redirect('/pago/crear')
 
 @pago_bp.route('/actualizar/<int:pago_id>', methods=['POST'])
