@@ -2,26 +2,30 @@ from src.core.auth.models.model_user import Role, User
 from src.core.auth.models.model_permission import Permission, RolePermission
 from src.core.auth.models.model_empleado import Empleados
 from src.core.auth.models.model_JyA import JYA
+from src.core.auth.models.model_publicacion import Publicacion
 from src.core.database import db
 from src.core import bcrypt
 from src.core.auth import utiles
-
+from datetime import datetime
 
 def role_create():
-    """
-    Carga los roles en la base de datos
-    """
-
-    # Roles del sistema
-    list_role = [
-        Role(name="tecnica"),
-        Role(name="ecuestre"),
-        Role(name="voluntariado"),
-        Role(name="administracion"),
-        Role(name="sysadmin"),
+    roles = [
+        {"name": "tecnica"},
+        {"name": "ecuestre"},
+        {"name": "voluntariado"},
+        {"name": "administracion"},
+        {"name": "sysadmin"}
     ]
 
-    db.session.add_all(list_role)
+    for role_data in roles:
+        existing_role = Role.query.filter_by(name=role_data["name"]).first()
+        if existing_role:
+            print(f"Role with name {role_data['name']} already exists. Skipping.")
+            continue
+
+        role = Role(name=role_data["name"])
+        db.session.add(role)
+
     db.session.commit()
 
 
@@ -71,6 +75,15 @@ def permission_create():
         Permission(name="consulta_destroy"),
         Permission(name="consulta_update"),
         Permission(name="consulta_show"),
+        # permisos publicaciones
+        Permission(name="publicacion_index"),
+        Permission(name="publicacion_new"),
+        Permission(name="publicacion_delete"),
+        Permission(name="publicacion_update"),
+        Permission(name="publicacion_show"),
+        # permisos reportes
+        Permission(name="reporte_index"),
+        Permission(name="show_reporte"),
     ]
     db.session.add_all(list_permission)
     db.session.commit()
@@ -390,7 +403,8 @@ def JYA_create():
     },
     becado = False,
     profesionales_atendiendo = "Carlos test",
-    certificado_discapacidad = False,
+    certificado_discapacidad = True,
+    tipo_discapacidad = "Sensorial",
 ),
 
         JYA(
@@ -417,6 +431,7 @@ def JYA_create():
     becado = True,
     profesionales_atendiendo = "Lucía test",
     certificado_discapacidad = True,
+    tipo_discapacidad = "Mental",
 ),
 
         JYA(
@@ -468,7 +483,8 @@ def JYA_create():
     },
     becado = True,
     profesionales_atendiendo = "Valentina test",
-    certificado_discapacidad = False,
+    certificado_discapacidad = True,
+    tipo_discapacidad = "Motora"
 ),
 
         JYA(
@@ -521,6 +537,7 @@ def JYA_create():
     becado = True,
     profesionales_atendiendo = "Agustina test",
     certificado_discapacidad = True,
+    tipo_discapacidad = "Mental"
 ),
 
         JYA(
@@ -553,6 +570,101 @@ def JYA_create():
     db.session.add_all(jya_list)
     db.session.commit()
 
+def articles_create():
+    articles_list = [
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-10", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-10", "%Y-%m-%d").date(),
+            titulo="Hola, soy noticia",
+            copete="Un saludo desde el mundo de las noticias, explorando los eventos más relevantes del día con un enfoque único.",
+            contenido="Hoy presentamos una noticia que captura la esencia de los sucesos diarios. Este artículo analiza en profundidad eventos clave, explicando su impacto y relevancia en la sociedad moderna. Descubre cómo pequeños detalles pueden influir en grandes cambios.",
+            autor_id=1
+        ),
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-11", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-11", "%Y-%m-%d").date(),
+            titulo="Nuevo avance en IA",
+            copete="Investigadores logran un avance significativo en el campo de la inteligencia artificial, transformando el futuro de la tecnología.",
+            contenido="Los desarrollos recientes en inteligencia artificial están marcando una nueva era en la computación. Este avance mejora significativamente la eficiencia de los algoritmos, reduciendo los tiempos de respuesta en un 40%. Las aplicaciones potenciales incluyen diagnósticos médicos más rápidos, sistemas educativos personalizados y optimización de procesos industriales. La comunidad científica está entusiasmada con las posibilidades que estos avances representan.",
+            autor_id=2
+        ),
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-12", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-12", "%Y-%m-%d").date(),
+            titulo="Receta fácil y rápida",
+            copete="Una receta deliciosa para preparar en menos de 20 minutos, perfecta para cualquier ocasión.",
+            contenido="¿Tienes poco tiempo pero quieres disfrutar de una comida deliciosa? Prueba esta receta de pasta con salsa cremosa de aguacate. Usando ingredientes simples como aguacate fresco, ajo y jugo de limón, puedes crear una cena nutritiva y rápida. Este plato no solo es saludable, sino que también impresiona con su sabor fresco y textura cremosa. Ideal para cenas familiares o momentos de apuro.",
+            autor_id=3
+        ),
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-13", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-13", "%Y-%m-%d").date(),
+            titulo="Clima y salud",
+            copete="El cambio climático afecta la salud humana de formas más profundas de lo que imaginamos.",
+            contenido="Un estudio reciente revela que el aumento de las temperaturas globales, combinado con la contaminación del aire, está causando un incremento alarmante de enfermedades respiratorias y cardiovasculares. Las poblaciones más vulnerables, incluidas las personas mayores y niños, enfrentan un riesgo elevado. Este artículo analiza las posibles soluciones para mitigar estos efectos, desde políticas más estrictas hasta tecnologías limpias.",
+            autor_id=4
+        ),
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-14", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-14", "%Y-%m-%d").date(),
+            titulo="Tecnología educativa",
+            copete="La tecnología está revolucionando la forma en que aprendemos y accedemos al conocimiento.",
+            contenido="Con la introducción de herramientas digitales y sistemas de inteligencia artificial en las aulas, el aprendizaje se ha vuelto más interactivo y accesible. Plataformas en línea permiten a los estudiantes de todo el mundo acceder a recursos educativos de alta calidad. Este artículo explora cómo estas innovaciones están democratizando la educación y ayudando a cerrar brechas de conocimiento en regiones desfavorecidas.",
+            autor_id=5
+        ),
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-15", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-15", "%Y-%m-%d").date(),
+            titulo="Viaje Antártida",
+            copete="Un grupo de científicos se aventura en un viaje épico para investigar los efectos del cambio climático.",
+            contenido="Este viaje científico, de seis meses de duración, busca estudiar el impacto del derretimiento de los glaciares en el nivel del mar. Equipos multidisciplinarios analizarán datos clave para comprender cómo estas transformaciones están afectando los ecosistemas globales. Los resultados podrían proporcionar la base para nuevas políticas ambientales y acciones urgentes.",
+            autor_id=6
+        ),
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-16", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-16", "%Y-%m-%d").date(),
+            titulo="Fósil raro",
+            copete="Un descubrimiento sin precedentes arroja luz sobre especies extintas de hace millones de años.",
+            contenido="En un yacimiento arqueológico de Sudamérica, investigadores hallaron un fósil excepcionalmente bien conservado que podría cambiar lo que sabemos sobre la evolución de varias especies. Este hallazgo no solo aporta datos paleontológicos, sino que también abre nuevas preguntas sobre los ecosistemas de épocas pasadas.",
+            autor_id=4
+        ),
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-17", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-17", "%Y-%m-%d").date(),
+            titulo="Misión espacial",
+            copete="Se lanza un satélite revolucionario para monitorear el clima en tiempo real.",
+            contenido="La agencia espacial internacional ha lanzado un satélite avanzado diseñado para observar desastres naturales y patrones climáticos con una precisión sin precedentes. Los datos recopilados ayudarán a los gobiernos a planificar mejor las respuestas ante emergencias climáticas, salvando vidas y reduciendo daños.",
+            autor_id=5
+        ),
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-18", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-18", "%Y-%m-%d").date(),
+            titulo="Vacuna rara",
+            copete="Un avance médico promete cambiar la vida de miles de personas en todo el mundo.",
+            contenido="Científicos han desarrollado una vacuna innovadora para combatir una enfermedad rara que afecta a menos del 1% de la población global. Los ensayos clínicos iniciales han mostrado resultados positivos, y la comunidad médica está entusiasmada con su potencial para reducir los síntomas y mejorar la calidad de vida de los pacientes.",
+            autor_id=1
+        ),
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-19", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-19", "%Y-%m-%d").date(),
+            titulo="Robots marinos",
+            copete="Exploradores robóticos están transformando la investigación marina.",
+            contenido="Ingenieros han presentado robots submarinos equipados con sensores avanzados capaces de recopilar datos en áreas inaccesibles para los humanos. Estas máquinas están revelando secretos ocultos de los océanos, incluyendo ecosistemas inexplorados y patrones de vida marina que podrían ser clave para la conservación.",
+            autor_id=3
+        ),
+        Publicacion(
+            fecha_creacion=datetime.strptime("2024-9-20", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-9-20", "%Y-%m-%d").date(),
+            titulo="Energía solar",
+            copete="Nueva tecnología en paneles solares promete revolucionar el mercado energético.",
+            contenido="Un grupo de investigadores ha desarrollado paneles solares con niveles de eficiencia nunca antes vistos. Este avance podría reducir significativamente los costos de la energía renovable, impulsando una adopción masiva y acelerando la transición hacia un futuro sostenible.",
+            autor_id=2
+        ),
+    ]
+
+    db.session.add_all(articles_list)
+    db.session.commit()
+
 def db_seeds():
     role_create()
     permission_create()
@@ -560,6 +672,7 @@ def db_seeds():
     rolePermission_create()
     JYA_create()
     employee_create()
+    articles_create()
 
 """
 Técnica

@@ -54,7 +54,7 @@ button[type="submit"] {
 
 
 button[type="submit-b"] {
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
@@ -83,11 +83,11 @@ button[type="submit-b"] {
 
 /* Estilo específico para el botón de editar */
 .btn-edit {
-    background-color: #28a745;
+    background-color: #4a584d;
 }
 
 .btn-edit:hover {
-    background-color: #218838;
+    background-color: #4a584d;
 }
 
 /* Estilo para los mensajes flash */
@@ -195,4 +195,84 @@ form button:hover {
     padding: 8px 12px;
     border-radius: 5px;
     background-color: #e2e2e2;
+}
+
+
+
+
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+        margin: 0;
+        overflow-x: hidden; /* Evita desbordamiento horizontal */
+    }
+
+    /* Ajusta tablas grandes para pantallas pequeñas */
+    table {
+        width: 100%; /* Permite que la tabla ocupe todo el espacio horizontal */
+        overflow-x: auto;
+        display: block; /* Cambia a bloque solo en pantallas pequeñas */
+    }
+
+    th, td {
+        font-size: 0.9rem; /* Reduce ligeramente el tamaño de fuente */
+        padding: 10px; /* Asegura que no se solapen */
+    }
+
+    /* Formularios */
+    form {
+        display: flex;
+        flex-wrap: wrap; /* Ajusta campos en varias líneas si es necesario */
+        justify-content: center;
+    }
+
+    input[type="text"], select {
+        width: 100%; /* Cada campo ocupa el 100% del contenedor */
+        max-width: 300px; /* Limita el tamaño en pantallas medianas */
+    }
+
+    button[type="submit"],
+    button[type="submit-b"] {
+        width: auto;
+        margin: 5px auto;
+    }
+
+    /* Botones */
+    .btn, .btn-edit {
+        width: auto;
+        margin: 5px auto;
+    }
+
+    /* Paginación */
+    .pagination {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .pagination a {
+        margin: 0 5px;
+        padding: 8px 12px;
+    }
+
+    .pagination span {
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5rem; /* Escala más pequeño */
+    }
+
+    input[type="text"], select {
+        width: 90%; /* Se asegura de que los campos quepan en pantallas más pequeñas */
+    }
+
+    button {
+        font-size: 0.8rem; /* Reduce tamaño para pantallas muy pequeñas */
+    }
+
+    th, td {
+        font-size: 0.8rem; /* Escala aún más en pantallas pequeñas */
+    }
 }

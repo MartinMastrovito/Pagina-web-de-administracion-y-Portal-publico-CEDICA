@@ -1,8 +1,6 @@
 <!-- templates/consultas/show.html -->
 {% extends "layout.html" %}
 
-
-
 {% block imports %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/index.css') }}">
@@ -18,11 +16,11 @@
 </head>
 <body>
     <h1>Detalles de la Consulta</h1>
-    <p>Fecha: {{ consulta.fecha }}</p>
-    <p>Nombre: {{ consulta.nombre_completo }}</p>
-    <p>Estado: {{ consulta.estado }}</p>
-    <p>Descripción: {{ consulta.descripcion }}</p>
-    <a href="{{ url_for('consultas.menu_consultas') }}">Volver</a>
+    <p><strong>Fecha:</strong> {{ consulta.fecha.strftime('%Y-%m-%d') }}</p>
+    <p><strong>Nombre:</strong> {{ consulta.nombre_completo }}</p>
+    <p><strong>Estado:</strong> {{ consulta.estado }}</p>
+    <p><strong>Descripción:</strong> {{ consulta.descripcion }}</p>
+    <a href="{{ url_for('consultas.menu_consultas') }}" class="btn">Volver</a>
 </body>
 </html>
 

@@ -163,14 +163,13 @@ def create_jya():
         })
 
     errores = validate_jya_form(jya_data)
-    print(errores)
     if errores:
         flash("Ocurrió un error al completar los campos, intentelo nuevamente...", "danger")
         return redirect("/JYA/crear_jya")
     
     user = crud_JyA.create_jya(**jya_data)
     if not user:
-        flash("El usuario ya existe o ocurrió un error", "danger")
+        flash("El usuario ya existe u ocurrió un error", "danger")
         return redirect("/JYA/crear_jya")
     
     crud_JyA.assign_employee_to_jya(user.id, request.form["profesor_terapeuta_id"], "terapeuta")

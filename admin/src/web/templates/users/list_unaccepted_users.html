@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+<title>{% block title %}Lista de Usuarios{% endblock %}</title>
+
+<body>
+    {% block content %}
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <h4 class="display-4">Usuarios no aceptados</h4>
+    <a class="btn btn-secondary" href="{{ url_for('users.index') }}">Volver</a>
+</header>
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Confirmación de rechazo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            ¿Está seguro de que desea rechazar a este usuario? Al hacerlo lo eliminarás del sistema.
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <form method="POST" id="deleteForm" action="" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Rechazar</button>
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    <section>
+        <article>
+            <form method="get" action="{{ url_for('users.index_unaccepted') }}" class="mt-4 mb-4">
+                <div class="row align-items-end">
+                    <div class="col-md-4">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" name="email" class="form-control mt-2" placeholder="Email" aria-label="Email" value="{{ request.args.get('email', '') }}">
+                    </div>
+                    <div class="col-md-2 text-right">
+                        <button type="submit" class="btn btn-primary mt-4">Buscar</button>
+                    </div>
+                </div>
+            </form>                      
+
+            <table class="table table-striped mt-4">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            <a href="{{ url_for('users.index_unaccepted', order='asc' if request.args.get('order') == 'desc' else 'desc', email=request.args.get('email', '')) }}">
+                                Email
+                                {% if request.args.get('order') == 'desc' %}
+                                        ▼
+                                {% else %}
+                                        ▲
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>Alias</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.alias }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Menú
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ url_for('users.show_user_accept', user_id=user.id) }}">Aceptar</a></li>
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ url_for('users.user_delete', user_id=user.id) }}">Rechazar</a></li>
+                                </ul>
+                            </div>                            
+                        </td>                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>                     
+            
+            <nav aria-label="Page navigation example" class="mt-4">
+                <ul class="pagination">
+                    {% if pagination.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('users.index_unaccepted', page=pagination.prev_num, 
+                            email=request.args.get('email', ''), 
+                            order=request.args.get('order', '')) }}" aria-label="Previous">Anterior
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item disabled"><span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span></li>
+                    {% if pagination.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('users.index_unaccepted', page=pagination.next_num, 
+                            email=request.args.get('email', ''), 
+                            order=request.args.get('order', '')) }}" aria-label="Next">Siguiente
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </article>
+    </section>
+</body>
+</html>
+
+<script>
+    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            var url = event.target.getAttribute('data-url');
+            if (url) {
+                document.getElementById('deleteForm').action = url;
+            }
+        });
+    });
+</script>
+
+
+<style>
+    .table thead {
+        background-color: rgb(174, 235, 225);
+    }
+    .pagination {
+        justify-content: center;
+    }
+</style>
+{% endblock %}

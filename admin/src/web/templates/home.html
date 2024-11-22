@@ -5,23 +5,16 @@ Página de Inicio
 {% endblock %}
 
 {% block content %}
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="alert alert-info" role="alert">
-                {% for category, message in messages %}
-                    <div class="alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-
+{% if check_authenticated(session) %}
     <div class="menu_home">
+        {% if check_permission(session, "horse_index") %}
         <a class="card item_home text-center" href="{{ url_for('caballos.menu_caballos') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/caballos.png') }}" alt="caballo icono">
             <div class="card-body">
                 <p class="card-text h4">Caballos</p>
             </div>
         </a>
+        {% endif %}
         <a class="card item_home text-center" href="{{ url_for('empleados.show_empleado_form') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/equipo.png') }}" alt="equipo icono">
             <div class="card-body">
@@ -34,26 +27,48 @@ Página de Inicio
                 <p class="card-text h4">Consultas</p>
             </div>
         </a>
+        {% if check_permission(session, "jya_index") %}
         <a class="card item_home text-center" href="{{ url_for('crud_JyA.index') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/jya.png') }}" alt="jinetes y amazonas icono">
             <div class="card-body">
                 <p class="card-text h4">J&A</p>
             </div>
         </a>
+        {% endif %}
+        {% if check_permission(session, "user_index") %}
         <a class="card item_home text-center" href="{{ url_for('users.index') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/usuarios.png') }}" alt="usuarios icono">
             <div class="card-body">
                 <p class="card-text h4">Usuarios</p>
             </div>
         </a>
+        {% endif %}
         <a class="card item_home text-center" href="{{ url_for('invoices.invoices_menu') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/cobros.png') }}" alt="cobros icono">
             <div class="card-body">
                 <p class="card-text h4">Cobros</p>
             </div>
         </a>
+        {% if check_permission(session, "publicacion_index") %}
+        <a class="card item_home text-center" href="{{ url_for('publicacion.index') }}">
+            <img class="card-img-top" src="{{ url_for('static', filename='assets/publicacion.png') }}" alt="publicaciones icono">
+            <div class="card-body">
+                <p class="card-text h4">Publicaciones</p>
+            </div>
+        </a>
+        {% endif %}
+        {% if check_permission(session, "reporte_index") %}
+        <a class="card item_home text-center" href="{{ url_for('reportes.menu') }}">
+            <img class="card-img-top" src="{{ url_for('static', filename='assets/reportes.png') }}" alt="reportes icono">
+            <div class="card-body">
+                <p class="card-text h4">Reportes</p>
+            </div>
+        </a>
+        {% endif %}
     </div>
-
+{% else%}
+    <h6 class="display-6 text-danger mt-3">Por favor, inicie sesión para acceder a las funciones de la página.</h6>
+{% endif %}
 
 <style>
         .menu_home {

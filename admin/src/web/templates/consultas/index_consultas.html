@@ -26,7 +26,7 @@
             <option value="Contestado" {% if estado == 'Contestado' %}selected{% endif %}>Contestado</option>
             <option value="Revisar" {% if estado == 'Revisar' %}selected{% endif %}>Revisar</option>
         </select>
-        <button type="submit">Buscar</button>
+        <button type="submit-b">Buscar</button>
     </form>
     <a href="{{ url_for('consultas.nueva_consulta') }}" class="btn btn-primary">Crear Consulta</a>
     <table>
@@ -43,7 +43,7 @@
         <tbody>
             {% for consulta in consultas.items %}
             <tr>
-                <td>{{ consulta.fecha }}</td>
+                <td>{{ consulta.fecha.strftime('%Y-%m-%d') }}</td>
                 <td>{{ consulta.nombre_completo }}</td>
                 <td>{{ consulta.estado }}</td>
                 <td>

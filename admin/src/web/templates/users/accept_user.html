@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+
+<head>
+    <title>{% block title %}Aceptar Usuario{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    {% block content %}
+    
+    <main class="container mt-4">
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="display-4">Aceptar Usuario: <strong>{{ user.alias }}</strong></h4>
+            <a class="btn btn-secondary" href="{{ url_for('users.index') }}">Volver</a>
+        </header>
+
+        <section>
+            <form action="{{ url_for('users.user_accept', user_id=user.id) }}" method="POST">
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" disabled>{{ user.email }}</textarea>
+                    <label for="floatingTextarea2Disabled">Email</label>
+                </div>
+                
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" disabled>{{ user.alias }}</textarea>
+                    <label for="floatingTextarea2Disabled">Alias</label>
+                </div>
+
+                <div class="mb-3">
+                    <label for="role_id" class="form-label">Rol</label>
+                    <select id="role_id" name="role_id" class="form-select" required>
+                        <option value="1" {% if user.role_id == 1 %} selected {% endif %}>Técnica</option>
+                        <option value="2" {% if user.role_id == 2 %} selected {% endif %}>Ecuestre</option>
+                        <option value="3" {% if user.role_id == 3 %} selected {% endif %}>Voluntariado</option>
+                        <option value="4" {% if user.role_id == 4 %} selected {% endif %}>Administración</option>
+                        <option value="5" {% if user.role_id == 5 %} selected {% endif %}>System Admin</option>
+                    </select>
+                </div>
+
+                <div class="d-grid gap-2 mb-3">
+                    <button type="submit" class="btn btn-primary">Aceptar Usuario</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    {% endblock %}
+</body>
+</html>
