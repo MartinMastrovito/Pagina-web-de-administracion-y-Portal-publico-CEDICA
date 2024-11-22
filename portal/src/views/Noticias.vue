@@ -37,12 +37,12 @@
       :pages="pages" 
     />
     <nav>
-      <a
+      <RouterLink
         v-for="page in pages"
         class="btn" 
-        :href="`/noticias/${page}`">   
+        :to="`/noticias/${page}`">   
           {{ page }}
-      </a>
+      </RouterLink>
     </nav>
   </main>
 </template>

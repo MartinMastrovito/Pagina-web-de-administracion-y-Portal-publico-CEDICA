@@ -4,12 +4,6 @@ from src.web.handlers.auth import check_permission
 from src.core.auth.utiles import get_user_by_email
 
 def login_required(f):
-    """
-    Decorador que verifica si un usuario se encuentra autenticado.
-
-    Returns:
-        function: La función decorada que realiza la verificación de la autenticación.
-    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session and 'profile' not in session:

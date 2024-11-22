@@ -63,18 +63,9 @@
                         <td>{{ documento.tipo_documento }}</td>
                         <td>{{ documento.created_at.strftime('%Y-%m-%d') }}</td>
                         <td>
-                            {% if documento.nombre_documento.startswith('http://') or documento.nombre_documento.startswith('https://') %}
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Menú
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ documento.nombre_documento }}" class="dropdown-item">Ver Enlace</a></li>
-                                        <li><a href="{{ url_for('enlaces.show_update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Editar</a></li>
-                                        <li><a href="{{ url_for('enlaces.show_delete_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Eliminar</a></li>
-                                    </ul>
-                                </div>
-                            {% else %}
+                            {% set file_extensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpeg', 'jpg'] %}
+                            {% set is_file = documento.nombre_documento.split('.')[-1] in file_extensions %}
+                            {% if is_file %}
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Menú
@@ -83,6 +74,17 @@
                                         <li><a href="{{ url_for('documentos.download_documento', documento_id=documento.id) }}" class="dropdown-item">Descargar</a></li>
                                         <li><a href="{{ url_for('documentos.show_update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Editar</a></li>
                                         <li><a href="{{ url_for('documentos.show_delete_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Eliminar</a></li>
+                                    </ul>
+                                </div>
+                            {% else %}
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Menú
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ documento.nombre_documento }}" class="dropdown-item">Ver Enlace</a></li>
+                                        <li><a href="{{ url_for('enlaces.show_update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Editar</a></li>
+                                        <li><a href="{{ url_for('enlaces.show_delete_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Eliminar</a></li>
                                     </ul>
                                 </div>
                             {% endif %}

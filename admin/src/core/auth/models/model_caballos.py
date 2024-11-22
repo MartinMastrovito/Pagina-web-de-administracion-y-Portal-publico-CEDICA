@@ -14,11 +14,7 @@ caballo_conductores = db.Table('caballo_conductores',
     extend_existing=True
 )
 
-caballo_tipoja = db.Table('caballo_tipoja',
-    db.Column('caballo_id', db.Integer, db.ForeignKey('caballos.id'), primary_key=True),
-    db.Column('JYA_id', db.Integer, db.ForeignKey('JYA.id'), primary_key=True),
-    extend_existing=True
-)
+
 
 
 class Caballo(db.Model):
@@ -30,7 +26,6 @@ class Caballo(db.Model):
 
     documentos = db.relationship('Documento', lazy=True)
 
-    jyas = db.relationship('JYA', back_populates='caballo')
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(255), nullable=False)

@@ -1,25 +1,15 @@
 {% extends "layout.html" %}
 
-<html lang="es">
 <head>
-    {% block title %}Menu Empleados{% endblock %}
-    <style>
-        .menu-container {
-            max-width: 400px;
-            margin: 50px auto;
-            text-align: center;
-        }
-        .menu-title {
-            margin-bottom: 30px;
-            font-size: 1.5rem;
-            color: #333;
-        }
-    </style>
+    {% block title %}MenuEmpleado{% endblock %}
+    {% block imports %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_menu.css') }}">
+    {% endblock %}
 </head>
-<body>
+
 {% block content %}
-<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
-    <a class="btn btn-secondary" href="{{ url_for('users.show_home') }}">Volver</a>
+<header>
+    <a class="btn" href="{{ url_for('users.show_home') }}">Volver al Inicio</a>
 </header>
 <div class="menu-container">
     <h1 class="display-6">Menú de empleados</h1>
