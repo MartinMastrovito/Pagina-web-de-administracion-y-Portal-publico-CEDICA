@@ -5,15 +5,46 @@ from src.core.auth.decorators import login_required, check
 from src.web.validators.empleado_validadores import validate_empleado_form
 
 
-empleados_bp = Blueprint('empleados', __name__, url_prefix="/menu_empleados", template_folder='../templates/empleados',static_folder="/admin/static")
+bp = Blueprint('empleados', __name__, url_prefix="/empleados", template_folder='../templates/empleados',static_folder="/admin/static")
 
-@empleados_bp.get("/menu")
-def show_empleado_form():
-    return render_template("empleados/menu_empleados.html")
+@bp.get("/")
+@login_required
+#@check("user_index")
+def index():
+    """
+    Muestra la lista de empleados con filtros y ordenación.
 
-#crear empleados
+    Returns:
+        Renderiza la plantilla con la lista de empleados, filtros y paginación.
+    """
+    nombre = request.args.get('nombre', '').strip()
+    apellido = request.args.get('apellido', '').strip()
+    dni = request.args.get('dni', '').strip()
+    email = request.args.get('email', '').strip()
+    sort_by = request.args.get('sort_by', 'nombre')
+    order = request.args.get('order', 'asc')
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
 
-@empleados_bp.get("/crear")
+    empleados_pagination = empleados.search_empleados(
+        nombre=nombre,
+        apellido=apellido,
+        dni=dni,
+        email=email,
+        sort_by=sort_by,
+        order=order,
+        page=page,
+        per_page=per_page
+    )
+
+    return render_template(
+        "empleados/index_empleados.html",
+        empleados=empleados_pagination.items,
+        pagination=empleados_pagination,
+    )
+
+
+@bp.get("/crear_empleado")
 def show_create_employee_form():
     """
     Muestra el formulario para crear un nuevo empleado.
@@ -24,7 +55,7 @@ def show_create_employee_form():
     return render_template("empleados/crear_empleado.html")
 
 
-@empleados_bp.post("/crear_empleado")
+@bp.post("/crear_empleado")
 #@login_required
 def crear_empleado_listo():
     # Obtener los datos del formulario
@@ -62,48 +93,7 @@ def crear_empleado_listo():
     flash("Empleado creado exitosamente", "success")
     return redirect(url_for('empleados.listar_empleados'))
 
-
-
-# listar empleados
-@empleados_bp.route('/lista-empleados', methods=['GET'])
-
-def listar_empleados():
-    """
-    Renderiza la vista principal de empleados con los registros paginados.
-    Se pueden filtrar resultados por nombre, apellido, dni y puesto.
-
-    Returns:
-        Renderizado de la plantilla listar_empleados.html con los resultados y la paginación.
-    """
-    nombre = request.args.get("nombre")
-    apellido = request.args.get("apellido")
-    dni = request.args.get("dni", type=int)
-    puesto = request.args.get("puesto")
-    sort_by = request.args.get("sort_by", "nombre")
-    order = request.args.get("order", "asc")
-    page = request.args.get("page", 1, type=int)
-    per_page = 25
-
-    empleados_paginacion = empleados.buscar_empleado(
-        nombre=nombre,
-        apellido=apellido,
-        dni=dni,
-        puesto=puesto,
-        sort_by=sort_by,
-        order=order,
-        page=page,
-        per_page=per_page
-    )
-
-    return render_template(
-        "empleados/listar_empleados.html",
-        empleados=empleados_paginacion.items,
-        paginacion=empleados_paginacion
-    )
-
-# actualizar empleados
-
-@empleados_bp.get("/actualizar/<int:empleado_dni>")
+@bp.get("/actualizar/<int:empleado_dni>")
 @login_required
 def show_update_employee_form(empleado_dni):
     """
@@ -123,7 +113,7 @@ def show_update_employee_form(empleado_dni):
     return render_template("empleados/update_empleado.html", empleado=empleado)
 
 
-@empleados_bp.post("/actualizar/<int:empleado_dni>")
+@bp.post("/actualizar/<int:empleado_dni>")
 @login_required
 def update_employee(empleado_dni):
     """
@@ -144,7 +134,7 @@ def update_employee(empleado_dni):
         "email": request.form["email"],
         "localidad": request.form["localidad"],
         "telefono": request.form["telefono"],
-        "profesión": request.form["profesión"],
+        "profesion": request.form["profesion"],
         "puesto": request.form["puesto"],
         "fecha_inicio": request.form["fecha_inicio"],
         "fecha_cese": request.form["fecha_cese"],
@@ -168,10 +158,7 @@ def update_employee(empleado_dni):
     flash("Empleado actualizado exitosamente", "success")
     return redirect("/empleados")
 
-
-# eliminar empleados
-
-@empleados_bp.get("menu_empleados/eliminar/<int:empleado_dni>")
+@bp.post("/eliminar/<int:empleado_dni>")
 @login_required
 def delete_employee(empleado_dni):
     """

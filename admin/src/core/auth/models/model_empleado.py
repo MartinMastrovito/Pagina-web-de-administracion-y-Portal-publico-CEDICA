@@ -21,6 +21,7 @@ class Empleados(db.Model):
     numero_afiliado = db.Column(db.String, nullable=True)
     condicion = db.Column(db.String)
     activo = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     documentos = db.relationship('DocumentoEmpleado', backref='empleado', lazy=True, cascade='all, delete-orphan')
     jyas_roles = db.relationship('JYAEmpleado', back_populates='empleado')

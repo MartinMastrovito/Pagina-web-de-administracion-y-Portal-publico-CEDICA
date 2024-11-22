@@ -3,7 +3,7 @@
 <body>
     <main>
         {% block content %}
-            <a href="{{ url_for('empleados.crear_empleado') }}">Crear Nuevo Empleado</a>
+            <a href="{{ url_for('empleados.show_create_employee_form') }}">Crear Nuevo Empleado</a>
             <form method="GET" action="{{ url_for('empleados.listar_empleados') }}">
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" value="{{ request.args.get('nombre', '') }}">

@@ -168,3 +168,39 @@ def search_documents(empleado_dni, nombre_documento=None, tipo_documento=None,
         query = query.order_by(getattr(DocumentoEmpleado, sort_by))
 
     return query.paginate(page=page, per_page=per_page)
+
+def search_empleados(nombre=None, apellido=None, dni=None, email=None, sort_by='nombre', order='asc', page=1, per_page=10):
+    """
+    Busca empleados en la base de datos aplicando filtros y ordenación.
+
+    Args:
+        nombre (str): Nombre del empleado.
+        apellido (str): Apellido del empleado.
+        dni (str): DNI del empleado.
+        email (str): Email del empleado.
+        sort_by (str): Columna por la que ordenar ('nombre', 'apellido', 'dni', etc.).
+        order (str): Dirección de la ordenación ('asc' o 'desc').
+        page (int): Página actual.
+        per_page (int): Número de resultados por página.
+
+    Returns:
+        Pagination: Objeto de paginación con los resultados.
+    """
+    query = Empleados.query
+
+    if nombre:
+        query = query.filter(Empleados.nombre.ilike(f"%{nombre}%"))
+    if apellido:
+        query = query.filter(Empleados.apellido.ilike(f"%{apellido}%"))
+    if dni:
+        query = query.filter(Empleados.dni.ilike(f"%{dni}%"))
+    if email:
+        query = query.filter(Empleados.email.ilike(f"%{email}%"))
+
+    sort_column = getattr(Empleados, sort_by, Empleados.nombre)
+    if order == 'asc':
+        query = query.order_by(sort_column.asc())
+    else:
+        query = query.order_by(sort_column.desc())
+
+    return query.paginate(page=page, per_page=per_page, error_out=False)
