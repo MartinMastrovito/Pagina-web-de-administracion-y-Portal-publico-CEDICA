@@ -80,7 +80,7 @@ def listar_empleados():
     puesto = request.args.get('puesto')
     ordenar_por = request.args.get('ordenar_por', 'nombre')  
     direccion_orden = request.args.get('direccion_orden', 'asc') 
-    query = db.query(Empleados)
+    query = db.session.query(Empleados)
 
     if nombre:
         query = query.filter(Empleados.nombre.ilike(f'%{nombre}%')) #realiza busquedas insensibles a mayusculas y minuscula

@@ -1,100 +1,58 @@
+<!-- templates/pagos/listar_pago.html -->
 {% extends "layout.html" %}
-<head>
-    {% block imports %} 
-        {{super()}}
-        <style>
-            .box {
-                background-color: rgb(174, 235, 225);
-            }
-            .search{
-                display:flex;
-                flex-direction:row;
-                justify-content:flex-start;
-                flex-wrap: wrap;
-                gap:1%;
-            }
-            label{
-                display:flex;
-                flex-direction: column;
-            }
-        </style>
-    {% endblock %}
-</head>
-<body>
-    <main>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class="flashes">
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
+
+{% block title %}Listado de Pagos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Listado de Pagos</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Monto</th>
+                <th>Tipo de Pago</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pago in pagos.items %}
+            <tr>
+                <td>{{ pago.id }}</td>
+                <td>{{ pago.monto }}</td>
+                <td>{{ pago.tipo_pago }}</td>
+                <td>{{ pago.description }}</td>
+                <td>
+                    <a href="{{ url_for('pagos.obtener_pago_route', id=pago.id) }}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{ url_for('pagos.actualizar_pago_route', id=pago.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="{{ url_for('pagos.eliminar_pago_route') }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="id" value="{{ pago.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar este pago?')">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if pagos.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('pagos.listar_pagos_route', page=pagos.prev_num) }}">Anterior</a>
+            </li>
             {% endif %}
-        {% endwith %}
-        {% block content %}
-            <form class="mt-4 mb-4" method="GET" action="{{ url_for('pago.listar_pago') }}">
-                <div class="row g-3">
-                    <label class="col-12 col-md-3" for="fecha_inicio">
-                        <span>Desde</span>
-                        <input class="form-control" type="date" id="fecha_inicio" name="fecha_inicio" value="{{ request.args.get('fecha_inicio', '') }}">
-                    </label>
-                    <label class="col-12 col-md-3" for="fecha_fin">
-                        <span>Hasta</span>
-                        <input class="form-control" type="date" id="fecha_fin" name="fecha_fin" value="{{ request.args.get('fecha_fin', '') }}">
-                    </label>
-                    <label class="col-12 col-md-3" for="tipo_pago">
-                        <span>Tipo de pago</span>
-                        <select class="form-control" id="tipo_pago" name="tipo_pago">
-                            <option value="">Todos</option>
-                            <option value="Honorarios" {% if request.args.get('tipo_pago') == 'Honorarios' %}selected{% endif %}>Honorarios</option>
-                            <option value="Proveedor" {% if request.args.get('tipo_pago') == 'Proveedor' %}selected{% endif %}>Proveedor</option>
-                            <option value="Gastos Varios" {% if request.args.get('tipo_pago') == 'GastoVarios' %}selected{% endif %}>Gastos Varios</option>
-                        </select>
-                    </label>
-                    <label class="col-12 col-md-3" for="orden">
-                        <span>Orden</span>
-                        <select class="form-control" id="orden" name="orden">
-                            <option value="asc" {% if request.args.get('orden') == 'asc' %}selected{% endif %}>Ascendente</option>
-                            <option value="desc" {% if request.args.get('orden') == 'desc' %}selected{% endif %}>Descendente</option>
-                        </select>
-                    </label>
-                    <div class="col-12 col-md-2 text-md-end">
-                        <button class="btn btn-primary w-100" type="submit">Buscar</button>
-                    </div>
-            </div>
-            </form>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover mt-4">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Beneficiario</th>
-                            <th>Monto</th>
-                            <th>Fecha de Pago</th>
-                            <th>Tipo de Pago</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for pago in pagos %}
-                            <tr>
-                                <td>{{ pago.beneficiario_nombre }} {{ pago.beneficiario_apellido }}</td>
-                                <td>{{ pago.monto }}</td>
-                                <td>{{ pago.fecha_pago }}</td>
-                                <td>{{ pago.tipo_pago }}</td>
-                                <td>{{ pago.descripcion }}</td>
-                                <td>
-                                    <a class="btn btn-primary" href="{{ url_for('pago.actualizar_pago', pago_id=pago.id) }}">Actualizar</a>
-                                    <form action="{{ url_for('pago.eliminar_pago') }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Seguro que deseas eliminar este pago?');">
-                                        <input type="hidden" value="{{pago.id}}" name="id">
-                                        <button class="btn btn-secondary btn-danger" type="submit">Eliminar</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        {% endblock %}
-    </main>
-</body>
+            <li class="page-item disabled">
+                <span class="page-link">Página {{ pagos.page }} de {{ pagos.pages }}</span>
+            </li>
+            {% if pagos.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('pagos.listar_pagos_route', page=pagos.next_num) }}">Siguiente</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

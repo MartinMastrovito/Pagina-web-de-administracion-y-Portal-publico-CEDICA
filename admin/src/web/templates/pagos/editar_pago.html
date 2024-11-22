@@ -1,0 +1,25 @@
+<!-- templates/pagos/editar_pago.html -->
+{% extends "layout.html" %}
+
+{% block title %}Editar Pago{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Editar Pago</h1>
+    <form action="{{ url_for('pagos.actualizar_pago_route', id=pago.id) }}" method="POST">
+        <div class="form-group">
+            <label for="monto">Monto</label>
+            <input type="text" class="form-control" id="monto" name="monto" value="{{ pago.monto }}" required>
+        </div>
+        <div class="form-group">
+            <label for="tipo_pago">Tipo de Pago</label>
+            <input type="text" class="form-control" id="tipo_pago" name="tipo_pago" value="{{ pago.tipo_pago }}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea class="form-control" id="description" name="description">{{ pago.description }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+    </form>
+</div>
+{% endblock %}
