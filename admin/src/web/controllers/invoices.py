@@ -15,15 +15,15 @@ invoices_bp = Blueprint("invoices", __name__,url_prefix="/cobros", template_fold
 
 #Ruta del menu principal
 @invoices_bp.route("/")
-#@login_required
-#@check("invoice_menu")
+@login_required
+@check("invoice_menu")
 def invoices_menu():
     return render_template("invoices_menu.html",invoices=invoices_bp)
 
 #Rutas del listado de cobros
 @invoices_bp.get("/lista-cobros/<int:page>")
-#@login_required
-#@check("invoice_index")
+@login_required
+@check("invoice_index")
 def invoices_index(page,**order):
     if(len(order) != 0):
         invoices = utiles.select_filter(**order)
@@ -34,8 +34,8 @@ def invoices_index(page,**order):
 
 
 @invoices_bp.post("/lista-cobros/")
-#@login_required
-#@check("invoice_index")
+@login_required
+@check("invoice_index")
 def order_list():
     if("id" in request.form):
         return delete_invoice()
@@ -51,8 +51,8 @@ def order_list():
         return invoices_index(1,**order_information)
 
 @invoices_bp.post("/lista-cobros/")
-#@login_required
-#@check("invoice_destroy")
+@login_required
+@check("invoice_destroy")
 def delete_invoice():
     id_delete = request.form['id']
     utiles.delete(id_delete)
@@ -61,15 +61,15 @@ def delete_invoice():
 
 #Ruta para actualizar cobro
 @invoices_bp.get("/actualizar-cobro/<int:invoice_id>")
-#@login_required
-#@check("invoice_update")
+@login_required
+@check("invoice_update")
 def update_invoice(invoice_id):
     invoice = utiles.get_invoice(invoice_id)
     return render_template("update_invoice.html",invoice=invoice)
 
 @invoices_bp.post("/actualizar-cobro/<int:invoice_id>")
-#@login_required
-#@check("invoice_update")
+@login_required
+@check("invoice_update")
 def invoice_update(invoice_id):
     invoice_information = {
         "pay_date":request.form['pay_date'],
@@ -150,8 +150,8 @@ def update_status(page,**order):
 
 #rutas para la muestra de un cobro especifico.
 @invoices_bp.get("/mostrar-cobro/<int:invoice_id>")
-#@login_required
-#@check("invoice_show")
+@login_required
+@check("invoice_show")
 def show_invoice(invoice_id):
     invoice = utiles.get_invoice(invoice_id)
     return render_template("show_invoice.html",invoice=invoice)

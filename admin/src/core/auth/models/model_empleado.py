@@ -1,7 +1,7 @@
 from src.core.database import db
 
 class Empleados(db.Model):
-    __tablename__ = 'empleados'
+    __tablename__ = "empleados"
     __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True, index=True)
@@ -21,9 +21,7 @@ class Empleados(db.Model):
     numero_afiliado = db.Column(db.String, nullable=True)
     condicion = db.Column(db.String)
     activo = db.Column(db.Boolean, default=True)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
-    documentos = db.relationship('DocumentoEmpleado', backref='empleado', lazy=True, cascade='all, delete-orphan')
     jyas_roles = db.relationship('JYAEmpleado', back_populates='empleado')
 
     beneficiary = db.relationship('Pago', secondary = 'beneficiary', back_populates='empleados')

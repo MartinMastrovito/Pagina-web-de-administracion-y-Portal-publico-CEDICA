@@ -175,8 +175,6 @@ def create_jya():
     crud_JyA.assign_employee_to_jya(user.id, request.form["profesor_terapeuta_id"], "terapeuta")
     crud_JyA.assign_employee_to_jya(user.id, request.form["conductor_caballo_id"], "conductor")
     crud_JyA.assign_employee_to_jya(user.id, request.form["auxiliar_id"], "auxiliar")
-    
-    crud_JyA.assign_horse_to_jya(user.id, request.form["caballo_id"])
 
     flash("JYA creado exitosamente", "success")
     return redirect("/JYA")

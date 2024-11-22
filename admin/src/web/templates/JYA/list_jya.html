@@ -7,6 +7,8 @@
     <h4 class="display-6 text-center text-md-start">J&A registrados</h4>
     <a class="btn btn-secondary mt-3 mt-md-0" href="{{ url_for('users.show_home') }}">Volver</a>
 </header>
+
+<!-- Modal de eliminación -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -29,6 +31,7 @@
 
 <section>
     <article>
+        <!-- Formulario de búsqueda -->
         <form method="get" action="{{ url_for('crud_JyA.index') }}" class="mt-4 mb-4">
             <div class="row g-3">
                 <div class="col-12 col-md-3">
@@ -108,6 +111,8 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Paginación responsive -->
         <nav aria-label="Page navigation example" class="mt-4">
             <ul class="pagination justify-content-center flex-wrap">
                 {% if pagination.has_prev %}
@@ -141,6 +146,7 @@
                 {% endif %}
             </ul>
         </nav>
+
         <div class="text-center mt-4">
             <a href="{{ url_for('crud_JyA.create_jya') }}" class="btn btn-primary">Crear nuevo J&A</a>
         </div> 
