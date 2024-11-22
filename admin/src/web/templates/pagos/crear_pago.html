@@ -1,45 +1,42 @@
-{% extends "layout.html" %}
-<head>
-    {% block imports %}
-        {{super()}}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_create.css') }}">  
-    {% endblock %}
-</head>
-<body>
-    <main>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class="flashes">
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-        {% block content %}
-            <form action="{{ url_for('pagos.crear_pago_route') }}" id="pagos_form" class="form_style" method="POST">
-                <label for="beneficiario">Beneficiario:</label>
-                <select id="beneficiario" name="beneficiario_id" required>
-                    <option value="" disabled selected>Seleccione un empleado</option>
-                    {% for empleado in empleados %}
-                        <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
-                    {% endfor %}
-                </select>
-                <label for="monto">Monto:</label>
-                <input type="number" id="monto" name="monto" required>
-                <label for="fecha_pago">Fecha de Pago:</label>
-                <input type="date" id="fecha_pago" name="fecha_pago" required>
-                <label for="tipo_pago">Tipo de Pago:</label>
-                <select id="tipo_pago" name="tipo_pago" required>
-                    <option value="Honorarios">Honorarios</option>
-                    <option value="Proveedor">Proveedor</option>
-                    <option value="Gastos Varios">Gastos Varios</option>
-                </select>
-                <label for="description">Descripción:</label>
-                <textarea id="description" name="description" rows="3"></textarea>
 
-                <button form="pagos_form" class="button" type="submit">Registrar Pago</button>
-            </form>
-        {% endblock %}
-    </main>
-</body>
+{% extends "layout.html" %}
+
+{% block title %}Crear Pago{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Crear Pago</h1>
+    <form action="{{ url_for('pagos.crear_pago_route') }}" id="pagos_form" class="form_style" method="POST">
+        <div class="form-group">
+            <label for="beneficiario">Beneficiario:</label>
+            <select id="beneficiario" name="beneficiario_id" class="form-control" required>
+                <option value="" disabled selected>Seleccione un empleado</option>
+                {% for empleado in empleados %}
+                <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="monto">Monto</label>
+            <input type="number" class="form-control" id="monto" name="monto" required>
+        </div>
+        <div class="form-group">
+            <label for="fecha_pago">Fecha de Pago</label>
+            <input type="date" class="form-control" id="fecha_pago" name="fecha_pago" required>
+        </div>
+        <div class="form-group">
+            <label for="tipo_pago">Tipo de Pago</label>
+            <select id="tipo_pago" class="form-control" name="tipo_pago" required>
+                <option value="Honorarios">Honorarios</option>
+                <option value="Proveedor">Proveedor</option>
+                <option value="Gastos Varios">Gastos Varios</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Registrar Pago</button>
+    </form>
+</div>
+{% endblock %}

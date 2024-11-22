@@ -10,6 +10,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Beneficiario</th>
                 <th>Monto</th>
                 <th>Tipo de Pago</th>
                 <th>Descripción</th>
@@ -20,6 +21,7 @@
             {% for pago in pagos.items %}
             <tr>
                 <td>{{ pago.id }}</td>
+                <td>{{ pago.beneficiario_nombre }} {{ pago.beneficiario_apellido }}</td>
                 <td>{{ pago.monto }}</td>
                 <td>{{ pago.tipo_pago }}</td>
                 <td>{{ pago.description }}</td>

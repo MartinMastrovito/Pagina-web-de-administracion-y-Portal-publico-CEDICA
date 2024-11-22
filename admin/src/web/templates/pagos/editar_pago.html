@@ -6,20 +6,38 @@
 {% block content %}
 <div class="container mt-4">
     <h1>Editar Pago</h1>
-    <form action="{{ url_for('pagos.actualizar_pago_route', id=pago.id) }}" method="POST">
+    <form action="{{ url_for('pagos.actualizar_pago_route', id=pago.id) }}" id="pagos_form" class="form_style" method="POST">
+        <div class="form-group">
+            <label for="beneficiario">Beneficiario:</label>
+            <select id="beneficiario" name="beneficiario_id" class="form-control" required>
+                {% for empleado in empleados %}
+                <option value="{{ empleado.id }}" {% if empleado.id == pago.beneficiario_id %}selected{% endif %}>
+                    {{ empleado.nombre }} {{ empleado.apellido }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
         <div class="form-group">
             <label for="monto">Monto</label>
-            <input type="text" class="form-control" id="monto" name="monto" value="{{ pago.monto }}" required>
+            <input type="number" class="form-control" id="monto" name="monto" value="{{ pago.monto }}" required>
+        </div>
+        <div class="form-group">
+            <label for="fecha_pago">Fecha de Pago</label>
+            <input type="date" class="form-control" id="fecha_pago" name="fecha_pago" value="{{ pago.fecha_pago }}" required>
         </div>
         <div class="form-group">
             <label for="tipo_pago">Tipo de Pago</label>
-            <input type="text" class="form-control" id="tipo_pago" name="tipo_pago" value="{{ pago.tipo_pago }}" required>
+            <select id="tipo_pago" class="form-control" name="tipo_pago" required>
+                <option value="Honorarios" {% if pago.tipo_pago == 'Honorarios' %}selected{% endif %}>Honorarios</option>
+                <option value="Proveedor" {% if pago.tipo_pago == 'Proveedor' %}selected{% endif %}>Proveedor</option>
+                <option value="Gastos Varios" {% if pago.tipo_pago == 'Gastos Varios' %}selected{% endif %}>Gastos Varios</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="description">Descripción</label>
-            <textarea class="form-control" id="description" name="description">{{ pago.description }}</textarea>
+            <textarea class="form-control" id="description" name="description" rows="3">{{ pago.description }}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Actualizar</button>
+        <button type="submit" class="btn btn-primary">Actualizar Pago</button>
     </form>
 </div>
 {% endblock %}
