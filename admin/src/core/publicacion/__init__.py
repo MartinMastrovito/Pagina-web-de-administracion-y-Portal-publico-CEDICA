@@ -17,7 +17,7 @@ def obtener_publicaciones(page, per_page):
         Pagination: Un objeto de tipo Pagination que contiene las publicaciones de la página
                     solicitada.
     """
-    return Publicacion.query.order_by(Publicacion.fecha_actualizacion.asc()).paginate(page=page, per_page=per_page)
+    return Publicacion.query.order_by(Publicacion.fecha_actualizacion.desc()).paginate(page=page, per_page=per_page)
 
 def crear_publicacion(kwargs):
     """
@@ -80,3 +80,21 @@ def get_publicacion(id):
         404 : Si no se encuentra la publicación con el ID proporcionado.
     """
     return Publicacion.query.get_or_404(id)
+
+
+def filtrado_portal(**kwargs):
+    titulo = kwargs['titulo']
+    page = kwargs['page']
+    per_page = kwargs['per_page']
+    desde = kwargs['desde']
+    hasta = kwargs['hasta']
+    publicaciones = Publicacion.query.order_by(Publicacion.fecha_actualizacion.desc())
+    if titulo:
+        publicaciones = publicaciones.filter(Publicacion.titulo.like(f"%{titulo}%"))
+    if desde:
+        publicaciones = publicaciones.filter(Publicacion.fecha_creacion >= desde)
+    if hasta:
+        publicaciones = publicaciones.filter(Publicacion.fecha_creacion <= hasta)
+    publicaciones=publicaciones.paginate(page=page, per_page=per_page)
+
+    return publicaciones
