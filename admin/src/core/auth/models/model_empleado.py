@@ -26,7 +26,8 @@ class Empleados(db.Model):
     documentos = db.relationship('DocumentoEmpleado', backref='empleado', lazy=True, cascade='all, delete-orphan')
     jyas_roles = db.relationship('JYAEmpleado', back_populates='empleado')
 
-    beneficiary = db.relationship('Pago', secondary = 'beneficiary', back_populates='empleados')
+    beneficiary = db.relationship('Pago', secondary='beneficiary', back_populates='empleados')
+
     
 
     def __repr__(self):
