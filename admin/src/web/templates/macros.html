@@ -18,7 +18,7 @@
                 {% endif %}
                 {% if check_authenticated(session) %}
                     <li class="nav-item">
-                        <a class="nav-link mx-2" href="{{ url_for('empleados.show_empleado_form') }}">Equipo</a>
+                        <a class="nav-link mx-2" href="{{ url_for('empleados.index') }}">Equipo</a>
                     </li>
                 {% endif %}
                 {% if check_authenticated(session) %}

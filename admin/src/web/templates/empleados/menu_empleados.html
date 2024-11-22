@@ -1,23 +1,37 @@
 {% extends "layout.html" %}
 
+<html lang="es">
 <head>
-    {% block title %}MenuEmpleado{% endblock %}
-    {% block imports %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_menu.css') }}">
-    {% endblock %}
+    {% block title %}Menu Empleados{% endblock %}
+    <style>
+        .menu-container {
+            max-width: 400px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .menu-title {
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+    </style>
 </head>
-
+<body>
 {% block content %}
-<header>
-    <a class="btn" href="{{ url_for('users.show_home') }}">Volver al Inicio</a>
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <a class="btn btn-secondary" href="{{ url_for('users.show_home') }}">Volver</a>
 </header>
-<h1>Menu Empleados</h1>
-<nav class="MENU_options">
-    <a class="button" href="{{url_for('empleados.listar_empleados')}}">LISTAR EMPLEADOS</a>
-    <a class="button" href="{{url_for('empleados.crear_empleado')}}">CREAR EMPLEADO</a>
-    <a class="button" href="{{url_for('pago.listar_pago')}}">LISTAR PAGOS</a>
-    <a class="button" href="{{url_for('pago.crear_pago')}}">CREAR PAGO</a>
-
-
-</nav>
+<div class="menu-container">
+    <h1 class="display-6">Menú de empleados</h1>
+    <div class="d-grid gap-3">
+        <a href="{{ url_for('empleados.show_create_employee_form') }}" class="btn btn-primary btn-lg">Crear Empleado</a>
+        <a href="{{ url_for('empleados.listar_empleados') }}" class="btn btn-primary btn-lg">Listar Empleados</a>
+        <a href="{{ url_for('empleados.show_update_employee_form', empleado_dni=0) }}" class="btn btn-primary btn-lg">Actualizar Empleado</a>
+        <a href="{{ url_for('empleados.delete_employee', empleado_dni=0) }}" class="btn btn-primary btn-lg">Eliminar Empleado</a>
+        <a href="{{ url_for('pago.listar_pago') }}" class="btn btn-primary btn-lg">Listar pagos </a>
+        <a href="{{ url_for('pago.crear_pago') }}" class="btn btn-primary btn-lg">Crear pago  </a>
+    </div>
+</div>
 {% endblock %}
+</body>
+</html>

@@ -83,17 +83,17 @@
                                 Menú
                             </button>
                             <ul class="dropdown-menu">
-                                {%if check_permission(session.get("user_id"),"invoice_update") %}
+                                {%if check_permission(session,"invoice_update") %}
                                     <li><a class="dropdown-item" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a> </li>
                                 {% endif %}
-                                {%if check_permission(session.get("user_id"),"invoice_show") %}
+                                {%if check_permission(session,"invoice_show") %}
                                     <li><a class="dropdown-item" href="{{url_for('invoices.show_invoice' ,invoice_id = invoice.id)}}">Mostrar</a> </li>
                                 {% endif %}
                             </ul>
                         </div>
                     </td>
                     <td>
-                        {%if check_permission(session.get("user_id"),"invoice_destroy") %}
+                        {%if check_permission(session,"invoice_destroy") %}
                             <form action="{{ url_for('invoices.delete_invoice') }}"  class="form_style" method="POST">
                                 <input type="hidden" value={{invoice.id}} name="id">
                                 <button  class="btn btn-danger">Eliminar</button>

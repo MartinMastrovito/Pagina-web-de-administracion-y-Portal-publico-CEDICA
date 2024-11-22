@@ -1,0 +1,214 @@
+{% extends "layout.html" %}
+
+{% block title %}Lista de Empleados{% endblock %}
+
+{% block content %}
+<header class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 mb-3">
+    <h4 class="display-6 text-center text-md-start">Empleados registrados</h4>
+    <a class="btn btn-secondary mt-3 mt-md-0" href="{{ url_for('users.show_home') }}">Volver</a>
+</header>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmación de eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro de que desea eliminar a este empleado? Esta acción es irreversible.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <form method="POST" id="deleteForm" action="" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section>
+    <article>
+        <form method="get" action="{{ url_for('empleados.index') }}" class="mt-4 mb-4">
+            <div class="row g-3">
+                <div class="col-12 col-md-3">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" value="{{ request.args.get('nombre', '') }}">
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="apellido" class="form-label">Apellido</label>
+                    <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido" value="{{ request.args.get('apellido', '') }}">
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="dni" class="form-label">DNI</label>
+                    <input type="text" id="dni" name="dni" class="form-control" placeholder="DNI" value="{{ request.args.get('dni', '') }}">
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="text" id="email" name="email" class="form-control" placeholder="Email" value="{{ request.args.get('email', '') }}">
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="puesto" class="form-label">Puesto Laboral</label>
+                    <select id="puesto" name="puesto" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="Administrativo/a" {% if request.args.get('puesto') == 'Administrativo/a' %}selected{% endif %}>Administrativo/a</option>
+                        <option value="Terapeuta" {% if request.args.get('puesto') == 'Terapeuta' %}selected{% endif %}>Terapeuta</option>
+                        <option value="Conductor" {% if request.args.get('puesto') == 'Conductor' %}selected{% endif %}>Conductor</option>
+                        <option value="Auxiliar de pista" {% if request.args.get('puesto') == 'Auxiliar de pista' %}selected{% endif %}>Auxiliar de pista</option>
+                        <option value="Herrero" {% if request.args.get('puesto') == 'Herrero' %}selected{% endif %}>Herrero</option>
+                        <option value="Veterinario" {% if request.args.get('puesto') == 'Veterinario' %}selected{% endif %}>Veterinario</option>
+                        <option value="Entrenador de Caballos" {% if request.args.get('puesto') == 'Entrenador de Caballos' %}selected{% endif %}>Entrenador de Caballos</option>
+                        <option value="Domador" {% if request.args.get('puesto') == 'Domador' %}selected{% endif %}>Domador</option>
+                        <option value="Profesor de Equitación" {% if request.args.get('puesto') == 'Profesor de Equitación' %}selected{% endif %}>Profesor de Equitación</option>
+                        <option value="Docente de Capacitación" {% if request.args.get('puesto') == 'Docente de Capacitación' %}selected{% endif %}>Docente de Capacitación</option>
+                        <option value="Auxiliar de mantenimiento" {% if request.args.get('puesto') == 'Auxiliar de mantenimiento' %}selected{% endif %}>Auxiliar de mantenimiento</option>
+                        <option value="Otra" {% if request.args.get('puesto') == 'Otra' %}selected{% endif %}>Otra</option>
+                    </select>
+                </div>                
+            </div>
+            <br>
+            <div class="col-12 col-md-2 text-md-end">
+                <button type="submit" class="btn btn-primary w-100">Buscar</button>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover mt-4">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            <a href="{{ url_for('empleados.index', 
+                                sort_by='nombre', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc',
+                                nombre=request.args.get('nombre', ''), 
+                                apellido=request.args.get('apellido', ''), 
+                                dni=request.args.get('dni', ''), 
+                                email=request.args.get('email', ''), 
+                                page=request.args.get('page', 1)) }}">
+                                Nombre
+                                {% if request.args.get('sort_by') == 'nombre' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ url_for('empleados.index', 
+                                sort_by='apellido', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc',
+                                nombre=request.args.get('nombre', ''), 
+                                apellido=request.args.get('apellido', ''), 
+                                dni=request.args.get('dni', ''), 
+                                email=request.args.get('email', ''), 
+                                page=request.args.get('page', 1)) }}">
+                                Apellido
+                                {% if request.args.get('sort_by') == 'apellido' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ url_for('empleados.index', 
+                                sort_by='created_at', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc',
+                                nombre=request.args.get('nombre', ''), 
+                                apellido=request.args.get('apellido', ''), 
+                                dni=request.args.get('dni', ''), 
+                                email=request.args.get('email', ''), 
+                                page=request.args.get('page', 1)) }}">
+                                Fecha de creación
+                                {% if request.args.get('sort_by') == 'created_at' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>DNI</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for empleado in empleados %}
+                    <tr>
+                        <td>{{ empleado.nombre }}</td>
+                        <td>{{ empleado.apellido }}</td>
+                        <td>{{ empleado.created_at.strftime('%Y-%m-%d') if empleado.created_at else 'No disponible' }}</td>
+                        <td>{{ empleado.dni }}</td>
+                        <td>{{ empleado.email }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Menú
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url_for('empleados.show_empleado', empleado_dni=empleado.dni) }}" class="dropdown-item">Ver más</a></li>
+                                    <li><a href="{{ url_for('empleados.show_update_employee_form', empleado_dni=empleado.dni) }}" class="dropdown-item">Actualizar</a></li>
+                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ url_for('empleados.delete_employee', empleado_dni=empleado.dni) }}" class="dropdown-item">Eliminar</a></li>
+                                </ul>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation example" class="mt-4">
+            <ul class="pagination justify-content-center flex-wrap">
+                {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('empleados.index', page=pagination.prev_num, 
+                        nombre=request.args.get('nombre', ''), 
+                        apellido=request.args.get('apellido', ''), 
+                        dni=request.args.get('dni', ''),
+                        email=request.args.get('email', ''),
+                        sort_by=request.args.get('sort_by', ''), 
+                        order=request.args.get('order', '')) }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span> Anterior
+                    </a>
+                </li>
+                {% endif %}
+                <li class="page-item disabled">
+                    <span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span>
+                </li>
+                {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('empleados.index', page=pagination.next_num, 
+                        nombre=request.args.get('nombre', ''), 
+                        apellido=request.args.get('apellido', ''), 
+                        dni=request.args.get('dni', ''), 
+                        email=request.args.get('email', ''),
+                        sort_by=request.args.get('sort_by', ''), 
+                        order=request.args.get('order', '')) }}" aria-label="Next">
+                        Siguiente <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('empleados.show_create_employee_form') }}" class="btn btn-primary">Crear nuevo empleado</a>
+        </div> 
+    </article>
+</section>
+
+<script>
+    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            var url = event.target.getAttribute('data-url');
+            if (url) {
+                document.getElementById('deleteForm').action = url;
+            }
+        });
+    });
+</script>
+
+<style>
+    .table thead {
+        background-color: rgb(174, 235, 225);
+    }
+    .pagination {
+        justify-content: center;
+    }
+</style>
+
+{% endblock %}

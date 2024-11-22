@@ -27,7 +27,7 @@
                     {% else %}
                         <p class="fw-bold">Estado de deuda: No deudor</p>
                     {% endif %}
-                    {%if check_permission(session.get("user_id"),"invoice_update") %}
+                    {%if check_permission(session,"invoice_update") %}
                         <form action="{{url_for('invoices.invoice_statuses', page = page)}}"id="status_update" class="form_style" method="POST">
                             <input type="hidden" value={{ja.id}} name="id">
                             <button class="btn" name="update" style="background-color:#f5be6b">Cambiar estado deuda</button>
