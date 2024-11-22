@@ -491,7 +491,7 @@ def JYA_create():
 def articles_create():
     articles_list = [
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-10", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-10", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-10", "%Y-%m-%d").date(),
             titulo="Hola, soy noticia",
             copete="Un saludo desde el mundo de las noticias, explorando los eventos más relevantes del día con un enfoque único.",
@@ -499,7 +499,7 @@ def articles_create():
             autor_id=1
         ),
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-11", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-11", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-11", "%Y-%m-%d").date(),
             titulo="Nuevo avance en IA",
             copete="Investigadores logran un avance significativo en el campo de la inteligencia artificial, transformando el futuro de la tecnología.",
@@ -507,7 +507,7 @@ def articles_create():
             autor_id=2
         ),
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-12", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-12", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-12", "%Y-%m-%d").date(),
             titulo="Receta fácil y rápida",
             copete="Una receta deliciosa para preparar en menos de 20 minutos, perfecta para cualquier ocasión.",
@@ -515,7 +515,7 @@ def articles_create():
             autor_id=3
         ),
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-13", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-13", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-13", "%Y-%m-%d").date(),
             titulo="Clima y salud",
             copete="El cambio climático afecta la salud humana de formas más profundas de lo que imaginamos.",
@@ -523,7 +523,7 @@ def articles_create():
             autor_id=4
         ),
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-14", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-14", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-14", "%Y-%m-%d").date(),
             titulo="Tecnología educativa",
             copete="La tecnología está revolucionando la forma en que aprendemos y accedemos al conocimiento.",
@@ -531,7 +531,7 @@ def articles_create():
             autor_id=5
         ),
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-15", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-15", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-15", "%Y-%m-%d").date(),
             titulo="Viaje Antártida",
             copete="Un grupo de científicos se aventura en un viaje épico para investigar los efectos del cambio climático.",
@@ -539,7 +539,7 @@ def articles_create():
             autor_id=6
         ),
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-16", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-16", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-16", "%Y-%m-%d").date(),
             titulo="Fósil raro",
             copete="Un descubrimiento sin precedentes arroja luz sobre especies extintas de hace millones de años.",
@@ -547,7 +547,7 @@ def articles_create():
             autor_id=4
         ),
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-17", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-17", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-17", "%Y-%m-%d").date(),
             titulo="Misión espacial",
             copete="Se lanza un satélite revolucionario para monitorear el clima en tiempo real.",
@@ -555,7 +555,7 @@ def articles_create():
             autor_id=5
         ),
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-18", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-18", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-18", "%Y-%m-%d").date(),
             titulo="Vacuna rara",
             copete="Un avance médico promete cambiar la vida de miles de personas en todo el mundo.",
@@ -563,7 +563,7 @@ def articles_create():
             autor_id=1
         ),
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-19", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-19", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-19", "%Y-%m-%d").date(),
             titulo="Robots marinos",
             copete="Exploradores robóticos están transformando la investigación marina.",
@@ -571,7 +571,7 @@ def articles_create():
             autor_id=3
         ),
         Publicacion(
-            fecha_creacion=datetime.strptime("2024-9-20", "%Y-%m-%d").date(),
+            fecha_publicacion=datetime.strptime("2024-9-20", "%Y-%m-%d").date(),
             fecha_actualizacion=datetime.strptime("2024-9-20", "%Y-%m-%d").date(),
             titulo="Energía solar",
             copete="Nueva tecnología en paneles solares promete revolucionar el mercado energético.",
