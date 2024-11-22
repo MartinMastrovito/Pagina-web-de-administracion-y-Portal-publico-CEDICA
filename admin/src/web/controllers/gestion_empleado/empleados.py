@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, url_for
 from src.core import empleados
-from flask import render_template , flash, redirect, current_app
+from flask import render_template , flash, redirect
 from src.core.auth.decorators import login_required, check
 from src.web.validators.empleado_validadores import validate_empleado_form
 

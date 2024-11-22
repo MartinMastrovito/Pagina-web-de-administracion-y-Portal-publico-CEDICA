@@ -22,16 +22,12 @@ class Empleados(db.Model):
     condicion = db.Column(db.String)
     activo = db.Column(db.Boolean, default=True)
 
-    documentos = db.relationship('Documento', backref='empleado', lazy=True, cascade='all, delete-orphan')
+    documentos = db.relationship('DocumentoEmpleado', backref='empleado', lazy=True, cascade='all, delete-orphan')
     jyas_roles = db.relationship('JYAEmpleado', back_populates='empleado')
-<<<<<<< HEAD
-    pagos = db.relationship('Pago', back_populates='empleados', cascade='all, delete-orphan')
-=======
 
     beneficiary = db.relationship('Pago', secondary = 'beneficiary', back_populates='empleados')
     
 
->>>>>>> dev
     def __repr__(self):
         return f'<Empleado {self.nombre},{self.id}>'
 

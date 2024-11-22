@@ -1,7 +1,7 @@
 from src.core.database import db
 
-class Documento(db.Model):
-    __tablename__ = 'documento'
+class DocumentoEmpleado(db.Model):
+    __tablename__ = 'documento_empleado'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     nombre_documento = db.Column(db.String(255), nullable=False)

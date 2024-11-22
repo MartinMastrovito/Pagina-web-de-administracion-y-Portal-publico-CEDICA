@@ -1,6 +1,6 @@
 from src.core.database import db
 from src.core.auth.models.model_empleado import Empleados
-from src.core.auth.models.model_docEmpleado import Documento
+from src.core.auth.models.model_docEmpleado import DocumentoEmpleado
 from sqlalchemy import or_
 
 def lista_empleado():
@@ -133,7 +133,7 @@ def guardar_documento(**kwargs):
     Args:
         **kwargs: Atributos del documento a guardar.
     """
-    document = Documento(**kwargs)
+    document = DocumentoEmpleado(**kwargs)
     db.session.add(document)
     db.session.commit()
 
@@ -154,17 +154,17 @@ def search_documents(empleado_dni, nombre_documento=None, tipo_documento=None,
     Returns:
         Objeto de paginación con los resultados de la búsqueda.
     """
-    query = Documento.query.filter(Documento.empleado_dni == str(empleado_dni))
+    query = DocumentoEmpleado.query.filter(DocumentoEmpleado.empleado_dni == str(empleado_dni))
 
     if nombre_documento:
-        query = query.filter(Documento.nombre_documento.ilike(f'%{nombre_documento}%'))
+        query = query.filter(DocumentoEmpleado.nombre_documento.ilike(f'%{nombre_documento}%'))
 
     if tipo_documento:
-        query = query.filter(Documento.tipo_documento.ilike(f'%{tipo_documento}%'))
+        query = query.filter(DocumentoEmpleado.tipo_documento.ilike(f'%{tipo_documento}%'))
 
     if order == 'desc':
-        query = query.order_by(getattr(Documento, sort_by).desc())
+        query = query.order_by(getattr(DocumentoEmpleado, sort_by).desc())
     else:
-        query = query.order_by(getattr(Documento, sort_by))
+        query = query.order_by(getattr(DocumentoEmpleado, sort_by))
 
     return query.paginate(page=page, per_page=per_page)
