@@ -46,7 +46,11 @@
                     {% for publicacion in publicaciones %}
                     <tr>
                         <td>{{ publicacion.titulo }}</td>
+                        {% if publicacion.autor %}
                         <td>{{ publicacion.autor.nombre }} {{ publicacion.autor.apellido }}</td>
+                        {% else %}
+                        <td>Desconocido</td>
+                        {% endif %}
                         <td>{{ publicacion.fecha_creacion }}</td>
                         <td>{{ publicacion.fecha_actualizacion }}</td>
                         <td>{{ publicacion.estado }}</td>
