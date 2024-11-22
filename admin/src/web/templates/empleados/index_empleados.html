@@ -47,9 +47,28 @@
                     <label for="email" class="form-label">Email:</label>
                     <input type="text" id="email" name="email" class="form-control" placeholder="Email" value="{{ request.args.get('email', '') }}">
                 </div>
-                <div class="col-12 col-md-2 text-md-end">
-                    <button type="submit" class="btn btn-primary w-100">Buscar</button>
-                </div>
+                <div class="col-12 col-md-3">
+                    <label for="puesto" class="form-label">Puesto Laboral</label>
+                    <select id="puesto" name="puesto" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="Administrativo/a" {% if request.args.get('puesto') == 'Administrativo/a' %}selected{% endif %}>Administrativo/a</option>
+                        <option value="Terapeuta" {% if request.args.get('puesto') == 'Terapeuta' %}selected{% endif %}>Terapeuta</option>
+                        <option value="Conductor" {% if request.args.get('puesto') == 'Conductor' %}selected{% endif %}>Conductor</option>
+                        <option value="Auxiliar de pista" {% if request.args.get('puesto') == 'Auxiliar de pista' %}selected{% endif %}>Auxiliar de pista</option>
+                        <option value="Herrero" {% if request.args.get('puesto') == 'Herrero' %}selected{% endif %}>Herrero</option>
+                        <option value="Veterinario" {% if request.args.get('puesto') == 'Veterinario' %}selected{% endif %}>Veterinario</option>
+                        <option value="Entrenador de Caballos" {% if request.args.get('puesto') == 'Entrenador de Caballos' %}selected{% endif %}>Entrenador de Caballos</option>
+                        <option value="Domador" {% if request.args.get('puesto') == 'Domador' %}selected{% endif %}>Domador</option>
+                        <option value="Profesor de Equitación" {% if request.args.get('puesto') == 'Profesor de Equitación' %}selected{% endif %}>Profesor de Equitación</option>
+                        <option value="Docente de Capacitación" {% if request.args.get('puesto') == 'Docente de Capacitación' %}selected{% endif %}>Docente de Capacitación</option>
+                        <option value="Auxiliar de mantenimiento" {% if request.args.get('puesto') == 'Auxiliar de mantenimiento' %}selected{% endif %}>Auxiliar de mantenimiento</option>
+                        <option value="Otra" {% if request.args.get('puesto') == 'Otra' %}selected{% endif %}>Otra</option>
+                    </select>
+                </div>                
+            </div>
+            <br>
+            <div class="col-12 col-md-2 text-md-end">
+                <button type="submit" class="btn btn-primary w-100">Buscar</button>
             </div>
         </form>
         <div class="table-responsive">

@@ -13,14 +13,12 @@ bp = Blueprint('empleados', __name__, url_prefix="/empleados", template_folder='
 def index():
     """
     Muestra la lista de empleados con filtros y ordenación.
-
-    Returns:
-        Renderiza la plantilla con la lista de empleados, filtros y paginación.
     """
     nombre = request.args.get('nombre', '').strip()
     apellido = request.args.get('apellido', '').strip()
     dni = request.args.get('dni', '').strip()
     email = request.args.get('email', '').strip()
+    puesto = request.args.get('puesto', '').strip()  # Nuevo filtro
     sort_by = request.args.get('sort_by', 'nombre')
     order = request.args.get('order', 'asc')
     page = request.args.get('page', 1, type=int)
@@ -31,6 +29,7 @@ def index():
         apellido=apellido,
         dni=dni,
         email=email,
+        puesto=puesto,
         sort_by=sort_by,
         order=order,
         page=page,
