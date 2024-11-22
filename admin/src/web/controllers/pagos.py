@@ -61,8 +61,9 @@ def actualizar_pago(pago_id):
     db.commit()
     return redirect('/pago')
 
-@pago_bp.route('/eliminar/<int:pago_id>', methods=['POST'])
-def eliminar_pago(pago_id):
-    db.query(Pago).filter(pago_id == pago_id).delete()
-    db.commit()
-    return redirect('/pago')
+@pago_bp.route('/eliminar/', methods=['POST'])
+def eliminar_pago():
+    pago_id = request.form['id']
+    db.session.query(Pago).filter_by(id = pago_id).delete()
+    db.session.commit()
+    return redirect('/pago/listar')

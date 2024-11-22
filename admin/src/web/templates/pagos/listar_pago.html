@@ -85,7 +85,8 @@
                                 <td>{{ pago.descripcion }}</td>
                                 <td>
                                     <a class="btn btn-primary" href="{{ url_for('pago.actualizar_pago', pago_id=pago.id) }}">Actualizar</a>
-                                    <form action="{{ url_for('pago.eliminar_pago', pago_id=pago.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Seguro que deseas eliminar este pago?');">
+                                    <form action="{{ url_for('pago.eliminar_pago') }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Seguro que deseas eliminar este pago?');">
+                                        <input type="hidden" value="{{pago.id}}" name="id">
                                         <button class="btn btn-secondary btn-danger" type="submit">Eliminar</button>
                                     </form>
                                 </td>
