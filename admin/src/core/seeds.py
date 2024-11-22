@@ -1,7 +1,9 @@
 from src.core.auth.models.model_user import Role, User
 from src.core.auth.models.model_permission import Permission, RolePermission
 from src.core.auth.models.model_empleado import Empleados
+from src.core.auth.models.model_caballos import Caballo
 from src.core.auth.models.model_JyA import JYA
+from src.core.auth.models.model_JYAEmpleado import JYAEmpleado
 from src.core.auth.models.model_publicacion import Publicacion
 from src.core.database import db
 from src.core import bcrypt
@@ -354,220 +356,136 @@ def employee_create():
     db.session.commit()
 
 def JYA_create():
+    caballo_1 = Caballo(
+        nombre="Pegasus",
+        fecha_nacimiento=datetime.strptime("2015-5-12", "%Y-%m-%d").date(),
+        sexo="Macho",
+        tipo_ingreso="Adopción",
+        fecha_ingreso=datetime.strptime("2021-6-1", "%Y-%m-%d").date(),
+        sede_asignada="Sede Central",
+        pelaje="Blanco",
+    )
+    
+    caballo_2 = Caballo(
+        nombre="Spirit",
+        fecha_nacimiento=datetime.strptime("2018-7-20", "%Y-%m-%d").date(),
+        sexo="Macho",
+        tipo_ingreso="Donación",
+        fecha_ingreso=datetime.strptime("2022-8-15", "%Y-%m-%d").date(),
+        sede_asignada="Sede Norte",
+        pelaje="Marrón",
+    )
+    db.session.add_all([caballo_1, caballo_2])
+    db.session.commit()
+
     jya_list = [
         JYA(
-            nombre = "carlos",
-            apellido = "Serebi",
-            dni = "43251556",
-            edad = 25,
-            fecha_nacimiento = "2022-12-15",
-            lugar_nacimiento = {
-                "localidad": "La Plata",
-                "provincia": "Buenos Aires",
-            },
-            domicilio_actual = {
-                "calle": 6,
+            nombre="Carlos",
+            apellido="Serebi",
+            dni="43251556",
+            edad=25,
+            fecha_nacimiento=datetime.strptime("1997-12-15", "%Y-%m-%d").date(),
+            lugar_nacimiento={"localidad": "La Plata", "provincia": "Buenos Aires"},
+            domicilio_actual={
+                "calle": "Calle 6",
                 "numero": 330,
                 "localidad": "La Plata",
                 "provincia": "Buenos Aires",
             },
-            telefono_actual = "2215869112",
-            contacto_emergencia = {
-                "nombre":"maria",
-                "telefono": "2215969991",
+            telefono_actual="2215869112",
+            contacto_emergencia={"nombre": "Maria", "telefono": "2215969991"},
+            becado=False,
+            porcentaje_beca=0.0,
+            profesionales_atendiendo="Carlos Test",
+            certificado_discapacidad=False,
+            diagnostico_discapacidad=None,
+            tipo_discapacidad=None,
+            asignacion_familiar=False,
+            tipo_asignacion=None,
+            pension=False,
+            tipo_pension=None,
+            obra_social="OSDE",
+            numero_afiliado="123456789",
+            curatela=False,
+            observaciones_previsionales=None,
+            institucion_escolar={
+                "nombre": "Escuela Secundaria 1",
+                "direccion": "Calle 12, La Plata",
+                "telefono": "2211234567",
+                "grado_actual": "6to Año",
+                "observaciones": "Buen desempeño académico",
             },
-            becado = False,
-            profesionales_atendiendo = "Carlos test",
-            certificado_discapacidad = False,
+            familiares_tutores=[
+                {"nombre": "Juan", "apellido": "Serebi", "parentesco": "Padre"},
+                {"nombre": "Laura", "apellido": "Serebi", "parentesco": "Madre"},
+            ],
+            propuesta_trabajo="Integración laboral",
+            condicion_trabajo="REGULAR",
+            sede="Sede Central",
+            dias_asistencia=["Lunes", "Miércoles", "Viernes"],
+            caballo_id=caballo_1.id,
         ),
         JYA(
-    nombre = "Carlos",
-    apellido = "Serebi",
-    dni = "43251551",
-    edad = 25,
-    fecha_nacimiento = "2022-12-15",
-    lugar_nacimiento = {
-        "localidad": "La Plata",
-        "provincia": "Buenos Aires",
-    },
-    domicilio_actual = {
-        "calle": 6,
-        "numero": 330,
-        "localidad": "La Plata",
-        "provincia": "Buenos Aires",
-    },
-    telefono_actual = "2215869112",
-    contacto_emergencia = {
-        "nombre":"Maria",
-        "telefono": "2215969991",
-    },
-    becado = False,
-    profesionales_atendiendo = "Carlos test",
-    certificado_discapacidad = True,
-    tipo_discapacidad = "Sensorial",
-),
-
-        JYA(
-    nombre = "Lucía",
-    apellido = "González",
-    dni = "39123548",
-    edad = 29,
-    fecha_nacimiento = "1993-08-19",
-    lugar_nacimiento = {
-        "localidad": "Mar del Plata",
-        "provincia": "Buenos Aires",
-    },
-    domicilio_actual = {
-        "calle": 38,
-        "numero": 745,
-        "localidad": "Mar del Plata",
-        "provincia": "Buenos Aires",
-    },
-    telefono_actual = "2234567890",
-    contacto_emergencia = {
-        "nombre":"Jorge",
-        "telefono": "2234123456",
-    },
-    becado = True,
-    profesionales_atendiendo = "Lucía test",
-    certificado_discapacidad = True,
-    tipo_discapacidad = "Mental",
-),
-
-        JYA(
-    nombre = "Juan",
-    apellido = "Perez",
-    dni = "40325679",
-    edad = 34,
-    fecha_nacimiento = "1989-03-25",
-    lugar_nacimiento = {
-        "localidad": "Rosario",
-        "provincia": "Santa Fe",
-    },
-    domicilio_actual = {
-        "calle": 12,
-        "numero": 123,
-        "localidad": "Rosario",
-        "provincia": "Santa Fe",
-    },
-    telefono_actual = "3415987654",
-    contacto_emergencia = {
-        "nombre":"Ana",
-        "telefono": "3415123456",
-    },
-    becado = False,
-    profesionales_atendiendo = "Juan test",
-    certificado_discapacidad = False,
-),
-
-        JYA(
-    nombre = "Valentina",
-    apellido = "Lopez",
-    dni = "41234569",
-    edad = 27,
-    fecha_nacimiento = "1996-07-12",
-    lugar_nacimiento = {
-        "localidad": "Córdoba",
-        "provincia": "Córdoba",
-    },
-    domicilio_actual = {
-        "calle": 21,
-        "numero": 458,
-        "localidad": "Córdoba",
-        "provincia": "Córdoba",
-    },
-    telefono_actual = "3514561234",
-    contacto_emergencia = {
-        "nombre":"Diego",
-        "telefono": "3514891234",
-    },
-    becado = True,
-    profesionales_atendiendo = "Valentina test",
-    certificado_discapacidad = True,
-    tipo_discapacidad = "Motora"
-),
-
-        JYA(
-    nombre = "Santiago",
-    apellido = "Martinez",
-    dni = "40321599",
-    edad = 31,
-    fecha_nacimiento = "1992-04-10",
-    lugar_nacimiento = {
-        "localidad": "Mendoza",
-        "provincia": "Mendoza",
-    },
-    domicilio_actual = {
-        "calle": 54,
-        "numero": 798,
-        "localidad": "Mendoza",
-        "provincia": "Mendoza",
-    },
-    telefono_actual = "2614098765",
-    contacto_emergencia = {
-        "nombre":"Laura",
-        "telefono": "2614109876",
-    },
-    becado = False,
-    profesionales_atendiendo = "Santiago test",
-    certificado_discapacidad = False,
-),
-
-        JYA(
-    nombre = "Agustina",
-    apellido = "Ramirez",
-    dni = "41432567",
-    edad = 28,
-    fecha_nacimiento = "1995-01-03",
-    lugar_nacimiento = {
-        "localidad": "San Juan",
-        "provincia": "San Juan",
-    },
-    domicilio_actual = {
-        "calle": 23,
-        "numero": 678,
-        "localidad": "San Juan",
-        "provincia": "San Juan",
-    },
-    telefono_actual = "2645123456",
-    contacto_emergencia = {
-        "nombre":"Roberto",
-        "telefono": "2645125678",
-    },
-    becado = True,
-    profesionales_atendiendo = "Agustina test",
-    certificado_discapacidad = True,
-    tipo_discapacidad = "Mental"
-),
-
-        JYA(
-    nombre = "Rodrigo",
-    apellido = "Sosa",
-    dni = "42345123",
-    edad = 36,
-    fecha_nacimiento = "1987-02-16",
-    lugar_nacimiento = {
-        "localidad": "Salta",
-        "provincia": "Salta",
-    },
-    domicilio_actual = {
-        "calle": 15,
-        "numero": 341,
-        "localidad": "Salta",
-        "provincia": "Salta",
-    },
-    telefono_actual = "3875432190",
-    contacto_emergencia = {
-        "nombre":"Elena",
-        "telefono": "3875321098",
-    },
-    becado = False,
-    profesionales_atendiendo = "Rodrigo test",
-    certificado_discapacidad = False,
-),
-
+            nombre="Lucía",
+            apellido="González",
+            dni="39123548",
+            edad=29,
+            fecha_nacimiento=datetime.strptime("1993-8-19", "%Y-%m-%d").date(),
+            lugar_nacimiento={"localidad": "Mar del Plata", "provincia": "Buenos Aires"},
+            domicilio_actual={
+                "calle": "Calle 38",
+                "numero": 745,
+                "localidad": "Mar del Plata",
+                "provincia": "Buenos Aires",
+            },
+            telefono_actual="2234567890",
+            contacto_emergencia={"nombre": "Jorge", "telefono": "2234123456"},
+            becado=True,
+            porcentaje_beca=50.0,
+            profesionales_atendiendo="Lucía Test",
+            certificado_discapacidad=True,
+            diagnostico_discapacidad="Déficit de atención",
+            tipo_discapacidad="Mental",
+            asignacion_familiar=True,
+            tipo_asignacion="Asignación Universal",
+            pension=False,
+            tipo_pension=None,
+            obra_social="Swiss Medical",
+            numero_afiliado="987654321",
+            curatela=False,
+            observaciones_previsionales="Sin observaciones adicionales",
+            institucion_escolar={
+                "nombre": "Colegio Nacional",
+                "direccion": "Av. Independencia, Mar del Plata",
+                "telefono": "2231234567",
+                "grado_actual": "5to Año",
+                "observaciones": None,
+            },
+            familiares_tutores=[
+                {"nombre": "Sergio", "apellido": "González", "parentesco": "Padre"},
+            ],
+            propuesta_trabajo="Apoyo terapéutico",
+            condicion_trabajo="REGULAR",
+            sede="Sede Norte",
+            dias_asistencia=["Martes", "Jueves"],
+            caballo_id=caballo_2.id,
+        ),
     ]
+    
     db.session.add_all(jya_list)
+    db.session.commit()
+
+    relaciones_jya_empleado = [
+        JYAEmpleado(jya_id=1, empleado_id=6, rol="terapeuta"),
+        JYAEmpleado(jya_id=1, empleado_id=3, rol="conductor"),
+        JYAEmpleado(jya_id=1, empleado_id=5, rol="auxiliar"),
+        
+        JYAEmpleado(jya_id=2, empleado_id=6, rol="terapeuta"),
+        JYAEmpleado(jya_id=2, empleado_id=3, rol="conductor"),
+        JYAEmpleado(jya_id=2, empleado_id=5, rol="auxiliar"),
+    ]
+
+    db.session.add_all(relaciones_jya_empleado)
     db.session.commit()
 
 def articles_create():
@@ -670,8 +588,8 @@ def db_seeds():
     permission_create()
     user_create()
     rolePermission_create()
-    JYA_create()
     employee_create()
+    JYA_create()
     articles_create()
 
 """
