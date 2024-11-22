@@ -8,7 +8,6 @@ from src.web.controllers.gestion_caballo.caballos import caballos_bp
 from src.web.controllers.gestion_caballo.caballo_archivos import caballos_documentos_bp as caballo_documentos_bp
 from src.web.controllers.gestion_caballo.caballo_enlaces import bp as caballo_enlaces_bp
 from src.web.controllers.pagos import pagos_bp
-from src.web.controllers.empleados import empleados_bp
 from src.web.controllers.gestion_empleado.empleados import bp as empleados_bp
 from src.web.controllers.gestion_empleado.empleado_archivos import bp as documentos_empleados_bp
 from src.web.controllers.consultas import consultas_bp
