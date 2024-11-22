@@ -38,6 +38,7 @@
             <textarea class="form-control" id="description" name="description" rows="3">{{ pago.description }}</textarea>
         </div>
         <button type="submit" class="btn btn-primary">Actualizar Pago</button>
+        <a href="{{ url_for('pagos.listar_pagos_route') }}" class="btn btn-secondary">Volver al listado</a>
     </form>
 </div>
 {% endblock %}

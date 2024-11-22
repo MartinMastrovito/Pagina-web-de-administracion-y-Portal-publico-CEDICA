@@ -1,24 +1,57 @@
+"""
+Módulo de controladores para la gestión de pagos.
+
+Este módulo contiene las rutas y controladores para listar, obtener, crear, actualizar y eliminar pagos.
+"""
+
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from src.core.crud_pagos import listar_pagos, obtener_pago, crear_pago, actualizar_pago, eliminar_pago
 from src.core.auth.models.model_empleado import Empleados
 from src.core.database import db
-from src.core.empleados import listar_empleados_activos  # Importar la función de empleados
+from src.core.empleados import listar_empleados_activos
 
 pagos_bp = Blueprint('pagos', __name__, url_prefix='/pagos')
 
 @pagos_bp.route('/', methods=['GET'])
 def listar_pagos_route():
+    """
+    Ruta para listar los pagos.
+
+    Obtiene una lista paginada de pagos y la renderiza en el template 'listar_pago.html'.
+
+    Returns:
+        str: El contenido HTML de la página de listado de pagos.
+    """
     page = request.args.get('page', 1, type=int)
     pagos = listar_pagos(page=page)
     return render_template('pagos/listar_pago.html', pagos=pagos)
 
 @pagos_bp.route('/<int:id>', methods=['GET'])
 def obtener_pago_route(id):
+    """
+    Ruta para obtener los detalles de un pago específico.
+
+    Obtiene los detalles de un pago por su ID y los renderiza en el template 'mostrar_pago.html'.
+
+    Args:
+        id (int): El ID del pago a obtener.
+
+    Returns:
+        str: El contenido HTML de la página de detalles del pago.
+    """
     pago = obtener_pago(id)
     return render_template('pagos/mostrar_pago.html', pago=pago)
 
 @pagos_bp.route('/nuevo', methods=['GET', 'POST'])
 def crear_pago_route():
+    """
+    Ruta para crear un nuevo pago.
+
+    Muestra el formulario para crear un nuevo pago y maneja la lógica para guardar el pago en la base de datos.
+
+    Returns:
+        str: El contenido HTML de la página de creación de pago o una redirección a la lista de pagos.
+    """
     if request.method == 'POST':
         data = request.form.to_dict()
         empleado_id = data.get('beneficiario_id')
@@ -36,6 +69,17 @@ def crear_pago_route():
 
 @pagos_bp.route('/<int:id>/editar', methods=['GET', 'POST'])
 def actualizar_pago_route(id):
+    """
+    Ruta para actualizar un pago existente.
+
+    Muestra el formulario para editar un pago y maneja la lógica para actualizar el pago en la base de datos.
+
+    Args:
+        id (int): El ID del pago a actualizar.
+
+    Returns:
+        str: El contenido HTML de la página de edición de pago o una redirección a la lista de pagos.
+    """
     pago = obtener_pago(id)
     if request.method == 'POST':
         data = request.form.to_dict()
@@ -53,6 +97,14 @@ def actualizar_pago_route(id):
 
 @pagos_bp.route('/eliminar', methods=['POST'])
 def eliminar_pago_route():
+    """
+    Ruta para eliminar un pago.
+
+    Maneja la lógica para eliminar un pago de la base de datos.
+
+    Returns:
+        str: Una redirección a la lista de pagos.
+    """
     pago_id = request.form['id']
     eliminar_pago(pago_id)
     flash("Pago eliminado correctamente", 'success')
