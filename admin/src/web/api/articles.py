@@ -23,14 +23,14 @@ def index():
         page = int(page)
     if per_page:
         per_page = int(per_page)
-    pop = {
+    filters = {
         'page' : page,
         'per_page' : per_page,
         'titulo' : titulo,
         'desde' : desde,
         'hasta' : hasta
     }
-    publicaciones = publicacion.filtrado_portal(**pop)
+    publicaciones = publicacion.filtrado_portal(**filters)
     pages = publicaciones.pages
     data = articles_schema.dump(publicaciones)
     retorno = {
