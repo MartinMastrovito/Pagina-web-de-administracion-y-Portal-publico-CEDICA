@@ -11,7 +11,7 @@ class Publicacion(db.Model):
     titulo = db.Column(db.String(25), nullable=False)
     copete = db.Column(db.String(255), nullable=True)
     contenido = db.Column(db.Text, nullable=False)
-    autor_id = db.Column(db.Integer, db.ForeignKey("empleados.id"), nullable=True)
+    autor_id = db.Column(db.Integer, db.ForeignKey("empleados.id"), nullable=False)
     estado = db.Column(db.Enum("Borrador", "Publicado", "Archivado", name="estado_publicacion"), default="Borrador")
 
     autor = db.relationship("Empleados", backref=db.backref("publicaciones", lazy=True))

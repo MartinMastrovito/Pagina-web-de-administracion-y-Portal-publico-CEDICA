@@ -27,8 +27,8 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     MINIO_SERVER = "localhost:9000"
-    MINIO_ACCESS_KEY = "KLpAmkPAkfmLvWDtrmkt"
-    MINIO_SECRET_KEY = "1Qcyj4ZrkWAqINZ54ryENCNsQx4F5QvI5zQx8GiP"
+    MINIO_ACCESS_KEY = "9H3ZLLlZC4qX1vbZ1MJb"
+    MINIO_SECRET_KEY = "mJGy8It49ebNNu2C1PaFMe5g1s6ObJ9adpzAHsWC"
     MINIO_SECURE = False
     DB_USER = os.getenv("DB_USER", "carlito")
     DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")

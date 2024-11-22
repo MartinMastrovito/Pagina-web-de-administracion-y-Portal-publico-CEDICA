@@ -30,17 +30,10 @@
         <input class="form-control" type="text" value="{{ pub.estado }}" aria-label="Disabled input example" disabled readonly>
         <label for="floatingInputDisabled">Estado</label>
     </div>
-    {% if pub.autor %}
     <div class="form-floating mb-3">
         <input class="form-control" type="text" value="{{ pub.autor.nombre }}" aria-label="Disabled input example" disabled readonly>
         <label for="floatingInputDisabled">Autor</label>
     </div>
-    {% else %}
-    <div class="form-floating mb-3">
-        <input class="form-control" type="text" value="IMPORTANTE: La persona que escribió esta publicación ya no pertenece a CEDICA." aria-label="Disabled input example" disabled readonly>
-        <label for="floatingInputDisabled">Autor</label>
-    </div>
-    {% endif %}
     <div class="form-floating mb-3">
         <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>{{ pub.copete }}</textarea>
         <label for="floatingTextarea2Disabled">Copete</label>

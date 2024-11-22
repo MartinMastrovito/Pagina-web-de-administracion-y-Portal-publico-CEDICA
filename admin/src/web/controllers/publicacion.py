@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, flash, redirect
 from src.core import publicacion
-from src.core.empleados import lista_empleado
+from src.core.empleados import get_empleados
 from src.core.auth.decorators import login_required, check
 from datetime import datetime, timezone
 
@@ -41,7 +41,7 @@ def show_crear_publicacion():
     Returns:
         render_template: Devuelve la plantilla con el formulario de creación de la publicación.
     """
-    empleados = lista_empleado()
+    empleados = get_empleados()
     return render_template("publicaciones/crear_publicacion.html", empleados=empleados)
 
 @bp.post("/crear")
@@ -107,7 +107,7 @@ def show_actualizar_publicacion(id):
     Returns:
         render_template: Devuelve la plantilla con el formulario de actualización de la publicación.
     """
-    empleados = lista_empleado()
+    empleados = get_empleados()
     pub = publicacion.get_publicacion(id)
     return render_template("publicaciones/actualizar_publicacion.html", empleados=empleados, publicacion=pub)
 
