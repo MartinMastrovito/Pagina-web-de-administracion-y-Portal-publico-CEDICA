@@ -58,7 +58,6 @@ def show_create_employee_form():
 @bp.post("/crear_empleado")
 #@login_required
 def crear_empleado_listo():
-    # Obtener los datos del formulario
     empleado_data = {
         "nombre": request.form['nombre'],
         "apellido": request.form['apellido'],
@@ -70,10 +69,10 @@ def crear_empleado_listo():
         "profesion": request.form['profesion'],
         "puesto": request.form['puesto'],
         "fecha_inicio": request.form['fecha_inicio'],
-        "fecha_cese": request.form.get('fecha_cese'),  # Puede ser None si no se proporciona
+        "fecha_cese": request.form.get('fecha_cese'),
         "contacto_emergencia": request.form['contacto_emergencia'],
-        "obra_social": request.form.get('obra_social'),  # Opcional
-        "numero_afiliado": request.form.get('numero_afiliado'),  # Opcional
+        "obra_social": request.form.get('obra_social'),
+        "numero_afiliado": request.form.get('numero_afiliado'),
         "condicion": request.form['condicion'],
         "activo": True if request.form['activo'] == 'true' else False
     }
@@ -91,7 +90,7 @@ def crear_empleado_listo():
         return  redirect(url_for('empleados.show_create_employee_form'))
     
     flash("Empleado creado exitosamente", "success")
-    return redirect(url_for('empleados.listar_empleados'))
+    return redirect("/empleados")
 
 @bp.get("/actualizar/<int:empleado_dni>")
 @login_required
@@ -113,9 +112,9 @@ def show_update_employee_form(empleado_dni):
     return render_template("empleados/update_empleado.html", empleado=empleado)
 
 
-@bp.post("/actualizar/<int:empleado_dni>")
+@bp.post("/actualizar/<int:empleado_dni>/<int:empleado_id>")
 @login_required
-def update_employee(empleado_dni):
+def update_employee(empleado_dni, empleado_id):
     """
     Actualiza los datos de un empleado existente.
     Valida y procesa los datos del formulario de actualización.
@@ -142,17 +141,18 @@ def update_employee(empleado_dni):
         "obra_social": request.form["obra_social"],
         "numero_afiliado": request.form["numero_afiliado"],
         "condicion": request.form["condicion"],
-        "activo": request.form["activo"],
+        "activo": request.form["activo"] == "true",
     }
 
     errores = validate_empleado_form(empleado_data)
+    print(errores)
     if errores:
         flash("Ocurrió un error al completar los campos, intente nuevamente...", "danger")
         return redirect(f"/empleados/actualizar/{empleado_dni}")
     
-    result = empleados.update_employee(empleado_dni, **empleado_data)
+    result = empleados.actualizar_empleado(empleado_id, **empleado_data)
     if not result:
-        flash("El empleado ya existe o ocurrió un error", "danger")
+        flash("El empleado ya existe u ocurrió un error", "danger")
         return redirect(f"/empleados/actualizar/{empleado_dni}")
     
     flash("Empleado actualizado exitosamente", "success")
@@ -174,3 +174,14 @@ def delete_employee(empleado_dni):
     flash("Empleado eliminado exitosamente", "success")
     return redirect("/empleados")
 
+@bp.get("/detalle/<int:empleado_dni>")
+@login_required
+def show_empleado(empleado_dni):
+    """
+    Muestra el formulario para crear un nuevo empleado.
+
+    Returns:
+        Renderizado de la plantilla crear_empleado.html.
+    """
+    empleado = empleados.get_empleado_por_dni(empleado_dni)
+    return render_template("empleados/detalles_empleado.html", empleado=empleado)

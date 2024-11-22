@@ -120,7 +120,7 @@
                                     Menú
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#" class="dropdown-item">Ver más</a></li>
+                                    <li><a href="{{ url_for('empleados.show_empleado', empleado_dni=empleado.dni) }}" class="dropdown-item">Ver más</a></li>
                                     <li><a href="{{ url_for('empleados.show_update_employee_form', empleado_dni=empleado.dni) }}" class="dropdown-item">Actualizar</a></li>
                                     <li><a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ url_for('empleados.delete_employee', empleado_dni=empleado.dni) }}" class="dropdown-item">Eliminar</a></li>
                                 </ul>

@@ -1,7 +1,6 @@
 from src.core.database import db
 from src.core.auth.models.model_empleado import Empleados
 from src.core.auth.models.model_docEmpleado import DocumentoEmpleado
-from sqlalchemy import or_
 
 def lista_empleado():
     """
@@ -78,7 +77,7 @@ def crear_empleado(**kwargs):
 
     return empleado
 
-def actualizar_empleado(dni, **kwargs):
+def actualizar_empleado(empleado_id, **kwargs):
     """
     Actualiza los datos de un empleado existente.
 
@@ -89,7 +88,7 @@ def actualizar_empleado(dni, **kwargs):
     Returns:
         Retorna True si la actualización fue exitosa, o None si ya existe un empleado con el mismo DNI.
     """
-    empleado = get_empleado_por_dni(dni)
+    empleado = Empleados.query.get(empleado_id)
     validation = Empleados.query.filter_by(dni=kwargs["dni"]).first()
 
     if validation and (not (empleado.dni == kwargs["dni"])):
@@ -126,6 +125,19 @@ def get_empleado_por_dni(dni):
     empleado = Empleados.query.filter_by(dni=dni).first()
     return empleado
 
+def get_empleado_by_id(id):
+    """
+    Busca un empleado por su ID.
+
+    Args:
+        id: ID del empleado a buscar.
+
+    Returns:
+        Empleado o None: Retorna el objeto Empleado encontrado o None si no existe.
+    """
+    empleado = Empleados.query.get(id)
+    return empleado
+
 def guardar_documento(**kwargs):
     """
     Guarda un nuevo documento en la base de datos.
@@ -137,15 +149,13 @@ def guardar_documento(**kwargs):
     db.session.add(document)
     db.session.commit()
 
-def search_documents(empleado_dni, nombre_documento=None, tipo_documento=None, 
-                     sort_by='nombre_documento', order='asc', page=1, per_page=10):
+def search_documents(empleado_dni, nombre_documento=None, sort_by='nombre_documento', order='asc', page=1, per_page=10):
     """
     Busca documentos asociados a un empleado.
 
     Args:
         empleado_dni: DNI del empleado al que pertenecen los documentos.
         nombre_documento: Nombre del documento a buscar.
-        tipo_documento: Tipo del documento a buscar.
         sort_by: Campo por el cual ordenar los resultados. Por defecto es 'nombre_documento'.
         order: Orden de la lista ('asc' o 'desc'). Por defecto es 'asc'.
         page: Número de página a obtener. Por defecto es 1.
@@ -159,15 +169,14 @@ def search_documents(empleado_dni, nombre_documento=None, tipo_documento=None,
     if nombre_documento:
         query = query.filter(DocumentoEmpleado.nombre_documento.ilike(f'%{nombre_documento}%'))
 
-    if tipo_documento:
-        query = query.filter(DocumentoEmpleado.tipo_documento.ilike(f'%{tipo_documento}%'))
-
+    sort_column = getattr(DocumentoEmpleado, sort_by, DocumentoEmpleado.nombre_documento)
     if order == 'desc':
-        query = query.order_by(getattr(DocumentoEmpleado, sort_by).desc())
+        query = query.order_by(sort_column.desc())
     else:
-        query = query.order_by(getattr(DocumentoEmpleado, sort_by))
+        query = query.order_by(sort_column.asc())
 
     return query.paginate(page=page, per_page=per_page)
+
 
 def search_empleados(nombre=None, apellido=None, dni=None, email=None, sort_by='nombre', order='asc', page=1, per_page=10):
     """
@@ -204,3 +213,69 @@ def search_empleados(nombre=None, apellido=None, dni=None, email=None, sort_by='
         query = query.order_by(sort_column.desc())
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
+
+def save_document(**kwargs):
+    """
+    Guarda un nuevo documento en la base de datos.
+
+    Args:
+        **kwargs: Atributos del documento a guardar.
+    """
+    document = DocumentoEmpleado(**kwargs)
+    db.session.add(document)
+    db.session.commit()
+    
+def get_document_by_id(document_id):
+    """
+    Busca un documento por su ID.
+
+    Args:
+        document_id: ID del documento a buscar.
+
+    Returns:
+        El documento encontrado.
+    """
+    document = DocumentoEmpleado.query.get_or_404(document_id)
+    return document
+
+def get_empleado_by_document(document):
+    """
+    Busca el empleado asociado a un documento.
+
+    Args:
+        document: El documento del cual se busca el empleado.
+
+    Returns:
+        empleado or None: Retorna el objeto empleado encontrado o None si no existe.
+    """
+    empleado = Empleados.query.filter_by(dni=document.empleado_dni).first()
+    return empleado
+
+def update_document(document_id, **kwargs):
+    """
+    Actualiza un documento existente en la base de datos.
+
+    Args:
+        document_id: ID del documento a actualizar.
+        **kwargs: Nuevos atributos del documento.
+
+    Returns:
+        El documento actualizado.
+    """
+    document = get_document_by_id(document_id)
+
+    for key, value in kwargs.items():
+        setattr(document, key, value)
+
+    db.session.commit()
+    return document
+
+def delete_document(document_id):
+    """
+    Elimina un documento de la base de datos.
+
+    Args:
+        document_id: ID del documento a eliminar.
+    """
+    db.session.query(DocumentoEmpleado).filter(DocumentoEmpleado.id == str(document_id)).delete()
+    db.session.commit()

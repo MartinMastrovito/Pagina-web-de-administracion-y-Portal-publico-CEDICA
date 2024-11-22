@@ -15,7 +15,7 @@
             <header>
                 <a class="btn" href="{{ url_for('empleados.index') }}">Volver al Menu</a>
             </header>
-            <form action="{{ url_for('empleados.crear_empleado_listo') }}" id="empleados_form" method="POST" enctype="multipart/form-data">
+            <form action="{{ url_for('empleados.crear_empleado_listo') }}" id="empleados_form" method="POST">
                 <!-- Nombre -->
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>
@@ -110,10 +110,6 @@
                     <option value="true">Sí</option>
                     <option value="false">No</option>
                 </select>
-                
-                <!-- Subida de Archivos -->
-                <label for="documentacion">Subir Documentación Complementaria:</label>
-                <input type="file" id="documentacion" name="documentacion[]" multiple>
                 
                 <button form="empleados_form" class="button" type="submit">Crear Empleado</button>
             </form>
