@@ -56,7 +56,8 @@ def order_list():
 def delete_invoice():
     id_delete = request.form['id']
     utiles.delete(id_delete)
-    return redirect("/cobros/")
+    flash("Se elimino el cobro","success")
+    return redirect("/cobros/lista-cobros/1")
 
 
 #Ruta para actualizar cobro
