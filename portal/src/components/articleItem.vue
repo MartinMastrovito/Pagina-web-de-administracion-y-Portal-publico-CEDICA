@@ -10,12 +10,12 @@ defineProps({
 </script>
 <template>
     <div class="item">
-        <h2>Titulo: {{ titulo }}</h2>
+        <h2>{{ titulo }}</h2>
         <div class="año">
-            <p>año: {{ año }}</p>
+            <p>Creacion: {{ año }}</p>
         </div>
         <div class="copete">
-            <p>copete: {{ copete }}</p>
+            <p>{{ copete }}</p>
         </div>
         <div>
             <RouterLink class="btn" :to="`/noticia/${id}`">
