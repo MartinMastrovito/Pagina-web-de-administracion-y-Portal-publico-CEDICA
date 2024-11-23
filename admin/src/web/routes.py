@@ -14,6 +14,7 @@ from src.web.controllers.consultas import consultas_bp
 from src.web.controllers.reportes import bp as reportes_bp
 from src.web.controllers.publicacion import bp as publicacion_bp
 from src.web.api.articles import bp as articles_api_bp
+from src.web.api.consulta import consulta_api_bp
 def register(app):
     # Crear un Blueprint para las rutas
     main = Blueprint('main', __name__)
@@ -62,8 +63,6 @@ def register(app):
 
     app.register_blueprint(empleados_bp)
 
-    app.register_blueprint(documentos_empleados_bp)
-    
     app.register_blueprint(reportes_bp)
 
     app.register_blueprint(consultas_bp)
@@ -71,6 +70,10 @@ def register(app):
     app.register_blueprint(publicacion_bp)
 
     app.register_blueprint(articles_api_bp)
+
+    app.register_blueprint(consulta_api_bp)
+
+    app.register_blueprint(documentos_empleados_bp)
 
     #de
     # f pages_list():
