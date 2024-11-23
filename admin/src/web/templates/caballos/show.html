@@ -20,6 +20,18 @@
     <h4><p><strong>Fecha de Ingreso:</strong> {{ caballo.fecha_ingreso }}</p></h4>
     <h4><p><strong>Sede Asignada:</strong> {{ caballo.sede_asignada }}</p></h4>
 
+    <!-- Sección de Conductores -->
+    <h3><strong>Conductores:</strong></h3>
+    <h4>
+        <ul>
+            {% for conductor in caballo.conductores %}
+                <li>{{ conductor.nombre }}</li>
+            {% else %}
+                <li>No hay conductores asignados.</li>
+            {% endfor %}
+        </ul>
+    </h4>
+
     <!-- Sección de Entrenadores -->
     <h3><strong>Entrenadores:</strong></h3>
     <h4>
@@ -28,18 +40,6 @@
                 <li>{{ entrenador.nombre }}</li>
             {% else %}
                 <li>No hay entrenadores asignados.</li>
-            {% endfor %}
-        </ul>
-    </h4>
-
-    <!-- Sección de Coordinadores -->
-    <h3><strong>Coordinadores:</strong></h3>
-    <h4>
-        <ul>
-            {% for coordinador in caballo.coordinadores %}
-                <li>{{ coordinador.nombre }}</li>
-            {% else %}
-                <li>No hay coordinadores asignados.</li>
             {% endfor %}
         </ul>
     </h4>

@@ -69,17 +69,18 @@
                 </select>
             </div>
 
-            <!-- Coordinadores -->
+            <!-- Conductores -->
             <div class="form-group">
-                <label for="coordinadores">Coordinadores:</label>
-                <select id="coordinadores" name="coordinadores" multiple>
-                    {% for coordinador in coordinadores %}
-                        <option value="{{ coordinador.id }}" {% if coordinador in caballo.coordinadores %} selected {% endif %}>
-                            {{ coordinador.nombre }}
+                <label for="conductores">Conductores:</label>
+                <select id="conductores" name="conductores" multiple>
+                    {% for conductor in conductores %}
+                        <option value="{{ conductor.id }}" {% if conductor in caballo.conductores %} selected {% endif %}>
+                            {{ conductor.nombre }}
                         </option>
                     {% endfor %}
                 </select>
             </div>
+
 
             <!-- Tipo de J&A Asignados -->
             <div class="form-group">

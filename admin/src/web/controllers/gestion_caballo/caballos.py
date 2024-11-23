@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from src.core.crud_caballos import (
     search_caballos, create_caballo, get_caballo_by_id,
-    update_caballo, delete_caballo, list_documents, get_empleados_by_rol
+    update_caballo, delete_caballo, list_documents, get_empleados_by_rol , get_empleados_by_ids
 )
 from src.core.auth.decorators import login_required, check
 
@@ -83,14 +83,17 @@ def crear_caballo():
 @check("horse_show")
 def mostrar_caballo(id):
     """
-    Muestra los detalles de un caballo, incluyendo entrenadores y conductores asignados.
+    Muestra los detalles de un caballo, incluyendo entrenadores y coordinadores asignados.
     """
     caballo = get_caballo_by_id(id)
-    entrenadores = caballo.entrenadores  # Lista de entrenadores asignados
-    conductores = caballo.conductores   # Lista de conductores asignados
+    
+    entrenadores_ids = [entrenador.id for entrenador in caballo.entrenadores]
+    conductores_ids = [conductor.id for conductor in caballo.conductores]
+
+    entrenadores = get_empleados_by_ids(entrenadores_ids)
+    conductores = get_empleados_by_ids(conductores_ids)
 
     return render_template('caballos/show.html', caballo=caballo, entrenadores=entrenadores, conductores=conductores)
-
 
 @caballos_bp.route('/<int:id>/editar', methods=['GET', 'POST'])
 @login_required
@@ -145,9 +148,10 @@ def editar_caballo(id):
     )
 
 
+
 @caballos_bp.route('/<int:id>/eliminar', methods=['POST'])
 @login_required
-@check("horse_delete")
+@check("horse_destroy")
 def eliminar_caballo(id):
     """
     Elimina un caballo de la base de datos.

@@ -208,3 +208,10 @@ def get_empleados_by_rol(puesto):
     """
     
     return Empleado.query.filter_by(puesto=puesto).all()
+
+
+def get_empleados_by_ids(ids):
+    """
+    Recupera los empleados por su lista de IDs.
+    """
+    return Empleado.query.filter(Empleado.id.in_(ids)).all()
