@@ -15,7 +15,7 @@
                     v-for="article in articles" 
                     :id="article.id"
                     :titulo="article.titulo"
-                    :año="article.fecha_publicacion" 
+                    :año="article.fecha_creacion" 
                     :copete="article.copete"
                     :contenido="article.contenido"
                 />
