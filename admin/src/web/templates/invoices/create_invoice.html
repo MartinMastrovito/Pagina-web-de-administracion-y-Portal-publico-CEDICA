@@ -17,6 +17,7 @@
             {% endif %}
         {% endwith %}
         {% block content %}
+        <a class="btn btn-light" href="{{ url_for('invoices.invoices_menu') }}"> Volver al menu</a>
             <form action="{{ url_for('invoices.invoice_create') }}" id="invoice_form" class="form_style" method="POST">
                 <label class="label" for="pay_date">Fecha de pago</label>
                 <input class="input" type="date" name="pay_date" required >
