@@ -7,62 +7,97 @@
     <title>Editar Caballo</title>
 </head>
 <body>
-    <h1>Editar Caballo: {{ caballo.nombre }}</h1>
+    <main class="form-container">
+        <h1>Editar Caballo: {{ caballo.nombre }}</h1>
 
-    <form action="{{ url_for('caballos.editar_caballo', id=caballo.id) }}" method="POST" enctype="multipart/form-data">
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" value="{{ caballo.nombre }}" required minlength="3" maxlength="50">
+        <form action="{{ url_for('caballos.editar_caballo', id=caballo.id) }}" method="POST" enctype="multipart/form-data" class="form">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="{{ caballo.nombre }}" required minlength="3" maxlength="50">
+            </div>
 
-        <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-        <input type="date" name="fecha_nacimiento" value="{{ caballo.fecha_nacimiento }}" required>
+            <div class="form-group">
+                <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ caballo.fecha_nacimiento }}" required>
+            </div>
 
-        <label for="sexo">Sexo:</label>
-        <select name="sexo" required>
-            <option value="Macho" {% if caballo.sexo == "Macho" %} selected {% endif %}>Macho</option>
-            <option value="Hembra" {% if caballo.sexo == "Hembra" %} selected {% endif %}>Hembra</option>
-        </select>
+            <div class="form-group">
+                <label for="sexo">Sexo:</label>
+                <select id="sexo" name="sexo" required>
+                    <option value="Macho" {% if caballo.sexo == "Macho" %} selected {% endif %}>Macho</option>
+                    <option value="Hembra" {% if caballo.sexo == "Hembra" %} selected {% endif %}>Hembra</option>
+                </select>
+            </div>
 
-        <label for="raza">Raza:</label>
-        <input type="text" name="raza" value="{{ caballo.raza }}" maxlength="50">
+            <div class="form-group">
+                <label for="raza">Raza:</label>
+                <input type="text" id="raza" name="raza" value="{{ caballo.raza }}" maxlength="50">
+            </div>
 
-        <label for="pelaje">Pelaje:</label>
-        <input type="text" name="pelaje" value="{{ caballo.pelaje }}" maxlength="50">
+            <div class="form-group">
+                <label for="pelaje">Pelaje:</label>
+                <input type="text" id="pelaje" name="pelaje" value="{{ caballo.pelaje }}" maxlength="50">
+            </div>
 
-        <label for="tipo_ingreso">Tipo de Ingreso:</label>
-        <select name="tipo_ingreso" required>
-            <option value="Compra" {% if caballo.tipo_ingreso == "Compra" %} selected {% endif %}>Compra</option>
-            <option value="Donación" {% if caballo.tipo_ingreso == "Donación" %} selected {% endif %}>Donación</option>
-        </select>
+            <div class="form-group">
+                <label for="tipo_ingreso">Tipo de Ingreso:</label>
+                <select id="tipo_ingreso" name="tipo_ingreso" required>
+                    <option value="Compra" {% if caballo.tipo_ingreso == "Compra" %} selected {% endif %}>Compra</option>
+                    <option value="Donación" {% if caballo.tipo_ingreso == "Donación" %} selected {% endif %}>Donación</option>
+                </select>
+            </div>
 
-        <label for="fecha_ingreso">Fecha de Ingreso:</label>
-        <input type="date" name="fecha_ingreso" value="{{ caballo.fecha_ingreso }}" required>
+            <div class="form-group">
+                <label for="fecha_ingreso">Fecha de Ingreso:</label>
+                <input type="date" id="fecha_ingreso" name="fecha_ingreso" value="{{ caballo.fecha_ingreso }}" required>
+            </div>
 
-        <label for="sede_asignada">Sede Asignada:</label>
-        <input type="text" name="sede_asignada" value="{{ caballo.sede_asignada }}" required>
+            <div class="form-group">
+                <label for="sede_asignada">Sede Asignada:</label>
+                <input type="text" id="sede_asignada" name="sede_asignada" value="{{ caballo.sede_asignada }}" required>
+            </div>
 
-        <label for="entrenadores">Entrenadores:</label>
-        <select name="entrenadores" multiple>
-            {% for entrenador in entrenadores %}
-            <option value="{{ entrenador.id }}" {% if entrenador in caballo.entrenadores %} selected {% endif %}>
-                {{ entrenador.nombre }}
-            </option>
-            {% endfor %}
-        </select>
+            <!-- Entrenadores -->
+            <div class="form-group">
+                <label for="entrenadores">Entrenadores:</label>
+                <select id="entrenadores" name="entrenadores" multiple>
+                    {% for entrenador in entrenadores %}
+                        <option value="{{ entrenador.id }}" {% if entrenador in caballo.entrenadores %} selected {% endif %}>
+                            {{ entrenador.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <label for="JYA">Tipo de J&A Asignados:</label>
-        <select name="tipo_ja_asignado" multiple>
-            <option value="Hipoterapia" {% if 'Hipoterapia' in caballo.tipo_ja_asignado %} selected {% endif %}>Hipoterapia</option>
-            <option value="Monta Terapéutica" {% if 'Monta Terapéutica' in caballo.tipo_ja_asignado %} selected {% endif %}>Monta Terapéutica</option>
-            <option value="Deporte Ecuestre Adaptado" {% if 'Deporte Ecuestre Adaptado' in caballo.tipo_ja_asignado %} selected {% endif %}>Deporte Ecuestre Adaptado</option>
-            <option value="Actividades Recreativas" {% if 'Actividades Recreativas' in caballo.tipo_ja_asignado %} selected {% endif %}>Actividades Recreativas</option>
-            <option value="Equitación" {% if 'Equitación' in caballo.tipo_ja_asignado %} selected {% endif %}>Equitación</option>
-        </select>
+            <!-- Coordinadores -->
+            <div class="form-group">
+                <label for="coordinadores">Coordinadores:</label>
+                <select id="coordinadores" name="coordinadores" multiple>
+                    {% for coordinador in coordinadores %}
+                        <option value="{{ coordinador.id }}" {% if coordinador in caballo.coordinadores %} selected {% endif %}>
+                            {{ coordinador.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        
+            <!-- Tipo de J&A Asignados -->
+            <div class="form-group">
+                <label for="JYA">Tipo de J&A Asignados:</label>
+                <select id="JYA" name="tipo_ja_asignado" multiple>
+                    <option value="Hipoterapia" {% if 'Hipoterapia' in caballo.tipo_ja_asignado %} selected {% endif %}>Hipoterapia</option>
+                    <option value="Monta Terapéutica" {% if 'Monta Terapéutica' in caballo.tipo_ja_asignado %} selected {% endif %}>Monta Terapéutica</option>
+                    <option value="Deporte Ecuestre Adaptado" {% if 'Deporte Ecuestre Adaptado' in caballo.tipo_ja_asignado %} selected {% endif %}>Deporte Ecuestre Adaptado</option>
+                    <option value="Actividades Recreativas" {% if 'Actividades Recreativas' in caballo.tipo_ja_asignado %} selected {% endif %}>Actividades Recreativas</option>
+                    <option value="Equitación" {% if 'Equitación' in caballo.tipo_ja_asignado %} selected {% endif %}>Equitación</option>
+                </select>
+            </div>
 
-        <button type="submit">Guardar Cambios</button>
-    </form>
-
-    <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn btn-cancel">Cancelar</a>
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a href="{{ url_for('caballos.mostrar_caballo', id=caballo.id) }}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </main>
 </body>
 </html>
