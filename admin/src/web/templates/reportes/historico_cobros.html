@@ -6,65 +6,66 @@
 <header class="d-flex justify-content-between align-items-center mt-4 mb-3">
     <a class="btn btn-secondary" href="{{ url_for('reportes.menu_reportes') }}">Volver</a>
 </header>
+
 {% if empleados %}
-<form method="get" action="{{ url_for('reportes.historico_cobros') }}">
-    <div class="form-group">
-        <label for="fecha_inicio">Fecha Inicio:</label>
-        <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio }}" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="fecha_fin">Fecha Fin:</label>
-        <input type="date" id="fecha_fin" name="fecha_fin" value="{{ fecha_fin }}" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="empleado_id">Seleccione un Empleado:</label>
-        <select id="empleado_id" name="empleado_id" class="form-control">
-            <option value="" disabled selected>Seleccione un empleado</option>
-            {% for empleado in empleados %}
-                <option value="{{ empleado.id }}" {% if empleado.id == request.args.get('empleado_id') %}selected{% endif %}>
-                    {{ empleado.nombre }} {{ empleado.apellido }}
-                </option>
-            {% endfor %}
-        </select>
-    </div>
-    <br>
-    <button type="submit" class="btn btn-primary">Filtrar</button>
-</form>
-
-<div class="container mt-4">
-    <h2 class="mb-4">Histórico de Cobros de Empleado</h2>
-    <p><strong>Fecha de Inicio:</strong> {{ fecha_inicio }} <br>
-       <strong>Fecha de Fin:</strong> {{ fecha_fin }}</p>
-
-    {% if cobros %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Fecha de Pago</th>
-                    <th>Monto</th>
-                    <th>Método de Pago</th>
-                    <th>Observaciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cobro in cobros %}
+<section>
+    <article>
+        <form method="get" action="{{ url_for('reportes.historico_cobros') }}" class="container-fluid">
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <label for="fecha_inicio">Fecha Inicio:</label>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio }}" class="form-control">
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="fecha_fin">Fecha Fin:</label>
+                    <input type="date" id="fecha_fin" name="fecha_fin" value="{{ fecha_fin }}" class="form-control">
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="empleado_id">Seleccione un Empleado:</label>
+                    <select id="empleado_id" name="empleado_id" class="form-control">
+                        <option value="" disabled selected>Seleccione un empleado</option>
+                        {% for empleado in empleados %}
+                            <option value="{{ empleado.id }}" {% if empleado.id == request.args.get('empleado_id') %}selected{% endif %}>
+                                {{ empleado.nombre }} {{ empleado.apellido }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-2 text-md-end">
+                    <button type="submit" class="btn btn-primary mt-md-4 w-100">Filtrar</button>
+                </div>
+            </div>
+        </form>
+        {% if cobros %}
+        <div class="table-responsive">
+            <table class="table table-striped mt-4">
+                <thead class="thead-dark">
                     <tr>
-                        <td>{{ cobro.id }}</td>
-                        <td>{{ cobro.pay_date }}</td>
-                        <td>${{ "%.2f"|format(cobro.amount) }}</td>
-                        <td>{{ cobro.payment_method }}</td>
-                        <td>{{ cobro.observations }}</td>
+                        <th>ID</th>
+                        <th>Fecha de Pago</th>
+                        <th>Monto</th>
+                        <th>Método de Pago</th>
+                        <th>Observaciones</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <h4>Total de Cobros: ${{ "%.2f"|format(total_cobros) }}</h4>
+                </thead>
+                <tbody>
+                    {% for cobro in cobros %}
+                        <tr>
+                            <td>{{ cobro.id }}</td>
+                            <td>{{ cobro.pay_date }}</td>
+                            <td>${{ "%.2f"|format(cobro.amount) }}</td>
+                            <td>{{ cobro.payment_method }}</td>
+                            <td>{{ cobro.observations }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h4 class="display-6 text-center mt-3">Total de Cobros: ${{ "%.2f"|format(total_cobros) }}</h4>
+        {% else %}
+            <h6 class="display-6 text-danger text-center mt-3">No hay cobros en este rango de fechas.</h6>
+        {% endif %}
+    </div>
     {% else %}
-        <p>No hay cobros en este rango de fechas.</p>
+        <h6 class="display-6 text-danger text-center mt-3">No hay empleados que hayan cobrado.</h6>
     {% endif %}
-</div>
-{% else %}
-    <h6 class="display-6 text-danger text-center mt-3">No hay empleados que hayan cobrado.</h6>
-{% endif %}
 {% endblock %}
