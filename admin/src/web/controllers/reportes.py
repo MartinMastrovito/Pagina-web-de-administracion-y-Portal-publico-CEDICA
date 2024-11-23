@@ -7,11 +7,6 @@ from src.core.auth.decorators import login_required, check
 from src.core import reportes
 from src.core.invoices.utiles import filtrar_cobros, get_empleados_con_cobros
 
-
-
-
-
-
 bp = Blueprint("reportes", __name__, url_prefix="/reportes")
 
 @bp.get("/")

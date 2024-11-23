@@ -61,7 +61,7 @@ def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=No
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
-def create_jya(**kwargs):
+def create_jya(caballo_id, **kwargs):
     """
     Crea un nuevo JYA en la base de datos.
 
@@ -76,6 +76,11 @@ def create_jya(**kwargs):
         return None
 
     jya = JYA(**kwargs)
+    
+    caballo = Caballo.query.get(caballo_id)
+    jya.caballo = caballo
+    jya.caballo_id = caballo_id
+
     db.session.add(jya)
     db.session.commit()
 
@@ -97,23 +102,6 @@ def assign_employee_to_jya(jya_id, empleado_id, rol):
     )
     db.session.add(asignacion)
     db.session.commit()
-
-def assign_horse_to_jya(jya_id, caballo_id):
-    """
-    Asigna un caballo a un JYA.
-
-    Args:
-        jya_id: ID del JYA.
-        caballo_id: ID del caballo a asignar.
-    """
-    
-    jya = JYA.query.get(jya_id)
-    caballo = Caballo.query.get(caballo_id)
-
-    jya.caballo = caballo
-    db.session.commit()
-    
-    return True
 
 def update_jya(jya_dni, **kwargs):
     """
@@ -305,3 +293,55 @@ def get_caballos():
     """
     caballos = Caballo.query.all()
     return caballos
+
+def get_jyaempleados_id(jya):
+    """
+    Obtiene los empleados asignados a un JYA y los clasifica por rol.
+
+    Args:
+        jya : el JYA para el cual se desean obtener los empleados asignados.
+
+    Returns:
+        dict: Un diccionario con los roles como claves ('profesor', 'terapeuta', 
+              'conductor', 'auxiliar') y los valores correspondientes a los 
+              IDs de los empleados asignados a cada rol.
+    """
+    jya_empleados = db.session.query(JYAEmpleado).filter(JYAEmpleado.jya_id == jya.id).all()
+    
+    empleados_por_rol = {
+        'profesor': None,
+        'terapeuta': None,
+        'conductor': None,
+        'auxiliar': None
+    }
+
+    for jya_empleado in jya_empleados:
+        empleados_por_rol[jya_empleado.rol] = jya_empleado.empleado_id
+        
+    return empleados_por_rol
+
+def get_jyaempleados(jya):
+    """
+    Obtiene los empleados asignados a un JYA y los clasifica por rol.
+
+    Args:
+        jya : el JYA para el cual se desean obtener los empleados asignados.
+
+    Returns:
+        dict: Un diccionario con los roles como claves ('profesor', 'terapeuta', 
+              'conductor', 'auxiliar') y JYAEmpleado correspondientes a los 
+              IDs de los empleados asignados a cada rol.
+    """
+    jya_empleados = db.session.query(JYAEmpleado).filter(JYAEmpleado.jya_id == jya.id).all()
+    
+    empleados_por_rol = {
+        'profesor': None,
+        'terapeuta': None,
+        'conductor': None,
+        'auxiliar': None
+    }
+
+    for jya_empleado in jya_empleados:
+        empleados_por_rol[jya_empleado.rol] = jya_empleado
+        
+    return empleados_por_rol
