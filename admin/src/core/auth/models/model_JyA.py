@@ -16,7 +16,6 @@ class JYA(db.Model):
     telefono_actual = db.Column(db.String(20), nullable=False)
     contacto_emergencia = db.Column(JSON, nullable=False)
     becado = db.Column(db.Boolean, default=False, nullable=False)
-    porcentaje_beca = db.Column(db.Float, default=0.0, nullable=True)
     observaciones_beca = db.Column(db.Text, nullable=True)
     profesionales_atendiendo = db.Column(db.Text, nullable=True)
     certificado_discapacidad = db.Column(db.Boolean, default=False, nullable=False)

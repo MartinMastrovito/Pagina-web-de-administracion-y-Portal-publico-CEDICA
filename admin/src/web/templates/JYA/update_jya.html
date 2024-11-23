@@ -11,7 +11,7 @@
 
     <section>
         <article>
-            <form method="post" action="{{ url_for('crud_JyA.create_jya') }}" onsubmit="return validateFields()" enctype="multipart/form-data">
+            <form method="post" action="{{ url_for('crud_JyA.jya_update', jya_dni=jya.dni) }}" onsubmit="return validateFields()" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
@@ -105,51 +105,49 @@
                 <div class="mb-3">
                     <label for="becado" class="form-label">Becado:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                    <select class="form-select" id="becado" name="becado" onchange="toggleBecaFields()" required>
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="true">Sí</option>
-                        <option value="false">No</option>
+                    <select class="form-select" id="becado" name="becado" required>
+                        <option value="true" {% if jya.beacdo %} selected {% endif %}>Sí</option>
+                        <option value="false" {% if not jya.becado %} selected {% endif %}>No</option>
                     </select>
                 </div>
             
                 <div class="mb-3">
-                    <label for="porcentaje_beca" class="form-label">Porcentaje de Beca:</label>
-                    <input type="number" step="0.01" class="form-control" id="porcentaje_beca" name="porcentaje_beca" min="0" max="1" disabled>
+                    <label for="observaciones_beca" class="form-label">Observaciones Previsionales:</label>
+                    <textarea class="form-control" id="observaciones_beca" name="observaciones_beca" rows="3" placeholder="Ingrese observaciones de la beca">{% if jya.observaciones_beca %}{{ jya.observaciones_beca }}{% endif %}</textarea>
                 </div>
 
                 <div class="mb-3">
                     <label for="certificado_discapacidad" class="form-label">¿Posee Certificado de Discapacidad?</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-select" id="certificado_discapacidad" name="certificado_discapacidad" onchange="toggleDiscapacidadFields()" required>
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="true">Sí</option>
-                        <option value="false">No</option>
+                        <option value="true" {% if jya.certificado_discapacidad %} selected {% endif %}>Sí</option>
+                        <option value="false" {% if not jya.certificado_discapacidad %} selected {% endif %}>No</option>
                     </select>
                 </div>
                 
                 <div class="mb-3">
                     <label for="diagnostico_discapacidad" class="form-label">Diagnóstico de Discapacidad (si posee):</label>
-                    <select class="form-select" id="diagnostico_discapacidad" name="diagnostico_discapacidad" disabled>
-                        <option value="" disabled selected>Seleccione un diagnóstico</option>
-                        <option value="ECNE">ECNE</option>
-                        <option value="Lesión post-traumática">Lesión post-traumática</option>
-                        <option value="Mielomeningocele">Mielomeningocele</option>
-                        <option value="Esclerosis Múltiple">Esclerosis Múltiple</option>
-                        <option value="Escoliosis Leve">Escoliosis Leve</option>
-                        <option value="OTRO">Otro</option>
+                    <select class="form-select" id="diagnostico_discapacidad" name="diagnostico_discapacidad" {% if jya.certificado_discapacidad %} enabled {% else %} disabled {% endif %}>
+                        <option value="" disabled {% if not jya.diagnostico_discapacidad %} selected {% endif %}>Seleccione un diagnóstico</option>
+                        <option value="ECNE" {% if jya.diagnostico_discapacidad == "ECNE" %} selected {% endif %}>ECNE</option>
+                        <option value="Lesión post-traumática" {% if jya.diagnostico_discapacidad == "Lesión post-traumática" %} selected {% endif %}>Lesión post-traumática</option>
+                        <option value="Mielomeningocele" {% if jya.diagnostico_discapacidad == "Mielomeningocele" %} selected {% endif %}>Mielomeningocele</option>
+                        <option value="Esclerosis Múltiple" {% if jya.diagnostico_discapacidad == "Esclerosis Múltiple" %} selected {% endif %}>Esclerosis Múltiple</option>
+                        <option value="Escoliosis Leve" {% if jya.diagnostico_discapacidad == "Escoliosis Leve" %} selected {% endif %}>Escoliosis Leve</option>
+                        <option value="OTRO" {% if jya.diagnostico_discapacidad != "OTRO" and jya.diagnostico_discapacidad != "ECNE" and jya.diagnostico_discapacidad != "Lesión post-traumática" and jya.diagnostico_discapacidad != "Mielomeningocele" and jya.diagnostico_discapacidad != "Esclerosis Múltiple" and jya.diagnostico_discapacidad != "Escoliosis Leve" %} selected {% endif %}>Otro</option>
                     </select>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control mt-2" id="otro_diagnostico" name="otro_diagnostico" placeholder="Si eligió OTRO, indique cuál" aria-describedby="diagnosticoHelp" disabled />
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" value="{{ jya.diagnostico_discapacidad }}"title="Por favor ingresa solo letras válidas" type="text" class="form-control mt-2" id="otro_diagnostico" name="otro_diagnostico" placeholder="Si eligió OTRO, indique cuál" {% if jya.diagnostico_discapacidad != "OTRO" %} disabled {% endif %} />
                     <small id="diagnosticoHelp" class="form-text text-muted">Si selecciona "Otro", ingrese el diagnóstico específico.</small>
                 </div>
                 
                 <div class="mb-3">
                     <label for="tipo_discapacidad" class="form-label">Tipo de Discapacidad:</label>
-                    <select class="form-select" id="tipo_discapacidad" name="tipo_discapacidad" disabled>
-                        <option value="" disabled selected>Seleccione un tipo</option>
-                        <option value="Mental">Mental</option>
-                        <option value="Motora">Motora</option>
-                        <option value="Sensorial">Sensorial</option>
-                        <option value="Visceral">Visceral</option>
+                    <select class="form-select" id="tipo_discapacidad" name="tipo_discapacidad" {% if jya.certificado_discapacidad %} enabled {% else %} disabled {% endif %}>
+                        <option value="" disabled {% if not jya.tipo_discapacidad %} selected {% endif %}>Seleccione un tipo</option>
+                        <option value="Mental" {% if jya.tipo_discapacidad == "Mental" %} selected {% endif %}>Mental</option>
+                        <option value="Motora" {% if jya.tipo_discapacidad == "Motora" %} selected {% endif %}>Motora</option>
+                        <option value="Sensorial" {% if jya.tipo_discapacidad == "Sensorial" %} selected {% endif %}>Sensorial</option>
+                        <option value="Visceral" {% if jya.tipo_discapacidad == "Visceral" %} selected {% endif %}>Visceral</option>
                     </select>
                 </div>
 
@@ -157,19 +155,18 @@
                     <label for="asignacion_familiar" class="form-label">¿Percibe alguna Asignación Familiar?</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-select" id="asignacion_familiar" name="asignacion_familiar" onchange="toggleAsignacionFields()" required>
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="true">Sí</option>
-                        <option value="false">No</option>
+                        <option value="true" {% if jya.asignacion_familiar %} selected {% endif %}>Sí</option>
+                        <option value="false"{% if not jya.asignacion_familiar %} selected {% endif %}>No</option>
                     </select>
                 </div>
             
                 <div class="mb-3">
                     <label for="tipo_asignacion" class="form-label">Tipo de Asignación:</label>
-                    <select class="form-select" id="tipo_asignacion" name="tipo_asignacion" disabled>
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Asignación Universal por hijo">Asignación Universal por hijo</option>
-                        <option value="Asignación Universal por hijo con Discapacidad">Asignación Universal por hijo con Discapacidad</option>
-                        <option value="Asignación por ayuda escolar anual">Asignación por ayuda escolar anual</option>
+                    <select class="form-select" id="tipo_asignacion" name="tipo_asignacion" {% if jya.tipo_asignacion %} enabled {% else %} disabled {% endif %}>
+                        <option value="" disabled {% if not jya.tipo_asignacion %} selected {% endif %}>Seleccione una opción</option>
+                        <option value="Asignación Universal por hijo" {% if jya.tipo_asignacion == "Asignación Universal por hijo" %} selected {% endif %}>Asignación Universal por hijo</option>
+                        <option value="Asignación Universal por hijo con Discapacidad" {% if jya.tipo_asignacion == "Asignación Universal por hijo con Discapacidad" %} selected {% endif %}>Asignación Universal por hijo con Discapacidad</option>
+                        <option value="Asignación por ayuda escolar anual" {% if jya.tipo_asignacion == "Asignación por ayuda escolar anual" %} selected {% endif %}>Asignación por ayuda escolar anual</option>
                     </select>
                 </div>
 
@@ -177,79 +174,77 @@
                     <label for="pension" class="form-label">¿Es beneficiario de alguna pensión?</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-select" id="pension" name="pension" onchange="togglePensionFields()" required>
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="true">Sí</option>
-                        <option value="false">No</option>
+                        <option value="true" {% if jya.pension %} selected {% endif %}>Sí</option>
+                        <option value="false" {% if not jya.pension %} selected {% endif %}>No</option>
                     </select>
                 </div>
             
                 <div class="mb-3">
-                    <label for="tipo_pension" class="form-label">Tipo de Pensión (si corresponde):</label>
+                    <label for="tipo_pension" class="form-label">Tipo de Pensión:</label>
                     <select class="form-select" id="tipo_pension" name="tipo_pension" disabled>
                         <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Provincial">Provincial</option>
-                        <option value="Nacional">Nacional</option>
+                        <option value="Provincial" {% if jya.tipo_pension == "Provincial" %} selected {% endif %}>Provincial</option>
+                        <option value="Nacional" {% if jya.tipo_pension == "Nacional" %} selected {% endif %}>Nacional</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="obra_social" class="form-label">Obra Social:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" {% if jya.obra_social %} value={{ jya.nombre }} {% endif %} title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="obra_social" name="obra_social" oninput="toggleObraSocialFields()">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" {% if jya.obra_social %} value={{ jya.obra_social }} {% endif %} title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="obra_social" name="obra_social" oninput="toggleObraSocialFields()">
                 </div>
             
                 <div class="mb-3">
                     <label for="numero_afiliado" class="form-label">Número de Afiliado:</label>
-                    <input type="number" class="form-control" id="numero_afiliado" name="numero_afiliado" min="0" disabled>
+                    <input type="number" {% if jya.obra_social %} value={{ jya.numero_afiliado }} {% endif %} class="form-control" id="numero_afiliado" name="numero_afiliado" min="0" disabled>
                 </div>
 
                 <div class="mb-3">
                     <label for="curatela" class="form-label">¿Posee curatela?</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-select" id="curatela" name="curatela" required>
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="true">Sí</option>
-                        <option value="false">No</option>
+                        <option value="true" {% if jya.curatela %} selected {% endif %}>Sí</option>
+                        <option value="false" {% if not jya.curatela %} selected {% endif %}>No</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="observaciones_previsionales" class="form-label">Observaciones Previsionales:</label>
-                    <textarea class="form-control" value={{ jya.observaciones_previsionales }} id="observaciones_previsionales" name="observaciones_previsionales" rows="3" placeholder="Ingrese observaciones adicionales"></textarea>
+                    <textarea class="form-control" id="observaciones_previsionales" name="observaciones_previsionales" rows="3" placeholder="Ingrese observaciones adicionales">{{ jya.observaciones_previsionales }}</textarea>
                 </div>
                 
                 <div class="mb-3">
                     <label for="institucion_escolar_nombre" class="form-label">Nombre de la Institución Escolar:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="institucion_escolar_nombre" name="institucion_escolar_nombre" required placeholder="Nombre de la institución">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" value="{{ jya.institucion_escolar["nombre"] }}" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="institucion_escolar_nombre" name="institucion_escolar_nombre" required placeholder="Nombre de la institución">
                 </div>
                 
                 <div class="mb-3">
                     <label for="institucion_escolar_direccion" class="form-label">Dirección:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                    <input type="text" class="form-control" id="institucion_escolar_direccion" name="institucion_escolar_direccion" required placeholder="Dirección de la institución">
+                    <input type="text" value="{{ jya.institucion_escolar["direccion"] }}" class="form-control" id="institucion_escolar_direccion" name="institucion_escolar_direccion" required placeholder="Dirección de la institución">
                 </div>                
 
                 <div class="mb-3">
                     <label for="institucion_escolar_telefono" class="form-label">Teléfono:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                    <input type="number" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono" min="0" title="Por favor ingrese un número válido" required placeholder="Número de teléfono de la institución">
+                    <input type="number" value="{{ jya.institucion_escolar["telefono"] }}" class="form-control" id="institucion_escolar_telefono" name="institucion_escolar_telefono" min="0" title="Por favor ingrese un número válido" required placeholder="Número de teléfono de la institución">
                 </div>
                 
                 <div class="mb-3">
                     <label for="grado_actual" class="form-label">Grado/Año Actual:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                    <input type="text" class="form-control" id="grado_actual" name="grado_actual" required placeholder="Indique el grado o año">
+                    <input type="text" value="{{ jya.institucion_escolar["grado_actual"] }}" class="form-control" id="grado_actual" name="grado_actual" required placeholder="Indique el grado o año">
                 </div>
                 
                 <div class="mb-3">
                     <label for="institucion_escolar_observaciones" class="form-label">Observaciones:</label>
-                    <textarea class="form-control" id="institucion_escolar_observaciones" name="institucion_escolar_observaciones" rows="3" placeholder="Ingrese observaciones adicionales"></textarea>
+                    <textarea class="form-control" id="institucion_escolar_observaciones" name="institucion_escolar_observaciones" rows="3" placeholder="Ingrese observaciones adicionales">{{ jya.institucion_escolar["observaciones"] }}</textarea>
                 </div>
                 
                 <div class="mb-3">
                     <label for="profesionales_atendiendo" class="form-label">Profesionales que lo atienden:</label>
-                    <textarea class="form-control" id="profesionales_atendiendo" name="profesionales_atendiendo" rows="3" placeholder="Ingrese los nombres de los profesionales"></textarea>
+                    <textarea class="form-control" id="profesionales_atendiendo" name="profesionales_atendiendo" rows="3" placeholder="Ingrese los nombres de los profesionales">{{ jya.profesionales_atendiendo }}</textarea>
                 </div>                
 
                 <h6 class="display-6">Datos del Familiar o Tutor Responsable</h6>
@@ -261,86 +256,105 @@
                 <script>
                     let contadorFamiliares = 0;
                     const maxFamiliares = 2;
+                    const familiaresExistentes = {{ jya.familiares_tutores | tojson | safe }};
+
+                    if (familiaresExistentes) {
+                        familiaresExistentes.forEach((familiar, index) => {
+                            if (contadorFamiliares < maxFamiliares) {
+                                contadorFamiliares++;
+                                agregarFormularioFamiliar(familiar, contadorFamiliares);
+                            }
+                        });
+                    }
 
                     document.getElementById('agregar_familiar').addEventListener('click', function() {
                         if (contadorFamiliares < maxFamiliares) {
                             contadorFamiliares++;
-
-                            const nuevoFormulario = document.createElement('div');
-                            nuevoFormulario.classList.add('familiar_formulario', 'mt-3');
-
-                            nuevoFormulario.innerHTML = `
-                                <h4>Familiar o tutor responsable ${contadorFamiliares}</h4>
-                                <div class="form-group">
-                                    <label for="familiar${contadorFamiliares}_parentesco">Parentesco:</label>
-                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar${contadorFamiliares}_parentesco" name="familiar${contadorFamiliares}_parentesco">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="familiar${contadorFamiliares}_nombre">Nombre:</label>
-                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar${contadorFamiliares}_nombre" name="familiar${contadorFamiliares}_nombre">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="familiar${contadorFamiliares}_apellido">Apellido:</label>
-                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar${contadorFamiliares}_apellido" name="familiar${contadorFamiliares}_apellido">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="familiar${contadorFamiliares}_dni">DNI (sin puntos o espacios):</label>
-                                    <input type="number" class="form-control" id="familiar${contadorFamiliares}_dni" name="familiar${contadorFamiliares}_dni" min="1000000" title="Por favor ingrese un DNI valido">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="familiar${contadorFamiliares}_domicilio_actual">Domicilio Actual:</label>
-                                    <input type="text" class="form-control" id="familiar${contadorFamiliares}_domicilio_actual" name="familiar${contadorFamiliares}_domicilio_actual">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="familiar${contadorFamiliares}_celular_actual">Celular Actual (sin guiones o espacios):</label>
-                                    <input type="number" class="form-control" id="familiar${contadorFamiliares}_celular_actual" name="familiar${contadorFamiliares}_celular_actual" min="0" title="Por favor ingrese un numero valido">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="familiar${contadorFamiliares}_email">Email:</label>
-                                    <input type="email" class="form-control" id="familiar${contadorFamiliares}_email" name="familiar${contadorFamiliares}_email">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="familiar${contadorFamiliares}_nivel_escolaridad">Nivel de Escolaridad:</label>
-                                    <select class="form-control" id="familiar${contadorFamiliares}_nivel_escolaridad" name="familiar${contadorFamiliares}_nivel_escolaridad">
-                                        <option value="" disabled selected>Seleccione una opción</option>
-                                        <option value="Primario">Primario</option>
-                                        <option value="Secundario">Secundario</option>
-                                        <option value="Terciario">Terciario</option>
-                                        <option value="Universitario">Universitario</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="familiar${contadorFamiliares}_ocupacion">Ocupación:</label>
-                                    <input type="text" class="form-control" id="familiar${contadorFamiliares}_ocupacion" name="familiar${contadorFamiliares}_ocupacion">
-                                </div>
-                            `;
-
-                            document.getElementById('familiares_container').appendChild(nuevoFormulario);
+                            agregarFormularioFamiliar(null, contadorFamiliares);
                         } else {
                             alert('Solo puedes agregar hasta 2 familiares.');
                         }
                     });
+
+                    function agregarFormularioFamiliar(familiar, contador) {
+                        const nuevoFormulario = document.createElement('div');
+                        nuevoFormulario.classList.add('familiar_formulario', 'mt-3');
+                        nuevoFormulario.id = `familiar_formulario_${contador}`;
+                    
+                        nuevoFormulario.innerHTML = `
+                            <h4>Familiar o tutor responsable ${contador} - Todos los campos son obligatorios</h4>
+                            <button type="button" class="btn btn-danger mb-3 cerrar_familiar" data-id="${contador}">Cerrar</button>
+                            <div class="form-group">
+                                <label for="familiar${contador}_parentesco">Parentesco:</label>
+                                <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="familiar${contador}_parentesco" name="familiar${contador}_parentesco" value="${familiar?.parentesco || ''}" required>
+                            </div>
+                    
+                            <div class="form-group">
+                                <label for="familiar${contador}_nombre">Nombre:</label>
+                                <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="familiar${contador}_nombre" name="familiar${contador}_nombre" value="${familiar?.nombre || ''}" required>
+                            </div>
+                    
+                            <div class="form-group">
+                                <label for="familiar${contador}_apellido">Apellido:</label>
+                                <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="familiar${contador}_apellido" name="familiar${contador}_apellido" value="${familiar?.apellido || ''}" required>
+                            </div>
+                    
+                            <div class="form-group">
+                                <label for="familiar${contador}_dni">DNI (sin puntos o espacios):</label>
+                                <input type="number" class="form-control" id="familiar${contador}_dni" name="familiar${contador}_dni" min="1000000" value="${familiar?.dni || ''}" title="Por favor ingrese un DNI válido" required>
+                            </div>
+                    
+                            <div class="form-group">
+                                <label for="familiar${contador}_domicilio_actual">Domicilio Actual:</label>
+                                <input type="text" class="form-control" id="familiar${contador}_domicilio_actual" name="familiar${contador}_domicilio_actual" value="${familiar?.domicilio_actual || ''}" required>
+                            </div>
+                    
+                            <div class="form-group">
+                                <label for="familiar${contador}_celular_actual">Celular Actual (sin guiones o espacios):</label>
+                                <input type="number" class="form-control" id="familiar${contador}_celular_actual" name="familiar${contador}_celular_actual" min="0" value="${familiar?.celular_actual || ''}" title="Por favor ingrese un número válido" required>
+                            </div>
+                    
+                            <div class="form-group">
+                                <label for="familiar${contador}_email">Email:</label>
+                                <input type="email" class="form-control" id="familiar${contador}_email" name="familiar${contador}_email" value="${familiar?.email || ''}" required>
+                            </div>
+                    
+                            <div class="form-group">
+                                <label for="familiar${contador}_nivel_escolaridad">Nivel de Escolaridad:</label>
+                                <select class="form-control" id="familiar${contador}_nivel_escolaridad" name="familiar${contador}_nivel_escolaridad" required>
+                                    <option value="" disabled ${familiar?.nivel_escolaridad ? '' : 'selected'}>Seleccione una opción</option>
+                                    <option value="Primario" ${familiar?.nivel_escolaridad === 'Primario' ? 'selected' : ''}>Primario</option>
+                                    <option value="Secundario" ${familiar?.nivel_escolaridad === 'Secundario' ? 'selected' : ''}>Secundario</option>
+                                    <option value="Terciario" ${familiar?.nivel_escolaridad === 'Terciario' ? 'selected' : ''}>Terciario</option>
+                                    <option value="Universitario" ${familiar?.nivel_escolaridad === 'Universitario' ? 'selected' : ''}>Universitario</option>
+                                </select>
+                            </div>
+                    
+                            <div class="form-group">
+                                <label for="familiar${contador}_ocupacion">Ocupación:</label>
+                                <input type="text" class="form-control" id="familiar${contador}_ocupacion" name="familiar${contador}_ocupacion" value="${familiar?.ocupacion || ''}" required>
+                            </div>
+                        `;
+                    
+                        document.getElementById('familiares_container').appendChild(nuevoFormulario);
+
+                        nuevoFormulario.querySelector('.cerrar_familiar').addEventListener('click', function () {
+                            document.getElementById(`familiar_formulario_${contador}`).remove();
+                            contadorFamiliares--;
+                        });
+                    }                           
                 </script>
                 
                 <div class="form-group mb-3">
                     <label for="propuesta_trabajo">Propuesta de trabajo institucional:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control custom-select" id="propuesta_trabajo" name="propuesta_trabajo">
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Hipoterapia">Hipoterapia</option>
-                        <option value="Monta Terápeutica">Monta Terápeutica</option>
-                        <option value="Deporte">Deporte</option>
-                        <option value="Encuentre adaptado">Encuentre adaptado</option>
-                        <option value="Actividades Recreativas">Actividades Recreativas</option>
-                        <option value="Equitación">Equitación</option>
+                        <option value="Hipoterapia" {% if jya.propuesta_trabajo == "Hipoterapia" %} selected {% endif %}>Hipoterapia</option>
+                        <option value="Monta Terápeutica" {% if jya.propuesta_trabajo == "Monta Terápeutica" %} selected {% endif %}>Monta Terápeutica</option>
+                        <option value="Deporte" {% if jya.propuesta_trabajo == "Deporte" %} selected {% endif %}>Deporte</option>
+                        <option value="Encuentre adaptado" {% if jya.propuesta_trabajo == "Encuentre adaptado" %} selected {% endif %}>Encuentre adaptado</option>
+                        <option value="Actividades Recreativas" {% if jya.propuesta_trabajo == "Actividades Recreativas" %} selected {% endif %}>Actividades Recreativas</option>
+                        <option value="Equitación" {% if jya.propuesta_trabajo == "Equitación" %} selected {% endif %}>Equitación</option>
                     </select>
                 </div>
                 
@@ -349,8 +363,8 @@
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control custom-select" id="condicion_trabajo" name="condicion_trabajo">
                         <option value="" disabled selected>Seleccione un tipo</option>
-                        <option value="REGULAR">REGULAR</option>
-                        <option value="DE BAJA">DE BAJA</option>
+                        <option value="REGULAR" {% if jya.condicion_trabajo == "REGULAR" %} selected {% endif %}>REGULAR</option>
+                        <option value="DE BAJA" {% if jya.condicion_trabajo == "DE BAJA" %} selected {% endif %}>DE BAJA</option>
                     </select>
                 </div>                                
                 
@@ -358,36 +372,40 @@
                     <label for="sede">Sede:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="sede" name="sede">
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="CASJ">CASJ</option>
-                        <option value="HLP">HLP</option>
-                        <option value="OTRO">OTRO</option>
+                        <option value="CASJ" {% if jya.sede == "CASJ" %} selected {% endif %}>CASJ</option>
+                        <option value="HLP" {% if jya.sede == "HLP" %} selected {% endif %}>HLP</option>
+                        <option value="OTRO" {% if jya.sede == "OTRO" %} selected {% endif %}>OTRO</option>
                     </select>
                 </div>
                 
                 <div class="form-group mb-3">
                     <label for="dias_asistencia">Días de Asistencia:</label><br>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="dias_asistencia" value="Lunes" id="lunes">
+                        <input class="form-check-input" type="checkbox" name="dias_asistencia" value="Lunes" id="lunes" 
+                            {% if "Lunes" in jya.dias_asistencia %} checked {% endif %}>
                         <label class="form-check-label" for="lunes">Lunes</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="dias_asistencia" value="Martes" id="martes">
+                        <input class="form-check-input" type="checkbox" name="dias_asistencia" value="Martes" id="martes" 
+                            {% if "Martes" in jya.dias_asistencia %} checked {% endif %}>
                         <label class="form-check-label" for="martes">Martes</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="dias_asistencia" value="Miércoles" id="miercoles">
+                        <input class="form-check-input" type="checkbox" name="dias_asistencia" value="Miércoles" id="miercoles" 
+                            {% if "Miércoles" in jya.dias_asistencia %} checked {% endif %}>
                         <label class="form-check-label" for="miercoles">Miércoles</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="dias_asistencia" value="Jueves" id="jueves">
+                        <input class="form-check-input" type="checkbox" name="dias_asistencia" value="Jueves" id="jueves" 
+                            {% if "Jueves" in jya.dias_asistencia %} checked {% endif %}>
                         <label class="form-check-label" for="jueves">Jueves</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="dias_asistencia" value="Viernes" id="viernes">
+                        <input class="form-check-input" type="checkbox" name="dias_asistencia" value="Viernes" id="viernes" 
+                            {% if "Viernes" in jya.dias_asistencia %} checked {% endif %}>
                         <label class="form-check-label" for="viernes">Viernes</label>
                     </div>
-                </div>
+                </div>                
                 
                 <h6 class="display-6">Datos de Profesores y Conductores</h6>
 
@@ -395,9 +413,12 @@
                     <label for="profesor_terapeuta_id">Profesor/a o Terapeuta:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="profesor_terapeuta_id" name="profesor_terapeuta_id" required>
-                        <option value="" disabled selected>Seleccione un Profesor o Terapeuta</option>
+                        <option value="" disabled {% if not empleados_jya.profesor and not empleados_jya.terapeuta %} selected {% endif %}>Seleccione un Profesor o Terapeuta</option>
                         {% for empleado in empleados_terapeuta_profesor %}
-                            <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
+                            <option value="{{ empleado.id }}"
+                                    {% if empleado.id == empleados_jya.profesor or empleado.id == empleados_jya.terapeuta %} selected {% endif %}>
+                                {{ empleado.nombre }} {{ empleado.apellido }}
+                            </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -406,20 +427,26 @@
                     <label for="conductor_caballo_id">Conductor/a del Caballo:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="conductor_caballo_id" name="conductor_caballo_id" required>
-                        <option value="" disabled selected>Seleccione un Conductor</option>
+                        <option value="" disabled {% if not empleados_jya.conductor %} selected {% endif %}>Seleccione un Conductor</option>
                         {% for empleado in empleados_conductor %}
-                            <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
+                            <option value="{{ empleado.id }}"
+                                    {% if empleado.id == empleados_jya.conductor %} selected {% endif %}>
+                                {{ empleado.nombre }} {{ empleado.apellido }}
+                            </option>
                         {% endfor %}
                     </select>
-                </div>                
+                </div>               
 
                 <div class="form-group mb-3">
                     <label for="auxiliar_id">Auxiliar de pista:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="auxiliar_id" name="auxiliar_id" required>
-                        <option value="" disabled selected>Seleccione un Auxiliar</option>
+                        <option value="" disabled {% if not empleados_jya.auxiliar %} selected {% endif %}>Seleccione un Auxiliar</option>
                         {% for empleado in empleados_auxiliar %}
-                            <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
+                            <option value="{{ empleado.id }}"
+                                    {% if empleado.id == empleados_jya.auxiliar %} selected {% endif %}>
+                                {{ empleado.nombre }} {{ empleado.apellido }}
+                            </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -428,14 +455,16 @@
                     <label for="caballo_id">Caballo:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="caballo_id" name="caballo_id" required>
-                        <option value="" disabled selected>Seleccione un Caballo</option>
+                        <option value="" disabled {% if not jya.caballo_id %} selected {% endif %}>Seleccione un Caballo</option>
                         {% for caballo in caballos %}
-                            <option value="{{ caballo.id }}">{{ caballo.nombre }}</option>
+                            <option value="{{ caballo.id }}" {% if jya.caballo_id == caballo.id %} selected {% endif %}>
+                                {{ caballo.nombre }}
+                            </option>
                         {% endfor %}
                     </select>
-                </div>                
+                </div>              
                 
-                <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
             </form>
         </article>
     </section>
@@ -445,32 +474,42 @@
             const diagnosticoField = document.getElementById('diagnostico_discapacidad');
             const otroDiagnosticoField = document.getElementById('otro_diagnostico');
             const tipoDiscapacidadField = document.getElementById('tipo_discapacidad');
-
+    
             const isCertificado = certificadoField.value === 'true';
-            
+    
             diagnosticoField.disabled = !isCertificado;
-            otroDiagnosticoField.disabled = !isCertificado;
             tipoDiscapacidadField.disabled = !isCertificado;
-
+    
             if (!isCertificado) {
                 diagnosticoField.value = '';
                 otroDiagnosticoField.value = '';
+                otroDiagnosticoField.disabled = true;
                 tipoDiscapacidadField.value = '';
+            }
+        }
+
+        function toggleDiagnosticoField() {
+            const diagnosticoField = document.getElementById('diagnostico_discapacidad');
+            const otroDiagnosticoField = document.getElementById('otro_diagnostico');
+    
+            otroDiagnosticoField.disabled = diagnosticoField.value !== 'OTRO';
+    
+            if (otroDiagnosticoField.disabled) {
+                otroDiagnosticoField.value = '';
             }
         }
 
         window.onload = function() {
             toggleDiscapacidadFields();
-        };
+            toggleDiagnosticoField();
+            togglePensionFields();
+            toggleObraSocialFields();
+            toggleDiscapacidadFields();
 
-        function toggleBecaFields() {
-            const becadoField = document.getElementById('becado');
-            const porcentajeField = document.getElementById('porcentaje_beca');
-            porcentajeField.disabled = becadoField.value !== "true";
-            if (porcentajeField.disabled) {
-                porcentajeField.value = "";
-            }
-        }
+            const diagnosticoField = document.getElementById('diagnostico_discapacidad');
+            diagnosticoField.addEventListener('change', toggleDiagnosticoField);
+        
+        };
         
         function toggleAsignacionFields() {
             const asignacionField = document.getElementById('asignacion_familiar');
@@ -500,8 +539,6 @@
         }
         
         function validateFields() {
-            const becado = document.getElementById('becado').value === "true";
-            const porcentajeBeca = document.getElementById('porcentaje_beca').value;
         
             const asignacionFamiliar = document.getElementById('asignacion_familiar').value === "true";
             const tipoAsignacion = document.getElementById('tipo_asignacion').value;
@@ -529,11 +566,6 @@
         
             if (certificadoDiscapacidad && !tipoDiscapacidad) {
                 alert("Debe seleccionar un tipo de discapacidad si posee certificado de discapacidad.");
-                return false;
-            }
-
-            if (becado && !porcentajeBeca) {
-                alert("Debe ingresar un porcentaje de beca si el usuario está becado.");
                 return false;
             }
         

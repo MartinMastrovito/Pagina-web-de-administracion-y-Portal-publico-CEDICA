@@ -11,7 +11,7 @@
 
     <section>
         <article>
-            <form method="post" action="{{ url_for('crud_JyA.create_jya') }}" onsubmit="return validateFields()" enctype="multipart/form-data">
+            <form method="post" action="{{ url_for('crud_JyA.create_jya') }}" onsubmit="return validateFields(event)" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
@@ -105,7 +105,7 @@
                 <div class="mb-3">
                     <label for="becado" class="form-label">Becado:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                    <select class="form-select" id="becado" name="becado" onchange="toggleBecaFields()" required>
+                    <select class="form-select" id="becado" name="becado" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
                         <option value="false">No</option>
@@ -113,14 +113,15 @@
                 </div>
             
                 <div class="mb-3">
-                    <label for="porcentaje_beca" class="form-label">Porcentaje de Beca:</label>
-                    <input type="number" step="0.01" class="form-control" id="porcentaje_beca" name="porcentaje_beca" min="0" max="1" disabled>
+                    <label for="observaciones_beca" class="form-label">Observaciones de la beca:</label>
+                    <textarea class="form-control" id="observaciones_beca" name="observaciones_beca" rows="3" placeholder="Ingrese observaciones de la beca"></textarea>
                 </div>
 
                 <div class="mb-3">
                     <label for="certificado_discapacidad" class="form-label">¿Posee Certificado de Discapacidad?</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                    <select class="form-select" id="certificado_discapacidad" name="certificado_discapacidad" onchange="toggleDiscapacidadFields()" required>
+                    <select class="form-select" id="certificado_discapacidad" name="certificado_discapacidad" 
+                            onchange="toggleDiscapacidadFields()" required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="true">Sí</option>
                         <option value="false">No</option>
@@ -129,7 +130,7 @@
                 
                 <div class="mb-3">
                     <label for="diagnostico_discapacidad" class="form-label">Diagnóstico de Discapacidad (si posee):</label>
-                    <select class="form-select" id="diagnostico_discapacidad" name="diagnostico_discapacidad" disabled>
+                    <select class="form-select" id="diagnostico_discapacidad" name="diagnostico_discapacidad" disabled required>
                         <option value="" disabled selected>Seleccione un diagnóstico</option>
                         <option value="ECNE">ECNE</option>
                         <option value="Lesión post-traumática">Lesión post-traumática</option>
@@ -138,20 +139,23 @@
                         <option value="Escoliosis Leve">Escoliosis Leve</option>
                         <option value="OTRO">Otro</option>
                     </select>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control mt-2" id="otro_diagnostico" name="otro_diagnostico" placeholder="Si eligió OTRO, indique cuál" aria-describedby="diagnosticoHelp" disabled />
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" 
+                           title="Por favor ingresa solo letras válidas" 
+                           type="text" class="form-control mt-2" id="otro_diagnostico" name="otro_diagnostico" 
+                           placeholder="Si eligió OTRO, indique cuál" disabled required />
                     <small id="diagnosticoHelp" class="form-text text-muted">Si selecciona "Otro", ingrese el diagnóstico específico.</small>
                 </div>
                 
                 <div class="mb-3">
                     <label for="tipo_discapacidad" class="form-label">Tipo de Discapacidad:</label>
-                    <select class="form-select" id="tipo_discapacidad" name="tipo_discapacidad" disabled>
+                    <select class="form-select" id="tipo_discapacidad" name="tipo_discapacidad" disabled required>
                         <option value="" disabled selected>Seleccione un tipo</option>
                         <option value="Mental">Mental</option>
                         <option value="Motora">Motora</option>
                         <option value="Sensorial">Sensorial</option>
                         <option value="Visceral">Visceral</option>
                     </select>
-                </div>
+                </div>                
 
                 <div class="mb-3">
                     <label for="asignacion_familiar" class="form-label">¿Percibe alguna Asignación Familiar?</label>
@@ -165,7 +169,7 @@
             
                 <div class="mb-3">
                     <label for="tipo_asignacion" class="form-label">Tipo de Asignación:</label>
-                    <select class="form-select" id="tipo_asignacion" name="tipo_asignacion" disabled>
+                    <select class="form-select" id="tipo_asignacion" name="tipo_asignacion" disabled required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="Asignación Universal por hijo">Asignación Universal por hijo</option>
                         <option value="Asignación Universal por hijo con Discapacidad">Asignación Universal por hijo con Discapacidad</option>
@@ -184,8 +188,8 @@
                 </div>
             
                 <div class="mb-3">
-                    <label for="tipo_pension" class="form-label">Tipo de Pensión (si corresponde):</label>
-                    <select class="form-select" id="tipo_pension" name="tipo_pension" disabled>
+                    <label for="tipo_pension" class="form-label">Tipo de Pensión:</label>
+                    <select class="form-select" id="tipo_pension" name="tipo_pension" disabled required>
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="Provincial">Provincial</option>
                         <option value="Nacional">Nacional</option>
@@ -195,12 +199,15 @@
                 <div class="mb-3">
                     <label for="obra_social" class="form-label">Obra Social:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="obra_social" name="obra_social" oninput="toggleObraSocialFields()">
+                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras válidas" 
+                           type="text" class="form-control" id="obra_social" name="obra_social" 
+                           oninput="toggleObraSocialFields()">
                 </div>
-            
+                
                 <div class="mb-3">
                     <label for="numero_afiliado" class="form-label">Número de Afiliado:</label>
-                    <input type="number" class="form-control" id="numero_afiliado" name="numero_afiliado" min="0" disabled>
+                    <input type="number" class="form-control" id="numero_afiliado" name="numero_afiliado" 
+                           min="0" disabled required>
                 </div>
 
                 <div class="mb-3">
@@ -262,33 +269,35 @@
                     let contadorFamiliares = 0;
                     const maxFamiliares = 2;
 
-                    document.getElementById('agregar_familiar').addEventListener('click', function() {
+                    document.getElementById('agregar_familiar').addEventListener('click', function () {
                         if (contadorFamiliares < maxFamiliares) {
                             contadorFamiliares++;
 
                             const nuevoFormulario = document.createElement('div');
                             nuevoFormulario.classList.add('familiar_formulario', 'mt-3');
+                            nuevoFormulario.id = `familiar_formulario_${contadorFamiliares}`;
 
                             nuevoFormulario.innerHTML = `
                                 <h4>Familiar o tutor responsable ${contadorFamiliares}</h4>
+                                <button type="button" class="btn btn-danger mb-3 cerrar_familiar" data-id="${contadorFamiliares}">Cerrar</button>
                                 <div class="form-group">
                                     <label for="familiar${contadorFamiliares}_parentesco">Parentesco:</label>
-                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar${contadorFamiliares}_parentesco" name="familiar${contadorFamiliares}_parentesco">
+                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="familiar${contadorFamiliares}_parentesco" name="familiar${contadorFamiliares}_parentesco">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="familiar${contadorFamiliares}_nombre">Nombre:</label>
-                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar${contadorFamiliares}_nombre" name="familiar${contadorFamiliares}_nombre">
+                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="familiar${contadorFamiliares}_nombre" name="familiar${contadorFamiliares}_nombre">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="familiar${contadorFamiliares}_apellido">Apellido:</label>
-                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Por favor ingresa solo letras validas" type="text" class="form-control" id="familiar${contadorFamiliares}_apellido" name="familiar${contadorFamiliares}_apellido">
+                                    <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\\s]+" title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="familiar${contadorFamiliares}_apellido" name="familiar${contadorFamiliares}_apellido">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="familiar${contadorFamiliares}_dni">DNI (sin puntos o espacios):</label>
-                                    <input type="number" class="form-control" id="familiar${contadorFamiliares}_dni" name="familiar${contadorFamiliares}_dni" min="1000000" title="Por favor ingrese un DNI valido">
+                                    <input type="number" class="form-control" id="familiar${contadorFamiliares}_dni" name="familiar${contadorFamiliares}_dni" min="1000000" title="Por favor ingrese un DNI válido">
                                 </div>
 
                                 <div class="form-group">
@@ -298,7 +307,7 @@
 
                                 <div class="form-group">
                                     <label for="familiar${contadorFamiliares}_celular_actual">Celular Actual (sin guiones o espacios):</label>
-                                    <input type="number" class="form-control" id="familiar${contadorFamiliares}_celular_actual" name="familiar${contadorFamiliares}_celular_actual" min="0" title="Por favor ingrese un numero valido">
+                                    <input type="number" class="form-control" id="familiar${contadorFamiliares}_celular_actual" name="familiar${contadorFamiliares}_celular_actual" min="0" title="Por favor ingrese un número válido">
                                 </div>
 
                                 <div class="form-group">
@@ -324,6 +333,11 @@
                             `;
 
                             document.getElementById('familiares_container').appendChild(nuevoFormulario);
+
+                            nuevoFormulario.querySelector('.cerrar_familiar').addEventListener('click', function () {
+                                document.getElementById(`familiar_formulario_${contadorFamiliares}`).remove();
+                                contadorFamiliares--;
+                            });
                         } else {
                             alert('Solo puedes agregar hasta 2 familiares.');
                         }
@@ -445,30 +459,35 @@
             const diagnosticoField = document.getElementById('diagnostico_discapacidad');
             const otroDiagnosticoField = document.getElementById('otro_diagnostico');
             const tipoDiscapacidadField = document.getElementById('tipo_discapacidad');
-
+        
             const isCertificado = certificadoField.value === 'true';
             
             diagnosticoField.disabled = !isCertificado;
-            otroDiagnosticoField.disabled = !isCertificado;
             tipoDiscapacidadField.disabled = !isCertificado;
-
+        
             if (!isCertificado) {
                 diagnosticoField.value = '';
                 otroDiagnosticoField.value = '';
+                otroDiagnosticoField.disabled = true;
                 tipoDiscapacidadField.value = '';
             }
-        }
+        
+            diagnosticoField.addEventListener('change', () => {
+                otroDiagnosticoField.disabled = diagnosticoField.value !== 'OTRO';
+                if (otroDiagnosticoField.disabled) {
+                    otroDiagnosticoField.value = '';
+                }
+            });
+        }        
 
-        window.onload = function() {
-            toggleDiscapacidadFields();
-        };
+        function toggleDiagnosticoField() {
+            const diagnosticoField = document.getElementById('diagnostico_discapacidad');
+            const otroDiagnosticoField = document.getElementById('otro_diagnostico');
 
-        function toggleBecaFields() {
-            const becadoField = document.getElementById('becado');
-            const porcentajeField = document.getElementById('porcentaje_beca');
-            porcentajeField.disabled = becadoField.value !== "true";
-            if (porcentajeField.disabled) {
-                porcentajeField.value = "";
+            otroDiagnosticoField.disabled = diagnosticoField.value !== 'OTRO';
+        
+            if (otroDiagnosticoField.disabled) {
+                otroDiagnosticoField.value = '';
             }
         }
         
@@ -493,9 +512,10 @@
         function toggleObraSocialFields() {
             const obraSocialField = document.getElementById('obra_social');
             const numeroAfiliadoField = document.getElementById('numero_afiliado');
+            
             numeroAfiliadoField.disabled = obraSocialField.value.trim() === "";
             if (numeroAfiliadoField.disabled) {
-                numeroAfiliadoField.value = "";
+                numeroAfiliadoField.value = '';
             }
         }
         
@@ -517,24 +537,22 @@
             const tipoDiscapacidad = document.getElementById('tipo_discapacidad').value;
             const otroDiagnostico = document.getElementById('otro_diagnostico').value.trim();
 
-            if (certificadoDiscapacidad && !diagnosticoDiscapacidad) {
-                alert("Debe seleccionar un diagnóstico si posee certificado de discapacidad.");
-                return false;
-            }
-        
-            if (certificadoDiscapacidad && diagnosticoDiscapacidad === "OTRO" && !otroDiagnostico) {
-                alert("Debe ingresar el diagnóstico específico si eligió 'Otro' como diagnóstico.");
-                return false;
-            }
-        
-            if (certificadoDiscapacidad && !tipoDiscapacidad) {
-                alert("Debe seleccionar un tipo de discapacidad si posee certificado de discapacidad.");
-                return false;
-            }
-
-            if (becado && !porcentajeBeca) {
-                alert("Debe ingresar un porcentaje de beca si el usuario está becado.");
-                return false;
+            if (certificadoDiscapacidad) {
+                if (!diagnosticoDiscapacidad) {
+                    alert("Debe seleccionar un diagnóstico si posee certificado de discapacidad.");
+                    event.preventDefault();
+                    return false;
+                }
+                if (diagnosticoDiscapacidad === "OTRO" && !otroDiagnostico) {
+                    alert("Debe ingresar el diagnóstico específico si eligió 'Otro' como diagnóstico.");
+                    event.preventDefault();
+                    return false;
+                }
+                if (!tipoDiscapacidad) {
+                    alert("Debe seleccionar un tipo de discapacidad si posee certificado de discapacidad.");
+                    event.preventDefault();
+                    return false;
+                }
             }
         
             if (asignacionFamiliar && !tipoAsignacion) {
@@ -549,11 +567,14 @@
         
             if (obraSocial && !numeroAfiliado) {
                 alert("Debe ingresar el número de afiliado si el usuario tiene obra social.");
+                event.preventDefault();
                 return false;
             }
         
             return true;
         }
+
+        document.getElementById('diagnostico_discapacidad').addEventListener('change', toggleDiagnosticoField);
     </script>
 </body>
 </html>
