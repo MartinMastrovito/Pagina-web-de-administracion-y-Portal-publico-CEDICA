@@ -27,7 +27,7 @@ class Empleados(db.Model):
     jyas_roles = db.relationship('JYAEmpleado', back_populates='empleado')
 
     beneficiary = db.relationship('Pago', secondary='beneficiary', back_populates='empleados')
-
+    
     
 
     def __repr__(self):
