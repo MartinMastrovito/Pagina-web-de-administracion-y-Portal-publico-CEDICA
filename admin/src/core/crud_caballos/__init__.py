@@ -5,6 +5,7 @@ from sqlalchemy import asc, desc
 from werkzeug.utils import secure_filename
 from minio import Minio
 from minio.error import S3Error
+from src.core.auth.models.model_empleado import Empleados as Empleado
 
 def search_caballos(nombre=None, tipo_ja_asignado=None, sort_by='nombre', order='asc', page=1, per_page=10):
     """
@@ -34,17 +35,29 @@ def search_caballos(nombre=None, tipo_ja_asignado=None, sort_by='nombre', order=
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
-def create_caballo(**kwargs):
+def create_caballo(entrenadores_ids=None, conductores_ids=None, **kwargs):
     """
-    Crea un nuevo caballo.
+    Crea un nuevo caballo con entrenadores y conductores opcionales.
 
     Args:
+        entrenadores_ids (list[int], optional): Lista de IDs de empleados que serán entrenadores.
+        conductores_ids (list[int], optional): Lista de IDs de empleados que serán conductores.
         **kwargs: Atributos del caballo a crear.
 
     Returns:
         Caballo: El caballo creado.
     """
+    
     caballo = Caballo(**kwargs)
+    
+    if entrenadores_ids:
+        entrenadores = Empleado.query.filter(Empleado.id.in_(entrenadores_ids)).all()
+        caballo.entrenadores.extend(entrenadores)
+    
+    if conductores_ids:
+        conductores = Empleado.query.filter(Empleado.id.in_(conductores_ids)).all()
+        caballo.conductores.extend(conductores)
+    
     db.session.add(caballo)
     db.session.commit()
     return caballo
@@ -181,3 +194,24 @@ def get_caballo_by_document(document):
     """
     caballo = Caballo.query.filter_by(id=document.caballo_id).first()
     return caballo
+
+
+def get_empleados_by_rol(puesto):
+    """
+    Obtiene una lista de empleados por su rol.
+
+    Args:
+        rol (str): Rol del empleado (e.g., 'entrenador', 'conductor').
+
+    Returns:
+        list[Empleado]: Lista de empleados con el rol especificado.
+    """
+    
+    return Empleado.query.filter_by(puesto=puesto).all()
+
+
+def get_empleados_by_ids(ids):
+    """
+    Recupera los empleados por su lista de IDs.
+    """
+    return Empleado.query.filter(Empleado.id.in_(ids)).all()

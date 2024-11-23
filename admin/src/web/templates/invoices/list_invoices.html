@@ -17,12 +17,17 @@
                 display:flex;
                 flex-direction: column;
             }
+            .options{
+                display:flex;
+                flex-direction: row;
+            }
         </style>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_list.css') }}">
     {% endblock %}
 </head>
 <body>
     {% block content %}
+    <a class="btn btn-light" href="{{ url_for('invoices.invoices_menu') }}"> Volver al menu</a>
     <form class="form search" method="POST" id="search-form" action="{{ url_for('invoices.order_list') }}">
         <label for="first_name">
             <span>Nombre empleado</span>
@@ -59,51 +64,46 @@
         </label>
        <button type="submit" form="search-form" class="btn" style="background-color:#78b9bf">BUSCAR</button>
     </form>
-    <table class="table table-striped mt-4">
-        <thead class="thead-dark">
-            <th>id</th>
-            <th>J&A</th>
-            <th>Fecha de pago</th>
-            <th>Metodo de pago</th>
-            <th>Monto</th>
-            <th>Beneficiario</th>
-        </thead>
-        <tbody>
-            {% for invoice in invoices %}
-                <tr>
-                    <td>{{invoice.id}}</td>
-                    <td>{{invoice.ja_first_name}} {{invoice.ja_last_name}}</td>
-                    <td>{{invoice.pay_date}}</td>
-                    <td>{{invoice.payment_method}}</td>
-                    <td>{{invoice.amount}}</td>
-                    <td>{{invoice.recipient_first_name}} {{invoice.recipient_last_name}}</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Menú
-                            </button>
-                            <ul class="dropdown-menu">
+    <div class="table-responsive">
+        <table class="table table-striped mt-4">
+            <thead class="thead-dark">
+                <th>id</th>
+                <th>J&A</th>
+                <th>Fecha de pago</th>
+                <th>Metodo de pago</th>
+                <th>Monto</th>
+                <th>Beneficiario</th>
+            </thead>
+            <tbody>
+                {% for invoice in invoices %}
+                    <tr>
+                        <td>{{invoice.id}}</td>
+                        <td>{{invoice.ja_first_name}} {{invoice.ja_last_name}}</td>
+                        <td>{{invoice.pay_date}}</td>
+                        <td>{{invoice.payment_method}}</td>
+                        <td>{{invoice.amount}}</td>
+                        <td>{{invoice.recipient_first_name}} {{invoice.recipient_last_name}}</td>
+                        <td class="options">
+                            <div>
                                 {%if check_permission(session,"invoice_update") %}
-                                    <li><a class="dropdown-item" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a> </li>
+                                    <a class="btn btn-primary" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a> 
                                 {% endif %}
                                 {%if check_permission(session,"invoice_show") %}
-                                    <li><a class="dropdown-item" href="{{url_for('invoices.show_invoice' ,invoice_id = invoice.id)}}">Mostrar</a> </li>
+                                    <a class="btn btn-primary" href="{{url_for('invoices.show_invoice' ,invoice_id = invoice.id)}}">Mostrar</a> 
                                 {% endif %}
-                            </ul>
-                        </div>
-                    </td>
-                    <td>
-                        {%if check_permission(session,"invoice_destroy") %}
-                            <form action="{{ url_for('invoices.delete_invoice') }}"  class="form_style" method="POST">
-                                <input type="hidden" value={{invoice.id}} name="id">
-                                <button  class="btn btn-danger">Eliminar</button>
-                            </form>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                            </div>
+                            {%if check_permission(session,"invoice_destroy") %}
+                                <form action="{{ url_for('invoices.delete_invoice') }}"  class="form_style" method="POST">
+                                    <input type="hidden" value={{invoice.id}} name="id">
+                                    <button  class="btn btn-danger">Eliminar</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     <div class="page-items">
         <p>{{invoices.first}} - {{invoices.last}} of {{invoices.total}} </p>
     </div>
