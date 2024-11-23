@@ -12,6 +12,9 @@
 {% endblock %}
 <body>
     {% block content %}
+        <div>
+            <a class="btn btn-light" href="{{ url_for('invoices.invoices_menu') }}"> Volver al menu</a>
+        </div>
         <h1 class="fw-bold">Estado de deuda de los J&A</h1>
         <main>
             <form class="form search" method="POST" id="search-form" action="{{ url_for('invoices.order_statuses_list',page=page) }}">
