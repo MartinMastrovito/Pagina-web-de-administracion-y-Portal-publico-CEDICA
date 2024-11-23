@@ -27,6 +27,7 @@
 </head>
 <body>
     {% block content %}
+    <a class="btn btn-light" href="{{ url_for('invoices.invoices_menu') }}"> Volver al menu</a>
     <form class="form search" method="POST" id="search-form" action="{{ url_for('invoices.order_list') }}">
         <label for="first_name">
             <span>Nombre empleado</span>
