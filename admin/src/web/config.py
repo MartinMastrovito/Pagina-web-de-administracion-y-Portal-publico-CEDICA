@@ -30,10 +30,10 @@ class DevelopmentConfig(Config):
     MINIO_ACCESS_KEY = "KLpAmkPAkfmLvWDtrmkt"
     MINIO_SECRET_KEY = "1Qcyj4ZrkWAqINZ54ryENCNsQx4F5QvI5zQx8GiP"
     MINIO_SECURE = False
-    DB_USER = os.getenv("DB_USER", os.getlogin())
+    DB_USER = os.getenv("DB_USER", "postgres")
     DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
     DB_HOST = "localhost"
-    DB_PORT = "5432"
+    DB_PORT = "5433"
     DB_NAME = "grupo30"
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
