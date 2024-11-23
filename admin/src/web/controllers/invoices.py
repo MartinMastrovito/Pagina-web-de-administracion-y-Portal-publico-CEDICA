@@ -103,8 +103,10 @@ def create_invoice():
     }
     if(utiles.validate_create(**invoice_information)):
          utiles.create(**invoice_information)
+         flash("Se logro crear el cobro","success")
     else: 
-        return redirect('/cobros')
+        flash("No se pudo crear el cobro","error")
+        return redirect('/cobros/crear-cobro')
     return redirect('/cobros/crear-cobro')
 
 #rutas para el listado de los estados de deuda
