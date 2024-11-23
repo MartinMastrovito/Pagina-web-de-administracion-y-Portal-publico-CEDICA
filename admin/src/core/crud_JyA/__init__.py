@@ -61,7 +61,7 @@ def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=No
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
-def create_jya(**kwargs):
+def create_jya(caballo_id, **kwargs):
     """
     Crea un nuevo JYA en la base de datos.
 
@@ -76,6 +76,11 @@ def create_jya(**kwargs):
         return None
 
     jya = JYA(**kwargs)
+    
+    caballo = Caballo.query.get(caballo_id)
+    jya.caballo = caballo
+    jya.caballo_id = caballo_id
+
     db.session.add(jya)
     db.session.commit()
 
@@ -97,23 +102,6 @@ def assign_employee_to_jya(jya_id, empleado_id, rol):
     )
     db.session.add(asignacion)
     db.session.commit()
-
-def assign_horse_to_jya(jya_id, caballo_id):
-    """
-    Asigna un caballo a un JYA.
-
-    Args:
-        jya_id: ID del JYA.
-        caballo_id: ID del caballo a asignar.
-    """
-    
-    jya = JYA.query.get(jya_id)
-    caballo = Caballo.query.get(caballo_id)
-
-    jya.caballo = caballo
-    db.session.commit()
-    
-    return True
 
 def update_jya(jya_dni, **kwargs):
     """

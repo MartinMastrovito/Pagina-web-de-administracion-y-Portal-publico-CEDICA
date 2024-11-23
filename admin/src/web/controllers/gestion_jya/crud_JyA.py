@@ -109,7 +109,6 @@ def create_jya():
             "telefono": request.form["contacto_emergencia_telefono"]
         },
         "becado": request.form["becado"] == "true",
-        "porcentaje_beca": float(request.form["porcentaje_beca"] or 0.0),
         "profesionales_atendiendo": request.form["profesionales_atendiendo"],
         "certificado_discapacidad": request.form["certificado_discapacidad"] == "true",
         "diagnostico_discapacidad": request.form.get("diagnostico_discapacidad", ""),
@@ -135,6 +134,9 @@ def create_jya():
         "sede": request.form["sede"],
         "dias_asistencia": request.form.getlist("dias_asistencia"),
     }
+    
+    if jya_data["becado"]:
+        jya_data["porcentaje_beca"] = float(request.form["porcentaje_beca"] or 0.0)
 
     if 'familiar1_parentesco' in request.form:
         jya_data["familiares_tutores"].append({
@@ -167,7 +169,7 @@ def create_jya():
         flash("Ocurrió un error al completar los campos, intentelo nuevamente...", "danger")
         return redirect("/JYA/crear_jya")
     
-    user = crud_JyA.create_jya(**jya_data)
+    user = crud_JyA.create_jya(request.form["caballo_id"], **jya_data)
     if not user:
         flash("El usuario ya existe u ocurrió un error", "danger")
         return redirect("/JYA/crear_jya")
@@ -175,8 +177,6 @@ def create_jya():
     crud_JyA.assign_employee_to_jya(user.id, request.form["profesor_terapeuta_id"], "terapeuta")
     crud_JyA.assign_employee_to_jya(user.id, request.form["conductor_caballo_id"], "conductor")
     crud_JyA.assign_employee_to_jya(user.id, request.form["auxiliar_id"], "auxiliar")
-    
-    crud_JyA.assign_horse_to_jya(user.id, request.form["caballo_id"])
 
     flash("JYA creado exitosamente", "success")
     return redirect("/JYA")
