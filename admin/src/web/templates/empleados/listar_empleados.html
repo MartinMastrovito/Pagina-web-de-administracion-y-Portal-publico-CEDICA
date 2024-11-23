@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+<head>
+    {% block imports %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/pagos/pagos_list.css') }}">
+        <header>
+            <a class="btn" href="{{ url_for('users.show_home') }}">Volver al Inicio</a>
+        </header>  
+    {% endblock %}
+</head>
+<body>
+    <main>
+        {% block content %}
+            <a href="{{ url_for('empleados.crear_empleado') }}">Crear Nuevo Empleado</a>
+            <form method="GET" action="{{ url_for('empleados.listar_empleados') }}">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="{{ request.args.get('nombre', '') }}">
+                
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" value="{{ request.args.get('apellido', '') }}">
+                
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" value="{{ request.args.get('dni', '') }}">
+                
+                <label for="puesto">Puesto:</label>
+                <select id="puesto" name="puesto">
+                    <option value="">Seleccione</option>
+                    <option value="Administrativo/a" {% if request.args.get('puesto') == 'Administrativo' %}selected{% endif %}>Administrativo/a</option>
+                    <option value="Terapeuta" {% if request.args.get('puesto') == 'Terapeuta' %}selected{% endif %}>Terapeuta</option>
+                    <option value="Conductor" {% if request.args.get('puesto') == 'Conductor' %}selected{% endif %}>Conductor</option>
+                    <option value="Auxiliar" {% if request.args.get('puesto') == 'Auxiliar' %}selected{% endif %}>Auxiliar de pista</option>
+                    <option value="Herrero" {% if request.args.get('puesto') == 'Herrero' %}selected{% endif %}>Herrero</option>
+                    <option value="Veterinario" {% if request.args.get('puesto') == 'Veterinario' %}selected{% endif %}>Veterinario</option>
+                    <option value="Entrenador" {% if request.args.get('puesto') == 'Entrenador' %}selected{% endif %}>Entrenador de Caballos</option>
+                    <option value="Domador" {% if request.args.get('puesto') == 'Domador' %}selected{% endif %}>Domador</option>
+                    <option value="Profesor" {% if request.args.get('puesto') == 'Profesor' %}selected{% endif %}>Profesor de Equitación</option>
+                    <option value="Docente" {% if request.args.get('puesto') == 'Docente' %}selected{% endif %}>Docente de Equitación</option>
+                    <option value="mantenimiento" {% if request.args.get('puesto') == 'mantenimiento' %}selected{% endif %}>Auxiliar de mantenimiento</option>
+                    <option value="otra" {% if request.args.get('puesto') == 'otra' %}selected{% endif %}>Otra</option>
+                 
+                </select>
+            
+                <label for="ordenar_por">Ordenar por:</label>
+                <select id="ordenar_por" name="ordenar_por">
+                    <option value="nombre" {% if request.args.get('ordenar_por') == 'nombre' %}selected{% endif %}>Nombre</option>
+                    <option value="apellido" {% if request.args.get('ordenar_por') == 'apellido' %}selected{% endif %}>Apellido</option>
+                    <option value="fecha_creacion" {% if request.args.get('ordenar_por') == 'fecha_creacion' %}selected{% endif %}>Fecha de Creación</option>
+                </select>
+            
+                <label for="direccion_orden">Dirección de orden:</label>
+                <select id="direccion_orden" name="direccion_orden">
+                    <option value="asc" {% if request.args.get('direccion_orden') == 'asc' %}selected{% endif %}>Ascendente</option>
+                    <option value="desc" {% if request.args.get('direccion_orden') == 'desc' %}selected{% endif %}>Descendente</option>
+                </select>
+            
+                <button type="submit">Buscar</button>
+            </form>
+            
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+                    <th>domicilio</th>
+                    <th>Email</th>
+                    <th>localidad</th>
+                    <th>telefono</th>
+                    <th>Profesión</th>
+                    <th>Puesto</th>
+                    <th>Fecha de Inicio</th>
+                    <th>fecha de cese</th>
+                    <th>Contacto de Emergencia</th>
+                    <th>Obra Social</th>
+                    <th>Número de Afiliado</th>
+                    <th>Condición</th>
+                    <th>Activo</th>
+                    <th>Acciones</th>
+                </tr>
+                {% for empleado in empleados %}
+                <tr>
+                    <td>{{ empleado.nombre }}</td>
+                    <td>{{ empleado.apellido }}</td>
+                    <td>{{ empleado.dni }}</td>
+                    <td>{{ empleado.domicilio }}</td>
+                    <td>{{ empleado.email }}</td>
+                    <td>{{ empleado.telefono }}</td>
+                    <td>{{ empleado.profesion }}</td>
+                    <td>{{ empleado.puesto }}</td>
+                    <td>{{ empleado.fecha_inicio }}</td>
+                    <td>{{ empleado.fecha_cese }}</td>
+                    <td>{{ empleado.contacto_emergencia }}</td>
+                    <td>{{ empleado.obra_social }}</td>
+                    <td>{{ empleado.numero_afiliado }}</td>
+                    <td>{{ empleado.activo }}</td>
+
+                    <td>
+                        <a href="{{ url_for('empleados.actualizar_empleados', id=empleado.id ) }}">Actualizar</a> | 
+                        <a href="{{ url_for('empleados.eliminar_empleados' , id=empleado.id ) }}">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endblock %}
+    </main>
+</body>
