@@ -123,15 +123,23 @@ def select_all():
     return db.select(Invoices)
 
 def filtrar_cobros(empleado_id, fecha_inicio, fecha_fin):
-    return Invoices.query.filter(
-        Invoices.recipient == empleado_id,
+    # Realizar la consulta y aplicar los filtros correctamente
+    return Invoices.query.join(
+        Empleados, 
+        (Empleados.nombre == Invoices.recipient_first_name) & 
+        (Empleados.apellido == Invoices.recipient_last_name)
+    ).filter(
         Invoices.pay_date >= fecha_inicio,
-        Invoices.pay_date <= fecha_fin
+        Invoices.pay_date <= fecha_fin,
+        Empleados.id == empleado_id  # Filtrar por el ID del empleado
     ).all()
+
     
 def get_empleados_con_cobros():
     empleados_cobradores = db.session.query(Empleados).join(
-        Invoices, Empleados.dni == Invoices.recipient
+        Invoices, 
+        (Empleados.nombre == Invoices.recipient_first_name) &
+        (Empleados.apellido == Invoices.recipient_last_name)
     ).distinct().all()
 
     return empleados_cobradores
