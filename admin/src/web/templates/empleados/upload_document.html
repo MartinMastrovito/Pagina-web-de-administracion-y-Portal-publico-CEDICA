@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+<head>
+    <title>{% block title %}Subir Documentos de J&A{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <header class="text-center my-4">
+        <h1>Subir Documentos para {{ empleado.nombre }} {{ empleado.apellido }}</h1>
+    </header>
+
+    <section class="container">
+        <form action="{{ url_for('documentos_empleado.upload_document', empleado_dni=empleado.dni) }}" method="POST" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
+            <div class="form-group">
+                <label for="documento" class="form-label">Selecciona el documento a subir:</label>
+                <input type="file" name="documento" id="documento" class="form-control-file" required>
+            </div>
+            <div class="d-flex flex-wrap gap-3 justify-content-between mt-4">
+                <button type="submit" class="btn btn-primary flex-grow-1">Subir Documento</button>
+                <a href="{{ url_for('documentos_empleado.index', empleado_dni=empleado.dni) }}" class="btn btn-secondary flex-grow-1">Volver</a>
+            </div>
+        </form>
+    </section>
+    {% endblock %}
+</body>
+</html>

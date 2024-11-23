@@ -87,17 +87,37 @@
                 </div>
             </div>
         </form>
-
-        <!-- Tabla responsive -->
         <div class="table-responsive">
             <table class="table table-striped mt-4">
                 <thead class="thead-dark">
                     <tr>
-                        <th>Email</th>
+                        <th>
+                            <a href="{{ url_for('users.index', sort_by='email', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                                 email=request.args.get('email', ''), 
+                                                 enabled=request.args.get('enabled', ''), 
+                                                 role_id=request.args.get('role_id', ''), 
+                                                 page=request.args.get('page', 1)) }}">
+                                Email
+                                {% if request.args.get('sort_by') == 'email' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
                         <th>Alias</th>
                         <th>Activo</th>
                         <th>Rol</th>
-                        <th>Fecha de creación</th>
+                        <th>
+                            <a href="{{ url_for('users.index', sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                                 email=request.args.get('email', ''), 
+                                                 enabled=request.args.get('enabled', ''), 
+                                                 role_id=request.args.get('role_id', ''), 
+                                                 page=request.args.get('page', 1)) }}">
+                                Fecha de creación
+                                {% if request.args.get('sort_by') == 'created_at' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
                         <th>Acciones</th>
                     </tr>
                 </thead>

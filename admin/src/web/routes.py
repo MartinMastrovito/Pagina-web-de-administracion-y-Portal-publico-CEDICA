@@ -73,6 +73,8 @@ def register(app):
 
     app.register_blueprint(consulta_api_bp)
 
+    app.register_blueprint(documentos_empleados_bp)
+
     #de
     # f pages_list():
         

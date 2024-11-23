@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Empleado</title>
+</head>
+<body>
+    <h1>Actualizar Empleado</h1>
+    <form action="{{ url_for('empleados.update_employee', empleado_dni=empleado.dni, empleado_id=empleado.id) }}" method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ empleado.nombre }}" required><br>
+
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" value="{{ empleado.apellido }}" required><br>
+
+        <div>
+            <label for="dni">DNI:</label>
+            <input type="number" id="dni" name="dni" value="{{ empleado.dni }}" required>
+        </div>
+        <div>
+            <label for="domicilio">Domicilio:</label>
+            <input type="text" id="domicilio" name="domicilio" value="{{ empleado.domicilio }}" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ empleado.email }}" required>
+        </div>
+        <div>
+            <label for="localidad">Localidad:</label>
+            <input type="text" id="localidad" name="localidad" value="{{ empleado.localidad }}">
+        </div>
+        <div>
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" value="{{ empleado.telefono }}">
+        </div>
+        <div>
+            <label for="profesion">Profesión:</label>
+            <input type="text" id="profesion" name="profesion" value="{{ empleado.profesion }}">
+        </div>
+        <div>
+            <label for="puesto">Puesto:</label>
+            <input type="text" id="puesto" name="puesto" value="{{ empleado.puesto }}">
+        </div>
+        <div>
+            <label for="fecha_inicio">Fecha de Inicio:</label>
+            <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ empleado.fecha_inicio }}">
+        </div>
+        <div>
+            <label for="fecha_cese">Fecha de Cese:</label>
+            <input type="date" id="fecha_cese" name="fecha_cese" value="{{ empleado.fecha_cese }}">
+        </div>
+        <div>
+            <label for="contacto_emergencia">Contacto de Emergencia:</label>
+            <input type="text" id="contacto_emergencia" name="contacto_emergencia" value="{{ empleado.contacto_emergencia }}">
+        </div>
+        <div>
+            <label for="obra_social">Obra Social:</label>
+            <input type="text" id="obra_social" name="obra_social" value="{{ empleado.obra_social }}">
+        </div>
+        <div>
+            <label for="numero_afiliado">Número de Afiliado:</label>
+            <input type="text" id="numero_afiliado" name="numero_afiliado" value="{{ empleado.numero_afiliado }}">
+        </div>
+        <div>
+            <label for="condicion">Condición:</label>
+            <input type="text" id="condicion" name="condicion" value="{{ empleado.condicion }}">
+        </div>
+        <div>
+            <label for="activo">Activo:</label>
+            <select id="activo" name="activo" required>
+                <option value="true" {% if empleado.activo %}selected{% endif %}>Sí</option>
+                <option value="false" {% if not empleado.activo %}selected{% endif %}>No</option>
+            </select>
+        </div>
+        
+        <button type="submit">Actualizar</button>
+    </form>
+</body>
+</html>
+{% endblock %}

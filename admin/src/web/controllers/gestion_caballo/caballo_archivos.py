@@ -207,10 +207,10 @@ def delete_document_caballo(caballo_id, documento_id):
 @check("horse_show")
 def download_documento(documento_id):
     """
-    Permite la descarga de un documento específico asociado a un JYA.
+    Permite la descarga de un documento específico asociado a un caballo.
 
     Args:
-        documento_id): ID del documento a descargar.
+        documento_id: ID del documento a descargar.
 
     Returns:
         Archivo descargable con los datos del documento.
