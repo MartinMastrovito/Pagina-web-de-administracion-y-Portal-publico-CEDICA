@@ -56,7 +56,8 @@ def order_list():
 def delete_invoice():
     id_delete = request.form['id']
     utiles.delete(id_delete)
-    return redirect("/cobros/")
+    flash("Se elimino el cobro","success")
+    return redirect("/cobros/lista-cobros/1")
 
 
 #Ruta para actualizar cobro
@@ -103,8 +104,10 @@ def create_invoice():
     }
     if(utiles.validate_create(**invoice_information)):
          utiles.create(**invoice_information)
+         flash("Se logro crear el cobro","success")
     else: 
-        return redirect('/cobros')
+        flash("No se pudo crear el cobro","error")
+        return redirect('/cobros/crear-cobro')
     return redirect('/cobros/crear-cobro')
 
 #rutas para el listado de los estados de deuda

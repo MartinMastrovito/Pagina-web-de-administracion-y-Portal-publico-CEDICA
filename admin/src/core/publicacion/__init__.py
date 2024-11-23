@@ -1,6 +1,6 @@
 from src.core.database import db
 from src.core.auth.models.model_publicacion import Publicacion
-from datetime import datetime
+
 
 def obtener_publicaciones(page, per_page):
     """
@@ -17,7 +17,7 @@ def obtener_publicaciones(page, per_page):
         Pagination: Un objeto de tipo Pagination que contiene las publicaciones de la página
                     solicitada.
     """
-    return Publicacion.query.order_by(Publicacion.fecha_actualizacion.desc()).paginate(page=page, per_page=per_page)
+    return Publicacion.query.order_by(Publicacion.fecha_actualizacion.asc()).paginate(page=page, per_page=per_page)
 
 def crear_publicacion(kwargs):
     """
@@ -80,25 +80,3 @@ def get_publicacion(id):
         404 : Si no se encuentra la publicación con el ID proporcionado.
     """
     return Publicacion.query.get_or_404(id)
-
-
-def filtrado_portal(**kwargs):
-    titulo = kwargs.get('titulo')
-    page = kwargs.get('page')
-    per_page = kwargs.get('per_page')
-    desde = kwargs.get('desde')
-    hasta = kwargs.get('hasta')
-    publicaciones = Publicacion.query.order_by(Publicacion.fecha_creacion.desc())
-    if desde:
-        desde = desde.strip('"')
-        publicaciones = publicaciones.filter(Publicacion.fecha_creacion >= (desde))
-    if titulo:
-        publicaciones = publicaciones.filter(Publicacion.titulo.like(f"%{titulo}%"))
-    if hasta:
-        hasta = hasta.strip('"')
-        hasta = datetime.strptime(hasta,"%Y-%m-%d").date()
-        publicaciones = publicaciones.filter(Publicacion.fecha_creacion <= (hasta))
-        
-    publicaciones=publicaciones.paginate(page=page, per_page=per_page)
-
-    return publicaciones

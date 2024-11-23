@@ -8,9 +8,6 @@ def index():
     page = request.args.get('page')
     per_page = request.args.get('per_page')
     id = request.args.get('id')
-    titulo = request.args.get('titulo')
-    desde = request.args.get('desde')
-    hasta = request.args.get('hasta')
     if id:
         id = int(id)
         pub = publicacion.get_publicacion(id)
@@ -23,14 +20,7 @@ def index():
         page = int(page)
     if per_page:
         per_page = int(per_page)
-    filters = {
-        'page' : page,
-        'per_page' : per_page,
-        'titulo' : titulo,
-        'desde' : desde,
-        'hasta' : hasta
-    }
-    publicaciones = publicacion.filtrado_portal(**filters)
+    publicaciones = publicacion.obtener_publicaciones(page, per_page)
     pages = publicaciones.pages
     data = articles_schema.dump(publicaciones)
     retorno = {
