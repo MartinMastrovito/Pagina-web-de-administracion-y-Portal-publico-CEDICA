@@ -1,131 +1,120 @@
 {% extends "layout.html" %}
-<head>
-    {% block imports %} 
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_create.css') }}">
-        <header>
-            <a class="btn" href="{{ url_for('users.show_home') }}">Volver al Inicio</a>
-        </header>  
-    {% endblock %}
-</head>
-<body>
-    <main>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class=flashes>
-                    {% for message in messages %}
-                        <li>{{message}}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-        {% block content %}
-            <header>
-                <a class="btn" href="{{ url_for('empleados.show_empleado_form') }}">Volver al Menu</a>
-            </header>
-            <form action="{{ url_for('empleados.crear_empleado_listo') }}" id="empleados_form" method="POST" enctype="multipart/form-data">
-                <!-- Nombre -->
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required>
-                
-                <!-- Apellido -->
-                <label for="apellido">Apellido:</label>
-                <input type="text" id="apellido" name="apellido" required>
-                
-                <!-- DNI -->
-                <label for="dni">DNI:</label>
-                <input type="text" id="dni" name="dni" required>
-                
-                <!-- Domicilio -->
-                <label for="domicilio">Domicilio:</label>
-                <input type="text" id="domicilio" name="domicilio" required>
-                
-                <!-- Email -->
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                
-                <!-- Localidad -->
-                <label for="localidad">Localidad:</label>
-                <input type="text" id="localidad" name="localidad" required>
-                
-                <!-- Teléfono -->
-                <label for="telefono">Teléfono:</label>
-                <input type="text" id="telefono" name="telefono" required>
-                
-                <!-- Profesión -->
-                <label for="profesion">Profesión:</label>
-                <select id="profesion" name="profesion" required>
-                    <option value="Psicólogo/a">Psicólogo/a</option>
-                    <option value="Psicomotricista">Psicomotricista</option>
-                    <option value="Médico/a">Médico/a</option>
-                    <option value="Kinesiólogo/a">Kinesiólogo/a</option>
-                    <option value="Terapista Ocupacional">Terapista Ocupacional</option>
-                    <option value="Psicopedagogo/a">Psicopedagogo/a</option>
-                    <option value="Docente">Docente</option>
-                    <option value="Profesor">Profesor</option>
-                    <option value="Fonoaudiólogo/a">Fonoaudiólogo/a</option>
-                    <option value="Veterinario/a">Veterinario/a</option>
-                    <option value="Otro">Otro</option>
-                </select>
-                
-                <!-- Puesto Laboral -->
-                <label for="puesto">Puesto laboral en la Institución:</label>
-                <select id="puesto" name="puesto" required>
-                    <option value="Administrativo/a">Administrativo/a</option>
-                    <option value="Terapeuta">Terapeuta</option>
-                    <option value="Conductor">Conductor</option>
-                    <option value="Auxiliar de pista">Auxiliar de pista</option>
-                    <option value="Herrero">Herrero</option>
-                    <option value="Veterinario">Veterinario</option>
-                    <option value="Entrenador de Caballos">Entrenador de Caballos</option>
-                    <option value="Domador">Domador</option>
-                    <option value="Profesor de Equitación">Profesor de Equitación</option>
-                    <option value="Docente de Capacitación">Docente de Capacitación</option>
-                    <option value="Auxiliar de mantenimiento">Auxiliar de mantenimiento</option>
-                    <option value="Otro">Otro</option>
-                </select>
-                
-                <!-- Fecha de inicio -->
-                <label for="fecha_inicio">Fecha de Inicio:</label>
-                <input type="date" id="fecha_inicio" name="fecha_inicio" required>
-                
-                <!-- Fecha de Cese -->
-                <label for="fecha_cese">Fecha de Cese:</label>
-                <input type="date" id="fecha_cese" name="fecha_cese">
-                
-                <!-- Contacto de Emergencia -->
-                <label for="contacto_emergencia">Contacto de Emergencia (Nombre y Teléfono):</label>
-                <input type="text" id="contacto_emergencia" name="contacto_emergencia" required>
-                
-                <!-- Obra Social -->
-                <label for="obra_social">Obra Social:</label>
-                <input type="text" id="obra_social" name="obra_social">
-                
-                <!-- N° de Afiliado -->
-                <label for="numero_afiliado">N° de Afiliado:</label>
-                <input type="text" id="numero_afiliado" name="numero_afiliado">
-                
-                <!-- Condición -->
-                <label for="condicion">Condición:</label>
-                <select id="condicion" name="condicion" required>
-                    <option value="Voluntario">Voluntario</option>
-                    <option value="Personal Rentado">Personal Rentado</option>
-                </select>
-                
-                <!-- Activo -->
-                <label for="activo">Activo:</label>
-                <select id="activo" name="activo" required>
-                    <option value="true">Sí</option>
-                    <option value="false">No</option>
-                </select>
-                
-                <!-- Subida de Archivos -->
-                <label for="documentacion">Subir Documentación Complementaria:</label>
-                <input type="file" id="documentacion" name="documentacion[]" multiple>
-                
-                <button form="empleados_form" class="button" type="submit">Crear Empleado</button>
-            </form>
-            
 
-    </main>
-    {% endblock %}
-</body>
+{% block title %}Crear Empleado{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Crear Empleado</h1>
+    <form action="{{ url_for('empleados.crear_empleado_listo') }}" id="empleados_form" class="form_style" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="dni">DNI:</label>
+            <input type="text" id="dni" name="dni" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="domicilio">Domicilio:</label>
+            <input type="text" id="domicilio" name="domicilio" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="localidad">Localidad:</label>
+            <input type="text" id="localidad" name="localidad" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="profesion">Profesión:</label>
+            <select id="profesion" name="profesion" class="form-control" required>
+                <option value="" disabled selected>Seleccione una profesión</option>
+                <option value="Psicólogo/a">Psicólogo/a</option>
+                <option value="Psicomotricista">Psicomotricista</option>
+                <option value="Médico/a">Médico/a</option>
+                <option value="Kinesiólogo/a">Kinesiólogo/a</option>
+                <option value="Terapista Ocupacional">Terapista Ocupacional</option>
+                <option value="Psicopedagogo/a">Psicopedagogo/a</option>
+                <option value="Docente">Docente</option>
+                <option value="Profesor">Profesor</option>
+                <option value="Fonoaudiólogo/a">Fonoaudiólogo/a</option>
+                <option value="Veterinario/a">Veterinario/a</option>
+                <option value="Otro">Otro</option>
+            
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="puesto">Puesto Laboral:</label>
+            <select id="puesto" name="puesto" class="form-control" required>
+                <option value="Administrativo/a">Administrativo/a</option>
+                <option value="Terapeuta">Terapeuta</option>
+                <option value="Conductor">Conductor</option>
+                <option value="Auxiliar de pista">Auxiliar de pista</option>
+                <option value="Herrero">Herrero</option>
+                <option value="Veterinario">Veterinario</option>
+                <option value="Entrenador de Caballos">Entrenador de Caballos</option>
+                <option value="Domador">Domador</option>
+                <option value="Profesor de Equitación">Profesor de Equitación</option>
+                <option value="Docente de Capacitación">Docente de Capacitación</option>
+                <option value="Auxiliar de mantenimiento">Auxiliar de mantenimiento</option>
+                <option value="Otro">Otro</option>
+            
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="fecha_inicio">fecha de inicio:</label>
+            <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="fecha_cese">fecha de cese:</label>
+            <input type="date" id="fecha_cese" name="fecha_cese" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="contacto_emergencia">Contacto de Emergencia (Nombre y Teléfono):</label>
+            <input type="text" id="contacto_emergencia" name="contacto_emergencia" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="obra_social">Obra Social:</label>
+            <input type="text" id="obra_social" name="obra_social" class="form-control" requerid>
+        </div>
+        <div class="form-group">
+            <label for="numero_afiliado">N° de Afiliado:</label>
+            <input type="text" id="numero_afiliado" name="numero_afiliado" class="form-control" required>
+        </div>
+        <div class="form-group"></div>
+            <label for="condicion">Condición:</label>
+            <select id="condicion" name="condicion" class="form-control" required>
+                <option value="Voluntario">Voluntario</option>
+                <option value="Personal Rentado">Personal Rentado</option>
+            </select>
+        </div>
+        
+        <div class="form-group"></div>
+            <label for="activo">Activo:</label>
+            <select id="activo" name="activo" class="form-control" required>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <!-- Subida de Archivos -->
+        <label for="documentacion">Subir Documentación Complementaria:</label>
+        <input type="file" id="documentacion" name="documentacion[]" multiple>
+
+        <button type="submit" class="btn btn-primary">Crear empleado</button>
+    </form>
+    <a href="{{ url_for('empleados.index') }}" class="btn btn-secondary">Volver al listado</a>
+</div>
+{% endblock %}
