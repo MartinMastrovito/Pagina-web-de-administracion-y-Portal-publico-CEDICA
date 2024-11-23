@@ -109,10 +109,9 @@ def create_jya():
             "telefono": request.form["contacto_emergencia_telefono"]
         },
         "becado": request.form["becado"] == "true",
-        "porcentaje_beca": float(request.form["porcentaje_beca"] or 0.0),
+        "observaciones_beca": request.form["observaciones_beca"],
         "profesionales_atendiendo": request.form["profesionales_atendiendo"],
         "certificado_discapacidad": request.form["certificado_discapacidad"] == "true",
-        "diagnostico_discapacidad": request.form.get("diagnostico_discapacidad", ""),
         "tipo_discapacidad": request.form.get("tipo_discapacidad", None),
         "asignacion_familiar": request.form["asignacion_familiar"] == "true",
         "tipo_asignacion": request.form.get("tipo_asignacion", ""),
@@ -135,6 +134,11 @@ def create_jya():
         "sede": request.form["sede"],
         "dias_asistencia": request.form.getlist("dias_asistencia"),
     }
+    
+    if request.form.get("diagnostico_discapacidad", "") == "OTRO":
+        jya_data["diagnostico_discapacidad"] = request.form.get("otro_diagnostico", "")
+    else:
+        jya_data["diagnostico_discapacidad"] = request.form.get("diagnostico_discapacidad", "")
 
     if 'familiar1_parentesco' in request.form:
         jya_data["familiares_tutores"].append({
@@ -167,7 +171,7 @@ def create_jya():
         flash("Ocurrió un error al completar los campos, intentelo nuevamente...", "danger")
         return redirect("/JYA/crear_jya")
     
-    user = crud_JyA.create_jya(**jya_data)
+    user = crud_JyA.create_jya(request.form["caballo_id"], **jya_data)
     if not user:
         flash("El usuario ya existe u ocurrió un error", "danger")
         return redirect("/JYA/crear_jya")
@@ -175,8 +179,6 @@ def create_jya():
     crud_JyA.assign_employee_to_jya(user.id, request.form["profesor_terapeuta_id"], "terapeuta")
     crud_JyA.assign_employee_to_jya(user.id, request.form["conductor_caballo_id"], "conductor")
     crud_JyA.assign_employee_to_jya(user.id, request.form["auxiliar_id"], "auxiliar")
-    
-    crud_JyA.assign_horse_to_jya(user.id, request.form["caballo_id"])
 
     flash("JYA creado exitosamente", "success")
     return redirect("/JYA")
@@ -195,7 +197,31 @@ def show_update_jya(jya_dni):
         Renderizado de la plantilla update_jya.html con los datos del JYA.
     """
     jya = crud_JyA.get_jya_by_dni(jya_dni)
-    return render_template("JYA/update_jya.html", jya=jya)
+    
+    empleados_jya = crud_JyA.get_jyaempleados_id(jya)
+    
+    empleados_terapeuta_profesor = crud_JyA.get_empleados_terapeuta_profesor()
+    empleados_conductor = crud_JyA.get_empleados_conductor()
+    empleados_auxiliar = crud_JyA.get_empleados_auxiliar()
+    caballos = crud_JyA.get_caballos()
+    
+    if not (empleados_terapeuta_profesor and empleados_conductor and empleados_auxiliar and caballos):
+        flash(
+            "Debe asegurarse de que exista por lo menos un empleado terapeuta/profesor, "
+            "conductor, auxiliar de pista y un caballo en el sistema",
+            "danger"
+        )
+        return redirect("/JYA")
+    
+    return render_template(
+        "JYA/update_jya.html",
+        jya=jya,
+        empleados_terapeuta_profesor=empleados_terapeuta_profesor,
+        empleados_conductor=empleados_conductor,
+        empleados_auxiliar=empleados_auxiliar,
+        caballos=caballos,
+        empleados_jya=empleados_jya,
+    )
 
 @bp.post("/actualizar/<int:jya_dni>")
 @login_required
@@ -216,7 +242,7 @@ def jya_update(jya_dni):
         "apellido": request.form['apellido'],
         "dni": request.form['dni'],
         "edad": request.form["edad"],
-        "fecha_nacimiento": request.form["fecha_de_nacimiento"],
+        "fecha_nacimiento": request.form["fecha_nacimiento"],
         "lugar_nacimiento": {
             "localidad": request.form["lugar_nacimiento_localidad"],
             "provincia": request.form["lugar_nacimiento_provincia"]
@@ -234,10 +260,9 @@ def jya_update(jya_dni):
             "telefono": request.form["contacto_emergencia_telefono"]
         },
         "becado": request.form["becado"] == "true",
-        "porcentaje_beca": float(request.form["porcentaje_beca"] or 0.0),
+        "observaciones_beca": request.form["observaciones_beca"],
         "profesionales_atendiendo": request.form["profesionales_atendiendo"],
         "certificado_discapacidad": request.form["certificado_discapacidad"] == "true",
-        "diagnostico_discapacidad": request.form.get("diagnostico_discapacidad", ""),
         "tipo_discapacidad": request.form.get("tipo_discapacidad", None),
         "asignacion_familiar": request.form["asignacion_familiar"] == "true",
         "tipo_asignacion": request.form.get("tipo_asignacion", ""),
@@ -254,35 +279,43 @@ def jya_update(jya_dni):
             "grado_actual": request.form["grado_actual"],
             "observaciones": request.form.get("institucion_escolar_observaciones", "")
         },
-        "familiares_tutores": [
-            {
-                "parentesco": request.form["familiar1_parentesco"],
-                "nombre": request.form["familiar1_nombre"],
-                "apellido": request.form["familiar1_apellido"],
-                "dni": request.form["familiar1_dni"],
-                "domicilio_actual": request.form["familiar1_domicilio_actual"],
-                "celular_actual": request.form["familiar1_celular_actual"],
-                "email": request.form["familiar1_email"],
-                "nivel_escolaridad": request.form["familiar1_nivel_escolaridad"],
-                "ocupacion": request.form["familiar1_ocupacion"]
-            },
-            {
-                "parentesco": request.form["familiar2_parentesco"],
-                "nombre": request.form["familiar2_nombre"],
-                "apellido": request.form["familiar2_apellido"],
-                "dni": request.form["familiar2_dni"],
-                "domicilio_actual": request.form["familiar2_domicilio_actual"],
-                "celular_actual": request.form["familiar2_celular_actual"],
-                "email": request.form["familiar2_email"],
-                "nivel_escolaridad": request.form["familiar2_nivel_escolaridad"],
-                "ocupacion": request.form["familiar2_ocupacion"]
-            }
-        ],
+        "familiares_tutores": [],
         "propuesta_trabajo": request.form["propuesta_trabajo"],
         "condicion_trabajo": request.form["condicion_trabajo"],
         "sede": request.form["sede"],
         "dias_asistencia": request.form.getlist("dias_asistencia"),
     }
+        
+    if request.form.get("diagnostico_discapacidad", "") == "OTRO":
+        jya_data["diagnostico_discapacidad"] = request.form.get("otro_diagnostico", "")
+    else:
+        jya_data["diagnostico_discapacidad"] = request.form.get("diagnostico_discapacidad", "")
+    
+    if 'familiar1_parentesco' in request.form:
+        jya_data["familiares_tutores"].append({
+            "parentesco": request.form.get("familiar1_parentesco", ""),
+            "nombre": request.form.get("familiar1_nombre", ""),
+            "apellido": request.form.get("familiar1_apellido", ""),
+            "dni": request.form.get("familiar1_dni", ""),
+            "domicilio_actual": request.form.get("familiar1_domicilio_actual", ""),
+            "celular_actual": request.form.get("familiar1_celular_actual", ""),
+            "email": request.form.get("familiar1_email", ""),
+            "nivel_escolaridad": request.form.get("familiar1_nivel_escolaridad", ""),
+            "ocupacion": request.form.get("familiar1_ocupacion", "")
+        })
+
+    if 'familiar2_parentesco' in request.form:
+        jya_data["familiares_tutores"].append({
+            "parentesco": request.form.get("familiar2_parentesco", ""),
+            "nombre": request.form.get("familiar2_nombre", ""),
+            "apellido": request.form.get("familiar2_apellido", ""),
+            "dni": request.form.get("familiar2_dni", ""),
+            "domicilio_actual": request.form.get("familiar2_domicilio_actual", ""),
+            "celular_actual": request.form.get("familiar2_celular_actual", ""),
+            "email": request.form.get("familiar2_email", ""),
+            "nivel_escolaridad": request.form.get("familiar2_nivel_escolaridad", ""),
+            "ocupacion": request.form.get("familiar2_ocupacion", "")
+        })
     
     errores = validate_jya_form(jya_data)
     if errores:
@@ -292,7 +325,9 @@ def jya_update(jya_dni):
     new_unique_dni = crud_JyA.update_jya(jya_dni, **jya_data)
     if new_unique_dni:
         flash("Se modificó el JYA exitosamente", "success")
-        return redirect("/JYA")
+        
+        updated_jya = crud_JyA.get_jya_by_dni(jya_data['dni'])
+        return redirect(f"/JYA/detalles/{updated_jya.dni}")
     else:
         flash("El DNI ingresado ya se encuentra registrado en nuestro sistema", "danger")
         return redirect(f"/JYA/actualizar/{jya_dni}")
@@ -311,7 +346,7 @@ def jya_delete(jya_dni):
         Redirige a la vista principal de JYA después de la eliminación.
     """
     crud_JyA.delete_jya(jya_dni)
-    flash("Usuario eliminado correctamente", "success")
+    flash("JYA eliminado correctamente", "success")
     return redirect("/JYA")
 
 @bp.get("/detalles/<int:jya_dni>")
@@ -328,4 +363,7 @@ def show_details_jya(jya_dni):
         Renderizado de la plantilla show_jya.html con los detalles del JYA.
     """
     jya = crud_JyA.get_jya_by_dni(jya_dni)
-    return render_template("JYA/show_jya.html", jya=jya)
+    
+    empleados_jya = crud_JyA.get_jyaempleados(jya)
+    
+    return render_template("JYA/show_jya.html", jya=jya, empleados_jya=empleados_jya)
