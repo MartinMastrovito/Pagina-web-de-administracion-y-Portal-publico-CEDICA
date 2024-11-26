@@ -32,7 +32,7 @@ def list_users():
     users = User.query.all()
     return users
 
-def search_users(email=None, enabled=None, role_id=None, sort_by='email', order='asc', page=1, per_page=25):
+def search_users(email=None, enabled=None, role_id=None, sort_by='email', order='asc', page=1, per_page=10):
     """
     Busca usuarios en la base de datos aplicando varios filtros.
 

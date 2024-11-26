@@ -18,7 +18,7 @@ def list_users():
     return jya
 
 def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=None, 
-               sort_by='nombre', order='asc', page=1, per_page=25):
+               sort_by='nombre', order='asc', page=1, per_page=10):
     """
     Busca JYA con filtros y devuelve una paginación de resultados.
 

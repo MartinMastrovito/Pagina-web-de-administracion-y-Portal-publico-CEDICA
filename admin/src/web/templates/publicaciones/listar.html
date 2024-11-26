@@ -5,7 +5,10 @@
 {% block content %}
 <header class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 mb-3">
     <h4 class="display-6 text-center text-md-start">Publicaciones del sistema:</h4>
-    <a class="btn btn-secondary mt-3 mt-md-0" href="{{ url_for('users.show_home') }}">Volver</a>
+    <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+        <a href="{{ url_for('publicacion.show_crear_publicacion') }}" class="btn btn-primary">Crear nueva publicación</a>
+        <a class="btn btn-secondary mt-3 mt-md-0" href="{{ url_for('users.show_home') }}">Volver</a>
+    </div>
 </header>
 
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -51,8 +54,8 @@
                         {% else %}
                         <td>Desconocido</td>
                         {% endif %}
-                        <td>{{ publicacion.fecha_creacion }}</td>
-                        <td>{{ publicacion.fecha_actualizacion }}</td>
+                        <td>{{ publicacion.fecha_creacion.strftime('%d/%m/%Y') }}</td>
+                        <td>{{ publicacion.fecha_actualizacion.strftime('%d/%m/%Y') }}</td>
                         <td>{{ publicacion.estado }}</td>
                         <td>
                             <div class="dropdown">
@@ -94,9 +97,6 @@
                 {% endif %}
             </ul>
         </nav>
-        <div class="text-center mt-4">
-            <a href="{{ url_for('publicacion.show_crear_publicacion') }}" class="btn btn-primary">Crear nueva publicación</a>
-        </div>
     </article>
 </section>
 
