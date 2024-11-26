@@ -99,9 +99,9 @@ def tecnica_rol_create():
             Permission.name.contains("jya"),
             Permission.name == "horse_index",
             Permission.name == "horse_show",
-            Permission.name == "Invoice_menu",
-            Permission.name == "Invoice_index",
-            Permission.name == "Invoice_show",
+            Permission.name == "invoice_menu",
+            Permission.name == "invoice_index",
+            Permission.name == "invoice_show",
         )
     )
     tecnica_permissions = []
