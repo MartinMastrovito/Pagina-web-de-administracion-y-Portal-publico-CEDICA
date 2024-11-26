@@ -159,7 +159,7 @@ def index_unaccepted():
     email = request.args.get('email')
     order = request.args.get('order', 'asc')
     page = request.args.get('page', 1, type=int)
-    per_page = 25
+    per_page = 10
 
     users_pagination = utiles.search_unaccepted_users(
         email=email,

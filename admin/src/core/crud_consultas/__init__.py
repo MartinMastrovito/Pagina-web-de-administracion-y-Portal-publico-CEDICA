@@ -25,7 +25,8 @@ def search_consultas(nombre_completo=None, estado=None, sort_by='fecha', order='
     if estado:
         query = query.filter(Consulta.estado.ilike(f"%{estado}%"))
 
-    sort_column = getattr(Consulta, sort_by, Consulta.fecha)
+    sort_column = Consulta.fecha
+    
     query = query.order_by(asc(sort_column) if order == 'asc' else desc(sort_column))
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
