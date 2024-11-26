@@ -143,3 +143,53 @@ def get_empleados_con_cobros():
     ).distinct().all()
 
     return empleados_cobradores
+
+
+def search_cobros(
+    recipient_first_name=None, 
+    recipient_last_name=None, 
+    payment_method=None, 
+    date_from=None, 
+    date_to=None, 
+    order='asc', 
+    page=1, 
+    per_page=10
+):
+    """
+    Busca cobros en la base de datos aplicando varios filtros.
+
+    Args:
+        recipient_first_name: Nombre del usuario a buscar.
+        recipient_last_name: Apellido del usuario a buscar.
+        payment_method: Forma de pago del cobro.
+        date_from: Fecha inicial para filtrar cobros.
+        date_to: Fecha final para filtrar cobros.
+        order: Orden de la lista ('asc' o 'desc').
+        page: Página de resultados (por defecto es 1).
+        per_page: Número de resultados por página (por defecto es 10).
+
+    Returns:
+        Objeto de paginación con los cobros encontrados.
+    """
+    query = Invoices.query
+
+    if recipient_first_name:
+        query = query.filter(Invoices.recipient_first_name.ilike(f"%{recipient_first_name}%"))
+
+    if recipient_last_name:
+        query = query.filter(Invoices.recipient_last_name.ilike(f"%{recipient_last_name}%"))
+
+    if payment_method:
+        query = query.filter_by(payment_method=payment_method)
+
+    if date_from:
+        query = query.filter(Invoices.pay_date >= date_from)
+    if date_to:
+        query = query.filter(Invoices.pay_date <= date_to)
+
+    if order == 'asc':
+        query = query.order_by(Invoices.pay_date.asc())
+    else:
+        query = query.order_by(Invoices.pay_date.desc())
+
+    return query.paginate(page=page, per_page=per_page, error_out=False)
