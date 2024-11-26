@@ -5,8 +5,9 @@
 </head>
 <body>
     {% block content %}
-    <header>
+    <header class="d-flex justify-content-between align-items-center mt-4 mb-3">
         <h4 class="display-4">Actualizar J&A</h4>
+        <a class="btn btn-secondary" href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}">Volver</a>
     </header>
 
     <section>

@@ -99,7 +99,9 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ url_for('crud_JyA.show_details_jya', jya_dni=jya.dni) }}" class="dropdown-item">Ver más</a></li>
+                                    {% if check_permission(session, "jya_destroy") %}
                                     <li><a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ url_for('crud_JyA.jya_delete', jya_dni=jya.dni) }}" class="dropdown-item">Eliminar</a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </td>
@@ -141,9 +143,11 @@
                 {% endif %}
             </ul>
         </nav>
+        {% if check_permission(session, "jya_new") %}
         <div class="text-center mt-4">
             <a href="{{ url_for('crud_JyA.create_jya') }}" class="btn btn-primary">Crear nuevo J&A</a>
-        </div> 
+        </div>
+        {% endif %}
     </article>
 </section>
 

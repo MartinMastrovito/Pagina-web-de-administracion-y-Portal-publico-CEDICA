@@ -148,7 +148,7 @@ def index():
 
 @bp.get("/unaccepted")
 @login_required
-@check("user_index")
+@check("user_accept")
 def index_unaccepted():
     """
     Muestra la lista de usuarios no aceptados con paginación y filtrado.
@@ -218,7 +218,7 @@ def create_user():
 
 @bp.get("/accept/<int:user_id>")
 @login_required
-@check("user_update")
+@check("user_accept")
 def show_user_accept(user_id):
     """
     Muestra el formulario para aceptar a un usuario.
@@ -234,7 +234,7 @@ def show_user_accept(user_id):
 
 @bp.post("/accept/<int:user_id>")
 @login_required
-@check("user_update")
+@check("user_accept")
 def user_accept(user_id):
     role_id = request.form['role_id']
     utiles.accept_user(user_id, role_id)

@@ -14,21 +14,25 @@
             
             <div class="mb-3">
                 <label for="titulo" class="form-label">Título</label>
-                <input type="text" class="form-control" id="titulo" name="titulo" required maxlength="20">
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                <input type="text" class="form-control" id="titulo" name="titulo" required maxlength="100">
             </div>
 
             <div class="mb-3">
                 <label for="copete" class="form-label">Copete</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                 <textarea class="form-control" id="copete" name="copete" rows="3" required></textarea>
             </div>
 
             <div class="mb-3">
                 <label for="contenido" class="form-label">Contenido</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                 <textarea class="form-control" id="contenido" name="contenido" rows="10" required></textarea>
             </div>
 
             <div class="mb-3">
                 <label for="estado" class="form-label">Estado</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                 <select class="form-control" id="estado" name="estado" required>
                     <option value="Borrador">Borrador</option>
                     <option value="Publicado">Publicado</option>

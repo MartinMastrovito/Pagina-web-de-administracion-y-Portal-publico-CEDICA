@@ -284,7 +284,9 @@
 {% endif %}
 
 <div class="mt-4">
-    <a href="{{ url_for('crud_JyA.show_update_jya', jya_dni=jya.dni) }}" class="btn btn-primary">Editar</a>
+    {% if check_permission(session, "jya_update") %}
+        <a href="{{ url_for('crud_JyA.show_update_jya', jya_dni=jya.dni) }}" class="btn btn-primary">Editar</a>
+    {% endif %}
     <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-primary">Documentos Adjuntos</a>
 </div>
 
