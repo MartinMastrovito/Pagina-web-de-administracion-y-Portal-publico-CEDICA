@@ -8,21 +8,18 @@ from werkzeug.utils import secure_filename
 import os
 
 empleados_bp = Blueprint('empleados', __name__, url_prefix="/menu_empleados", template_folder='../templates/empleados',static_folder="/admin/static")
-@empleados_bp.get("/empleados")
 
+@empleados_bp.get("/empleados")
 def show_empleado_form():
     return render_template("empleados/menu_empleados.html")
-
-#crear empleados
 
 @empleados_bp.get("/crear-empleado")
 def crear_empleado():
     return render_template("empleados/crear_empleado.html")
 
 @empleados_bp.post("/crear_empleado")
-#@login_required
+@login_required
 def crear_empleado_listo():
-    # Obtener los datos del formulario
     empleado_data = {
         "nombre": request.form['nombre'],
         "apellido": request.form['apellido'],
@@ -34,18 +31,16 @@ def crear_empleado_listo():
         "profesion": request.form['profesion'],
         "puesto": request.form['puesto'],
         "fecha_inicio": request.form['fecha_inicio'],
-        "fecha_cese": request.form.get('fecha_cese'),  # Puede ser None si no se proporciona
+        "fecha_cese": request.form.get('fecha_cese'),
         "contacto_emergencia": request.form['contacto_emergencia'],
-        "obra_social": request.form.get('obra_social'),  # Opcional
-        "numero_afiliado": request.form.get('numero_afiliado'),  # Opcional
+        "obra_social": request.form.get('obra_social'),
+        "numero_afiliado": request.form.get('numero_afiliado'),
         "condicion": request.form['condicion'],
         "activo": True if request.form['activo'] == 'true' else False
     }
 
-    # Crear instancia de empleado
     nuevo_empleado = Empleados(**empleado_data)
 
-    # Guardar el empleado en la base de datos
     try:
         db.session.add(nuevo_empleado)
         db.session.commit()
@@ -58,7 +53,6 @@ def crear_empleado_listo():
                 if file and file.filename != '':
                     filename = secure_filename(file.filename)
                     file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-                    # Aquí puedes agregar lógica para guardar la referencia del archivo en la BD si es necesario.
         
         return redirect('/menu_empleados/empleados')
 
@@ -68,10 +62,6 @@ def crear_empleado_listo():
         flash('Ocurrió un error al crear el empleado: ' + str(e), 'danger')
         return redirect("/empleados/crear_empleado")
 
-
-
-
-# listar empleados
 @empleados_bp.route('/lista-empleados', methods=['GET'])
 def listar_empleados():
     nombre = request.args.get('nombre')  
