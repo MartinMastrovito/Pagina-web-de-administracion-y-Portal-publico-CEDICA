@@ -5,7 +5,10 @@
 {% block content %}
 <header class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 mb-3">
     <h4 class="display-6 text-center text-md-start">Consultas</h4>
-    <a class="btn btn-secondary mt-3 mt-md-0" href="{{ url_for('users.show_home') }}">Volver</a>
+    <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+        <a href="{{ url_for('consultas.nueva_consulta') }}" class="btn btn-primary">Crear Consulta</a>
+        <a class="btn btn-secondary mt-3 mt-md-0" href="{{ url_for('users.show_home') }}">Volver</a>
+    </div>
 </header>
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -72,7 +75,7 @@
                         <tr>
                             <td>{{ consulta.nombre_completo }}</td>
                             <td>{{ consulta.estado }}</td>
-                            <td>{{ consulta.fecha.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ consulta.fecha.strftime('%d/%m/%Y') }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -106,9 +109,6 @@
                         {% endif %}
                     </ul>
                 </nav>
-                <div class="text-center mt-4">
-                    <a href="{{ url_for('consultas.nueva_consulta') }}" class="btn btn-primary">Crear Consulta</a>
-                </div>
     </article>
 </section>
 </body>
