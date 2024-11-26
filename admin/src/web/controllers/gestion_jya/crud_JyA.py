@@ -23,7 +23,7 @@ def index():
     sort_by = request.args.get("sort_by", "nombre")
     order = request.args.get("order", "asc")
     page = request.args.get("page", 1, type=int)
-    per_page = 25
+    per_page = 10
 
     users_pagination = crud_JyA.search_JYA(
         nombre=nombre,

@@ -19,16 +19,16 @@ def menu_consultas():
     estado = request.args.get('estado', '', type=str)
     orden = request.args.get('orden', 'fecha')
     direction = request.args.get('direction', 'asc')
-
+    
     consultas_paginadas = crud_consulta.search_consultas(
         nombre_completo=nombre_completo,
         estado=estado,
         sort_by=orden,
         order=direction,
-        page=page
+        page=page,
     )
 
-    return render_template('consultas/index_consultas.html', consultas=consultas_paginadas, nombre_completo=nombre_completo, estado=estado, orden=orden, direction=direction)
+    return render_template('consultas/index_consultas.html', consultas=consultas_paginadas.items, pagination=consultas_paginadas, nombre_completo=nombre_completo, estado=estado, orden=orden, direction=direction)
 
 @consultas_bp.route('/<int:id>', methods=['GET'])
 @login_required
@@ -102,7 +102,7 @@ def editar_consulta(id):
     
     return render_template('consultas/editar_consultas.html', consulta=consulta)
 
-@consultas_bp.route('/<int:id>/eliminar', methods=['POST'])
+@consultas_bp.post('/<int:id>/eliminar')
 @login_required
 @check("consulta_destroy")
 def eliminar_consulta(id):
