@@ -346,7 +346,7 @@ def jya_delete(jya_dni):
         Redirige a la vista principal de JYA después de la eliminación.
     """
     crud_JyA.delete_jya(jya_dni)
-    flash("JYA eliminado correctamente", "success")
+    flash(f"El JYA con DNI {jya_dni} y todos sus documentos asociados han sido eliminados.", "success")
     return redirect("/JYA")
 
 @bp.get("/detalles/<int:jya_dni>")

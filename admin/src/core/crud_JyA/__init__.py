@@ -5,6 +5,7 @@ from src.core.auth.models.model_empleado import Empleados
 from src.core.auth.models.model_caballos import Caballo
 from src.core.auth.models.model_JYAEmpleado import JYAEmpleado
 from sqlalchemy import or_
+from flask import current_app
 
 def list_users():
     """
@@ -147,17 +148,30 @@ def update_document(document_id, **kwargs):
 
 def delete_jya(jya_dni):
     """
-    Elimina un JYA de la base de datos.
+    Elimina un JYA y todos sus documentos del almacenamiento y la base de datos.
 
     Args:
         jya_dni: DNI del JYA a eliminar.
     """
+
     jya = get_jya_by_dni(jya_dni)
+
+    if not jya:
+        raise ValueError("El JYA especificado no existe.")
+
+    documentos = get_documents_by_jya_dni(jya.dni)
+
+    client = current_app.storage.client
+    for documento in documentos:
+            client.remove_object("grupo30", documento.nombre_documento)
+
+            delete_document(documento.id)
 
     db.session.query(JYAEmpleado).filter_by(jya_id=jya.id).delete(synchronize_session=False)
 
     db.session.delete(jya)
     db.session.commit()
+
     
 def delete_document(document_id):
     """
@@ -168,6 +182,20 @@ def delete_document(document_id):
     """
     db.session.query(Documento).filter(Documento.id == str(document_id)).delete()
     db.session.commit()
+    
+def get_documents_by_jya_dni(jya_dni):
+    """
+    Recupera todos los documentos asociados a un JYA específico.
+
+    Args:
+        jya_id: ID del JYA cuyos documentos se desean recuperar.
+
+    Returns:
+        Una lista de objetos Documento asociados al JYA.
+    """
+    documentos = db.session.query(Documento).filter_by(jya_dni=jya_dni).all()
+    return documentos
+
     
 def get_jya_by_dni(dni):
     """
