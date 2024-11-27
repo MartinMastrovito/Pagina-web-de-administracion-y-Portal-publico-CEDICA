@@ -36,7 +36,12 @@ def create_app(env="development", static_folder=''):
     # Inicializar la base de datos y migraciones
     init_app(app)  # Inicializa SQLAlchemy con la app
     migrate.init_app(app, db)  # Inicializa Migrate con la app y db
-
+    
+    #Resetea y ejecuta el seeds en la BD 
+    with app.app_context():
+        db_reset()
+        db_seeds()
+    
     # Inicializar Bcrypt
     bcrypt.init_app(app)
 

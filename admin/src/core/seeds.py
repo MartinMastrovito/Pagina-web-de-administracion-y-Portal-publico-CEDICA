@@ -5,6 +5,7 @@ from src.core.auth.models.model_caballos import Caballo
 from src.core.auth.models.model_JyA import JYA
 from src.core.auth.models.model_JYAEmpleado import JYAEmpleado
 from src.core.auth.models.model_publicacion import Publicacion
+from src.core.invoices.invoices import Invoices
 from src.core.database import db
 from src.core import bcrypt
 from src.core.auth import utiles
@@ -246,6 +247,7 @@ def user_create():
 
 
 def employee_create():
+
     list_employees = [
         Empleados(
             nombre = "Carlos",
@@ -265,6 +267,24 @@ def employee_create():
             condicion = "Empleado Permanente",
             activo = True,           
        ),
+       Empleados(
+            nombre="Martín",
+            apellido="Pérez",
+            dni="40256789",
+            domicilio="12 854",
+            email="martin.perez@example.com",
+            localidad="Rosario",
+            telefono="3414567890",
+            profesion="Conductor",
+            puesto="Conductor",
+            fecha_inicio="2021-06-10",
+            fecha_cese=None,
+            contacto_emergencia="+5493412345678",
+            obra_social="OSDE",
+            numero_afiliado="789123456",
+            condicion="Empleado Temporal",
+            activo=True,
+        ),
         Empleados(
             nombre="Laura",
             apellido="González",
@@ -284,24 +304,7 @@ def employee_create():
             activo=False,
         ),
 
-        Empleados(
-            nombre="Martín",
-            apellido="Pérez",
-            dni="40256789",
-            domicilio="12 854",
-            email="martin.perez@example.com",
-            localidad="Rosario",
-            telefono="3414567890",
-            profesion="Conductor",
-            puesto="Conductor",
-            fecha_inicio="2021-06-10",
-            fecha_cese=None,
-            contacto_emergencia="+5493412345678",
-            obra_social="OSDE",
-            numero_afiliado="789123456",
-            condicion="Empleado Temporal",
-            activo=True,
-        ),
+        
 
         Empleados(
             nombre="Ana",
@@ -372,16 +375,21 @@ def JYA_create():
         fecha_ingreso=datetime.strptime("2021-6-1", "%Y-%m-%d").date(),
         sede_asignada="Sede Central",
         pelaje="Blanco",
+        raza="Percheron",
+        tipo_ja_asignado="Hipoterapia",
     )
     
     caballo_2 = Caballo(
         nombre="Spirit",
         fecha_nacimiento=datetime.strptime("2018-7-20", "%Y-%m-%d").date(),
         sexo="Macho",
+        raza="Pura Sangre",
+        pelaje="Marrón",
         tipo_ingreso="Donación",
         fecha_ingreso=datetime.strptime("2022-8-15", "%Y-%m-%d").date(),
         sede_asignada="Sede Norte",
-        pelaje="Marrón",
+        tipo_ja_asignado="Equitación",
+
     )
     db.session.add_all([caballo_1, caballo_2])
     db.session.commit()
@@ -591,6 +599,24 @@ def articles_create():
     db.session.add_all(articles_list)
     db.session.commit()
 
+def invoices_create():
+    primer_jya = JYA.query.get(1)
+    primer_empleado = Empleados.query.get(1)
+    invoices_list = [
+        Invoices(
+            ja_first_name = primer_jya.nombre,
+            ja_last_name = primer_jya.apellido,
+            pay_date = "2024-09-27",
+            payment_method = "Efectivo",
+            amount = 500,
+            recipient_first_name = primer_empleado.nombre,
+            recipient_last_name = primer_empleado.apellido,
+            observations = "Esto se esta creando desde el seeds :)"
+        )
+    ]
+    db.session.add_all(invoices_list)
+    db.session.commit()
+
 def db_seeds():
     role_create()
     permission_create()
@@ -599,6 +625,7 @@ def db_seeds():
     employee_create()
     JYA_create()
     articles_create()
+    invoices_create()
 
 """
 Técnica
