@@ -1,20 +1,20 @@
 <template id="app">
-    <header class="header">
+    <header class="header conteiner-fluid">
       <div class="header-content">
         <h1>Centro de equitación</h1>
         <p>La Plata, buenos Aires</p>
         <img src="@/assets/logo.png" alt="Logo de CEDICA" class="logo" />
       </div>
       <nav>
-          <RouterLink class="btn" to="/">Home</RouterLink>
-          <RouterLink class="btn" to="/noticias/1">Noticias</RouterLink>
-          <RouterLink class="btn" to="/contacto">Contacto</RouterLink>
+          <RouterLink class="btn btn-primary" to="/">Home</RouterLink>
+          <RouterLink class="btn btn-primary" to="/noticias/1">Noticias</RouterLink>
+          <RouterLink class="btn btn-primary" to="/contacto">Contacto</RouterLink>
       </nav>
     </header>
-    <main>
+    <main class="container-fluid">
       <RouterView/>
     </main>
-    <footer class="footer">
+    <footer class="footer conteiner-fluid">
       <p>&copy; 2024 CEDICA. Todos los derechos reservados.</p>
     </footer>
 </template>
@@ -36,13 +36,11 @@ console.log(import.meta.env.VITE_ARTICLES_API);
 header {
   text-align: center;
   background-color: #4842b935;
-  padding: 20px;
   color: white;
 }
 
 footer {
   background-color: #42b983;
-  padding: 10px;
   color: white;
   width: 100%;
   bottom: 0;
@@ -56,27 +54,5 @@ footer {
 nav{
   display:flex;
   justify-content: space-around;
-}
-
-.btn {
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  background-color: #007bff;
-  text-align: center;
-  text-decoration: none;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background-color: #0056b3;
-}
-
-.btn-primary {
-  background-color: #007bff;
 }
 </style>
