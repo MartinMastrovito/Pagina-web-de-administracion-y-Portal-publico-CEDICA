@@ -121,7 +121,7 @@ def index():
     sort_by = request.args.get('sort_by', 'email')
     order = request.args.get('order', 'asc')
     page = request.args.get('page', 1, type=int)
-    per_page = 25
+    per_page = 10
 
     unaccepted_users = utiles.unaccepted_users()
 
