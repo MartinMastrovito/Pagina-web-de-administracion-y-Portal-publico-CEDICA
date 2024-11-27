@@ -246,6 +246,7 @@ def user_create():
 
 
 def employee_create():
+
     list_employees = [
         Empleados(
             nombre = "Carlos",
@@ -265,6 +266,24 @@ def employee_create():
             condicion = "Empleado Permanente",
             activo = True,           
        ),
+       Empleados(
+            nombre="Martín",
+            apellido="Pérez",
+            dni="40256789",
+            domicilio="12 854",
+            email="martin.perez@example.com",
+            localidad="Rosario",
+            telefono="3414567890",
+            profesion="Conductor",
+            puesto="Conductor",
+            fecha_inicio="2021-06-10",
+            fecha_cese=None,
+            contacto_emergencia="+5493412345678",
+            obra_social="OSDE",
+            numero_afiliado="789123456",
+            condicion="Empleado Temporal",
+            activo=True,
+        ),
         Empleados(
             nombre="Laura",
             apellido="González",
@@ -284,24 +303,7 @@ def employee_create():
             activo=False,
         ),
 
-        Empleados(
-            nombre="Martín",
-            apellido="Pérez",
-            dni="40256789",
-            domicilio="12 854",
-            email="martin.perez@example.com",
-            localidad="Rosario",
-            telefono="3414567890",
-            profesion="Conductor",
-            puesto="Conductor",
-            fecha_inicio="2021-06-10",
-            fecha_cese=None,
-            contacto_emergencia="+5493412345678",
-            obra_social="OSDE",
-            numero_afiliado="789123456",
-            condicion="Empleado Temporal",
-            activo=True,
-        ),
+        
 
         Empleados(
             nombre="Ana",
@@ -372,16 +374,21 @@ def JYA_create():
         fecha_ingreso=datetime.strptime("2021-6-1", "%Y-%m-%d").date(),
         sede_asignada="Sede Central",
         pelaje="Blanco",
+        raza="Percheron",
+        tipo_ja_asignado="Hipoterapia",
     )
     
     caballo_2 = Caballo(
         nombre="Spirit",
         fecha_nacimiento=datetime.strptime("2018-7-20", "%Y-%m-%d").date(),
         sexo="Macho",
+        raza="Pura Sangre",
+        pelaje="Marrón",
         tipo_ingreso="Donación",
         fecha_ingreso=datetime.strptime("2022-8-15", "%Y-%m-%d").date(),
         sede_asignada="Sede Norte",
-        pelaje="Marrón",
+        tipo_ja_asignado="Equitación",
+
     )
     db.session.add_all([caballo_1, caballo_2])
     db.session.commit()

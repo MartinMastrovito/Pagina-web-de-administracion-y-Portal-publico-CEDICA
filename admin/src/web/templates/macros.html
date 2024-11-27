@@ -36,9 +36,11 @@
                     {% endif %}
                 {% endif %}
                 {% if check_authenticated(session) %}
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="{{ url_for('consultas.menu_consultas') }}">Consultas</a>
-                </li>
+                    {% if check_permission(session, "consulta_index") %}
+                        <li class="nav-item">
+                            <a class="nav-link mx-2" href="{{ url_for('consultas.menu_consultas') }}">Consultas</a>
+                        </li>
+                    {% endif %}
                 {% endif %}
                 {% if not check_authenticated(session) %}
                 <li class="nav-item">

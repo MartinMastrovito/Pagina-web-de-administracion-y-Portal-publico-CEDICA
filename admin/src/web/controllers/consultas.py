@@ -7,6 +7,7 @@ consultas_bp = Blueprint('consultas', __name__, url_prefix='/consultas')
 
 @consultas_bp.route('/', methods=['GET'])
 @login_required
+@check("consulta_index")
 def menu_consultas():
     """
     Muestra el menú de consultas con opciones de búsqueda, ordenamiento y filtrado.
@@ -32,7 +33,7 @@ def menu_consultas():
 
 @consultas_bp.route('/<int:id>', methods=['GET'])
 @login_required
-#@check("consulta_show")
+@check("consulta_show")
 def mostrar_consulta(id):
     """
     Muestra los detalles de una consulta específica.
