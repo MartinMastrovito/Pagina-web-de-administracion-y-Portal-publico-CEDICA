@@ -37,7 +37,6 @@ def crear_caballo():
 
     if request.method == 'POST':
         try:
-            # Recoger datos del formulario
             datos_caballo = {
                 'nombre': request.form['nombre'],
                 'fecha_nacimiento': request.form['fecha_nacimiento'],
@@ -47,15 +46,13 @@ def crear_caballo():
                 'tipo_ingreso': request.form['tipo_ingreso'],
                 'fecha_ingreso': request.form['fecha_ingreso'],
                 'sede_asignada': request.form['sede_asignada'],
-                'tipo_ja_asignado': request.form.getlist('tipo_ja_asignado')  # Lista de J&A seleccionados
+                'tipo_ja_asignado': request.form.getlist('tipo_ja_asignado')
             }
-            datos_caballo['tipo_ja_asignado'] = ', '.join(datos_caballo['tipo_ja_asignado'])  # Convertir a string
+            datos_caballo['tipo_ja_asignado'] = ', '.join(datos_caballo['tipo_ja_asignado'])
 
-            # Recoger IDs de entrenadores y conductores seleccionados (pueden estar vacíos)
             entrenadores_ids = request.form.getlist('entrenadores_ids', type=int) or []
             conductores_ids = request.form.getlist('conductores_ids', type=int) or []
 
-            # Crear caballo en la base de datos
             create_caballo(
                 **datos_caballo,
                 entrenadores_ids=entrenadores_ids,
@@ -67,7 +64,6 @@ def crear_caballo():
         except Exception as e:
             flash(f'Error al registrar el caballo: {e}', 'danger')
 
-    # Obtener datos para el formulario
     entrenadores = get_empleados_by_rol('Entrenador de Caballos')
     conductores = get_empleados_by_rol('Conductor')
     return render_template(
@@ -106,7 +102,6 @@ def editar_caballo(id):
 
     if request.method == 'POST':
         try:
-            # Recoger datos del formulario
             datos_caballo = {
                 'nombre': request.form['nombre'],
                 'fecha_nacimiento': request.form['fecha_nacimiento'],
@@ -119,11 +114,9 @@ def editar_caballo(id):
                 'tipo_ja_asignado': ', '.join(request.form.getlist('tipo_ja_asignado'))
             }
 
-            # Recoger IDs de entrenadores y conductores seleccionados
             entrenadores_ids = request.form.getlist('entrenadores', type=int)
             conductores_ids = request.form.getlist('conductores', type=int)
 
-            # Actualizar caballo en la base de datos
             update_caballo(
                 id,
                 **datos_caballo,
@@ -132,11 +125,10 @@ def editar_caballo(id):
             )
 
             flash('Caballo actualizado correctamente', 'success')
-            return redirect(url_for('caballos.mostrar_caballo', id=id))
+            return redirect(url_for('caballos.menu_caballos'))
         except Exception as e:
             flash(f'Error al actualizar el caballo: {e}', 'danger')
 
-    # Obtener entrenadores y conductores para el formulario
     entrenadores = get_empleados_by_rol('Entrenador de Caballos')
     conductores = get_empleados_by_rol('Conductor')
 

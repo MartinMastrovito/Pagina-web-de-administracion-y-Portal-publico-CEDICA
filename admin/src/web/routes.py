@@ -35,7 +35,7 @@ def register(app):
             if user:
                 
                 flash('Inicio de sesión exitoso.', 'success')
-                return redirect(url_for('main.home'))  # Redirige a la página de inicio
+                return redirect(url_for('main.home'))
             else:
                 flash('Correo electrónico o contraseña incorrectos.', 'danger')
         
@@ -74,18 +74,5 @@ def register(app):
     app.register_blueprint(consulta_api_bp)
 
     app.register_blueprint(documentos_empleados_bp)
-
-    #de
-    # f pages_list():
-        
-     #   pages = [
-      #      {
-       #         "name":"home","url":url_for("home")
-        #    }
-        #]
-        
-       # return pages
-
-	
 
 	
