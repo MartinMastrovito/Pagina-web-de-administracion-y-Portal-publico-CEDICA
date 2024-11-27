@@ -14,22 +14,22 @@
         <div class="mb-3">
             <label for="nombre_completo" class="form-label">Nombre Completo:</label>
             <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-            <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="{{ consulta.nombre_completo }}" required>
+            <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="{{ consulta.nombre_completo }}" disabled required>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email:</label>
             <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-            <input type="email" class="form-control" id="email" name="email" value="{{ consulta.email }}" required>
+            <input type="email" class="form-control" id="email" name="email" value="{{ consulta.email }}" disabled required>
         </div>
         <div class="mb-3">
             <label for="fecha" class="form-label">Fecha:</label>
             <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ consulta.fecha.strftime('%Y-%m-%d') }}" required>
+            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ consulta.fecha.strftime('%Y-%m-%d') }}" disabled required>
         </div>
         <div class="mb-3">
             <label for="descripcion" class="form-label">Descripción:</label>
             <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-            <textarea class="form-control" id="descripcion" name="descripcion" rows="10" cols="50" required>{{ consulta.descripcion }}</textarea>
+            <textarea class="form-control" id="descripcion" name="descripcion" rows="10" cols="50" disabled required>{{ consulta.descripcion }}</textarea>
         </div>
         <div class="mb-3">
             <label for="estado" class="form-label">Estado:</label>

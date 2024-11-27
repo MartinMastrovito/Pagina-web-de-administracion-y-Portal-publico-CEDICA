@@ -44,7 +44,7 @@ def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=No
         query = query.filter(JYA.apellido.ilike(f"%{apellido}%"))
 
     if dni is not None:
-        query = query.filter_by(dni=str(dni))
+        query = query.filter(JYA.dni.ilike(f"%{dni}%"))
 
     if profesionales_atendiendo:
         query = query.filter(JYA.profesionales_atendiendo.ilike(f"%{profesionales_atendiendo}%"))
