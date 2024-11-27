@@ -11,12 +11,16 @@
 
 <body>
     <div class="form-floating mb-3">
-        <input class="form-control" type="text" value="{{ consulta.fecha.strftime('%Y-%m-%d') }}" aria-label="Disabled input example" disabled readonly>
-        <label for="floatingInputDisabled">Fecha</label>
-    </div>
-    <div class="form-floating mb-3">
         <input class="form-control" type="text" value="{{ consulta.nombre_completo }}" aria-label="Disabled input example" disabled readonly>
         <label for="floatingInputDisabled">Nombre</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ consulta.email }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Email</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ consulta.fecha.strftime('%Y-%m-%d') }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Fecha</label>
     </div>
     <div class="form-floating mb-3">
         <input class="form-control" type="text" value="{{ consulta.estado }}" aria-label="Disabled input example" disabled readonly>

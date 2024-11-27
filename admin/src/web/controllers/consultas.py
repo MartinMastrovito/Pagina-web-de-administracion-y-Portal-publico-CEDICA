@@ -91,10 +91,6 @@ def editar_consulta(id):
     
     if request.method == 'POST':
         datos_consulta = {
-            'nombre_completo': request.form['nombre_completo'],
-            'email': request.form['email'],
-            'fecha': request.form['fecha'],
-            'descripcion': request.form['descripcion'],
             'estado': request.form['estado']
         }
         crud_consulta.update_consulta(id, **datos_consulta)
