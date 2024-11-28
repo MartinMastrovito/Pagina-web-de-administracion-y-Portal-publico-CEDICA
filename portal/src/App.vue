@@ -1,4 +1,4 @@
-<template id="app">
+<template id="app" class="container-fluid">
     <header class="header conteiner-fluid">
       <div class="header-content">
         <h1>Centro de equitación</h1>
@@ -14,7 +14,7 @@
     <main class="container-fluid">
       <RouterView/>
     </main>
-    <footer class="footer conteiner-fluid">
+    <footer class="navbar fixed-bottom">
       <p>&copy; 2024 CEDICA. Todos los derechos reservados.</p>
     </footer>
 </template>
@@ -31,6 +31,7 @@ console.log(import.meta.env.VITE_ARTICLES_API);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  padding-bottom: 70px;
 }
 
 header {
