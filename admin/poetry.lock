@@ -110,6 +110,23 @@ tests = ["pytest (>=3.2.1,!=3.3.0)"]
 typecheck = ["mypy"]
 
 [[package]]
+name = "bleach"
+version = "6.2.0"
+description = "An easy safelist-based HTML-sanitizing tool."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "bleach-6.2.0-py3-none-any.whl", hash = "sha256:117d9c6097a7c3d22fd578fcd8d35ff1e125df6736f554da4e432fdd63f31e5e"},
+    {file = "bleach-6.2.0.tar.gz", hash = "sha256:123e894118b8a599fd80d3ec1a6d4cc7ce4e5882b1317a7e1ba69b56e95f991f"},
+]
+
+[package.dependencies]
+webencodings = "*"
+
+[package.extras]
+css = ["tinycss2 (>=1.1.0,<1.5)"]
+
+[[package]]
 name = "blinker"
 version = "1.9.0"
 description = "Fast, simple object-to-object and broadcast signaling"
@@ -524,6 +541,25 @@ files = [
 [package.dependencies]
 bcrypt = ">=3.1.1"
 Flask = "*"
+
+[[package]]
+name = "flask-ckeditor"
+version = "1.0.0"
+description = "CKEditor integration for Flask."
+optional = false
+python-versions = "*"
+files = [
+    {file = "Flask_CKEditor-1.0.0-py2.py3-none-any.whl", hash = "sha256:1a4aa871b510100df7bb8401b71cdcddfe1fd6d860649bc3760d0d43df485d72"},
+    {file = "flask_ckeditor-1.0.0.tar.gz", hash = "sha256:e1737ca180ea0d46d53226f888f4786589f2e8ed810694aaff2aa68dfad15a98"},
+]
+
+[package.dependencies]
+bleach = {version = "*", optional = true, markers = "extra == \"all\""}
+Flask = "*"
+flask-wtf = {version = "*", optional = true, markers = "extra == \"all\""}
+
+[package.extras]
+all = ["bleach", "flask-wtf"]
 
 [[package]]
 name = "flask-cors"
@@ -1613,6 +1649,17 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
+name = "webencodings"
+version = "0.5.1"
+description = "Character encoding aliases for legacy web content"
+optional = false
+python-versions = "*"
+files = [
+    {file = "webencodings-0.5.1-py2.py3-none-any.whl", hash = "sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78"},
+    {file = "webencodings-0.5.1.tar.gz", hash = "sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923"},
+]
+
+[[package]]
 name = "werkzeug"
 version = "3.1.3"
 description = "The comprehensive WSGI web application library."
@@ -1649,4 +1696,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12.3"
-content-hash = "d1d795209f8aa6c8bb49f149d9d250981fbd13f04faa5fd3648b2f263cb08c93"
+content-hash = "78f1fd81b8974c05e52537a671e7b7991c1244f22f41efb3b924dac0babd44af"

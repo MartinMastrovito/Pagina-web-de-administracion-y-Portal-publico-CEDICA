@@ -1,4 +1,5 @@
 from flask import render_template, request, Blueprint, flash, redirect
+from flask_ckeditor.utils import cleanify
 from src.core import publicacion
 from src.core.empleados import lista_empleado
 from src.core.auth.decorators import login_required, check
@@ -21,14 +22,16 @@ def index():
     """
     page = request.args.get("page", 1, type=int)
     per_page = 10
+    estado = request.args.get('estado', '', type=str)
     sort_by = request.args.get("orden", "fecha_actualizacion")
     order = request.args.get("order", "desc")
-    publicaciones = publicacion.obtener_publicaciones(sort_by, order, page, per_page)
+    publicaciones = publicacion.obtener_publicaciones(estado, sort_by, order, page, per_page)
     
     return render_template(
         "publicaciones/listar.html", 
         publicaciones=publicaciones.items,
         pagination=publicaciones,
+        estado=estado,
         sort_by=sort_by,
         order=order,
     )
@@ -64,7 +67,7 @@ def crear_publicacion():
     pub_data = {
         "titulo": request.form["titulo"],
         "copete": request.form["copete"],
-        "contenido": request.form["contenido"],
+        "contenido": cleanify(request.form.get('ckeditor')),
         "autor_id": request.form["autor_id"],
         "estado": request.form["estado"],
         "fecha_publicacion": datetime.now(timezone.utc) if request.form["estado"] == "Publicado" else None,
@@ -134,7 +137,7 @@ def actualizar_publicacion(id):
     pub_data = {
         "titulo": request.form["titulo"],
         "copete": request.form["copete"],
-        "contenido": request.form["contenido"],
+        "contenido": cleanify(request.form.get('ckeditor')),
         "autor_id": request.form["autor_id"],
         "estado": request.form["estado"],
         "fecha_publicacion": datetime.now(timezone.utc) if request.form["estado"] == "Publicado" else None,

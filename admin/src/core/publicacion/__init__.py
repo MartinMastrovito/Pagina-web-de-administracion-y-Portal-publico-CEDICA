@@ -2,7 +2,7 @@ from src.core.database import db
 from src.core.auth.models.model_publicacion import Publicacion
 from datetime import datetime
 
-def obtener_publicaciones(sort_by='fecha_actualizacion', order='desc', page=1, per_page=10):
+def obtener_publicaciones(estado=None, sort_by='fecha_actualizacion', order='desc', page=1, per_page=10):
     """
     Obtiene las publicaciones paginadas.
 
@@ -10,6 +10,7 @@ def obtener_publicaciones(sort_by='fecha_actualizacion', order='desc', page=1, p
     especificados, y las devuelve en formato paginado.
 
     Args:
+        estado (str, optional): Estado para filtrar las consultas.
         sort_by (str): Columna por la cual ordenar las publicaciones.
         order (str): Orden de la columna ('asc' para ascendente, 'desc' para descendente).
         page (int): Número de página para la paginación.
@@ -19,6 +20,9 @@ def obtener_publicaciones(sort_by='fecha_actualizacion', order='desc', page=1, p
         Pagination: Un objeto de tipo Pagination con las publicaciones de la página solicitada.
     """
     query = Publicacion.query
+
+    if estado:
+        query = query.filter(Publicacion.estado == estado)
 
     sort_columns = {
         'fecha_actualizacion': Publicacion.fecha_actualizacion,
