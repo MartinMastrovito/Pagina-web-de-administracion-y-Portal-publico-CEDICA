@@ -7,11 +7,10 @@
     <h4 class="display-4">Crear Nueva Publicación</h4>
     <a class="btn btn-secondary" href="{{ url_for('publicacion.index') }}">Volver</a>
 </header>
-
+<body>
 <section>
     <article>
         <form method="post" action="{{ url_for('publicacion.crear_publicacion') }}">
-            
             <div class="mb-3">
                 <label for="titulo" class="form-label">Título</label>
                 <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
@@ -25,9 +24,9 @@
             </div>
 
             <div class="mb-3">
-                <label for="contenido" class="form-label">Contenido</label>
+                <label for="ckeditor" class="form-label">Contenido</label>
                 <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                <textarea class="form-control" id="contenido" name="contenido" rows="10" required></textarea>
+                {{ ckeditor.create() }}
             </div>
 
             <div class="mb-3">
@@ -55,5 +54,7 @@
         </form>
     </article>
 </section>
-
+{{ ckeditor.load() }}
+{{ ckeditor.config() }}
+</body>
 {% endblock %}

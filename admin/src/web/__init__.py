@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_ckeditor import CKEditor
 from src.web import routes
 from src.web import helpers
 from src.web.storage import storage
@@ -12,6 +13,8 @@ from src.web.handlers.error import not_found_error
 from src.web.handlers.error import internal_server_error
 from src.web.handlers.auth import check_permission, check_authenticated
 from src.web.autenticacion_google import oauth
+
+ckeditor = CKEditor()
 
 def create_app(env="development", static_folder=''):
     app = Flask(__name__, template_folder='../web/templates', static_folder='../../static/')
@@ -27,6 +30,9 @@ def create_app(env="development", static_folder=''):
     
     # oAuth Setup
     oauth.init_app(app)
+    
+    # ckeditor Setup
+    ckeditor.init_app(app)
 
     # Inicializar la base de datos y migraciones
     init_app(app)

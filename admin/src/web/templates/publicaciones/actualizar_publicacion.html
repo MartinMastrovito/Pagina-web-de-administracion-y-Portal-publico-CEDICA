@@ -7,7 +7,7 @@
     <h4 class="display-4">Actualizar publicación</h4>
     <a class="btn btn-secondary" href="{{ url_for('publicacion.index') }}">Volver</a>
 </header>
-
+<body>
 <section>
     <article>
         <form method="post" action="{{ url_for('publicacion.actualizar_publicacion', id=publicacion.id) }}">
@@ -27,7 +27,7 @@
             <div class="mb-3">
                 <label for="contenido" class="form-label">Contenido</label>
                 <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-                <textarea class="form-control" id="contenido" name="contenido" rows="10" required>{{ publicacion.contenido }}</textarea>
+                {{ ckeditor.create(value=publicacion.contenido) }}
             </div>
 
             <div class="mb-3">
@@ -57,5 +57,7 @@
         </form>
     </article>
 </section>
-
+</body>
+{{ ckeditor.load() }}
+{{ ckeditor.config() }}
 {% endblock %}
