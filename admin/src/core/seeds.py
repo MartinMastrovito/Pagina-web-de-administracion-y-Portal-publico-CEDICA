@@ -314,7 +314,7 @@ def employee_create():
             profesion="ingeniera civil",
             puesto="Gerente de Proyectos",
             fecha_inicio="2019-07-01",
-            fecha_cese="2023-02-28",
+            fecha_cese=None,
             contacto_emergencia="+5491134567890",
             obra_social="Medicus",
             numero_afiliado="456789123",
