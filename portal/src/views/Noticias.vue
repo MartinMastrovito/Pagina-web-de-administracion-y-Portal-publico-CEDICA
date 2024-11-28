@@ -36,41 +36,52 @@
 <template>
   <main>
     <form @submit.prevent="fetchArticles">
-      <label for="titulo">Título:</label>
-      <input
-        type="text"
-        id="titulo"
-        v-model="titulo"
-        placeholder="Buscar por título"
-      />
-      <label for="desde">Desde:</label>
-      <input
-        type="date"
-        id="desde"
-        v-model="desde"
-        placeholder="Buscar por fecha"
-      />
-      <label for="hasta">Hasta:</label>
-      <input
-        type="date"
-        id="hasta"
-        v-model="hasta"
-        placeholder="Buscar por fecha"
-      />
-      <button type="submit">Buscar</button>
+      <div class="row">
+          <div class="col">
+            <label for="titulo">Título:</label>
+            <input
+              type="text"
+              id="titulo"
+              v-model="titulo"
+              placeholder="Buscar por título"
+            />
+          </div>
+          <div class="col">
+            <label for="desde">Desde:</label>
+            <input
+              type="date"
+              id="desde"
+              v-model="desde"
+              placeholder="Buscar por fecha"
+            />
+          </div>
+          <div class=col>
+            <label for="hasta">Hasta:</label>
+            <input
+              type="date"
+              id="hasta"
+              v-model="hasta"
+              placeholder="Buscar por fecha"
+            />
+          </div>
+          <div class=col>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+          </div>
+      </div>
     </form>
     <articlesList
       :articles="articles"
       :pages="pages" 
     />
+    <br>
     <nav>
       <div v-for="page in pages">
         <a v-if="page != route.params.page"
-          class="btn" 
+          class="btn btn-primary" 
           :href="`/noticias/${page}`">   
             {{ page }}
         </a>
-        <p v-else style="color: black;">{{ page }}</p>
+        <p v-else style="color: black;" class="btn btn-secondary disabled">{{ page }}</p>
     </div>
     </nav>
   </main>
