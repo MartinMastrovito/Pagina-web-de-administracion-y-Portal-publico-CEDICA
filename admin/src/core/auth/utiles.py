@@ -76,7 +76,7 @@ def search_users(email=None, enabled=None, role_id=None, sort_by='email', order=
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
-def search_unaccepted_users(email=None, order='asc', page=1, per_page=25):
+def search_unaccepted_users(email=None, order='asc', page=1, per_page=10):
     """
     Busca usuarios no aceptados en la base de datos aplicando varios filtros.
 
