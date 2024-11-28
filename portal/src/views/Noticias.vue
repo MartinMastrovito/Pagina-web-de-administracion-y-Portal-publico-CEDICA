@@ -73,14 +73,15 @@
       :articles="articles"
       :pages="pages" 
     />
+    <br>
     <nav>
       <div v-for="page in pages">
         <a v-if="page != route.params.page"
-          class="btn" 
+          class="btn btn-primary" 
           :href="`/noticias/${page}`">   
             {{ page }}
         </a>
-        <p v-else style="color: black;">{{ page }}</p>
+        <p v-else style="color: black;" class="btn btn-secondary disabled">{{ page }}</p>
     </div>
     </nav>
   </main>
