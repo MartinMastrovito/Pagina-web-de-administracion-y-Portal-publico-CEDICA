@@ -96,7 +96,14 @@
                     <ul class="pagination justify-content-center flex-wrap">
                         {% if pagination.has_prev %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ url_for('consultas.menu_consultas', page=pagination.prev_num) }}"><span aria-hidden="true">&laquo;</span>Anterior</a>
+                            <a class="page-link" href="{{ url_for('consultas.menu_consultas', 
+                                                                  page=pagination.prev_num, 
+                                                                  nombre_completo=request.args.get('nombre_completo', ''), 
+                                                                  estado=request.args.get('estado', ''), 
+                                                                  orden=request.args.get('orden', 'fecha'), 
+                                                                  direction=request.args.get('direction', 'asc')) }}">
+                                <span aria-hidden="true">&laquo;</span> Anterior
+                            </a>
                         </li>
                         {% endif %}
                         <li class="page-item disabled">
@@ -104,7 +111,14 @@
                         </li>
                         {% if pagination.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ url_for('consultas.menu_consultas', page=pagination.next_num) }}">Siguiente<span aria-hidden="true">&raquo;</span></a>
+                            <a class="page-link" href="{{ url_for('consultas.menu_consultas', 
+                                                                  page=pagination.next_num, 
+                                                                  nombre_completo=request.args.get('nombre_completo', ''), 
+                                                                  estado=request.args.get('estado', ''), 
+                                                                  orden=request.args.get('orden', 'fecha'), 
+                                                                  direction=request.args.get('direction', 'asc')) }}">
+                                Siguiente <span aria-hidden="true">&raquo;</span>
+                            </a>
                         </li>
                         {% endif %}
                     </ul>
