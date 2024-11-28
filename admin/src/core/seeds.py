@@ -17,6 +17,7 @@ def role_create():
         {"name": "ecuestre"},
         {"name": "voluntariado"},
         {"name": "administracion"},
+        {"name": "editor"},
         {"name": "sysadmin"}
     ]
 
@@ -164,24 +165,41 @@ def administracion_rol_create():
     db.session.add_all(administration_permissions)
     db.session.commit()
 
+def editor_rol_create():
+    editor_id = Role.query.filter(Role.name == "editor").first().id
+    permissions = Permission.query.filter(
+        db.or_(
+            Permission.name == "publicacion_index",
+            Permission.name == "publicacion_new",
+            Permission.name == "publicacion_update",
+            Permission.name == "publicacion_show",
+            
+        )
+    )
+    editor_permissions = []
+    for permission in permissions:
+        editor_permissions.append(
+            RolePermission(role_id=editor_id, permission_id=permission.id)
+        )
+    db.session.add_all(editor_permissions)
+    db.session.commit()
 
 def sysadmin_rol_create():
     permissions = Permission.query.all()
     sysadmin_permissions = []
     for permission in permissions:
         sysadmin_permissions.append(
-            RolePermission(role_id=5, permission_id=permission.id)
+            RolePermission(role_id=6, permission_id=permission.id)
         )
     db.session.add_all(sysadmin_permissions)
     db.session.commit()
-
 
 def rolePermission_create():
     sysadmin_rol_create()
     administracion_rol_create()
     ecuestre_rol_create()
     tecnica_rol_create()
-
+    editor_rol_create()
 
 def user_create():
     list_user = [
