@@ -5,6 +5,7 @@ from src.core.auth.models.model_empleado import Empleados
 from src.core.auth.models.model_caballos import Caballo
 from src.core.auth.models.model_JYAEmpleado import JYAEmpleado
 from sqlalchemy import or_
+from flask import current_app
 
 def list_users():
     """
@@ -17,7 +18,7 @@ def list_users():
     return jya
 
 def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=None, 
-               sort_by='nombre', order='asc', page=1, per_page=25):
+               sort_by='nombre', order='asc', page=1, per_page=10):
     """
     Busca JYA con filtros y devuelve una paginación de resultados.
 
@@ -43,7 +44,7 @@ def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=No
         query = query.filter(JYA.apellido.ilike(f"%{apellido}%"))
 
     if dni is not None:
-        query = query.filter_by(dni=str(dni))
+        query = query.filter(JYA.dni.ilike(f"%{dni}%"))
 
     if profesionales_atendiendo:
         query = query.filter(JYA.profesionales_atendiendo.ilike(f"%{profesionales_atendiendo}%"))
@@ -61,7 +62,7 @@ def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=No
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
-def create_jya(**kwargs):
+def create_jya(caballo_id, **kwargs):
     """
     Crea un nuevo JYA en la base de datos.
 
@@ -76,6 +77,11 @@ def create_jya(**kwargs):
         return None
 
     jya = JYA(**kwargs)
+    
+    caballo = Caballo.query.get(caballo_id)
+    jya.caballo = caballo
+    jya.caballo_id = caballo_id
+
     db.session.add(jya)
     db.session.commit()
 
@@ -142,17 +148,30 @@ def update_document(document_id, **kwargs):
 
 def delete_jya(jya_dni):
     """
-    Elimina un JYA de la base de datos.
+    Elimina un JYA y todos sus documentos del almacenamiento y la base de datos.
 
     Args:
         jya_dni: DNI del JYA a eliminar.
     """
+
     jya = get_jya_by_dni(jya_dni)
+
+    if not jya:
+        raise ValueError("El JYA especificado no existe.")
+
+    documentos = get_documents_by_jya_dni(jya.dni)
+
+    client = current_app.storage.client
+    for documento in documentos:
+            client.remove_object("grupo30", documento.nombre_documento)
+
+            delete_document(documento.id)
 
     db.session.query(JYAEmpleado).filter_by(jya_id=jya.id).delete(synchronize_session=False)
 
     db.session.delete(jya)
     db.session.commit()
+
     
 def delete_document(document_id):
     """
@@ -163,6 +182,20 @@ def delete_document(document_id):
     """
     db.session.query(Documento).filter(Documento.id == str(document_id)).delete()
     db.session.commit()
+    
+def get_documents_by_jya_dni(jya_dni):
+    """
+    Recupera todos los documentos asociados a un JYA específico.
+
+    Args:
+        jya_id: ID del JYA cuyos documentos se desean recuperar.
+
+    Returns:
+        Una lista de objetos Documento asociados al JYA.
+    """
+    documentos = db.session.query(Documento).filter_by(jya_dni=jya_dni).all()
+    return documentos
+
     
 def get_jya_by_dni(dni):
     """
@@ -288,3 +321,55 @@ def get_caballos():
     """
     caballos = Caballo.query.all()
     return caballos
+
+def get_jyaempleados_id(jya):
+    """
+    Obtiene los empleados asignados a un JYA y los clasifica por rol.
+
+    Args:
+        jya : el JYA para el cual se desean obtener los empleados asignados.
+
+    Returns:
+        dict: Un diccionario con los roles como claves ('profesor', 'terapeuta', 
+              'conductor', 'auxiliar') y los valores correspondientes a los 
+              IDs de los empleados asignados a cada rol.
+    """
+    jya_empleados = db.session.query(JYAEmpleado).filter(JYAEmpleado.jya_id == jya.id).all()
+    
+    empleados_por_rol = {
+        'profesor': None,
+        'terapeuta': None,
+        'conductor': None,
+        'auxiliar': None
+    }
+
+    for jya_empleado in jya_empleados:
+        empleados_por_rol[jya_empleado.rol] = jya_empleado.empleado_id
+        
+    return empleados_por_rol
+
+def get_jyaempleados(jya):
+    """
+    Obtiene los empleados asignados a un JYA y los clasifica por rol.
+
+    Args:
+        jya : el JYA para el cual se desean obtener los empleados asignados.
+
+    Returns:
+        dict: Un diccionario con los roles como claves ('profesor', 'terapeuta', 
+              'conductor', 'auxiliar') y JYAEmpleado correspondientes a los 
+              IDs de los empleados asignados a cada rol.
+    """
+    jya_empleados = db.session.query(JYAEmpleado).filter(JYAEmpleado.jya_id == jya.id).all()
+    
+    empleados_por_rol = {
+        'profesor': None,
+        'terapeuta': None,
+        'conductor': None,
+        'auxiliar': None
+    }
+
+    for jya_empleado in jya_empleados:
+        empleados_por_rol[jya_empleado.rol] = jya_empleado
+        
+    return empleados_por_rol

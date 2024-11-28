@@ -1,39 +1,35 @@
 {% extends "layout.html" %}
 
-<!DOCTYPE html>
-<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>{% block title %}Editar Documento de J&A{% endblock %}</title>
 </head>
 <body>
     {% block content %}
-    <header>
-        <h1>Editar Documento</h1>
+    <header class="text-center my-4">
+        <h1>Actualizar Documento para {{ jya.nombre }} {{ jya.apellido }}</h1>
     </header>
 
-    <section>
-        <form action="{{ url_for('documentos.update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" method="POST" enctype="multipart/form-data">
+    <section class="container">
+        <form action="{{ url_for('documentos.update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" method="POST" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
             <div class="form-group">
-                <label for="tipo">Tipo de documento:</label>
+                <label for="tipo" class="form-label">Tipo de documento:</label>
                 <select class="form-control" id="tipo" name="tipo" required>
-                    <option value="" disabled selected>Seleccione una opción</option>
-                    <option value="entrevista" {% if documento.tipo == 'entrevista' %}selected{% endif %}>Entrevista</option>
-                    <option value="evaluacion" {% if documento.tipo == 'evaluacion' %}selected{% endif %}>Evaluación</option>
-                    <option value="planificaciones" {% if documento.tipo == 'planificaciones' %}selected{% endif %}>Planificaciones</option>
-                    <option value="evolucion" {% if documento.tipo == 'evolucion' %}selected{% endif %}>Evolución</option>
-                    <option value="cronicas" {% if documento.tipo == 'cronicas' %}selected{% endif %}>Crónicas</option>
-                    <option value="documental" {% if documento.tipo == 'documental' %}selected{% endif %}>Documental</option>
+                    <option value="entrevista" {% if documento.tipo_documento == 'entrevista' %}selected{% endif %}>Entrevista</option>
+                    <option value="evaluacion" {% if documento.tipo_documento == 'evaluacion' %}selected{% endif %}>Evaluación</option>
+                    <option value="planificaciones" {% if documento.tipo_documento == 'planificaciones' %}selected{% endif %}>Planificaciones</option>
+                    <option value="evolucion" {% if documento.tipo_documento == 'evolucion' %}selected{% endif %}>Evolución</option>
+                    <option value="cronicas" {% if documento.tipo_documento == 'cronicas' %}selected{% endif %}>Crónicas</option>
+                    <option value="documental" {% if documento.tipo_documento == 'documental' %}selected{% endif %}>Documental</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="documento">Selecciona el documento a subir:</label>
                 <input type="file" name="documento" id="documento" class="form-control-file" required>
             </div>
-            <button type="submit" class="btn btn-primary">Actualizar Documento</button>
-            <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
+            <div class="d-flex flex-wrap gap-3 justify-content-between mt-4">
+                <button type="submit" class="btn btn-primary flex-grow-1">Actualizar Documento</button>
+                <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-secondary flex-grow-1">Volver</a>
+            </div>
         </form>        
     </section>
     

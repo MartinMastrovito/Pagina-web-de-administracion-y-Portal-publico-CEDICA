@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %}Detalles del empleado{% endblock %}
+
+{% block content %}
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <h4 class="display-4">Detalles del empleado</h4>
+    <a class="btn btn-secondary" href="{{ url_for('empleados.index') }}">Volver</a>
+</header>
+<body>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.nombre }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Nombre</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.apellido }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Apellido</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.dni }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">DNI</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.domicilio }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Domicilio</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.email }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Email</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.localidad }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Localidad</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.telefono }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Teléfono</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.profesion }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Profesión</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.puesto }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Puesto</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.fecha_inicio }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Fecha de inicio</label>
+    </div>
+    {% if empleado.fecha_cese %}
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.fecha_cese }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Fecha de cese</label>
+    </div>
+    {% endif %}
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.contacto_emergencia }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Contacto emergencia</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.obra_social }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Obra social</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.numero_afiliado }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Numero afiliado</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.condicion }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Condición</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.activo }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Activo</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ empleado.created_at.strftime('%Y-%m-%d') }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Creado en</label>
+    </div>
+    <div class="mt-4">
+        <a href="{{ url_for('documentos_empleado.index', empleado_dni=empleado.dni) }}" class="btn btn-primary">Documentos Adjuntos</a>
+    </div>
+</body>
+
+{% endblock %}

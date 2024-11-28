@@ -121,7 +121,7 @@ def index():
     sort_by = request.args.get('sort_by', 'email')
     order = request.args.get('order', 'asc')
     page = request.args.get('page', 1, type=int)
-    per_page = 25
+    per_page = 10
 
     unaccepted_users = utiles.unaccepted_users()
 
@@ -148,7 +148,7 @@ def index():
 
 @bp.get("/unaccepted")
 @login_required
-@check("user_index")
+@check("user_accept")
 def index_unaccepted():
     """
     Muestra la lista de usuarios no aceptados con paginación y filtrado.
@@ -159,7 +159,7 @@ def index_unaccepted():
     email = request.args.get('email')
     order = request.args.get('order', 'asc')
     page = request.args.get('page', 1, type=int)
-    per_page = 25
+    per_page = 10
 
     users_pagination = utiles.search_unaccepted_users(
         email=email,
@@ -218,7 +218,7 @@ def create_user():
 
 @bp.get("/accept/<int:user_id>")
 @login_required
-@check("user_update")
+@check("user_accept")
 def show_user_accept(user_id):
     """
     Muestra el formulario para aceptar a un usuario.
@@ -234,7 +234,7 @@ def show_user_accept(user_id):
 
 @bp.post("/accept/<int:user_id>")
 @login_required
-@check("user_update")
+@check("user_accept")
 def user_accept(user_id):
     role_id = request.form['role_id']
     utiles.accept_user(user_id, role_id)
@@ -330,7 +330,7 @@ def block(user_id):
         flash("Usuario bloqueado exitosamente.")
     else:
         flash("No se puede bloquear a un System Admin.")
-    return redirect(url_for("users.index"))
+    return redirect("/usuarios")
 
 
 @bp.post("/unblock/<int:user_id>")

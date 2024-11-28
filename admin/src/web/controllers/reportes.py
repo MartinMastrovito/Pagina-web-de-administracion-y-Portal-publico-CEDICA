@@ -1,11 +1,11 @@
-from flask import render_template, request, Blueprint
-from src.core import reportes
-from src.core.invoices.utiles import filtrar_cobros, get_empleados_con_cobros
-from src.core.auth.decorators import login_required, check
-import matplotlib.pyplot as plt
+from datetime import date
 import io
 import base64
-from datetime import date
+import matplotlib.pyplot as plt
+from flask import render_template, request, Blueprint
+from src.core.auth.decorators import login_required, check
+from src.core import reportes
+from src.core.invoices.utiles import filtrar_cobros, get_empleados_con_cobros
 
 bp = Blueprint("reportes", __name__, url_prefix="/reportes")
 
@@ -138,7 +138,7 @@ def grafico_tipo_discapacidad():
     """
     tipos_discapacidad = reportes.tipo_discapacidad()
     tipos_discapacidad = [tipo for tipo in tipos_discapacidad if tipo[0] is not None]
-
+    
     if not tipos_discapacidad:
         plt.figure(figsize=(10, 6))
         plt.bar(["No hay datos"], [1], color=['#D3D3D3'])
@@ -147,7 +147,7 @@ def grafico_tipo_discapacidad():
         plt.title('Distribución de Tipos de Discapacidad en JYA')
         plt.grid(axis='y', linestyle='--', alpha=0.7)
         plt.tight_layout()
-
+        
         img = io.BytesIO()
         plt.savefig(img, format='png', bbox_inches='tight')
         img.seek(0)

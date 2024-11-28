@@ -7,12 +7,14 @@ from src.web.controllers.gestion_jya.jya_enlaces import bp as jya_enlaces_bp
 from src.web.controllers.gestion_caballo.caballos import caballos_bp
 from src.web.controllers.gestion_caballo.caballo_archivos import caballos_documentos_bp as caballo_documentos_bp
 from src.web.controllers.gestion_caballo.caballo_enlaces import bp as caballo_enlaces_bp
-from src.web.controllers.pagos import pago_bp
-from src.web.controllers.empleados import empleados_bp
+from src.web.controllers.pagos import pagos_bp
+from src.web.controllers.gestion_empleado.empleados import bp as empleados_bp
+from src.web.controllers.gestion_empleado.empleado_archivos import bp as documentos_empleados_bp
 from src.web.controllers.consultas import consultas_bp
 from src.web.controllers.reportes import bp as reportes_bp
 from src.web.controllers.publicacion import bp as publicacion_bp
 from src.web.api.articles import bp as articles_api_bp
+from src.web.api.consulta import consulta_api_bp
 def register(app):
     # Crear un Blueprint para las rutas
     main = Blueprint('main', __name__)
@@ -33,7 +35,7 @@ def register(app):
             if user:
                 
                 flash('Inicio de sesión exitoso.', 'success')
-                return redirect(url_for('main.home'))  # Redirige a la página de inicio
+                return redirect(url_for('main.home'))
             else:
                 flash('Correo electrónico o contraseña incorrectos.', 'danger')
         
@@ -57,7 +59,7 @@ def register(app):
     
     app.register_blueprint(caballo_enlaces_bp) 
 
-    app.register_blueprint(pago_bp) 
+    app.register_blueprint(pagos_bp) 
 
     app.register_blueprint(empleados_bp)
 
@@ -69,17 +71,8 @@ def register(app):
 
     app.register_blueprint(articles_api_bp)
 
-    #de
-    # f pages_list():
-        
-     #   pages = [
-      #      {
-       #         "name":"home","url":url_for("home")
-        #    }
-        #]
-        
-       # return pages
+    app.register_blueprint(consulta_api_bp)
 
-	
+    app.register_blueprint(documentos_empleados_bp)
 
 	

@@ -1,16 +1,18 @@
 {% extends "layout.html" %}
 
-<!DOCTYPE html>
 <title>{% block title %}Lista de Usuarios{% endblock %}</title>
 
 <body>
     {% block content %}
-<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
-    <h4 class="display-4">Usuarios registrados</h4>
-    {% if unaccepted_users %}
-    <a class="btn btn-danger" href="{{ url_for('users.index_unaccepted') }}">Aceptar usuarios</a>
-    {% endif %}
-    <a class="btn btn-secondary" href="{{ url_for('users.show_home') }}">Volver</a>
+<header class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 mb-3">
+    <h4 class="display-6 text-center text-md-start">Usuarios registrados</h4>
+    <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+        <a href="{{ url_for('users.create_user') }}" class="btn btn-primary">Crear nuevo usuario</a>
+        {% if unaccepted_users %}
+        <a class="btn btn-danger mb-2 mb-md-0" href="{{ url_for('users.index_unaccepted') }}">Aceptar usuarios</a>
+        {% endif %}
+        <a class="btn btn-secondary" href="{{ url_for('users.show_home') }}">Volver</a>
+    </div>
 </header>
 
 <div class="modal fade" id="blockModal" tabindex="-1" aria-labelledby="blockModalLabel" aria-hidden="true">
@@ -54,47 +56,49 @@
 </div>
   
 
-    <section>
-        <article>
-            <form method="get" action="{{ url_for('users.index') }}" class="mt-4 mb-4">
-                <div class="row align-items-end">
-                    <div class="col-md-4">
-                        <label for="email">Email</label>
-                        <input type="text" id="email" name="email" class="form-control mt-2" placeholder="Email" aria-label="Email" value="{{ request.args.get('email', '') }}">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="enabled">Activo</label>
-                        <select id="enabled" name="enabled" class="form-control mt-2" aria-label="Activo">
-                            <option value="">Todos</option>
-                            <option value="si" {% if request.args.get('enabled') == 'si' %}selected{% endif %}>Sí</option>
-                            <option value="no" {% if request.args.get('enabled') == 'no' %}selected{% endif %}>No</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="role_id">Rol</label>
-                        <select id="role_id" name="role_id" class="form-control mt-2" aria-label="Rol">
-                            <option value="">Todos</option>
-                            <option value="1" {% if request.args.get('role_id') == '1' %}selected{% endif %}>Técnica</option>
-                            <option value="2" {% if request.args.get('role_id') == '2' %}selected{% endif %}>Ecuestre</option>
-                            <option value="3" {% if request.args.get('role_id') == '3' %}selected{% endif %}>Voluntariado</option>
-                            <option value="4" {% if request.args.get('role_id') == '4' %}selected{% endif %}>Administración</option>
-                            <option value="5" {% if request.args.get('role_id') == '5' %}selected{% endif %}>Sysadmin</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 text-right">
-                        <button type="submit" class="btn btn-primary mt-4">Buscar</button>
-                    </div>
+<section>
+    <article>
+        <form method="get" action="{{ url_for('users.index') }}" class="mt-4 mb-4">
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" id="email" name="email" class="form-control" placeholder="Email" aria-label="Email" value="{{ request.args.get('email', '') }}">
                 </div>
-            </form>                      
-
+                <div class="col-6 col-md-3">
+                    <label for="enabled" class="form-label">Activo</label>
+                    <select id="enabled" name="enabled" class="form-control" aria-label="Activo">
+                        <option value="">Todos</option>
+                        <option value="si" {% if request.args.get('enabled') == 'si' %}selected{% endif %}>Sí</option>
+                        <option value="no" {% if request.args.get('enabled') == 'no' %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-3">
+                    <label for="role_id" class="form-label">Rol</label>
+                    <select id="role_id" name="role_id" class="form-control" aria-label="Rol">
+                        <option value="">Todos</option>
+                        <option value="1" {% if request.args.get('role_id') == '1' %}selected{% endif %}>Técnica</option>
+                        <option value="2" {% if request.args.get('role_id') == '2' %}selected{% endif %}>Ecuestre</option>
+                        <option value="3" {% if request.args.get('role_id') == '3' %}selected{% endif %}>Voluntariado</option>
+                        <option value="4" {% if request.args.get('role_id') == '4' %}selected{% endif %}>Administración</option>
+                        <option value="5" {% if request.args.get('role_id') == '5' %}selected{% endif %}>Editor</option>
+                        <option value="6" {% if request.args.get('role_id') == '6' %}selected{% endif %}>Sysadmin</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary mt-md-4 w-100">Buscar</button>
+                </div>
+            </div>
+        </form>
+        <div class="table-responsive">
             <table class="table table-striped mt-4">
                 <thead class="thead-dark">
                     <tr>
                         <th>
                             <a href="{{ url_for('users.index', sort_by='email', order='asc' if request.args.get('order') == 'desc' else 'desc', 
-                                email=request.args.get('email', ''), 
-                                enabled=request.args.get('enabled', ''), 
-                                role_id=request.args.get('role_id', '')) }}">
+                                                 email=request.args.get('email', ''), 
+                                                 enabled=request.args.get('enabled', ''), 
+                                                 role_id=request.args.get('role_id', ''), 
+                                                 page=request.args.get('page', 1)) }}">
                                 Email
                                 {% if request.args.get('sort_by') == 'email' %}
                                     {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
@@ -106,9 +110,10 @@
                         <th>Rol</th>
                         <th>
                             <a href="{{ url_for('users.index', sort_by='created_at', order='asc' if request.args.get('order') == 'desc' else 'desc', 
-                                email=request.args.get('email', ''), 
-                                enabled=request.args.get('enabled', ''), 
-                                role_id=request.args.get('role_id', '')) }}">
+                                                 email=request.args.get('email', ''), 
+                                                 enabled=request.args.get('enabled', ''), 
+                                                 role_id=request.args.get('role_id', ''), 
+                                                 page=request.args.get('page', 1)) }}">
                                 Fecha de creación
                                 {% if request.args.get('sort_by') == 'created_at' %}
                                     {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
@@ -125,10 +130,10 @@
                         <td>{{ user.alias }}</td>
                         <td>{{ 'Sí' if user.enabled else 'No' }}</td>
                         <td>{{ user.role.name }}</td>
-                        <td>{{ user.created_at.strftime('%Y-%m-%d') if user.created_at else 'No disponible' }}</td>
+                        <td>{{ user.created_at.strftime('%d/%m/%Y') if user.created_at else 'No disponible' }}</td>
                         <td>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Menú
                                 </button>
                                 <ul class="dropdown-menu">
@@ -137,56 +142,55 @@
                                     {% else %}
                                         <li>
                                             <form method="POST" action="{{ url_for('users.unblock', user_id=user.id) }}" style="display:inline;">
-                                                <button type="submit" class="dropdown-item btn btn-success">Desbloquear</button>
+                                                <button type="submit" class="dropdown-item">Desbloquear</button>
                                             </form>
                                         </li>
                                     {% endif %}
                                     <li><a class="dropdown-item" href="{{ url_for('users.user_update', user_id=user.id) }}">Editar</a></li>
                                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ url_for('users.user_delete', user_id=user.id) }}">Eliminar</a></li>
                                 </ul>
-                            </div>                            
-                        </td>                        
+                            </div>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
-            </table>                     
-            
-            <nav aria-label="Page navigation example" class="mt-4">
-                <ul class="pagination">
-                    {% if pagination.has_prev %}
-                    <li class="page-item">
-                        <a class="page-link" href="{{ url_for('users.index', page=pagination.prev_num, 
-                            email=request.args.get('email', ''), 
-                            enabled=request.args.get('enabled', ''), 
-                            role_id=request.args.get('role_id', ''), 
-                            sort_by=request.args.get('sort_by', ''), 
-                            order=request.args.get('order', '')) }}" aria-label="Previous">Anterior
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    {% endif %}
-                    <li class="page-item disabled"><span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span></li>
-                    {% if pagination.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="{{ url_for('users.index', page=pagination.next_num, 
-                            email=request.args.get('email', ''), 
-                            enabled=request.args.get('enabled', ''), 
-                            role_id=request.args.get('role_id', ''), 
-                            sort_by=request.args.get('sort_by', ''), 
-                            order=request.args.get('order', '')) }}" aria-label="Next">Siguiente
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>            
-
-            <div class="text-right mt-4">
-                <a href="{{ url_for('users.create_user') }}" class="btn btn-primary">Crear nuevo usuario</a>
-            </div>            
-
-        </article>
-    </section>
+            </table>
+        </div>
+        <nav aria-label="Page navigation example" class="mt-4">
+            <ul class="pagination justify-content-center flex-wrap">
+                {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('users.index', 
+                                                          page=pagination.prev_num, 
+                                                          email=request.args.get('email', ''), 
+                                                          enabled=request.args.get('enabled', ''), 
+                                                          role_id=request.args.get('role_id', ''), 
+                                                          sort_by=request.args.get('sort_by', ''), 
+                                                          order=request.args.get('order', '')) }}">
+                        Anterior
+                    </a>
+                </li>
+                {% endif %}
+                <li class="page-item disabled">
+                    <span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span>
+                </li>
+                {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('users.index', 
+                                                          page=pagination.next_num, 
+                                                          email=request.args.get('email', ''), 
+                                                          enabled=request.args.get('enabled', ''), 
+                                                          role_id=request.args.get('role_id', ''), 
+                                                          sort_by=request.args.get('sort_by', ''), 
+                                                          order=request.args.get('order', '')) }}">
+                        Siguiente
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>        
+    </article>
+</section>
 </body>
 </html>
 

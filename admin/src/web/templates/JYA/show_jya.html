@@ -1,145 +1,293 @@
 {% extends "layout.html" %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}Detalles de JYA{% endblock %}</title>
-</head>
-<body>
-    {% block content %}
-    <header>
-        <h1>Detalles del JYA</h1>
-    </header>
+{% block title %}Detalles del JYA{% endblock %}
 
-    <section>
-        <article>
-            <h2>Información Personal</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Nombre:</strong> {{ jya.nombre }}</li>
-                <li class="list-group-item"><strong>Apellido:</strong> {{ jya.apellido }}</li>
-                <li class="list-group-item"><strong>DNI:</strong> {{ jya.dni }}</li>
-                <li class="list-group-item"><strong>Edad:</strong> {{ jya.edad }}</li>
-                <li class="list-group-item"><strong>Fecha de Nacimiento:</strong> {{ jya.fecha_nacimiento }}</li>
-            </ul>
+{% block content %}
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <h4 class="display-4">Detalles del JYA</h4>
+    <a class="btn btn-secondary" href="{{ url_for('crud_JyA.index') }}">Volver</a>
+</header>
 
-            <h2 class="mt-4">Lugar de Nacimiento</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Localidad:</strong> {{ jya.lugar_nacimiento.localidad }}</li>
-                <li class="list-group-item"><strong>Provincia:</strong> {{ jya.lugar_nacimiento.provincia }}</li>
-            </ul>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.nombre }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Nombre</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.apellido }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Apellido</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.dni }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">DNI</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.edad }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Edad</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.fecha_nacimiento }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Fecha de Nacimiento</label>
+</div>
 
-            <h2 class="mt-4">Domicilio Actual</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Calle:</strong> {{ jya.domicilio_actual.calle }}</li>
-                <li class="list-group-item"><strong>Número:</strong> {{ jya.domicilio_actual.numero }}</li>
-                <li class="list-group-item"><strong>Departamento:</strong> {{ jya.domicilio_actual.departamento }}</li>
-                <li class="list-group-item"><strong>Localidad:</strong> {{ jya.domicilio_actual.localidad }}</li>
-                <li class="list-group-item"><strong>Provincia:</strong> {{ jya.domicilio_actual.provincia }}</li>
-            </ul>
+<h5 class="mt-4">Lugar de Nacimiento</h5>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.lugar_nacimiento.localidad }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Localidad</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.lugar_nacimiento.provincia }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Provincia</label>
+</div>
 
-            <h2 class="mt-4">Teléfono Actual</h2>
-            <p>{{ jya.telefono_actual }}</p>
+<h5 class="mt-4">Domicilio Actual</h5>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.domicilio_actual.calle }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Calle</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.domicilio_actual.numero }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Número</label>
+</div>
+{% if jya.domicilio_actual.departamento %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.domicilio_actual.departamento }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Departamento</label>
+</div>
+{% endif %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.domicilio_actual.localidad }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Localidad</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.domicilio_actual.provincia }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Provincia</label>
+</div>
 
-            <h2 class="mt-4">Contacto de Emergencia</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Nombre:</strong> {{ jya.contacto_emergencia.nombre }}</li>
-                <li class="list-group-item"><strong>Teléfono:</strong> {{ jya.contacto_emergencia.telefono }}</li>
-            </ul>
+<h5 class="mt-4">Contacto de Emergencia</h5>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.contacto_emergencia.nombre }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Nombre</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.contacto_emergencia.telefono }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Teléfono</label>
+</div>
 
-            <h2 class="mt-4">Estado de Beca</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Becado:</strong> {{ 'Sí' if jya.becado else 'No' }}</li>
-                <li class="list-group-item"><strong>Porcentaje de Beca:</strong> {{ jya.porcentaje_beca }}</li>
-            </ul>
-
-            <h2 class="mt-4">Profesionales que lo Atienden</h2>
-            <p>{{ jya.profesionales_atendiendo }}</p>
-
-            <h2 class="mt-4">Discapacidad</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Certificado de Discapacidad:</strong> {{ 'Sí' if jya.certificado_discapacidad else 'No' }}</li>
-                <li class="list-group-item"><strong>Diagnóstico:</strong> {{ jya.diagnostico_discapacidad }}</li>
-                <li class="list-group-item"><strong>Tipo de Discapacidad:</strong> {{ jya.tipo_discapacidad }}</li>
-            </ul>
-
-            <h2 class="mt-4">Asignaciones Familiares</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Asignación Familiar:</strong> {{ 'Sí' if jya.asignacion_familiar else 'No' }}</li>
-                <li class="list-group-item"><strong>Tipo de Asignación:</strong> {{ jya.tipo_asignacion }}</li>
-            </ul>
-
-            <h2 class="mt-4">Pensión</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Pensión:</strong> {{ 'Sí' if jya.pension else 'No' }}</li>
-                <li class="list-group-item"><strong>Tipo de Pensión:</strong> {{ jya.tipo_pension }}</li>
-            </ul>
-
-            <h2 class="mt-4">Situación Previsional</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Obra Social:</strong> {{ jya.obra_social }}</li>
-                <li class="list-group-item"><strong>Número de Afiliado:</strong> {{ jya.numero_afiliado }}</li>
-                <li class="list-group-item"><strong>Curatela:</strong> {{ 'Sí' if jya.curatela else 'No' }}</li>
-                <li class="list-group-item"><strong>Observaciones Previsionales:</strong> {{ jya.observaciones_previsionales }}</li>
-            </ul>
-
-            <h2 class="mt-4">Institución Escolar</h2>
-            {% if jya.institucion_escolar %}
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Nombre:</strong> {{ jya.institucion_escolar.nombre }}</li>
-                <li class="list-group-item"><strong>Dirección:</strong> {{ jya.institucion_escolar.direccion }}</li>
-                <li class="list-group-item"><strong>Teléfono:</strong> {{ jya.institucion_escolar.telefono }}</li>
-                <li class="list-group-item"><strong>Grado Actual:</strong> {{ jya.institucion_escolar.grado_actual }}</li>
-                <li class="list-group-item"><strong>Observaciones:</strong> {{ jya.institucion_escolar.observaciones }}</li>
-            </ul>
-            {% else %}
-            <p>No tiene institución escolar registrada.</p>
-            {% endif %}
-
-            <h2 class="mt-4">Familiares o Tutores Responsables</h2>
-            {% if jya.familiares_tutores %}
-            <ul class="list-group">
-                {% for familiar in jya.familiares_tutores %}
-                <li class="list-group-item"><strong>Parentesco:</strong> {{ familiar.parentesco }}<br>
-                    <strong>Nombre:</strong> {{ familiar.nombre }}<br>
-                    <strong>Apellido:</strong> {{ familiar.apellido }}<br>
-                    <strong>DNI:</strong> {{ familiar.dni }}<br>
-                    <strong>Domicilio Actual:</strong> {{ familiar.domicilio_actual }}<br>
-                    <strong>Celular:</strong> {{ familiar.celular_actual }}<br>
-                    <strong>Email:</strong> {{ familiar.email }}<br>
-                    <strong>Nivel de Escolaridad:</strong> {{ familiar.nivel_escolaridad }}<br>
-                    <strong>Ocupación:</strong> {{ familiar.ocupacion }}
-                </li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <p>No tiene familiares o tutores registrados.</p>
-            {% endif %}
-
-            <h2 class="mt-4">Actividad en la Institución</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Propuesta de Trabajo:</strong> {{ jya.propuesta_trabajo }}</li>
-                <li class="list-group-item"><strong>Condición de Trabajo:</strong> {{ jya.condicion_trabajo }}</li>
-                <li class="list-group-item"><strong>Sede:</strong> {{ jya.sede }}</li>
-                <li class="list-group-item"><strong>Días de Asistencia:</strong> {{ jya.dias_asistencia | join(', ') }}</li>
-            </ul>
-
-        </article>
-
-        <!-- Botones para editar y ver documentos adjuntos-->
-        <div class="mt-4">
-            <a href="{{ url_for('crud_JyA.show_update_jya', jya_dni=jya.dni) }}" class="btn btn-warning">Editar</a>
-            <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-info">Documentos Adjuntos</a>
+<h5 class="mt-4">Estado de Beca</h5>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ 'Sí' if jya.becado else 'No' }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Becado</label>
+</div>
+{% if jya.observaciones_beca %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.observaciones_beca }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Observaciones de la Beca</label>
+</div>
+{% endif %}
+<h5 class="mt-4">Discapacidad</h5>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ 'Sí' if jya.certificado_discapacidad else 'No' }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Certificado de Discapacidad</label>
+</div>
+{% if jya.certificado_discapacidad %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.diagnostico_discapacidad }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Diagnóstico</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.tipo_discapacidad }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Tipo de Discapacidad</label>
+</div>
+{% endif %}
+<h5 class="mt-4">Asignacion familiar</h5>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ 'Sí' if jya.asignacion_familiar else 'No' }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Asignación familiar</label>
+</div>
+{% if jya.asignacion_familiar %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.tipo_asignacion }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Tipo de asignación</label>
+</div>
+{% endif %}
+<h5 class="mt-4">Pensión</h5>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ 'Sí' if jya.pension else 'No' }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Pensión</label>
+</div>
+{% if jya.pension %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.tipo_pension }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Tipo de pensión</label>
+</div>
+{% endif %}
+<h5 class="mt-4">Situación previsional</h5>
+{% if jya.obra_social %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.obra_social }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Obra social</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.numero_afiliado }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Número de afiliado</label>
+</div>
+{% endif %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ 'Sí' if jya.curatela else 'No' }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Curatela</label>
+</div>
+{% if jya.observaciones_previsionales %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.observaciones_previsionales }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Observaciones previsionales</label>
+</div>
+{% endif %}
+<h5 class="mt-4">Institución escolar</h5>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.institucion_escolar["nombre"] }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Nombre de la institución</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.institucion_escolar["direccion"] }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Direccion de la institución</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.institucion_escolar["telefono"] }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Nombre de la institución</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.institucion_escolar["grado_actual"] }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Nombre de la institución</label>
+</div>
+{% if  jya.institucion_escolar["observaciones"] %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.institucion_escolar["observaciones"] }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Obersvaciones sobre la institución</label>
+</div>
+{% endif %}
+{% if jya.profesionales_atendiendo %}
+<h5 class="mt-4">Profesionales que lo atienden</h5>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.profesionales_atendiendo }}" aria-label="Disabled input example" disabled readonly>
+</div>
+{% endif %}
+{% if jya.familiares_tutores %}
+<h5 class="mt-4">Familiares / Tutores</h5>
+{% for familiar in jya.familiares_tutores %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6 class="card-title">Familiar {{ loop.index }}</h6>
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" value="{{ familiar.parentesco }}" aria-label="Disabled input example" disabled readonly>
+                <label for="floatingInputDisabled">Parentesco</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" value="{{ familiar.nombre }}" aria-label="Disabled input example" disabled readonly>
+                <label for="floatingInputDisabled">Nombre</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" value="{{ familiar.apellido }}" aria-label="Disabled input example" disabled readonly>
+                <label for="floatingInputDisabled">Apellido</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" value="{{ familiar.dni }}" aria-label="Disabled input example" disabled readonly>
+                <label for="floatingInputDisabled">DNI</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" value="{{ familiar.domicilio_actual }}" aria-label="Disabled input example" disabled readonly>
+                <label for="floatingInputDisabled">Domicilio Actual</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" value="{{ familiar.celular_actual }}" aria-label="Disabled input example" disabled readonly>
+                <label for="floatingInputDisabled">Celular</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" value="{{ familiar.email }}" aria-label="Disabled input example" disabled readonly>
+                <label for="floatingInputDisabled">Email</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" value="{{ familiar.nivel_escolaridad }}" aria-label="Disabled input example" disabled readonly>
+                <label for="floatingInputDisabled">Nivel de Escolaridad</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" value="{{ familiar.ocupacion }}" aria-label="Disabled input example" disabled readonly>
+                <label for="floatingInputDisabled">Ocupación</label>
+            </div>
         </div>
-    </section>
+    </div>
+{% endfor %}
+{% endif %}
+<h5 class="mt-4">Trabajo en nuestra institución</h5>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.propuesta_trabajo }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Propuesta de Trabajo</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.condicion_trabajo }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Condición de Trabajo</label>
+</div>
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.sede }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Sede</label>
+</div>
+{% if empleados_jya["auxiliar"] %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ empleados_jya["auxiliar"].empleado.nombre }} {{ empleados_jya["auxiliar"].empleado.apellido }}" aria-label="Disabled input example" disabled readonly>
+{% else %}
+    <input class="form-control" type="text" value="No asignado" aria-label="Disabled input example" disabled readonly>
+{% endif %}
+    <label for="floatingInputDisabled">Auxiliar de pista</label>
+</div>
+{% if empleados_jya["conductor"] %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ empleados_jya["conductor"].empleado.nombre }} {{ empleados_jya["conductor"].empleado.apellido }}" aria-label="Disabled input example" disabled readonly>
+{% else %}
+    <input class="form-control" type="text" value="No asignado" aria-label="Disabled input example" disabled readonly>
+{% endif %}
+    <label for="floatingInputDisabled">Conductor</label>
+</div>
+{% if empleados_jya["profesor"] or empleados_jya["terapeuta"] %}
+{% if empleados_jya["profesor"] %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ empleados_jya["profesor"].empleado.nombre }} {{ empleados_jya["profesor"].empleado.apellido }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Profesor</label>
+{% endif %}
+</div>
+{% if empleados_jya["terapeuta"] %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ empleados_jya["terapeuta"].empleado.nombre }} {{ empleados_jya["terapeuta"].empleado.apellido }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Terapeuta</label>
+{% endif %}
+</div>
+{% else %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="No asignado" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Terapeuta o Profesor</label>
+</div>
+{% endif %}
+{% if jya.caballo_id %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ jya.caballo.nombre }}" aria-label="Disabled input example" disabled readonly>
+{% else %}
+    <input class="form-control" type="text" value="No asignado" aria-label="Disabled input example" disabled readonly>
+{% endif %}
+    <label for="floatingInputDisabled">Caballo</label>
+</div>
+{% if jya.dias_asistencia %}
+<h5 class="mt-4">Días de asistencia</h5>
+{% for dia in jya.dias_asistencia %}
+<div class="form-floating mb-3">
+    <input class="form-control" type="text" value="{{ dia }}" aria-label="Disabled input example" disabled readonly>
+    <label for="floatingInputDisabled">Dia</label>
+</div>
+{% endfor %}
+{% endif %}
 
-    {% endblock %}
+<div class="mt-4">
+    {% if check_permission(session, "jya_update") %}
+        <a href="{{ url_for('crud_JyA.show_update_jya', jya_dni=jya.dni) }}" class="btn btn-primary">Editar</a>
+    {% endif %}
+    <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-primary">Documentos Adjuntos</a>
+</div>
 
-    <footer>
-        <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
-    </footer>
-
-</body>
-</html>
+{% endblock %}

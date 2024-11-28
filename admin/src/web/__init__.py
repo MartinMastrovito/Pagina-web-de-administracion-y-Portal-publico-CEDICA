@@ -1,22 +1,20 @@
 from flask import Flask
-from flask_migrate import Migrate  # Importar Migrate
 from flask_cors import CORS
+from flask_ckeditor import CKEditor
 from src.web import routes
 from src.web import helpers
 from src.web.storage import storage
 from src.core.bcrypt import bcrypt
 from src.core.database import db_reset, init_app
 from src.core.seeds import db_seeds
-from src.core.database import db # Importar 'db' desde 'core.database'
+from src.core.database import db
 from src.web.config import config
 from src.web.handlers.error import not_found_error
 from src.web.handlers.error import internal_server_error
 from src.web.handlers.auth import check_permission, check_authenticated
 from src.web.autenticacion_google import oauth
 
-
-# Inicializa Migrate aquí para poder usarlo en create_app
-migrate = Migrate()
+ckeditor = CKEditor()
 
 def create_app(env="development", static_folder=''):
     app = Flask(__name__, template_folder='../web/templates', static_folder='../../static/')
@@ -32,11 +30,18 @@ def create_app(env="development", static_folder=''):
     
     # oAuth Setup
     oauth.init_app(app)
+    
+    # ckeditor Setup
+    ckeditor.init_app(app)
 
     # Inicializar la base de datos y migraciones
-    init_app(app)  # Inicializa SQLAlchemy con la app
-    migrate.init_app(app, db)  # Inicializa Migrate con la app y db
-
+    init_app(app)
+    
+    #Resetea y ejecuta el seeds en la BD 
+    with app.app_context():
+        db_reset()
+        db_seeds()
+    
     # Inicializar Bcrypt
     bcrypt.init_app(app)
 

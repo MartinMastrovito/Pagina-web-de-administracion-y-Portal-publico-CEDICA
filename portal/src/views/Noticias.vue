@@ -1,9 +1,77 @@
 <script setup>
-import articlesList from '../components/articlesList.vue'
+    import articlesList from '../components/articlesList.vue'
+    import { useArticlesStore } from '../stores/articles';
+    import { storeToRefs } from 'pinia';
+    import { onMounted, watch } from 'vue';
+    import { RouterLink, useRoute, RouterView} from 'vue-router';
+
+    const store = useArticlesStore();
+    const { articles, pages,loading, error} = storeToRefs(store);
+    const route = useRoute();
+    
+    const fetchArticles = async() => {
+        const filter = {
+            page:route.params.page,
+            titulo: titulo.value,
+            desde: desde.value,
+            hasta: hasta.value 
+        }
+        await store.fetchArticles(filter);
+    };
+    onMounted(() => {
+        if(!articles.length){
+            fetchArticles();
+        }
+    });
+    watch(
+        route,(newValue,oldValue) => {
+            console.log("ola")
+            if(newValue !== oldValue){
+                fetchArticles()
+            }
+        }
+    )
 </script>
 
 <template>
   <main>
-    <articlesList />
+    <form @submit.prevent="fetchArticles">
+      <label for="titulo">Título:</label>
+      <input
+        type="text"
+        id="titulo"
+        v-model="titulo"
+        placeholder="Buscar por título"
+      />
+      <label for="desde">Desde:</label>
+      <input
+        type="date"
+        id="desde"
+        v-model="desde"
+        placeholder="Buscar por fecha"
+      />
+      <label for="hasta">Hasta:</label>
+      <input
+        type="date"
+        id="hasta"
+        v-model="hasta"
+        placeholder="Buscar por fecha"
+      />
+      <button type="submit">Buscar</button>
+    </form>
+    <articlesList
+      :articles="articles"
+      :pages="pages" 
+    />
+    <nav>
+      <div v-for="page in pages">
+        <a v-if="page != route.params.page"
+          class="btn" 
+          :href="`/noticias/${page}`">   
+            {{ page }}
+        </a>
+        <p v-else style="color: black;">{{ page }}</p>
+    </div>
+    </nav>
   </main>
 </template>

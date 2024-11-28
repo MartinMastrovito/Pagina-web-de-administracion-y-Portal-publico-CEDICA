@@ -32,16 +32,8 @@
           placeholder="Escribe tu mensaje aquí"
         ></textarea>
       </div>
-      <div class="form-group">
-        <label for="captcha">Captcha</label>
-        <input
-          type="text"
-          id="captcha"
-          v-model="captcha"
-          required
-          placeholder="Escribe el resultado de 5+3"
-        />
-      </div>
+      <!-- reCAPTCHA -->
+      <div id="recaptcha-container" class="form-group"></div>
       <button type="submit">Enviar</button>
       <p v-if="successMessage" class="success">{{ successMessage }}</p>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
@@ -56,10 +48,26 @@ export default {
       name: "",
       email: "",
       message: "",
-      captcha: "",
+      captchaToken: "", // Token del reCAPTCHA
       successMessage: "",
       errorMessage: "",
       emailError: "",
+    };
+  },
+  mounted() {
+    // Carga dinámica del script de reCAPTCHA
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit";
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    // Define la función onloadCallback para renderizar el reCAPTCHA
+    window.onloadCallback = () => {
+      window.grecaptcha.render("recaptcha-container", {
+        sitekey: "6LfMIYYqAAAAAB6jARfFQKbeatxyfbg0J0isoNEj", // Reemplaza con tu clave de sitio
+        callback: this.onCaptchaSuccess, // Método a llamar cuando se resuelve el captcha
+      });
     };
   },
   methods: {
@@ -67,18 +75,22 @@ export default {
       const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
       return re.test(email);
     },
+    onCaptchaSuccess(token) {
+      this.captchaToken = token; // Captura el token al resolver el reCAPTCHA
+    },
     async submitForm() {
-      // Validar correo electrónico
       if (!this.validateEmail(this.email)) {
         this.emailError = "Por favor, ingresa un correo electrónico válido.";
         return;
-      } else {
-        this.emailError = "";
+      }
+
+      if (!this.captchaToken) {
+        this.errorMessage = "Por favor, completa el reCAPTCHA.";
+        return;
       }
 
       try {
-        // Enviar datos al servidor
-        const response = await fetch("http://localhost:5000/api/consulta", {
+        const response = await fetch("https://admin-grupo30.proyecto2024.linti.unlp.edu.ar/api/consulta", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -87,30 +99,33 @@ export default {
             nombre_completo: this.name,
             email: this.email,
             mensaje: this.message,
-            captcha: this.captcha,
-            estado: "Pendiente",  // O cualquier valor que consideres predeterminado
-            fecha: new Date().toISOString(),  // Establece la fecha actual
+            captcha: this.captchaToken, // Envía el token del reCAPTCHA
+            estado: "Pendiente", // Estado predeterminado
+            fecha: new Date().toISOString(), // Fecha actual
           }),
         });
 
-        if (!response.ok) {
-          throw new Error("No se pudo enviar el mensaje. Inténtalo nuevamente.");
-        }
-
         const result = await response.json();
-        if (result.message === "Consulta guardada correctamente") {
-          this.successMessage = "Consulta enviada correctamente.";
-          this.errorMessage = "";
+        if (!response.ok) {
+          throw new Error(result.error || "No se pudo enviar el mensaje. Inténtalo nuevamente.");
         }
 
-        // Limpiar el formulario
-        this.name = "";
-        this.email = "";
-        this.message = "";
-        this.captcha = "";
+        this.successMessage = "Consulta enviada correctamente.";
+        this.errorMessage = "";
+        this.resetForm();
       } catch (error) {
         this.errorMessage = error.message;
         this.successMessage = "";
+      }
+    },
+    resetForm() {
+      this.name = "";
+      this.email = "";
+      this.message = "";
+      this.captchaToken = "";
+      // Reinicia el reCAPTCHA
+      if (window.grecaptcha) {
+        window.grecaptcha.reset();
       }
     },
   },

@@ -1,12 +1,15 @@
 from src.core.auth.models.model_user import Role, User
 from src.core.auth.models.model_permission import Permission, RolePermission
 from src.core.auth.models.model_empleado import Empleados
+from src.core.auth.models.model_caballos import Caballo
 from src.core.auth.models.model_JyA import JYA
+from src.core.auth.models.model_JYAEmpleado import JYAEmpleado
 from src.core.auth.models.model_publicacion import Publicacion
+from src.core.invoices.invoices import Invoices
 from src.core.database import db
 from src.core import bcrypt
 from src.core.auth import utiles
-
+from datetime import datetime
 
 def role_create():
     roles = [
@@ -14,6 +17,7 @@ def role_create():
         {"name": "ecuestre"},
         {"name": "voluntariado"},
         {"name": "administracion"},
+        {"name": "editor"},
         {"name": "sysadmin"}
     ]
 
@@ -38,6 +42,7 @@ def permission_create():
         Permission(name="user_destroy"),
         Permission(name="user_update"),
         Permission(name="user_show"),
+        Permission(name="user_accept"),
         # permisos jya
         Permission(name="jya_index"),
         Permission(name="jya_new"),
@@ -75,6 +80,12 @@ def permission_create():
         Permission(name="consulta_destroy"),
         Permission(name="consulta_update"),
         Permission(name="consulta_show"),
+        # permisos publicaciones
+        Permission(name="publicacion_index"),
+        Permission(name="publicacion_new"),
+        Permission(name="publicacion_delete"),
+        Permission(name="publicacion_update"),
+        Permission(name="publicacion_show"),
         # permisos reportes
         Permission(name="reporte_index"),
         Permission(name="show_reporte"),
@@ -90,11 +101,9 @@ def tecnica_rol_create():
             Permission.name.contains("jya"),
             Permission.name == "horse_index",
             Permission.name == "horse_show",
-            Permission.name == "Invoice_menu",
-            Permission.name == "Invoice_index",
-            Permission.name == "Invoice_show",
-            Permission.name == "reporte_index",
-            Permission.name == "show_reporte",
+            Permission.name == "invoice_menu",
+            Permission.name == "invoice_index",
+            Permission.name == "invoice_show",
         )
     )
     tecnica_permissions = []
@@ -139,8 +148,13 @@ def administracion_rol_create():
             Permission.name == "consulta_new",
             Permission.name == "consulta_destroy",
             Permission.name == "consulta_update",
+            Permission.name == "publicacion_index",
+            Permission.name == "publicacion_new",
+            Permission.name == "publicacion_update",
+            Permission.name == "publicacion_show",
             Permission.name == "reporte_index",
             Permission.name == "show_reporte",
+            
         )
     )
     administration_permissions = []
@@ -151,24 +165,41 @@ def administracion_rol_create():
     db.session.add_all(administration_permissions)
     db.session.commit()
 
+def editor_rol_create():
+    editor_id = Role.query.filter(Role.name == "editor").first().id
+    permissions = Permission.query.filter(
+        db.or_(
+            Permission.name == "publicacion_index",
+            Permission.name == "publicacion_new",
+            Permission.name == "publicacion_update",
+            Permission.name == "publicacion_show",
+            
+        )
+    )
+    editor_permissions = []
+    for permission in permissions:
+        editor_permissions.append(
+            RolePermission(role_id=editor_id, permission_id=permission.id)
+        )
+    db.session.add_all(editor_permissions)
+    db.session.commit()
 
 def sysadmin_rol_create():
     permissions = Permission.query.all()
     sysadmin_permissions = []
     for permission in permissions:
         sysadmin_permissions.append(
-            RolePermission(role_id=5, permission_id=permission.id)
+            RolePermission(role_id=6, permission_id=permission.id)
         )
     db.session.add_all(sysadmin_permissions)
     db.session.commit()
-
 
 def rolePermission_create():
     sysadmin_rol_create()
     administracion_rol_create()
     ecuestre_rol_create()
     tecnica_rol_create()
-
+    editor_rol_create()
 
 def user_create():
     list_user = [
@@ -234,6 +265,7 @@ def user_create():
 
 
 def employee_create():
+
     list_employees = [
         Empleados(
             nombre = "Carlos",
@@ -253,6 +285,24 @@ def employee_create():
             condicion = "Empleado Permanente",
             activo = True,           
        ),
+       Empleados(
+            nombre="Martín",
+            apellido="Pérez",
+            dni="40256789",
+            domicilio="12 854",
+            email="martin.perez@example.com",
+            localidad="Rosario",
+            telefono="3414567890",
+            profesion="Conductor",
+            puesto="Conductor",
+            fecha_inicio="2021-06-10",
+            fecha_cese=None,
+            contacto_emergencia="+5493412345678",
+            obra_social="OSDE",
+            numero_afiliado="789123456",
+            condicion="Empleado Temporal",
+            activo=True,
+        ),
         Empleados(
             nombre="Laura",
             apellido="González",
@@ -272,24 +322,7 @@ def employee_create():
             activo=False,
         ),
 
-        Empleados(
-            nombre="Martín",
-            apellido="Pérez",
-            dni="40256789",
-            domicilio="12 854",
-            email="martin.perez@example.com",
-            localidad="Rosario",
-            telefono="3414567890",
-            profesion="Conductor",
-            puesto="Conductor",
-            fecha_inicio="2021-06-10",
-            fecha_cese=None,
-            contacto_emergencia="+5493412345678",
-            obra_social="OSDE",
-            numero_afiliado="789123456",
-            condicion="Empleado Temporal",
-            activo=True,
-        ),
+        
 
         Empleados(
             nombre="Ana",
@@ -352,323 +385,254 @@ def employee_create():
     db.session.commit()
 
 def JYA_create():
+    caballo_1 = Caballo(
+        nombre="Pegasus",
+        fecha_nacimiento=datetime.strptime("2015-5-12", "%Y-%m-%d").date(),
+        sexo="Macho",
+        tipo_ingreso="Adopción",
+        fecha_ingreso=datetime.strptime("2021-6-1", "%Y-%m-%d").date(),
+        sede_asignada="Sede Central",
+        pelaje="Blanco",
+        raza="Percheron",
+        tipo_ja_asignado="Hipoterapia",
+    )
+    
+    caballo_2 = Caballo(
+        nombre="Spirit",
+        fecha_nacimiento=datetime.strptime("2018-7-20", "%Y-%m-%d").date(),
+        sexo="Macho",
+        raza="Pura Sangre",
+        pelaje="Marrón",
+        tipo_ingreso="Donación",
+        fecha_ingreso=datetime.strptime("2022-8-15", "%Y-%m-%d").date(),
+        sede_asignada="Sede Norte",
+        tipo_ja_asignado="Equitación",
+
+    )
+    db.session.add_all([caballo_1, caballo_2])
+    db.session.commit()
+
     jya_list = [
         JYA(
-            nombre = "carlos",
-            apellido = "Serebi",
-            dni = "43251556",
-            edad = 25,
-            fecha_nacimiento = "2022-12-15",
-            lugar_nacimiento = {
-                "localidad": "La Plata",
-                "provincia": "Buenos Aires",
-            },
-            domicilio_actual = {
-                "calle": 6,
+            nombre="Carlos",
+            apellido="Serebi",
+            dni="43251556",
+            edad=25,
+            fecha_nacimiento=datetime.strptime("1997-12-15", "%Y-%m-%d").date(),
+            lugar_nacimiento={"localidad": "La Plata", "provincia": "Buenos Aires"},
+            domicilio_actual={
+                "calle": "Calle 6",
                 "numero": 330,
                 "localidad": "La Plata",
                 "provincia": "Buenos Aires",
             },
-            telefono_actual = "2215869112",
-            contacto_emergencia = {
-                "nombre":"maria",
-                "telefono": "2215969991",
+            telefono_actual="2215869112",
+            contacto_emergencia={"nombre": "Maria", "telefono": "2215969991"},
+            becado=False,
+            observaciones_beca="Me gustaría tenerla",
+            profesionales_atendiendo="Carlos Test",
+            certificado_discapacidad=False,
+            diagnostico_discapacidad=None,
+            tipo_discapacidad=None,
+            asignacion_familiar=False,
+            tipo_asignacion=None,
+            pension=False,
+            tipo_pension=None,
+            obra_social="OSDE",
+            numero_afiliado="123456789",
+            curatela=False,
+            observaciones_previsionales=None,
+            institucion_escolar={
+                "nombre": "Escuela Secundaria 1",
+                "direccion": "Calle 12, La Plata",
+                "telefono": "2211234567",
+                "grado_actual": "6to Año",
+                "observaciones": "Buen desempeño académico",
             },
-            becado = False,
-            profesionales_atendiendo = "Carlos test",
-            certificado_discapacidad = False,
+            familiares_tutores=[
+                {"nombre": "Juan", "apellido": "Serebi", "parentesco": "Padre"},
+                {"nombre": "Laura", "apellido": "Serebi", "parentesco": "Madre"},
+            ],
+            propuesta_trabajo="Integración laboral",
+            condicion_trabajo="REGULAR",
+            sede="Sede Central",
+            dias_asistencia=["Lunes", "Miércoles", "Viernes"],
+            caballo_id=caballo_1.id,
         ),
         JYA(
-    nombre = "Carlos",
-    apellido = "Serebi",
-    dni = "43251551",
-    edad = 25,
-    fecha_nacimiento = "2022-12-15",
-    lugar_nacimiento = {
-        "localidad": "La Plata",
-        "provincia": "Buenos Aires",
-    },
-    domicilio_actual = {
-        "calle": 6,
-        "numero": 330,
-        "localidad": "La Plata",
-        "provincia": "Buenos Aires",
-    },
-    telefono_actual = "2215869112",
-    contacto_emergencia = {
-        "nombre":"Maria",
-        "telefono": "2215969991",
-    },
-    becado = False,
-    profesionales_atendiendo = "Carlos test",
-    certificado_discapacidad = True,
-    tipo_discapacidad = "Sensorial",
-),
-
-        JYA(
-    nombre = "Lucía",
-    apellido = "González",
-    dni = "39123548",
-    edad = 29,
-    fecha_nacimiento = "1993-08-19",
-    lugar_nacimiento = {
-        "localidad": "Mar del Plata",
-        "provincia": "Buenos Aires",
-    },
-    domicilio_actual = {
-        "calle": 38,
-        "numero": 745,
-        "localidad": "Mar del Plata",
-        "provincia": "Buenos Aires",
-    },
-    telefono_actual = "2234567890",
-    contacto_emergencia = {
-        "nombre":"Jorge",
-        "telefono": "2234123456",
-    },
-    becado = True,
-    profesionales_atendiendo = "Lucía test",
-    certificado_discapacidad = True,
-    tipo_discapacidad = "Mental",
-),
-
-        JYA(
-    nombre = "Juan",
-    apellido = "Perez",
-    dni = "40325679",
-    edad = 34,
-    fecha_nacimiento = "1989-03-25",
-    lugar_nacimiento = {
-        "localidad": "Rosario",
-        "provincia": "Santa Fe",
-    },
-    domicilio_actual = {
-        "calle": 12,
-        "numero": 123,
-        "localidad": "Rosario",
-        "provincia": "Santa Fe",
-    },
-    telefono_actual = "3415987654",
-    contacto_emergencia = {
-        "nombre":"Ana",
-        "telefono": "3415123456",
-    },
-    becado = False,
-    profesionales_atendiendo = "Juan test",
-    certificado_discapacidad = False,
-),
-
-        JYA(
-    nombre = "Valentina",
-    apellido = "Lopez",
-    dni = "41234569",
-    edad = 27,
-    fecha_nacimiento = "1996-07-12",
-    lugar_nacimiento = {
-        "localidad": "Córdoba",
-        "provincia": "Córdoba",
-    },
-    domicilio_actual = {
-        "calle": 21,
-        "numero": 458,
-        "localidad": "Córdoba",
-        "provincia": "Córdoba",
-    },
-    telefono_actual = "3514561234",
-    contacto_emergencia = {
-        "nombre":"Diego",
-        "telefono": "3514891234",
-    },
-    becado = True,
-    profesionales_atendiendo = "Valentina test",
-    certificado_discapacidad = True,
-    tipo_discapacidad = "Motora"
-),
-
-        JYA(
-    nombre = "Santiago",
-    apellido = "Martinez",
-    dni = "40321599",
-    edad = 31,
-    fecha_nacimiento = "1992-04-10",
-    lugar_nacimiento = {
-        "localidad": "Mendoza",
-        "provincia": "Mendoza",
-    },
-    domicilio_actual = {
-        "calle": 54,
-        "numero": 798,
-        "localidad": "Mendoza",
-        "provincia": "Mendoza",
-    },
-    telefono_actual = "2614098765",
-    contacto_emergencia = {
-        "nombre":"Laura",
-        "telefono": "2614109876",
-    },
-    becado = False,
-    profesionales_atendiendo = "Santiago test",
-    certificado_discapacidad = False,
-),
-
-        JYA(
-    nombre = "Agustina",
-    apellido = "Ramirez",
-    dni = "41432567",
-    edad = 28,
-    fecha_nacimiento = "1995-01-03",
-    lugar_nacimiento = {
-        "localidad": "San Juan",
-        "provincia": "San Juan",
-    },
-    domicilio_actual = {
-        "calle": 23,
-        "numero": 678,
-        "localidad": "San Juan",
-        "provincia": "San Juan",
-    },
-    telefono_actual = "2645123456",
-    contacto_emergencia = {
-        "nombre":"Roberto",
-        "telefono": "2645125678",
-    },
-    becado = True,
-    profesionales_atendiendo = "Agustina test",
-    certificado_discapacidad = True,
-    tipo_discapacidad = "Mental"
-),
-
-        JYA(
-    nombre = "Rodrigo",
-    apellido = "Sosa",
-    dni = "42345123",
-    edad = 36,
-    fecha_nacimiento = "1987-02-16",
-    lugar_nacimiento = {
-        "localidad": "Salta",
-        "provincia": "Salta",
-    },
-    domicilio_actual = {
-        "calle": 15,
-        "numero": 341,
-        "localidad": "Salta",
-        "provincia": "Salta",
-    },
-    telefono_actual = "3875432190",
-    contacto_emergencia = {
-        "nombre":"Elena",
-        "telefono": "3875321098",
-    },
-    becado = False,
-    profesionales_atendiendo = "Rodrigo test",
-    certificado_discapacidad = False,
-),
-
+            nombre="Lucía",
+            apellido="González",
+            dni="39123548",
+            edad=29,
+            fecha_nacimiento=datetime.strptime("1993-8-19", "%Y-%m-%d").date(),
+            lugar_nacimiento={"localidad": "Mar del Plata", "provincia": "Buenos Aires"},
+            domicilio_actual={
+                "calle": "Calle 38",
+                "numero": 745,
+                "localidad": "Mar del Plata",
+                "provincia": "Buenos Aires",
+            },
+            telefono_actual="2234567890",
+            contacto_emergencia={"nombre": "Jorge", "telefono": "2234123456"},
+            becado=True,
+            observaciones_beca="Me sirve para pagar el internet",
+            profesionales_atendiendo="Lucía Test",
+            certificado_discapacidad=True,
+            diagnostico_discapacidad="Déficit de atención",
+            tipo_discapacidad="Mental",
+            asignacion_familiar=True,
+            tipo_asignacion="Asignación Universal",
+            pension=False,
+            tipo_pension=None,
+            obra_social="Swiss Medical",
+            numero_afiliado="987654321",
+            curatela=False,
+            observaciones_previsionales="Sin observaciones adicionales",
+            institucion_escolar={
+                "nombre": "Colegio Nacional",
+                "direccion": "Av. Independencia, Mar del Plata",
+                "telefono": "2231234567",
+                "grado_actual": "5to Año",
+                "observaciones": None,
+            },
+            familiares_tutores=[
+                {"nombre": "Sergio", "apellido": "González", "parentesco": "Padre"},
+            ],
+            propuesta_trabajo="Apoyo terapéutico",
+            condicion_trabajo="REGULAR",
+            sede="Sede Norte",
+            dias_asistencia=["Martes", "Jueves"],
+            caballo_id=caballo_2.id,
+        ),
     ]
+    
     db.session.add_all(jya_list)
+    db.session.commit()
+
+    relaciones_jya_empleado = [
+        JYAEmpleado(jya_id=1, empleado_id=6, rol="terapeuta"),
+        JYAEmpleado(jya_id=1, empleado_id=3, rol="conductor"),
+        JYAEmpleado(jya_id=1, empleado_id=5, rol="auxiliar"),
+        
+        JYAEmpleado(jya_id=2, empleado_id=6, rol="terapeuta"),
+        JYAEmpleado(jya_id=2, empleado_id=3, rol="conductor"),
+        JYAEmpleado(jya_id=2, empleado_id=5, rol="auxiliar"),
+    ]
+
+    db.session.add_all(relaciones_jya_empleado)
     db.session.commit()
 
 def articles_create():
     articles_list = [
         Publicacion(
-            fecha_publicacion = "2024-10-10",
-            fecha_creacion = "2024-10-09",
-            titulo = "Hola, soy una noticia",
-            copete = "Copetin de noticia",
-            contenido = "Contenido de noticia",
-            autor_id = 1
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Hola, soy noticia",
+            copete="Un saludo desde el mundo de las noticias, explorando los eventos más relevantes del día con un enfoque único.",
+            contenido="Hoy presentamos una noticia que captura la esencia de los sucesos diarios. Este artículo analiza en profundidad eventos clave, explicando su impacto y relevancia en la sociedad moderna. Descubre cómo pequeños detalles pueden influir en grandes cambios.",
+            autor_id=1
         ),
         Publicacion(
-            fecha_publicacion = "2024-10-11",
-            fecha_creacion = "2024-10-10",
-            titulo = "Nuevo avance en IA",
-            copete = "Investigadores logran un avance significativo en el campo de la inteligencia artificial, mejorando la precisión de los algoritmos.",
-            contenido = "El avance de hoy permite que los sistemas de IA puedan procesar información de manera más eficiente, reduciendo el tiempo de respuesta en un 40%. Se espera que esta mejora impacte positivamente en sectores como la salud, educación y transporte.",
-            autor_id = 2
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Nuevo avance en IA",
+            copete="Investigadores logran un avance significativo en el campo de la inteligencia artificial, transformando el futuro de la tecnología.",
+            contenido="Los desarrollos recientes en inteligencia artificial están marcando una nueva era en la computación. Este avance mejora significativamente la eficiencia de los algoritmos, reduciendo los tiempos de respuesta en un 40%. Las aplicaciones potenciales incluyen diagnósticos médicos más rápidos, sistemas educativos personalizados y optimización de procesos industriales. La comunidad científica está entusiasmada con las posibilidades que estos avances representan.",
+            autor_id=2
         ),
-
         Publicacion(
-            fecha_publicacion = "2024-10-12",
-            fecha_creacion = "2024-10-11",
-            titulo = "Receta fácil y rápida",
-            copete = "Te compartimos una receta deliciosa y fácil de preparar en solo 20 minutos.",
-            contenido = "Esta receta de pasta con salsa cremosa de aguacate es perfecta para una cena rápida pero nutritiva. Solo necesitas unos pocos ingredientes como aguacate, pasta y limón. ¡Ideal para los días ajetreados!",
-            autor_id = 3
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Receta fácil y rápida",
+            copete="Una receta deliciosa para preparar en menos de 20 minutos, perfecta para cualquier ocasión.",
+            contenido="¿Tienes poco tiempo pero quieres disfrutar de una comida deliciosa? Prueba esta receta de pasta con salsa cremosa de aguacate. Usando ingredientes simples como aguacate fresco, ajo y jugo de limón, puedes crear una cena nutritiva y rápida. Este plato no solo es saludable, sino que también impresiona con su sabor fresco y textura cremosa. Ideal para cenas familiares o momentos de apuro.",
+            autor_id=3
         ),
-
         Publicacion(
-            fecha_publicacion = "2024-10-13",
-            fecha_creacion = "2024-10-12",
-            titulo = "Cambio climático y salud",
-            copete = "Estudios recientes sugieren que el cambio climático podría tener un impacto directo en la salud humana, exacerbando enfermedades respiratorias.",
-            contenido = "El aumento de las temperaturas globales y la contaminación del aire están provocando un incremento en los casos de enfermedades respiratorias y cardiovasculares. Se recomienda la implementación de políticas más estrictas para mitigar estos efectos.",
-            autor_id = 4
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Clima y salud",
+            copete="El cambio climático afecta la salud humana de formas más profundas de lo que imaginamos.",
+            contenido="Un estudio reciente revela que el aumento de las temperaturas globales, combinado con la contaminación del aire, está causando un incremento alarmante de enfermedades respiratorias y cardiovasculares. Las poblaciones más vulnerables, incluidas las personas mayores y niños, enfrentan un riesgo elevado. Este artículo analiza las posibles soluciones para mitigar estos efectos, desde políticas más estrictas hasta tecnologías limpias.",
+            autor_id=4
         ),
-
         Publicacion(
-            fecha_publicacion = "2024-10-14",
-            fecha_creacion = "2024-10-13",
-            titulo = "Tecnología en la educación",
-            copete = "La tecnología está transformando la forma en que aprendemos, desde clases virtuales hasta el uso de IA en la educación.",
-            contenido = "Las herramientas digitales están revolucionando el sector educativo, permitiendo una personalización del aprendizaje y facilitando el acceso a materiales de estudio desde cualquier lugar del mundo.",
-            autor_id = 5
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Tecnología educativa",
+            copete="La tecnología está revolucionando la forma en que aprendemos y accedemos al conocimiento.",
+            contenido="Con la introducción de herramientas digitales y sistemas de inteligencia artificial en las aulas, el aprendizaje se ha vuelto más interactivo y accesible. Plataformas en línea permiten a los estudiantes de todo el mundo acceder a recursos educativos de alta calidad. Este artículo explora cómo estas innovaciones están democratizando la educación y ayudando a cerrar brechas de conocimiento en regiones desfavorecidas.",
+            autor_id=5
         ),
-
         Publicacion(
-            fecha_publicacion = "2024-10-15",
-            fecha_creacion = "2024-10-14",
-            titulo = "Viaje a la Antártida",
-            copete = "Un grupo de científicos ha emprendido un viaje a la Antártida para estudiar los efectos del cambio climático en los glaciares.",
-            contenido = "Este viaje, que durará seis meses, tiene como objetivo obtener datos clave sobre el derretimiento de los glaciares y su impacto en los niveles del mar. Los investigadores esperan lograr avances significativos en la comprensión del cambio climático.",
-            autor_id = 6
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Viaje Antártida",
+            copete="Un grupo de científicos se aventura en un viaje épico para investigar los efectos del cambio climático.",
+            contenido="Este viaje científico, de seis meses de duración, busca estudiar el impacto del derretimiento de los glaciares en el nivel del mar. Equipos multidisciplinarios analizarán datos clave para comprender cómo estas transformaciones están afectando los ecosistemas globales. Los resultados podrían proporcionar la base para nuevas políticas ambientales y acciones urgentes.",
+            autor_id=6
         ),
-
         Publicacion(
-            fecha_publicacion = "2024-11-20",
-            fecha_creacion = "2024-11-19",
-            titulo = "Descubren fósil raro",
-            copete = "Un hallazgo único en un yacimiento arqueológico.",
-            contenido = "Un equipo de arqueólogos encontró un fósil excepcionalmente bien conservado en un yacimiento en Sudamérica. Este descubrimiento podría proporcionar información valiosa sobre especies extintas y su entorno.",
-            autor_id = 4
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Fósil raro",
+            copete="Un descubrimiento sin precedentes arroja luz sobre especies extintas de hace millones de años.",
+            contenido="En un yacimiento arqueológico de Sudamérica, investigadores hallaron un fósil excepcionalmente bien conservado que podría cambiar lo que sabemos sobre la evolución de varias especies. Este hallazgo no solo aporta datos paleontológicos, sino que también abre nuevas preguntas sobre los ecosistemas de épocas pasadas.",
+            autor_id=4
         ),
-
         Publicacion(
-            fecha_publicacion = "2024-12-01",
-            fecha_creacion = "2024-11-30",
-            titulo = "Nueva misión espacial",
-            copete = "Se lanza un satélite para monitorear climas.",
-            contenido = "La agencia espacial internacional lanzó un satélite diseñado para monitorear cambios climáticos y desastres naturales en tiempo real. Este avance permitirá una mejor preparación ante emergencias.",
-            autor_id = 5
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Misión espacial",
+            copete="Se lanza un satélite revolucionario para monitorear el clima en tiempo real.",
+            contenido="La agencia espacial internacional ha lanzado un satélite avanzado diseñado para observar desastres naturales y patrones climáticos con una precisión sin precedentes. Los datos recopilados ayudarán a los gobiernos a planificar mejor las respuestas ante emergencias climáticas, salvando vidas y reduciendo daños.",
+            autor_id=5
         ),
-
         Publicacion(
-            fecha_publicacion = "2024-12-15",
-            fecha_creacion = "2024-12-14",
-            titulo = "Avance en medicina",
-            copete = "Desarrollan vacuna contra enfermedad rara.",
-            contenido = "Un grupo de científicos ha desarrollado una vacuna innovadora para combatir una enfermedad rara que afecta a miles de personas en todo el mundo. Los ensayos iniciales muestran resultados prometedores.",
-            autor_id = 1
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Vacuna rara",
+            copete="Un avance médico promete cambiar la vida de miles de personas en todo el mundo.",
+            contenido="Científicos han desarrollado una vacuna innovadora para combatir una enfermedad rara que afecta a menos del 1% de la población global. Los ensayos clínicos iniciales han mostrado resultados positivos, y la comunidad médica está entusiasmada con su potencial para reducir los síntomas y mejorar la calidad de vida de los pacientes.",
+            autor_id=1
         ),
-
         Publicacion(
-            fecha_publicacion = "2025-01-10",
-            fecha_creacion = "2025-01-09",
-            titulo = "Robots submarinos",
-            copete = "Exploran el océano para investigar vida marina.",
-            contenido = "Un equipo de ingenieros presentó robots submarinos diseñados para explorar las profundidades del océano. Estas máquinas avanzadas están recopilando datos sobre ecosistemas marinos aún desconocidos.",
-            autor_id = 3
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Robots marinos",
+            copete="Exploradores robóticos están transformando la investigación marina.",
+            contenido="Ingenieros han presentado robots submarinos equipados con sensores avanzados capaces de recopilar datos en áreas inaccesibles para los humanos. Estas máquinas están revelando secretos ocultos de los océanos, incluyendo ecosistemas inexplorados y patrones de vida marina que podrían ser clave para la conservación.",
+            autor_id=3
         ),
-
         Publicacion(
-            fecha_publicacion = "2025-01-20",
-            fecha_creacion = "2025-01-19",
-            titulo = "Nuevo récord solar",
-            copete = "Paneles solares logran eficiencia sin precedentes.",
-            contenido = "Una empresa tecnológica ha desarrollado paneles solares capaces de alcanzar niveles de eficiencia sin precedentes, lo que podría revolucionar el mercado de las energías renovables en los próximos años.",
-            autor_id = 2
+            fecha_publicacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            fecha_actualizacion=datetime.strptime("2024-11-27", "%Y-%m-%d").date(),
+            titulo="Energía solar",
+            copete="Nueva tecnología en paneles solares promete revolucionar el mercado energético.",
+            contenido="Un grupo de investigadores ha desarrollado paneles solares con niveles de eficiencia nunca antes vistos. Este avance podría reducir significativamente los costos de la energía renovable, impulsando una adopción masiva y acelerando la transición hacia un futuro sostenible.",
+            autor_id=2
         ),
     ]
+
     db.session.add_all(articles_list)
+    db.session.commit()
+
+def invoices_create():
+    primer_jya = JYA.query.get(1)
+    primer_empleado = Empleados.query.get(1)
+    invoices_list = [
+        Invoices(
+            ja_first_name = primer_jya.nombre,
+            ja_last_name = primer_jya.apellido,
+            pay_date = "2024-09-27",
+            payment_method = "Efectivo",
+            amount = 500,
+            recipient_first_name = primer_empleado.nombre,
+            recipient_last_name = primer_empleado.apellido,
+            observations = "Esto se esta creando desde el seeds :)"
+        )
+    ]
+    db.session.add_all(invoices_list)
     db.session.commit()
 
 def db_seeds():
@@ -676,9 +640,10 @@ def db_seeds():
     permission_create()
     user_create()
     rolePermission_create()
-    JYA_create()
     employee_create()
+    JYA_create()
     articles_create()
+    invoices_create()
 
 """
 Técnica

@@ -1,64 +1,91 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/nuevo.css') }}">
-    <title>Nuevo Caballo</title>
-</head>
-<body>
-    <h1>Registrar Nuevo Caballo</h1>
+{% extends "layout.html" %}
 
-    <form action="{{ url_for('caballos.crear_caballo') }}" method="POST">
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" required minlength="3" maxlength="50>
+{% block title %}Registrar Nuevo Caballo{% endblock %}
 
-        <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-        <input type="date" name="fecha_nacimiento" required>
+{% block content %}
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <h4 class="display-4">Registrar Nuevo Caballo</h4>
+    <a class="btn btn-secondary" href="{{ url_for('caballos.menu_caballos') }}">Volver</a>
+</header>
 
-        <label for="sexo">Sexo:</label>
-        <select name="sexo" required>
-            <option value="Macho">Macho</option>
-            <option value="Hembra">Hembra</option>
-        </select>
+<section>
+    <article>
+        <form method="post" action="{{ url_for('caballos.crear_caballo') }}">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                <input type="text" class="form-control" id="nombre" name="nombre" required minlength="3" maxlength="50">
+            </div>
+            <div class="mb-3">
+                <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+            </div>
+            <div class="mb-3">
+                <label for="sexo" class="form-label">Sexo</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                <select class="form-control" id="sexo" name="sexo" required>
+                    <option value="" disabled selected>Seleccione el sexo</option>
+                    <option value="Macho">Macho</option>
+                    <option value="Hembra">Hembra</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="raza" class="form-label">Raza</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                <input type="text" class="form-control" id="raza" name="raza" required maxlength="50">
+            </div>
+            <div class="mb-3">
+                <label for="pelaje" class="form-label">Pelaje</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                <input type="text" class="form-control" id="pelaje" name="pelaje" required maxlength="50">
+            </div>
+            <div class="mb-3">
+                <label for="tipo_ingreso" class="form-label">Tipo de Ingreso</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                <select class="form-control" id="tipo_ingreso" name="tipo_ingreso" required>
+                    <option value="" disabled selected>Seleccione el tipo de ingreso</option>
+                    <option value="Compra">Compra</option>
+                    <option value="Donación">Donación</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="fecha_ingreso" class="form-label">Fecha de Ingreso</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso" required>
+            </div>
+            <div class="mb-3">
+                <label for="sede_asignada" class="form-label">Sede Asignada</label>
+                <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+                <input type="text" class="form-control" id="sede_asignada" name="sede_asignada" required>
+            </div>
+            <div class="mb-3">
+                <label for="entrenadores" class="form-label">Entrenadores (opcional)</label>
+                <select class="form-control" id="entrenadores" name="entrenadores_ids" multiple>
+                    {% for entrenador in entrenadores %}
+                        <option value="{{ entrenador.id }}">{{ entrenador.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="conductores" class="form-label">Conductores (opcional)</label>
+                <select class="form-control" id="conductores" name="conductores_ids" multiple>
+                    {% for conductor in conductores %}
+                        <option value="{{ conductor.id }}">{{ conductor.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="tipo_ja_asignado" class="form-label">Tipo de J&A Asignados</label>
+                <select class="form-control" id="tipo_ja_asignado" name="tipo_ja_asignado" multiple>
+                    {% for opcion in opciones_ja %}
+                        <option value="{{ opcion }}">{{ opcion }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar Caballo</button>
+        </form>
+    </article>
+</section>
 
-        <label for="raza">Raza:</label>
-        <input type="text" name="raza" maxlength="50>
-
-        <label for="pelaje">Pelaje:</label>
-        <input type="text" name="pelaje" maxlength="50>
-
-        <label for="tipo_ingreso">Tipo de Ingreso:</label>
-        <select name="tipo_ingreso" required>
-            <option value="Compra">Compra</option>
-            <option value="Donación">Donación</option>
-        </select>
-
-        <label for="fecha_ingreso">Fecha de Ingreso:</label>
-        <input type="date" name="fecha_ingreso" required>
-
-        <label for="sede_asignada">Sede Asignada:</label>
-        <input type="text" name="sede_asignada" required>
-
-        <label for="entrenadores">Entrenadores:</label>
-        <select name="entrenadores" multiple>
-            {% for entrenador in entrenadores %}
-            <option value="{{ entrenador.id }}">{{ entrenador.nombre }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="tipo_ja_asignado">Tipo de J&A Asignados:</label>
-        <select name="tipo_ja_asignado" id="tipo_ja_asignado" multiple>
-            {% for opcion in opciones_ja %}
-               <option value="{{ opcion }}">{{ opcion }}</option>
-            {% endfor %}
-        </select>
-
-        <button type="submit">Registrar Caballo</button>
-    </form>
-
-    <form action="{{ url_for('caballos.menu_caballos') }}" method="GET" style="display:inline;">
-        <button type="submit" class="submit">Volver al listado</button>
-    </form>
-</body>
-</html>
+{% endblock %}

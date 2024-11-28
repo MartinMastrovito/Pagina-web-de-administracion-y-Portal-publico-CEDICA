@@ -2,75 +2,92 @@
 
 {% block title %}Detalles del Caballo{% endblock %}
 
-{% block imports %}
-    {{ super() }}  
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/show.css') }}">
-{% endblock %}
-
 {% block content %}
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <h4 class="display-4">Detalles del Caballo</h4>
+    <a class="btn btn-secondary" href="{{ url_for('caballos.menu_caballos') }}">Volver</a>
+</header>
+
 <body>
-    <h4><strong>Detalles del Caballo: {{ caballo.nombre }}</strong></h4>
-
-    <h4><p><strong>Nombre:</strong> {{ caballo.nombre }}</p></h4>
-    <h4><p><strong>Fecha de Nacimiento:</strong> {{ caballo.fecha_nacimiento }}</p></h4>
-    <h4><p><strong>Sexo:</strong> {{ caballo.sexo }}</p></h4>
-    <h4><p><strong>Raza:</strong> {{ caballo.raza }}</p></h4>
-    <h4><p><strong>Pelaje:</strong> {{ caballo.pelaje }}</p></h4>
-    <h4><p><strong>Tipo de Ingreso:</strong> {{ caballo.tipo_ingreso }}</p></h4>
-    <h4><p><strong>Fecha de Ingreso:</strong> {{ caballo.fecha_ingreso }}</p></h4>
-    <h4><p><strong>Sede Asignada:</strong> {{ caballo.sede_asignada }}</p></h4>
-
-    <h3><strong>Entrenadores :</strong></h3>
-    <h4><ul>
-        {% for entrenador in caballo.entrenadores %}
-        <li>{{ entrenador.nombre }}</li>
-        {% else %}
-        <li>No hay entrenadores asignados.</li>
-        {% endfor %}
-    </ul></h4>
-
-    <h3><strong>Tipo de J&A Asignados : </strong></h3>
-    <h4><ul>
-        {% if caballo.tipo_ja_asignado %}
-            {% for tipo_ja in caballo.tipo_ja_asignado.split(',') %}
-            <li>{{ tipo_ja }}</li>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ caballo.nombre }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Nombre</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ caballo.fecha_nacimiento }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Fecha de Nacimiento</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ caballo.sexo }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Sexo</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ caballo.raza }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Raza</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ caballo.pelaje }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Pelaje</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ caballo.tipo_ingreso }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Tipo de Ingreso</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ caballo.fecha_ingreso }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Fecha de Ingreso</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ caballo.sede_asignada }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Sede Asignada</label>
+    </div>
+    <div class="mb-4">
+        <h5 class="fw-bold">Conductores:</h5>
+        <ul class="list-group">
+            {% for conductor in caballo.conductores %}
+                <li class="list-group-item">{{ conductor.nombre }}</li>
+            {% else %}
+                <li class="list-group-item">No hay conductores asignados.</li>
             {% endfor %}
-        {% else %}
-            <li>No hay tipos de J&A asignados.</li>
-        {% endif %}
-    </ul></h4>
-
-    <div class="center">
-        <a href="{{ url_for('caballos.editar_caballo', id=caballo.id) }}" class="btn" >Editar Informacion del Caballo</a>
+        </ul>
     </div>
-
-    <h3><strong>Documentos :</strong></h3>
-    <h4><ul>
-        {% for documento in caballo.documentos %}
-            <li>
-                <a href="{{ url_for('static', filename=documento.nombre_documento) }}">{{ documento.nombre_documento }}</a>
-                ({{ documento.tipo_documento }})
-            </li>
-        {% else %}
-            <li>No hay documentos adjuntos.</li>
-        {% endfor %}
-
-
-    
-        
-    </ul></h4>
-    
-
-    <div class="center">
-        <a href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id) }}" class="btn btn-info">Administrar Documentos Adjuntos</a>
+    <div class="mb-4">
+        <h5 class="fw-bold">Entrenadores:</h5>
+        <ul class="list-group">
+            {% for entrenador in caballo.entrenadores %}
+                <li class="list-group-item">{{ entrenador.nombre }}</li>
+            {% else %}
+                <li class="list-group-item">No hay entrenadores asignados.</li>
+            {% endfor %}
+        </ul>
     </div>
-    
-    <form action="{{ url_for('caballos.eliminar_caballo', id=caballo.id) }}" method="POST">
-        <button type="submit" onclick="return confirm('¿Está seguro que desea eliminar este caballo?')">Eliminar Caballo</button>
-    </form>
-    <div class="center">
-        <a href="{{ url_for('caballos.menu_caballos') }}" class="btn">Volver al listado</a>
+    <div class="mb-4">
+        <h5 class="fw-bold">Tipo de J&A Asignados:</h5>
+        <ul class="list-group">
+            {% if caballo.tipo_ja_asignado %}
+                {% for tipo_ja in caballo.tipo_ja_asignado.split(',') %}
+                    <li class="list-group-item">{{ tipo_ja }}</li>
+                {% endfor %}
+            {% else %}
+                <li class="list-group-item">No hay tipos de J&A asignados.</li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="mt-4">
+        <h5 class="fw-bold">Documentos:</h5>
+        <ul class="list-group">
+            {% for documento in caballo.documentos %}
+                <li class="list-group-item">
+                    <a href="{{ url_for('static', filename=documento.nombre_documento) }}">{{ documento.nombre_documento }}</a>
+                    ({{ documento.tipo_documento }})
+                </li>
+            {% else %}
+                <li class="list-group-item">No hay documentos adjuntos.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="mt-4">
+        <a href="{{ url_for('caballos_documentos.index_documents_caballo', caballo_id=caballo.id) }}" class="btn btn-primary">Administrar Documentos Adjuntos</a>
     </div>
 </body>
 {% endblock %}
-

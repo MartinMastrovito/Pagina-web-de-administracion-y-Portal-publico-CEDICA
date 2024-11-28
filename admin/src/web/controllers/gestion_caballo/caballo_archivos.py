@@ -96,7 +96,7 @@ def upload_document(caballo_id):
         }
         crud_caballo.save_document(**doc_data)
         
-    return render_template("caballos/show_caballo.html", caballo=caballo)
+    return render_template("caballos/show.html", caballo=caballo)
 
 @caballos_documentos_bp.get("/documentos/actualizar/<int:caballo_id>/<int:documento_id>")
 @login_required
@@ -157,7 +157,7 @@ def update_document_caballo(caballo_id, documento_id):
     
     caballo = crud_caballo.get_caballo_by_id(caballo_id)
     
-    return render_template("caballos/show_caballo.html", caballo=caballo)
+    return render_template("caballos/show.html", caballo=caballo)
 
 @caballos_documentos_bp.get("/documentos/eliminar/<int:caballo_id>/<int:documento_id>")
 @login_required
@@ -200,7 +200,7 @@ def delete_document_caballo(caballo_id, documento_id):
     
     crud_caballo.delete_document(documento.id)
     
-    return render_template("caballos/show_caballo.html", caballo=caballo)
+    return render_template("caballos/show.html", caballo=caballo)
 
 @caballos_documentos_bp.get("/documentos/descargar/<int:documento_id>")
 @login_required

@@ -3,7 +3,7 @@
     <h2>Últimas Noticias</h2>
     <div v-for="noticia in noticias" :key="noticia.id" class="noticia">
       <h3>{{ noticia.titulo }}</h3>
-      <p>{{ noticia.contenido }}</p>
+      <p v-html="noticia.contenido"></p>
     </div>
   </div>
 </template>

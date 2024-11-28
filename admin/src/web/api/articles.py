@@ -8,15 +8,35 @@ def index():
     page = request.args.get('page')
     per_page = request.args.get('per_page')
     id = request.args.get('id')
+    titulo = request.args.get('titulo')
+    desde = request.args.get('desde')
+    hasta = request.args.get('hasta')
+
     if id:
         id = int(id)
         pub = publicacion.get_publicacion(id)
         data = article_schema.dump(pub)
-        return data,200
+        retorno = {
+            "articles": data
+        }
+        return retorno,200
     if page:
         page = int(page)
     if per_page:
         per_page = int(per_page)
-    publicaciones = publicacion.obtener_publicaciones(page, per_page)
+    filters = {
+        'page' : page,
+        'per_page' : per_page,
+        'titulo' : titulo,
+        'desde' : desde,
+        'hasta' : hasta
+    }
+    publicaciones = publicacion.filtrado_portal(**filters)
+    pages = publicaciones.pages
     data = articles_schema.dump(publicaciones)
-    return data,200
+    retorno = {
+        "articles": data,
+        "pages": pages,
+    }
+    retorno = jsonify(retorno)
+    return retorno,200

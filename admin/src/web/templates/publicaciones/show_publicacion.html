@@ -18,30 +18,44 @@
     </div>
     <div class="form-floating mb-3">
         <input class="form-control" type="text" value="{{ pub.fecha_actualizacion }}" aria-label="Disabled input example" disabled readonly>
-        <label for="floatingInputDisabled">Fecha de actalización</label>
+        <label for="floatingInputDisabled">Fecha de actualización</label>
     </div>
     {% if pub.estado == "Publicado" %}
     <div class="form-floating mb-3">
         <input class="form-control" type="text" value="{{ pub.fecha_publicacion }}" aria-label="Disabled input example" disabled readonly>
-        <label for="floatingInputDisabled">Fecha de actalización</label>
+        <label for="floatingInputDisabled">Fecha de publicación</label>
     </div>
     {% endif %}
     <div class="form-floating mb-3">
         <input class="form-control" type="text" value="{{ pub.estado }}" aria-label="Disabled input example" disabled readonly>
         <label for="floatingInputDisabled">Estado</label>
     </div>
+    {% if pub.autor %}
     <div class="form-floating mb-3">
-        <input class="form-control" type="text" value="{{ pub.autor.nombre }}" aria-label="Disabled input example" disabled readonly>
+        <input class="form-control" type="text" value="{{ pub.autor.nombre }} {{ pub.autor.apellido }}" aria-label="Disabled input example" disabled readonly>
         <label for="floatingInputDisabled">Autor</label>
     </div>
+    {% else %}
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="IMPORTANTE: La persona que escribió esta publicación ya no pertenece a CEDICA." aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Autor</label>
+    </div>
+    {% endif %}
     <div class="form-floating mb-3">
         <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>{{ pub.copete }}</textarea>
         <label for="floatingTextarea2Disabled">Copete</label>
     </div>
+    <label for="floatingTextarea2Disabled">Contenido</label>
     <div class="form-floating mb-3">
-        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>{{ pub.contenido }}</textarea>
-        <label for="floatingTextarea2Disabled">Contenido</label>
+        {{ ckeditor.create(value=pub.contenido) }}
     </div>
 </body>
+{{ ckeditor.load() }}
+{{ ckeditor.config() }}
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        CKEDITOR.config.readOnly = true;
+    });
+</script>
 {% endblock %}

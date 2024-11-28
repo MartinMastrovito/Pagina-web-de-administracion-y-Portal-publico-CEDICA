@@ -14,14 +14,12 @@ def get_permissions(user_id):
         Lista de nombres de permisos asociados al rol del usuario.
     """
     user = get_user(user_id)
-    # Obtenemos los permisos asociados al rol del usuario
     role_permissions = (
         db.session.query(Permission.name)
         .join(RolePermission, RolePermission.permission_id == Permission.id)
         .filter(RolePermission.role_id == user.role_id)
         .all()
     )
-    # Devuelve una lista de nombres de permisos
     return [perm.name for perm in role_permissions]
 
 def list_users():
@@ -34,7 +32,7 @@ def list_users():
     users = User.query.all()
     return users
 
-def search_users(email=None, enabled=None, role_id=None, sort_by='email', order='asc', page=1, per_page=25):
+def search_users(email=None, enabled=None, role_id=None, sort_by='email', order='asc', page=1, per_page=10):
     """
     Busca usuarios en la base de datos aplicando varios filtros.
 
@@ -78,7 +76,7 @@ def search_users(email=None, enabled=None, role_id=None, sort_by='email', order=
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
-def search_unaccepted_users(email=None, order='asc', page=1, per_page=25):
+def search_unaccepted_users(email=None, order='asc', page=1, per_page=10):
     """
     Busca usuarios no aceptados en la base de datos aplicando varios filtros.
 
@@ -172,7 +170,6 @@ def update_user(user_id, **kwargs):
     for key, value in kwargs.items():
         setattr(user, key, value)
     
-    # Confirmar los cambios en la base de datos
     db.session.commit()
     
     return False
@@ -231,8 +228,8 @@ def login_user(email, password):
     """
     user = get_user_by_email(email)
     if user and bcrypt.check_password_hash(user.password, password):
-        return user  # Retorna el usuario si las credenciales son correctas
-    return None  # Retorna None si las credenciales son incorrectas
+        return user
+    return None
 
 def block_user(user_id):
     """
