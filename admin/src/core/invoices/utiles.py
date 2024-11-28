@@ -54,31 +54,25 @@ def validate_update(**kwargs):
 
 def update_invoice(invoice_id,**kwargs):
     invoice = get_invoice(invoice_id)
-    # Actualizar los atributos del usuario con los valores proporcionados en kwargs
     if(validate_update(**kwargs)):
         for key, value in kwargs.items():
             if value != '':
                 setattr(invoice, key, value)
-        
-        # Confirmar los cambios en la base de datos
+
         db.session.commit()
     else:
         return False
     flash("Se actualizo con exito un cobro",'true')
     return True
-#Modulo para conseguir el nombre de todos los JYA 
+
 def get_all_ja():
     ja_query = JYA.query.order_by(JYA.apellido)
     return ja_query
 
-
-
-#Modulo para conseguir el nombre de todos los empleados 
 def get_all_employees():
     emp_query = Empleados.query.order_by(Empleados.apellido)
     return emp_query
 
-#Modulo para conseguir el nombre de un empleado por su ID 
 def get_emp(emp_id):
     query = Empleados.query.get_or_404(emp_id)
     return query.nombre + " " + query.apellido
@@ -123,7 +117,6 @@ def select_all():
     return db.select(Invoices)
 
 def filtrar_cobros(empleado_id, fecha_inicio, fecha_fin):
-    # Realizar la consulta y aplicar los filtros correctamente
     return Invoices.query.join(
         Empleados, 
         (Empleados.nombre == Invoices.recipient_first_name) & 
@@ -131,7 +124,7 @@ def filtrar_cobros(empleado_id, fecha_inicio, fecha_fin):
     ).filter(
         Invoices.pay_date >= fecha_inicio,
         Invoices.pay_date <= fecha_fin,
-        Empleados.id == empleado_id  # Filtrar por el ID del empleado
+        Empleados.id == empleado_id
     ).all()
 
     

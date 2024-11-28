@@ -159,7 +159,15 @@
             <ul class="pagination justify-content-center flex-wrap">
                 {% if pagination.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('users.index', page=pagination.prev_num) }}">Anterior</a>
+                    <a class="page-link" href="{{ url_for('users.index', 
+                                                          page=pagination.prev_num, 
+                                                          email=request.args.get('email', ''), 
+                                                          enabled=request.args.get('enabled', ''), 
+                                                          role_id=request.args.get('role_id', ''), 
+                                                          sort_by=request.args.get('sort_by', ''), 
+                                                          order=request.args.get('order', '')) }}">
+                        Anterior
+                    </a>
                 </li>
                 {% endif %}
                 <li class="page-item disabled">
@@ -167,11 +175,19 @@
                 </li>
                 {% if pagination.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('users.index', page=pagination.next_num) }}">Siguiente</a>
+                    <a class="page-link" href="{{ url_for('users.index', 
+                                                          page=pagination.next_num, 
+                                                          email=request.args.get('email', ''), 
+                                                          enabled=request.args.get('enabled', ''), 
+                                                          role_id=request.args.get('role_id', ''), 
+                                                          sort_by=request.args.get('sort_by', ''), 
+                                                          order=request.args.get('order', '')) }}">
+                        Siguiente
+                    </a>
                 </li>
                 {% endif %}
             </ul>
-        </nav>
+        </nav>        
     </article>
 </section>
 </body>

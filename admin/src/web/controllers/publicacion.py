@@ -21,12 +21,16 @@ def index():
     """
     page = request.args.get("page", 1, type=int)
     per_page = 10
-    publicaciones = publicacion.obtener_publicaciones(page, per_page)
+    sort_by = request.args.get("orden", "fecha_actualizacion")
+    order = request.args.get("order", "desc")
+    publicaciones = publicacion.obtener_publicaciones(sort_by, order, page, per_page)
     
     return render_template(
         "publicaciones/listar.html", 
         publicaciones=publicaciones.items,
-        pagination=publicaciones
+        pagination=publicaciones,
+        sort_by=sort_by,
+        order=order,
     )
 
 @bp.get("/crear")
