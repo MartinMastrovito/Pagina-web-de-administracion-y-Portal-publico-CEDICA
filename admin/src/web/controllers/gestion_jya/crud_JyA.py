@@ -327,6 +327,10 @@ def jya_update(jya_dni):
         flash("Se modificó el JYA exitosamente", "success")
         
         updated_jya = crud_JyA.get_jya_by_dni(jya_data['dni'])
+        crud_JyA.assign_employee_to_jya(updated_jya.id, request.form["profesor_terapeuta_id"], "terapeuta")
+        crud_JyA.assign_employee_to_jya(updated_jya.id, request.form["conductor_caballo_id"], "conductor")
+        crud_JyA.assign_employee_to_jya(updated_jya.id, request.form["auxiliar_id"], "auxiliar")
+        
         return redirect(f"/JYA/detalles/{updated_jya.dni}")
     else:
         flash("El DNI ingresado ya se encuentra registrado en nuestro sistema", "danger")
@@ -366,4 +370,10 @@ def show_details_jya(jya_dni):
     
     empleados_jya = crud_JyA.get_jyaempleados(jya)
     
+    if not empleados_jya["terapeuta"] or not empleados_jya["auxiliar"] or not empleados_jya["conductor"]:
+        flash(f"Hemos realizado cambios en el personal y usted se ve impactado. Por favor verifique su/s empleado/s eliminado/s.", "danger")
+    
+    if not jya.caballo_id:
+        flash(f"Su caballo ha sido dado de baja de nuestro sistema", "danger")
+      
     return render_template("JYA/show_jya.html", jya=jya, empleados_jya=empleados_jya)
