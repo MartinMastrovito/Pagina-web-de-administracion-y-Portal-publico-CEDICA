@@ -5,6 +5,7 @@ Este módulo contiene las rutas y controladores para listar, obtener, crear, act
 """
 
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
+from src.core.auth.decorators import check, login_required
 from src.core.crud_pagos import listar_pagos, obtener_pago, crear_pago, actualizar_pago, eliminar_pago
 from src.core.auth.models.model_empleado import Empleados
 from src.core.database import db
@@ -13,6 +14,8 @@ from src.core.empleados import listar_empleados_activos
 pagos_bp = Blueprint('pagos', __name__, url_prefix='/pagos')
 
 @pagos_bp.route('/', methods=['GET'])
+@login_required
+@check("payment_index")
 def listar_pagos_route():
     """
     Ruta para listar los pagos.
@@ -27,6 +30,8 @@ def listar_pagos_route():
     return render_template('pagos/listar_pago.html', pagos=pagos)
 
 @pagos_bp.route('/<int:id>', methods=['GET'])
+@login_required
+@check("payment_show")
 def obtener_pago_route(id):
     """
     Ruta para obtener los detalles de un pago específico.
@@ -43,6 +48,8 @@ def obtener_pago_route(id):
     return render_template('pagos/mostrar_pago.html', pago=pago)
 
 @pagos_bp.route('/nuevo', methods=['GET', 'POST'])
+@login_required
+@check("payment_new")
 def crear_pago_route():
     """
     Ruta para crear un nuevo pago.
@@ -68,6 +75,8 @@ def crear_pago_route():
     return render_template('pagos/crear_pago.html', empleados=empleados)
 
 @pagos_bp.route('/<int:id>/editar', methods=['GET', 'POST'])
+@login_required
+@check("payment_update")
 def actualizar_pago_route(id):
     """
     Ruta para actualizar un pago existente.
@@ -96,6 +105,8 @@ def actualizar_pago_route(id):
     return render_template('pagos/editar_pago.html', pago=pago, empleados=empleados)
 
 @pagos_bp.route('/eliminar', methods=['POST'])
+@login_required
+@check("payment_destroy")
 def eliminar_pago_route():
     """
     Ruta para eliminar un pago.
