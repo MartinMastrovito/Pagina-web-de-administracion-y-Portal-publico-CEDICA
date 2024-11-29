@@ -17,9 +17,18 @@
                     {% endif %}
                 {% endif %}
                 {% if check_authenticated(session) %}
-                    <li class="nav-item">
-                        <a class="nav-link mx-2" href="{{ url_for('empleados.index') }}">Equipo</a>
-                    </li>
+                    {% if check_permission(session, "team_index") %}
+                        <li class="nav-item">
+                            <a class="nav-link mx-2" href="{{ url_for('empleados.index') }}">Equipo</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                {% if check_authenticated(session) %}
+                    {% if check_permission(session, "payment_index") %}
+                        <li class="nav-item">
+                            <a class="nav-link mx-2" href="{{ url_for('pagos.listar_pagos_route') }}">Pagos</a>
+                        </li>
+                    {% endif %}
                 {% endif %}
                 {% if check_authenticated(session) %}
                     {% if check_permission(session, "jya_index") %}
@@ -48,9 +57,11 @@
                 </li>
                 {% endif %}
                 {% if check_authenticated(session) %}
-                <li class="nav-item">
-                    <a class="nav-link mx-2" href="{{ url_for('invoices.invoices_index') }}">Cobros</a>
-                </li>
+                {% if check_permission(session, "invoice_index") %}
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="{{ url_for('invoices.invoices_index') }}">Cobros</a>
+                    </li>
+                    {% endif %}
                 {% endif %}
                 {% if check_authenticated(session) %}
                     {% if check_permission(session, "reporte_index") %}
