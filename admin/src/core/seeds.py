@@ -620,6 +620,8 @@ def articles_create():
 def invoices_create():
     primer_jya = JYA.query.get(1)
     primer_empleado = Empleados.query.get(1)
+    segundo_jya = JYA.query.get(2)
+    segundo_empleado = Empleados.query.get(2)
     invoices_list = [
         Invoices(
             ja_first_name = primer_jya.nombre,
@@ -629,6 +631,16 @@ def invoices_create():
             amount = 500,
             recipient_first_name = primer_empleado.nombre,
             recipient_last_name = primer_empleado.apellido,
+            observations = "Esto se esta creando desde el seeds :)"
+        ),
+        Invoices(
+            ja_first_name = segundo_jya.nombre,
+            ja_last_name = segundo_jya.apellido,
+            pay_date = "2024-09-11",
+            payment_method = "Tarjeta de credito",
+            amount = 76412,
+            recipient_first_name = segundo_empleado.nombre,
+            recipient_last_name = segundo_empleado.apellido,
             observations = "Esto se esta creando desde el seeds :)"
         )
     ]
