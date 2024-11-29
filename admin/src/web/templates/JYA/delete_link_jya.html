@@ -16,12 +16,10 @@
                 <h2>Confirmación de eliminación</h2>
             </div>
             <div class="card-body">
-                <p>¿Estás seguro de que deseas eliminar el link <strong>{{ documento.nombre_documento }}</strong>?</p>
+                <p>¿Estás seguro de que deseas eliminar el enlace <strong>{{ documento.nombre_documento }}</strong>?</p>
                 <form action="{{ url_for('enlaces.delete_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" method="POST">
                     <div class="d-flex justify-content-between">
-                        <!-- Botón para eliminar -->
-                        <button type="submit" class="btn btn-danger">Eliminar documento</button>
-                        <!-- Botón para cancelar -->
+                        <button type="submit" class="btn btn-danger">Eliminar enlace</button>
                         <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </form>

@@ -83,6 +83,7 @@
                                 apellido=request.args.get('apellido', ''), 
                                 dni=request.args.get('dni', ''), 
                                 email=request.args.get('email', ''), 
+                                puesto=request.args.get('puesto', ''), 
                                 page=request.args.get('page', 1)) }}">
                                 Nombre
                                 {% if request.args.get('sort_by') == 'nombre' %}
@@ -98,6 +99,7 @@
                                 apellido=request.args.get('apellido', ''), 
                                 dni=request.args.get('dni', ''), 
                                 email=request.args.get('email', ''), 
+                                puesto=request.args.get('puesto', ''), 
                                 page=request.args.get('page', 1)) }}">
                                 Apellido
                                 {% if request.args.get('sort_by') == 'apellido' %}
@@ -113,9 +115,26 @@
                                 apellido=request.args.get('apellido', ''), 
                                 dni=request.args.get('dni', ''), 
                                 email=request.args.get('email', ''), 
+                                puesto=request.args.get('puesto', ''),                                 
                                 page=request.args.get('page', 1)) }}">
                                 Fecha de creación
                                 {% if request.args.get('sort_by') == 'created_at' %}
+                                    {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ url_for('empleados.index', 
+                                sort_by='puesto', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc',
+                                nombre=request.args.get('nombre', ''), 
+                                apellido=request.args.get('apellido', ''), 
+                                dni=request.args.get('dni', ''), 
+                                email=request.args.get('email', ''), 
+                                puesto=request.args.get('puesto', ''), 
+                                page=request.args.get('page', 1)) }}">
+                                Puesto Laboral
+                                {% if request.args.get('sort_by') == 'puesto' %}
                                     {% if request.args.get('order') == 'asc' %}▲{% else %}▼{% endif %}
                                 {% endif %}
                             </a>
@@ -131,6 +150,7 @@
                         <td>{{ empleado.nombre }}</td>
                         <td>{{ empleado.apellido }}</td>
                         <td>{{ empleado.created_at.strftime('%Y-%m-%d') if empleado.created_at else 'No disponible' }}</td>
+                        <td>{{ empleado.puesto }}</td>
                         <td>{{ empleado.dni }}</td>
                         <td>{{ empleado.email }}</td>
                         <td>

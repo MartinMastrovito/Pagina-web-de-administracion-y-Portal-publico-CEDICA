@@ -17,6 +17,7 @@
                     <label for="tipo_documento" class="form-label">Tipo de Documento:</label>
                     <select class="form-control" id="tipo_documento" name="tipo_documento">
                         <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="">Todos</option>
                         <option value="entrevista" {% if request.args.get('tipo_documento') == 'entrevista' %}selected{% endif %}>Entrevista</option>
                         <option value="evaluacion" {% if request.args.get('tipo_documento') == 'evaluacion' %}selected{% endif %}>Evaluación</option>
                         <option value="planificaciones" {% if request.args.get('tipo_documento') == 'planificaciones' %}selected{% endif %}>Planificaciones</option>
@@ -61,7 +62,7 @@
                     <tr>
                         <td>{{ documento.nombre_documento }}</td>
                         <td>{{ documento.tipo_documento }}</td>
-                        <td>{{ documento.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ documento.created_at.strftime('%d/%m/%Y') }}</td>
                         <td>
                             {% if documento.nombre_documento.startswith('http://') or documento.nombre_documento.startswith('https://') %}
                                 <div class="dropdown">
@@ -70,7 +71,9 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ documento.nombre_documento }}" class="dropdown-item">Ver Enlace</a></li>
+                                        {% if check_permission(session, "jya_update") %}
                                         <li><a href="{{ url_for('enlaces.show_update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Editar</a></li>
+                                        {% endif %}
                                         <li><a href="{{ url_for('enlaces.show_delete_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Eliminar</a></li>
                                     </ul>
                                 </div>
@@ -81,8 +84,12 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ url_for('documentos.download_documento', documento_id=documento.id) }}" class="dropdown-item">Descargar</a></li>
-                                        <li><a href="{{ url_for('documentos.show_update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Editar</a></li>
+                                        {% if check_permission(session, "jya_update") %}
+                                        <li><a href="{{ url_for('documentos.show_update_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Actualizar</a></li>
+                                        {% endif %}
+                                        {% if check_permission(session, "jya_destroy") %}
                                         <li><a href="{{ url_for('documentos.show_delete_document_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Eliminar</a></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             {% endif %}
@@ -121,10 +128,12 @@
                 {% endif %}
             </ul>
         </nav>
+        {% if check_permission(session, "jya_new") %}
         <div class="d-flex flex-wrap gap-3 mt-4">
             <a href="{{ url_for('documentos.show_upload_document', jya_dni=jya.dni) }}" class="btn btn-secondary">Subir documento</a>
             <a href="{{ url_for('enlaces.show_upload_link', jya_dni=jya.dni) }}" class="btn btn-secondary">Subir enlace</a>
         </div>
+        {% endif %}
     </article>
 </section>
 

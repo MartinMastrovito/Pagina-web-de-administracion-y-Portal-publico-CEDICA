@@ -13,6 +13,13 @@ payment_methods_list = [
     ]
 
 def create(**kwargs):
+    """
+        Crea un cobro.
+        Mediante el id de j&a y empleado consigue los nombres y apellidos de cada uno y los agrega en un cobro a la bd.
+
+        Returns:
+            el cobro creado
+    """
     j_a = JYA.query.get_or_404(kwargs['j_a'])
     emp = Empleados.query.get_or_404(kwargs['recipient'])
     kwargs['ja_first_name'] = j_a.nombre
@@ -27,10 +34,24 @@ def create(**kwargs):
     return invoice
 
 def delete(id_delete):
+    """
+        Elimina un cobro mediante id.
+        Args:
+            id_delete(int): Id del cobro a eliminar
+        Returns:
+            None
+    """
     db.session.query(Invoices).filter_by(id=id_delete).delete()
     db.session.commit()
 
 def validate_create(**datos):
+    """
+        Valida los datos recibidos.
+        Args: 
+            **datos: Datos a validar.
+        Returns:
+            bool: True si los datos son validos, False en caso contrario.
+    """
     payment_method = datos.get("payment_method")
     if(not payment_method in payment_methods_list):
         return False
@@ -39,9 +60,23 @@ def validate_create(**datos):
     return True 
 
 def get_invoice(id):
+    """
+        Obtiene un cobro mediante id, si no lo encuentra devuelve un error 404.
+        Args:
+            id(int): Id del cobro a buscar.
+        Returns:
+            Cobro obtenido o error 404. 
+    """
     return Invoices.query.get_or_404(id)
 
 def validate_update(**kwargs):
+    """
+        Valida los datos obtenidos en una actualización.
+        Args:
+            **kwargs:Datos a validar.
+        Returns:
+            True en caso de ser validados como correcto. False en caso contrario.
+    """
     payment_method = kwargs.get("payment_method")
     amount = kwargs.get("amount")
     if(payment_method != ''):
@@ -53,37 +88,64 @@ def validate_update(**kwargs):
     return True
 
 def update_invoice(invoice_id,**kwargs):
+    """
+        Actualiza un cobro en la BD.
+        Llama a una funcion para validar los datos. Si son correctos actualiza y crea un mensaje de exito.
+        Args:
+            invoice_id(int): Id del cobro a actualizar.
+            **kwargs: Datos con los que actualizar al cobro.
+        Returns:
+            True si los datos son validos. False en caso contrario.
+    """
     invoice = get_invoice(invoice_id)
-    # Actualizar los atributos del usuario con los valores proporcionados en kwargs
     if(validate_update(**kwargs)):
         for key, value in kwargs.items():
             if value != '':
                 setattr(invoice, key, value)
-        
-        # Confirmar los cambios en la base de datos
+
         db.session.commit()
     else:
         return False
     flash("Se actualizo con exito un cobro",'true')
     return True
-#Modulo para conseguir el nombre de todos los JYA 
+
 def get_all_ja():
+    """
+        Consigue un listado de todos los JYA ordenados por apellido.
+        Returns:
+            Listado de JYA ordenados por apellido.
+    """
     ja_query = JYA.query.order_by(JYA.apellido)
     return ja_query
 
-
-
-#Modulo para conseguir el nombre de todos los empleados 
 def get_all_employees():
+    """
+        Consigue un listado de todos los empleados ordenados por apellido.
+        Returns:
+            Listado de empleados ordenados por apellido.
+    """
     emp_query = Empleados.query.order_by(Empleados.apellido)
     return emp_query
 
-#Modulo para conseguir el nombre de un empleado por su ID 
 def get_emp(emp_id):
+    """
+        Obtiene el nombre y apellido de un empleado.
+        Realiza una consulta para obtener un empleado por id y retorna nombre y apellido del mismo.
+        Args:
+            emp_id(int):Id del empleado a buscar
+        Returns:
+            String de nombre y apellido concatenados separados por un espacio.
+    """
     query = Empleados.query.get_or_404(emp_id)
     return query.nombre + " " + query.apellido
 
 def get_statuses():
+    """
+        Genera un diccionario con los estados de deuda de los J&A.
+        Realiza una consulta para obtener un listado de los J&A y arma un diccionario con id y estado de deuda de cada uno.
+        Returns:
+            Diccionario con estado de deudas de JYA e indices con sus ID.
+    """
     status_query = JYA.query.all()
     status_dictionary = {}
     for status in status_query:
@@ -91,6 +153,13 @@ def get_statuses():
     return status_dictionary
 
 def change_status(id_change):
+    """
+        Cambia el estado de deudor de un J&A
+        Args:
+            id_change(int):Id del J&A a ser actualizado.
+        Returns:
+            None
+    """
     query_value = JYA.query.get_or_404(id_change)
     setattr(query_value,'debts',not query_value.debts)
     db.session.commit()
@@ -99,6 +168,14 @@ def get_recipients():
     pass
 
 def select_filter(**kwargs):
+    """
+        Listar cobros con filtro.
+        Recibe argumentos por los que filtrar y si se encuentran realiza filtros a un select de cobros.
+        Args:
+            Kwargs:Filtros a realizar.
+        Returns:
+            Listado de cobros.
+    """
     invoices = db.select(Invoices)
     if(kwargs['date_from'] != ''):
         invoices = invoices.filter(Invoices.pay_date >= kwargs["date_from"])
@@ -120,18 +197,95 @@ def select_filter(**kwargs):
     return invoices
 
 def select_all():
+    """
+        Realiza un listado de todos los cobros
+        Returns:
+            Lista de todos los cobros.
+    """
     return db.select(Invoices)
 
 def filtrar_cobros(empleado_id, fecha_inicio, fecha_fin):
-    return Invoices.query.filter(
-        Invoices.recipient == empleado_id,
+    """
+        Filtrado de cobros. 
+        Realiza un filtrado de cobros mediante id de empleado y fecha desde y hasta.
+        Args:
+            empleado_id(int):Empleado a buscar
+            fecha_inicio(date):Fecha desde la que buscar.
+            fecha_fin(date):Fecha hasta la que buscar.
+        Returns:
+            Lista de cobros filtrada.    
+    """
+    return Invoices.query.join(
+        Empleados, 
+        (Empleados.nombre == Invoices.recipient_first_name) & 
+        (Empleados.apellido == Invoices.recipient_last_name)
+    ).filter(
         Invoices.pay_date >= fecha_inicio,
-        Invoices.pay_date <= fecha_fin
+        Invoices.pay_date <= fecha_fin,
+        Empleados.id == empleado_id
     ).all()
+
     
 def get_empleados_con_cobros():
+    """
+        Obtiene una lista de empleados que figuran en cobros.
+        Returns:
+            Lista de empleados que figuran en cobros.
+    """
     empleados_cobradores = db.session.query(Empleados).join(
-        Invoices, Empleados.dni == Invoices.recipient
+        Invoices, 
+        (Empleados.nombre == Invoices.recipient_first_name) &
+        (Empleados.apellido == Invoices.recipient_last_name)
     ).distinct().all()
 
     return empleados_cobradores
+
+
+def search_cobros(
+    recipient_first_name=None, 
+    recipient_last_name=None, 
+    payment_method=None, 
+    date_from=None, 
+    date_to=None, 
+    order='asc', 
+    page=1, 
+    per_page=10
+):
+    """
+    Busca cobros en la base de datos aplicando varios filtros.
+
+    Args:
+        recipient_first_name: Nombre del usuario a buscar.
+        recipient_last_name: Apellido del usuario a buscar.
+        payment_method: Forma de pago del cobro.
+        date_from: Fecha inicial para filtrar cobros.
+        date_to: Fecha final para filtrar cobros.
+        order: Orden de la lista ('asc' o 'desc').
+        page: Página de resultados (por defecto es 1).
+        per_page: Número de resultados por página (por defecto es 10).
+
+    Returns:
+        Objeto de paginación con los cobros encontrados.
+    """
+    query = Invoices.query
+
+    if recipient_first_name:
+        query = query.filter(Invoices.recipient_first_name.ilike(f"%{recipient_first_name}%"))
+
+    if recipient_last_name:
+        query = query.filter(Invoices.recipient_last_name.ilike(f"%{recipient_last_name}%"))
+
+    if payment_method:
+        query = query.filter_by(payment_method=payment_method)
+
+    if date_from:
+        query = query.filter(Invoices.pay_date >= date_from)
+    if date_to:
+        query = query.filter(Invoices.pay_date <= date_to)
+
+    if order == 'asc':
+        query = query.order_by(Invoices.pay_date.asc())
+    else:
+        query = query.order_by(Invoices.pay_date.desc())
+
+    return query.paginate(page=page, per_page=per_page, error_out=False)

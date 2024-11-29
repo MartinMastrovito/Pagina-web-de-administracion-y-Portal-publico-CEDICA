@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 
-<!DOCTYPE html>
 <title>{% block title %}Lista de Usuarios{% endblock %}</title>
 
 <body>
@@ -79,30 +78,35 @@
                     {% endfor %}
                 </tbody>
             </table>                     
-            
             <nav aria-label="Page navigation example" class="mt-4">
                 <ul class="pagination">
                     {% if pagination.has_prev %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('users.index_unaccepted', page=pagination.prev_num, 
-                            email=request.args.get('email', ''), 
-                            order=request.args.get('order', '')) }}" aria-label="Previous">Anterior
+                        <a class="page-link" href="{{ url_for('users.index_unaccepted', 
+                                                              page=pagination.prev_num, 
+                                                              email=request.args.get('email', ''), 
+                                                              order=request.args.get('order', '')) }}" aria-label="Previous">
+                            Anterior
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     {% endif %}
-                    <li class="page-item disabled"><span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span></li>
+                    <li class="page-item disabled">
+                        <span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span>
+                    </li>
                     {% if pagination.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('users.index_unaccepted', page=pagination.next_num, 
-                            email=request.args.get('email', ''), 
-                            order=request.args.get('order', '')) }}" aria-label="Next">Siguiente
+                        <a class="page-link" href="{{ url_for('users.index_unaccepted', 
+                                                              page=pagination.next_num, 
+                                                              email=request.args.get('email', ''), 
+                                                              order=request.args.get('order', '')) }}" aria-label="Next">
+                            Siguiente
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                     {% endif %}
                 </ul>
-            </nav>
+            </nav>            
         </article>
     </section>
 </body>

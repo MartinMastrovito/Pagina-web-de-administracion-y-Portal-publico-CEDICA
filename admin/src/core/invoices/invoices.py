@@ -2,7 +2,6 @@ from src.core.database import db
 import enum
 from sqlalchemy import Enum, ForeignKey
 
-#Modelo de cobros
 class Invoices(db.Model):
     __tablename__="invoices"
     id = db.Column(db.Integer, primary_key=True)

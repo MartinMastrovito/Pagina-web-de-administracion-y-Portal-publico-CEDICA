@@ -1,23 +1,42 @@
 from src.core.database import db
 from src.core.auth.models.model_publicacion import Publicacion
+from datetime import datetime
 
-
-def obtener_publicaciones(page, per_page):
+def obtener_publicaciones(estado=None, sort_by='fecha_actualizacion', order='desc', page=1, per_page=10):
     """
     Obtiene las publicaciones paginadas.
 
-    Recupera las publicaciones de la base de datos, ordenadas por la fecha de actualización
-    de manera ascendente y las devuelve en formato paginado.
+    Recupera las publicaciones de la base de datos, ordenadas según la columna y el orden
+    especificados, y las devuelve en formato paginado.
 
     Args:
-        page : Número de página para la paginación.
-        per_page : Número de publicaciones por página.
+        estado (str, optional): Estado para filtrar las consultas.
+        sort_by (str): Columna por la cual ordenar las publicaciones.
+        order (str): Orden de la columna ('asc' para ascendente, 'desc' para descendente).
+        page (int): Número de página para la paginación.
+        per_page (int): Número de publicaciones por página.
 
     Returns:
-        Pagination: Un objeto de tipo Pagination que contiene las publicaciones de la página
-                    solicitada.
+        Pagination: Un objeto de tipo Pagination con las publicaciones de la página solicitada.
     """
-    return Publicacion.query.order_by(Publicacion.fecha_actualizacion.asc()).paginate(page=page, per_page=per_page)
+    query = Publicacion.query
+
+    if estado:
+        query = query.filter(Publicacion.estado == estado)
+
+    sort_columns = {
+        'fecha_actualizacion': Publicacion.fecha_actualizacion,
+        'fecha_creacion': Publicacion.fecha_creacion,
+    }
+
+    sort_column = sort_columns.get(sort_by, Publicacion.fecha_actualizacion)
+
+    if order == 'asc':
+        query = query.order_by(sort_column.asc())
+    else:
+        query = query.order_by(sort_column.desc())
+
+    return query.paginate(page=page, per_page=per_page, error_out=False)
 
 def crear_publicacion(kwargs):
     """
@@ -80,3 +99,24 @@ def get_publicacion(id):
         404 : Si no se encuentra la publicación con el ID proporcionado.
     """
     return Publicacion.query.get_or_404(id)
+
+def filtrado_portal(**kwargs):
+    titulo = kwargs.get('titulo')
+    page = kwargs.get('page')
+    per_page = kwargs.get('per_page')
+    desde = kwargs.get('desde')
+    hasta = kwargs.get('hasta')
+    publicaciones = Publicacion.query.filter(Publicacion.estado=='Publicado').order_by(Publicacion.fecha_creacion.desc())
+    if desde:
+        desde = desde.strip('"')
+        publicaciones = publicaciones.filter(Publicacion.fecha_creacion >= (desde))
+    if titulo:
+        publicaciones = publicaciones.filter(Publicacion.titulo.like(f"%{titulo}%"))
+    if hasta:
+        hasta = hasta.strip('"')
+        hasta = datetime.strptime(hasta,"%Y-%m-%d").date()
+        publicaciones = publicaciones.filter(Publicacion.fecha_creacion <= (hasta))
+        
+    publicaciones=publicaciones.paginate(page=page, per_page=per_page)
+
+    return publicaciones

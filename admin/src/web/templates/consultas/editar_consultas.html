@@ -1,49 +1,46 @@
-<!-- templates/consultas/editar.html -->
-
 {% extends "layout.html" %}
 
-{% block imports %}
-    {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/editar.css') }}">
-{% endblock %}
+{% block title %}Actualizar Consulta{% endblock %}
 
 {% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Consulta</title>
-</head>
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <h4 class="display-4">Actualizar Consulta</h4>
+    <a class="btn btn-secondary" href="{{ url_for('consultas.menu_consultas') }}">Volver</a>
+</header>
+
 <body>
-    <h1>Editar Consulta</h1>
     <form method="POST" action="{{ url_for('consultas.editar_consulta', id=consulta.id) }}">
-        <div>
-            <label for="nombre_completo">Nombre Completo:</label>
-            <input type="text" id="nombre_completo" name="nombre_completo" value="{{ consulta.nombre_completo }}" required>
+        <div class="mb-3">
+            <label for="nombre_completo" class="form-label">Nombre Completo:</label>
+            <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+            <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="{{ consulta.nombre_completo }}" disabled required>
         </div>
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="{{ consulta.email }}" required>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+            <input type="email" class="form-control" id="email" name="email" value="{{ consulta.email }}" disabled required>
         </div>
-        <div>
-            <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" name="fecha" value="{{ consulta.fecha.strftime('%Y-%m-%d') }}" required>
+        <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha:</label>
+            <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ consulta.fecha.strftime('%Y-%m-%d') }}" disabled required>
         </div>
-        <div>
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="10" cols="50" required>{{ consulta.descripcion }}</textarea>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción:</label>
+            <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+            <textarea class="form-control" id="descripcion" name="descripcion" rows="10" cols="50" disabled required>{{ consulta.descripcion }}</textarea>
         </div>
-        <div>
-            <label for="estado">Estado:</label>
-            <select id="estado" name="estado" required>
+        <div class="mb-3">
+            <label for="estado" class="form-label">Estado:</label>
+            <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
+            <select class="form-control" id="estado" name="estado" required>
                 <option value="Pendiente" {% if consulta.estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
                 <option value="Contestado" {% if consulta.estado == 'Contestado' %}selected{% endif %}>Contestado</option>
                 <option value="Revisar" {% if consulta.estado == 'Revisar' %}selected{% endif %}>Revisar</option>
             </select>
         </div>
-        <button type="submit">Actualizar Consulta</button>
-        <a href="{{ url_for('consultas.menu_consultas') }}" class="btn btn-primary">Volver</a>
+        <button type="submit" class="btn btn-primary">Actualizar Consulta</button>
     </form>
 </body>
 </html>
