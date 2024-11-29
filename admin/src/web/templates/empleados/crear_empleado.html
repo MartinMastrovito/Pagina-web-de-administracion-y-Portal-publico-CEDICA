@@ -16,7 +16,11 @@
         </div>
         <div class="form-group">
             <label for="dni">DNI:</label>
-            <input type="text" id="dni" name="dni" class="form-control" required>
+            <i  title="Campo obligatorio"></i>
+            <input type="number" class="form-control" id="dni" name="dni" min="1000000" required>
+            <small >
+                El campo es obligatorio y debe contener un número de 7 o 8 dígitos.
+            </small>
         </div>
         <div class="form-group">
             <label for="domicilio">Domicilio:</label>
