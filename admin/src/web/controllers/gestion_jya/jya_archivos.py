@@ -39,7 +39,7 @@ def index_documents_jya(jya_dni):
     )
 
     for documento in documentos_pagination.items:
-        documento.nombre_documento = documento.nombre_documento.replace("documentos-JYA/", "")
+        documento.nombre_documento = documento.nombre_documento[documento.nombre_documento.find("=")+1:]
     
     return render_template(
         "JYA/show_documents_jya.html",
@@ -87,7 +87,7 @@ def upload_document(jya_dni):
             
             client.put_object(
                 "grupo30",
-                f"documentos-JYA/{file.filename}",
+                f"documentos-JYA/{jya_dni}/{crud_JyA.cant_documentos()}={file.filename}",
                 file,
                 size,
                 content_type=file.content_type
@@ -95,7 +95,7 @@ def upload_document(jya_dni):
             
             doc_data = {
                 "jya_dni": jya_dni,
-                "nombre_documento": f"documentos-JYA/{file.filename}",
+                "nombre_documento": f"documentos-JYA/{jya_dni}/{crud_JyA.cant_documentos()}={file.filename}",
                 "tipo_documento": request.form["tipo"]
             }
             crud_JyA.save_document(**doc_data)
@@ -152,19 +152,19 @@ def update_document_jya(jya_dni, documento_id):
             
             client.put_object(
                 "grupo30",
-                f"documentos-JYA/{file.filename}",
+                f"documentos-JYA/{jya_dni}/{crud_JyA.cant_documentos()}={file.filename}",
                 file,
                 size,
                 content_type=file.content_type
             )
             
             doc_data = {
-                "nombre_documento": f"documentos-JYA/{file.filename}",
+                "nombre_documento": f"documentos-JYA/{jya_dni}/{crud_JyA.cant_documentos()}={file.filename}",
                 "tipo_documento": request.form["tipo"]
             }
             crud_JyA.update_document(documento.id, **doc_data)
             
-            flash('Se ha actualizado el archivo exitosamente!.', 'success')
+            flash('Se ha actualizado el archivo exitosamente!', 'success')
         else:
             flash('No se pudo actualizar el archivo! Verifique que esté intentando subir un archivo de tipo .pdf, .doc, .xls o .jpeg', 'danger')
     
@@ -188,7 +188,7 @@ def show_delete_document_jya(jya_dni, documento_id):
        Renderizado de la plantilla delete_document_jya.html.
     """
     documento = crud_JyA.get_document_by_id(documento_id)
-    documento.nombre_documento = documento.nombre_documento.replace("documentos-JYA/", "")
+    documento.nombre_documento = documento.nombre_documento[documento.nombre_documento.find("=")+1:]
     
     jya = crud_JyA.get_jya_by_dni(jya_dni)
     
@@ -216,7 +216,7 @@ def delete_document_jya(jya_dni, documento_id):
     
     crud_JyA.delete_document(documento.id)
     
-    flash('Se ha eliminado el archivo exitosamente!.', 'success')
+    flash('Se ha eliminado el archivo exitosamente!', 'success')
     return redirect(f"/JYA/documentos/{jya_dni}")
 
 @bp.get("/descargar/<int:documento_id>")
