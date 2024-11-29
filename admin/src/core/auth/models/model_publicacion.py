@@ -13,6 +13,7 @@ class Publicacion(db.Model):
     contenido = db.Column(db.Text, nullable=False)
     autor_id = db.Column(db.Integer, db.ForeignKey("empleados.id"), nullable=True)
     estado = db.Column(db.Enum("Borrador", "Publicado", "Archivado", name="estado_publicacion"), default="Borrador")
+    nombre_autor = db.Column(db.String(80), nullable=True)
 
     autor = db.relationship("Empleados", backref=db.backref("publicaciones", lazy=True))
 
