@@ -55,7 +55,6 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ url_for('documentos_empleado.download_documento', documento_id=documento.id) }}" class="dropdown-item">Descargar</a></li>
-                                    <li><a href="{{ url_for('documentos_empleado.show_update_document_empleado', empleado_id=empleado.id, documento_id=documento.id) }}" class="dropdown-item">Editar</a></li>
                                     <li><a href="{{ url_for('documentos_empleado.show_delete_document_empleado', empleado_id=empleado.id, documento_id=documento.id) }}" class="dropdown-item">Eliminar</a></li>
                                 </ul>
                             </div>

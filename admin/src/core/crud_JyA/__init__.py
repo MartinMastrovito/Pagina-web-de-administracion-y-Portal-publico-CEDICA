@@ -385,4 +385,7 @@ def get_jyaempleados(jya):
     return empleados_por_rol
 
 def cant_documentos():
+    '''
+        Retorna la cantidad de documentos en total de todos los JYA
+    '''
     return len(Documento.query.all())
