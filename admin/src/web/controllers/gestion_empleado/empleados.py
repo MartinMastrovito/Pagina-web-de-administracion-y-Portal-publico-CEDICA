@@ -18,7 +18,7 @@ def index():
     apellido = request.args.get('apellido', '').strip()
     dni = request.args.get('dni', '').strip()
     email = request.args.get('email', '').strip()
-    puesto = request.args.get('puesto', '').strip()  # Nuevo filtro
+    puesto = request.args.get('puesto', '').strip() 
     sort_by = request.args.get('sort_by', 'nombre')
     order = request.args.get('order', 'asc')
     page = request.args.get('page', 1, type=int)
