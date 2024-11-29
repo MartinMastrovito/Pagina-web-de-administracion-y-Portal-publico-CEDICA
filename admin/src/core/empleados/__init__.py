@@ -244,3 +244,9 @@ def delete_document(document_id):
     """
     db.session.query(DocumentoEmpleado).filter(DocumentoEmpleado.id == str(document_id)).delete()
     db.session.commit()
+
+def cant_documentos():
+    '''
+        Retorna la cantidad de documentos en total de todos los empleados
+    '''
+    return len(DocumentoEmpleado.query.all())
