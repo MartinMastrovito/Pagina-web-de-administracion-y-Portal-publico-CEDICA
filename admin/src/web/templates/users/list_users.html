@@ -7,6 +7,7 @@
 <header class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 mb-3">
     <h4 class="display-6 text-center text-md-start">Usuarios registrados</h4>
     <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+        <a href="{{ url_for('users.create_user') }}" class="btn btn-primary">Crear nuevo usuario</a>
         {% if unaccepted_users %}
         <a class="btn btn-danger mb-2 mb-md-0" href="{{ url_for('users.index_unaccepted') }}">Aceptar usuarios</a>
         {% endif %}
@@ -79,10 +80,11 @@
                         <option value="2" {% if request.args.get('role_id') == '2' %}selected{% endif %}>Ecuestre</option>
                         <option value="3" {% if request.args.get('role_id') == '3' %}selected{% endif %}>Voluntariado</option>
                         <option value="4" {% if request.args.get('role_id') == '4' %}selected{% endif %}>Administración</option>
-                        <option value="5" {% if request.args.get('role_id') == '5' %}selected{% endif %}>Sysadmin</option>
+                        <option value="5" {% if request.args.get('role_id') == '5' %}selected{% endif %}>Editor</option>
+                        <option value="6" {% if request.args.get('role_id') == '6' %}selected{% endif %}>Sysadmin</option>
                     </select>
                 </div>
-                <div class="col-12 col-md-2 text-md-end">
+                <div class="col-12 col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary mt-md-4 w-100">Buscar</button>
                 </div>
             </div>
@@ -128,7 +130,7 @@
                         <td>{{ user.alias }}</td>
                         <td>{{ 'Sí' if user.enabled else 'No' }}</td>
                         <td>{{ user.role.name }}</td>
-                        <td>{{ user.created_at.strftime('%Y-%m-%d') if user.created_at else 'No disponible' }}</td>
+                        <td>{{ user.created_at.strftime('%d/%m/%Y') if user.created_at else 'No disponible' }}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -154,13 +156,19 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- Paginación responsive -->
         <nav aria-label="Page navigation example" class="mt-4">
             <ul class="pagination justify-content-center flex-wrap">
                 {% if pagination.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('users.index', page=pagination.prev_num) }}">Anterior</a>
+                    <a class="page-link" href="{{ url_for('users.index', 
+                                                          page=pagination.prev_num, 
+                                                          email=request.args.get('email', ''), 
+                                                          enabled=request.args.get('enabled', ''), 
+                                                          role_id=request.args.get('role_id', ''), 
+                                                          sort_by=request.args.get('sort_by', ''), 
+                                                          order=request.args.get('order', '')) }}">
+                        Anterior
+                    </a>
                 </li>
                 {% endif %}
                 <li class="page-item disabled">
@@ -168,15 +176,19 @@
                 </li>
                 {% if pagination.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('users.index', page=pagination.next_num) }}">Siguiente</a>
+                    <a class="page-link" href="{{ url_for('users.index', 
+                                                          page=pagination.next_num, 
+                                                          email=request.args.get('email', ''), 
+                                                          enabled=request.args.get('enabled', ''), 
+                                                          role_id=request.args.get('role_id', ''), 
+                                                          sort_by=request.args.get('sort_by', ''), 
+                                                          order=request.args.get('order', '')) }}">
+                        Siguiente
+                    </a>
                 </li>
                 {% endif %}
             </ul>
-        </nav>
-
-        <div class="text-center mt-4">
-            <a href="{{ url_for('users.create_user') }}" class="btn btn-primary">Crear nuevo usuario</a>
-        </div>
+        </nav>        
     </article>
 </section>
 </body>

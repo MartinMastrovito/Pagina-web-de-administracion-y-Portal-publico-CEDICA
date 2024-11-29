@@ -68,13 +68,15 @@ def crear_empleado_listo():
         "profesion": request.form['profesion'],
         "puesto": request.form['puesto'],
         "fecha_inicio": request.form['fecha_inicio'],
-        "fecha_cese": request.form.get('fecha_cese'),
         "contacto_emergencia": request.form['contacto_emergencia'],
         "obra_social": request.form.get('obra_social'),
         "numero_afiliado": request.form.get('numero_afiliado'),
         "condicion": request.form['condicion'],
         "activo": True if request.form['activo'] == 'true' else False
     }
+    
+    if request.form.get('fecha_cese'):
+        empleado_data["fecha_cese"] = request.form.get('fecha_cese')
 
     errores = validate_empleado_form(empleado_data)
     if errores:
@@ -135,7 +137,6 @@ def update_employee(empleado_dni, empleado_id):
         "profesion": request.form["profesion"],
         "puesto": request.form["puesto"],
         "fecha_inicio": request.form["fecha_inicio"],
-        "fecha_cese": request.form["fecha_cese"],
         "contacto_emergencia": request.form["contacto_emergencia"],
         "obra_social": request.form["obra_social"],
         "numero_afiliado": request.form["numero_afiliado"],
@@ -143,6 +144,9 @@ def update_employee(empleado_dni, empleado_id):
         "activo": request.form["activo"] == "true",
     }
 
+    if request.form.get('fecha_cese'):
+        empleado_data["fecha_cese"] = request.form.get('fecha_cese')
+        
     errores = validate_empleado_form(empleado_data)
     print(errores)
     if errores:

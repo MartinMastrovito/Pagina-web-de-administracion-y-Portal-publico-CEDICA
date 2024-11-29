@@ -7,6 +7,7 @@ consultas_bp = Blueprint('consultas', __name__, url_prefix='/consultas')
 
 @consultas_bp.route('/', methods=['GET'])
 @login_required
+@check("consulta_index")
 def menu_consultas():
     """
     Muestra el menú de consultas con opciones de búsqueda, ordenamiento y filtrado.
@@ -19,20 +20,20 @@ def menu_consultas():
     estado = request.args.get('estado', '', type=str)
     orden = request.args.get('orden', 'fecha')
     direction = request.args.get('direction', 'asc')
-
+    
     consultas_paginadas = crud_consulta.search_consultas(
         nombre_completo=nombre_completo,
         estado=estado,
         sort_by=orden,
         order=direction,
-        page=page
+        page=page,
     )
 
-    return render_template('consultas/index_consultas.html', consultas=consultas_paginadas, nombre_completo=nombre_completo, estado=estado, orden=orden, direction=direction)
+    return render_template('consultas/index_consultas.html', consultas=consultas_paginadas.items, pagination=consultas_paginadas, nombre_completo=nombre_completo, estado=estado, orden=orden, direction=direction)
 
 @consultas_bp.route('/<int:id>', methods=['GET'])
 @login_required
-#@check("consulta_show")
+@check("consulta_show")
 def mostrar_consulta(id):
     """
     Muestra los detalles de una consulta específica.
@@ -90,10 +91,6 @@ def editar_consulta(id):
     
     if request.method == 'POST':
         datos_consulta = {
-            'nombre_completo': request.form['nombre_completo'],
-            'email': request.form['email'],
-            'fecha': request.form['fecha'],
-            'descripcion': request.form['descripcion'],
             'estado': request.form['estado']
         }
         crud_consulta.update_consulta(id, **datos_consulta)
@@ -102,7 +99,7 @@ def editar_consulta(id):
     
     return render_template('consultas/editar_consultas.html', consulta=consulta)
 
-@consultas_bp.route('/<int:id>/eliminar', methods=['POST'])
+@consultas_bp.post('/<int:id>/eliminar')
 @login_required
 @check("consulta_destroy")
 def eliminar_consulta(id):

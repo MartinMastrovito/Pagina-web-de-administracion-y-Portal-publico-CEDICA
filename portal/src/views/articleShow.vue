@@ -23,9 +23,11 @@
 
 <template>
     <h1>{{articles.titulo}}</h1>
+    <span>{{articles.fecha_creacion}}</span>
     <h2>{{articles.copete}}</h2>
-    <span>{{articles.año}}</span>
-    <p>{{articles.contenido}}</p>
+    <article>
+        <div v-html="articles.contenido"></div>
+    </article>
 </template>
 
 <style scoped>

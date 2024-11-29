@@ -1,26 +1,35 @@
-<!-- templates/consultas/show.html -->
 {% extends "layout.html" %}
 
-{% block imports %}
-    {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/caballo-css/index.css') }}">
-{% endblock %}
+{% block title %}Detalles de la consulta{% endblock %}
 
 {% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Detalles de la Consulta</title>
-</head>
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <h4 class="display-4">Detalles de la consulta</h4>
+    <a class="btn btn-secondary" href="{{ url_for('consultas.menu_consultas') }}">Volver</a>
+</header>
+
 <body>
-    <h1>Detalles de la Consulta</h1>
-    <p><strong>Fecha:</strong> {{ consulta.fecha.strftime('%Y-%m-%d') }}</p>
-    <p><strong>Nombre:</strong> {{ consulta.nombre_completo }}</p>
-    <p><strong>Estado:</strong> {{ consulta.estado }}</p>
-    <p><strong>Descripción:</strong> {{ consulta.descripcion }}</p>
-    <a href="{{ url_for('consultas.menu_consultas') }}" class="btn">Volver</a>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ consulta.nombre_completo }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Nombre</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ consulta.email }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Email</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ consulta.fecha.strftime('%Y-%m-%d') }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Fecha</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ consulta.estado }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Estado</label>
+    </div>
+    <div class="form-floating mb-3">
+        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>{{ consulta.descripcion }}</textarea>
+        <label for="floatingTextarea2Disabled">Descripcion</label>
+    </div>
 </body>
 </html>
 

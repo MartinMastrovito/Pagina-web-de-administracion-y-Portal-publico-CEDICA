@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}Fluctuación de Empleados{% endblock %}
+
+{% block content %}
+<header class="d-flex justify-content-between align-items-center mt-4 mb-3">
+    <a class="btn btn-secondary" href="{{ url_for('reportes.menu_graficos') }}">Volver</a>
+</header>
+<div class="container">
+    <form method="post" action="{{ url_for('reportes.grafico_fluctuacion_empleados') }}" class="row g-3 mb-4">
+        <div class="col-md-5">
+            <label for="fecha_inicio" class="form-label">Fecha de Inicio:</label>
+            <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio | string }}" class="form-control" disabled>
+        </div>
+        <div class="col-md-5">
+            <label for="fecha_fin" class="form-label">Fecha de Fin:</label>
+            <input type="date" id="fecha_fin" name="fecha_fin" value="{{ fecha_hoy | string }}" class="form-control" disabled>
+        </div>
+    </form>
+
+    {% if plot_url %}
+    <div class="text-center">
+        <h2 class="mb-4">Gráfico de cantidad de Empleados trabajando (Último Año)</h2>
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfico de Fluctuación de Empleados" class="img-fluid">
+    </div>
+    {% else %}
+        <h6 class="display-6 text-danger text-center mt-3">No hubo empleados este último año.</h6>
+    {% endif %}
+</div>
+{% endblock %}

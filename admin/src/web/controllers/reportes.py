@@ -2,15 +2,12 @@ from datetime import date
 import io
 import base64
 import matplotlib.pyplot as plt
+from dateutil.relativedelta import relativedelta
 from flask import render_template, request, Blueprint
 from src.core.auth.decorators import login_required, check
 from src.core import reportes
+from src.core.empleados import get_empleados
 from src.core.invoices.utiles import filtrar_cobros, get_empleados_con_cobros
-
-
-
-
-
 
 bp = Blueprint("reportes", __name__, url_prefix="/reportes")
 
@@ -220,3 +217,48 @@ def reporte_deudores():
     """
     deudores = reportes.obtener_deudores()
     return render_template('reportes/reporte_deudores.html', deudores=deudores)
+
+@bp.route('/fluctuacion')
+@login_required
+@check("show_reporte")
+def grafico_fluctuacion_empleados():
+    """
+    Genera un gráfico de la fluctuación de empleados en el último año, con los meses en español en el eje X.
+    
+    Returns:
+        Renderizado de la plantilla grafico_equipo.html con las fluctuaciones de personal.
+    """
+    
+    fecha_fin = date.today()
+    fecha_inicio = fecha_fin.replace(day=1) - relativedelta(months=12)
+
+    fechas = [fecha_inicio + relativedelta(months=m) for m in range(12)]
+
+    empleados = get_empleados()
+    if not empleados:
+        return render_template("reportes/grafico_equipo.html", plot_url=None, fecha_inicio=fecha_inicio, fecha_hoy=fecha_fin)
+
+    fluctuacion = [
+        sum(
+            1 for empleado in empleados if empleado.fecha_inicio <= fecha and
+            (empleado.fecha_cese is None or empleado.fecha_cese >= fecha)
+        )
+        for fecha in fechas
+    ]
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(fechas, fluctuacion, marker='o', color='b', label='Empleados trabajando')
+    plt.title('Cantidad de empleados trabajando (Último Año)', fontsize=16)
+    plt.xlabel('Meses', fontsize=12)
+    plt.ylabel('Cantidad de Empleados', fontsize=12)
+    plt.grid(True)
+    
+    meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
+    plt.xticks(fechas, [meses[fecha.month - 1] for fecha in fechas], rotation=45)
+    
+    img = io.BytesIO()
+    plt.savefig(img, format='png', bbox_inches='tight')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode()
+
+    return render_template("reportes/grafico_equipo.html", plot_url=plot_url, fecha_inicio=fecha_inicio, fecha_hoy=fecha_fin)

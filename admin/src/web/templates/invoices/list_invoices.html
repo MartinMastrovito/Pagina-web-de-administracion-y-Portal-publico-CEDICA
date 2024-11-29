@@ -1,127 +1,189 @@
 {% extends "layout.html" %}
-<head>
-    {% block imports %}
-        {{super()}}
-        <style>
-            .box {
-                background-color: rgb(174, 235, 225);
-            }
-            .search{
-                display:flex;
-                flex-direction:row;
-                justify-content:flex-start;
-                flex-wrap: wrap;
-                gap:1%;
-            }
-            label{
-                display:flex;
-                flex-direction: column;
-            }
-            .options{
-                display:flex;
-                flex-direction: row;
-            }
-        </style>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/invoices/invoices_list.css') }}">
-    {% endblock %}
-</head>
+
+<title>{% block title %}Registro de Cobros{% endblock %}</title>
+
 <body>
     {% block content %}
-    <a class="btn btn-light" href="{{ url_for('invoices.invoices_menu') }}"> Volver al menu</a>
-    <form class="form search" method="POST" id="search-form" action="{{ url_for('invoices.order_list') }}">
-        <label for="first_name">
-            <span>Nombre empleado</span>
-            <input type="search" placeholder="Nombre" name="first_name">
-        </label>
-        <label for="last_name">
-            <span>Apellido empleado</span>
-            <input type="search" placeholder="Apellido" name="last_name">
-        </label>
-        <label for="from">
-            <span>Desde</span>
-            <input type="date" name="from" value="">
-        </label>
-        <label for="to">
-            <span>Hasta</span>
-            <input type="date" name="to" value="">
-        </label>
-        <label for="payment_method">
-            <span>Tipo de pago</span>
-            <select class="select" name="payment_method" >
-                <option value="">Todos</option>
-                <option value="Efectivo">Efectivo</option>
-                <option value="Tarjeta de credito">Tarjeta de credito</option>
-                <option value="Tarjeta de debito">Tarjeta de debito</option>
-                <option value="Otro">Otro</option>
-            </select>
-        </label>
-        <label>
-            <span>Orden</span>
-            <select class="select" name="order">
-                    <option value="ASC">Ascendente</option>
-                    <option value="DESC">Descendente</option>
-            </select>
-        </label>
-       <button type="submit" form="search-form" class="btn" style="background-color:#78b9bf">BUSCAR</button>
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteModalLabel">Confirmación de eliminación</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ¿Está seguro de que desea eliminar este cobro? Esta acción es irreversible.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <form method="POST" id="deleteForm" action="" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+    <header class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 mb-3">
+        <h4 class="display-6 text-center text-md-start">Cobros registrados</h4>
+        <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+            {% if check_permission(session,"invoice_new") %}
+                <a href="{{url_for('invoices.invoice_create')}}" class="btn btn-primary">Crear cobro</a>
+            {% endif %}
+            <a class="btn btn-danger mb-2 mb-md-0" href="{{url_for('invoices.invoice_statuses', page = 1)}}">Estado deudores</a>
+            <a class="btn btn-secondary" href="{{ url_for('users.show_home') }}">Volver</a>
+        </div>
+    </header>
+
+    <form method="get" action="{{ url_for('invoices.invoices_index') }}" class="mt-4 mb-4">
+        <div class="row g-3">
+            <div class="col-12 col-md-3">
+                <label for="recipient_first_name" class="form-label">Nombre Empleado</label>
+                <input type="text" id="recipient_first_name" name="recipient_first_name" class="form-control" 
+                       placeholder="Nombre" value="{{ request.args.get('recipient_first_name', '') }}">
+            </div>
+            <div class="col-12 col-md-3">
+                <label for="recipient_last_name" class="form-label">Apellido Empleado</label>
+                <input type="text" id="recipient_last_name" name="recipient_last_name" class="form-control" 
+                       placeholder="Apellido" value="{{ request.args.get('recipient_last_name', '') }}">
+            </div>
+            <div class="col-12 col-md-3">
+                <label for="payment_method" class="form-label">Método de Pago</label>
+                <select id="payment_method" name="payment_method" class="form-control">
+                    <option value="">Todos</option>
+                    <option value="Efectivo" {% if request.args.get('payment_method') == 'Efectivo' %}selected{% endif %}>Efectivo</option>
+                    <option value="Tarjeta de credito" {% if request.args.get('payment_method') == 'Tarjeta de credito' %}selected{% endif %}>Tarjeta de crédito</option>
+                    <option value="Tarjeta de debito" {% if request.args.get('payment_method') == 'Tarjeta de debito' %}selected{% endif %}>Tarjeta de débito</option>
+                    <option value="Otro" {% if request.args.get('payment_method') == 'Otro' %}selected{% endif %}>Otro</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3 mt-3">
+            <div class="col-12 col-md-3">
+                <label for="date_from" class="form-label">Fecha Desde</label>
+                <input type="date" id="date_from" name="date_from" class="form-control" 
+                       value="{{ request.args.get('date_from', '') }}">
+            </div>
+            <div class="col-12 col-md-3">
+                <label for="date_to" class="form-label">Fecha Hasta</label>
+                <input type="date" id="date_to" name="date_to" class="form-control" 
+                       value="{{ request.args.get('date_to', '') }}">
+            </div>
+            <div class="col-12 col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Buscar</button>
+            </div>
+        </div>
     </form>
+
     <div class="table-responsive">
         <table class="table table-striped mt-4">
             <thead class="thead-dark">
-                <th>id</th>
-                <th>J&A</th>
-                <th>Fecha de pago</th>
-                <th>Metodo de pago</th>
+                <th>Empleado</th>
                 <th>Monto</th>
-                <th>Beneficiario</th>
-            </thead>
+                <th>Método de pago</th>
+                <th>
+                    <a href="{{ url_for('invoices.invoices_index', page=pagination.page, 
+                                                                 date_from=request.args.get('date_from'), 
+                                                                 recipient_first_name=request.args.get('recipient_first_name'), 
+                                                                 recipient_last_name=request.args.get('recipient_last_name'),
+                                                                 payment_method=request.args.get('payment_method'),
+                                                                 date_to=request.args.get('date_to'), 
+                                                                 order='asc' if request.args.get('order', 'asc') == 'desc' else 'desc') }}">
+                        Fecha
+                        {% if request.args.get('order', 'asc') == 'asc' %}
+                            ▲
+                        {% else %}
+                            ▼
+                        {% endif %}
+                    </a>
+                </th>
+                <th>J&A</th>
+                <th>Acciones</th>
+            </thead>            
             <tbody>
-                {% for invoice in invoices %}
-                    <tr>
-                        <td>{{invoice.id}}</td>
-                        <td>{{invoice.ja_first_name}} {{invoice.ja_last_name}}</td>
-                        <td>{{invoice.pay_date}}</td>
-                        <td>{{invoice.payment_method}}</td>
-                        <td>{{invoice.amount}}</td>
-                        <td>{{invoice.recipient_first_name}} {{invoice.recipient_last_name}}</td>
-                        <td class="options">
-                            <div>
-                                {%if check_permission(session,"invoice_update") %}
-                                    <a class="btn btn-primary" href="{{url_for('invoices.update_invoice' ,invoice_id = invoice.id)}}">Actualizar</a> 
+                {% for cobro in cobros %}
+                <tr>
+                    <td>{{ cobro.recipient_first_name }} {{ cobro.recipient_last_name }}</td>
+                    <td>{{ cobro.amount }}</td>
+                    <td>{{ cobro.payment_method }}</td>
+                    <td>{{ cobro.pay_date.strftime('%d/%m/%Y') if cobro.pay_date else '' }}</td>
+                    <td>{{ cobro.ja_first_name }} {{ cobro.ja_last_name }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Menú
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% if check_permission(session, "invoice_update") %}
+                                    <li><a href="{{ url_for('invoices.update_invoice', invoice_id=cobro.id) }}" class="dropdown-item">Actualizar</a></li>
                                 {% endif %}
-                                {%if check_permission(session,"invoice_show") %}
-                                    <a class="btn btn-primary" href="{{url_for('invoices.show_invoice' ,invoice_id = invoice.id)}}">Mostrar</a> 
+                                {% if check_permission(session, "invoice_show") %}
+                                    <li><a href="{{ url_for('invoices.show_invoice', invoice_id=cobro.id) }}" class="dropdown-item">Mostrar</a></li>
                                 {% endif %}
-                            </div>
-                            {%if check_permission(session,"invoice_destroy") %}
-                                <form action="{{ url_for('invoices.delete_invoice') }}"  class="form_style" method="POST">
-                                    <input type="hidden" value={{invoice.id}} name="id">
-                                    <button  class="btn btn-danger">Eliminar</button>
-                                </form>
-                            {% endif %}
-                        </td>
-                    </tr>
+                                {% if check_permission(session, "invoice_destroy") %}
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ url_for('invoices.delete_invoice', cobro_id=cobro.id) }}">Eliminar</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <div class="page-items">
-        <p>{{invoices.first}} - {{invoices.last}} of {{invoices.total}} </p>
-    </div>
-    <div class="pagination">
-        {% for page in invoices.iter_pages() %}
-            {% if page %}
-                {% if page != invoices.page %}
-                    <a class="button" href="{{ url_for('invoices.invoices_index',page=page) }}">{{page}}</a>
-                {% else %}
-                    <strong>{{page}}</strong>
-                {% endif %}
-            {% else %}
-                <span class="ellipsis">...</span>
+    <nav aria-label="Page navigation example" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if pagination.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('invoices.invoices_index', 
+                                                      page=pagination.prev_num, 
+                                                      recipient_first_name=request.args.get('recipient_first_name', ''), 
+                                                      recipient_last_name=request.args.get('recipient_last_name', ''), 
+                                                      payment_method=request.args.get('payment_method', ''), 
+                                                      date_from=request.args.get('date_from', ''), 
+                                                      date_to=request.args.get('date_to', ''), 
+                                                      order=request.args.get('order', 'asc')) }}">
+                    Anterior
+                </a>
+            </li>
             {% endif %}
-        {% endfor %}
-    </div>
-    {% endblock %}
-    {%block scripts %}
-            {{super()}}
-    {% endblock %}
+            <li class="page-item disabled">
+                <span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span>
+            </li>
+            {% if pagination.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('invoices.invoices_index', 
+                                                      page=pagination.next_num, 
+                                                      recipient_first_name=request.args.get('recipient_first_name', ''), 
+                                                      recipient_last_name=request.args.get('recipient_last_name', ''), 
+                                                      payment_method=request.args.get('payment_method', ''), 
+                                                      date_from=request.args.get('date_from', ''), 
+                                                      date_to=request.args.get('date_to', ''), 
+                                                      order=request.args.get('order', 'asc')) }}">
+                    Siguiente
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>    
 </body>
+
+<script>
+    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            var url = event.target.getAttribute('data-url');
+            if (url) {
+                document.getElementById('deleteForm').action = url;
+            }
+        });
+    });
+</script>
+
+<style>
+    .table thead {
+        background-color: rgb(174, 235, 225);
+    }
+    .pagination {
+        justify-content: center;
+    }
+</style>
+{% endblock %}
