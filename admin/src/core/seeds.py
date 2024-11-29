@@ -3,6 +3,7 @@ from src.core.auth.models.model_permission import Permission, RolePermission
 from src.core.auth.models.model_empleado import Empleados
 from src.core.auth.models.model_caballos import Caballo
 from src.core.auth.models.model_JyA import JYA
+from src.core.auth.models.model_pago import Pago
 from src.core.auth.models.model_JYAEmpleado import JYAEmpleado
 from src.core.auth.models.model_publicacion import Publicacion
 from src.core.invoices.invoices import Invoices
@@ -635,6 +636,36 @@ def invoices_create():
     db.session.add_all(invoices_list)
     db.session.commit()
 
+def pagos_create():
+    primer_empleado = Empleados.query.get(1)
+    segundo_empleado = Empleados.query.get(2)
+    pagos_list = [
+        Pago(
+            beneficiario_id = primer_empleado.id,
+            beneficiario_nombre = primer_empleado.nombre,
+            beneficiario_apellido = primer_empleado.apellido,
+            fecha_pago = "2024-06-07",
+            monto = 600,
+            tipo_pago = "Honorarios",
+            description = "agrego pago",
+
+           
+        ),
+        Pago(
+            beneficiario_id = segundo_empleado.id,
+            beneficiario_nombre = segundo_empleado.nombre,
+            beneficiario_apellido = segundo_empleado.apellido,
+            fecha_pago = "2023-06-07",
+            monto = 100,
+            tipo_pago = "Proveedor",
+            description = "agrego pago 2",
+
+           
+        )
+    ]
+    db.session.add_all(pagos_list)
+    db.session.commit()
+
 def db_seeds():
     role_create()
     permission_create()
@@ -644,6 +675,7 @@ def db_seeds():
     JYA_create()
     articles_create()
     invoices_create()
+    pagos_create()
 
 """
 Técnica
