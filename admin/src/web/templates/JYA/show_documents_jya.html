@@ -72,7 +72,7 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ documento.nombre_documento }}" class="dropdown-item">Ver Enlace</a></li>
                                         {% if check_permission(session, "jya_update") %}
-                                        <li><a href="{{ url_for('enlaces.show_update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Editar</a></li>
+                                        <li><a href="{{ url_for('enlaces.show_update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Actualizar</a></li>
                                         {% endif %}
                                         <li><a href="{{ url_for('enlaces.show_delete_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" class="dropdown-item">Eliminar</a></li>
                                     </ul>
