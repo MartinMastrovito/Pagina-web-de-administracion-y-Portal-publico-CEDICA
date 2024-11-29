@@ -7,25 +7,63 @@
 <div class="container mt-4">
     <h1>Listado de Pagos</h1>
     <a class="btn btn-info btn-sm" href="{{url_for('pagos.crear_pago_route')}}">Crear pago</a>
+    <form method="get" action="{{ url_for('pagos.listar_pagos_route') }}" class="mt-4 mb-4">
+        <div class="row g-3">
+            <div class="col-12 col-md-3">
+                <label for="payment_method" class="form-label">Método de Pago</label>
+                <select id="payment_method" name="payment_method" class="form-control">
+                    <option value="">Todos</option>
+                    <option value="Honorarios" {% if request.args.get('payment_method') == 'Honorarios' %}selected{% endif %}>Honorarios</option>
+                    <option value="Proveedor" {% if request.args.get('payment_method') == 'Proveedor' %}selected{% endif %}>Proveedor</option>
+                    <option value="Gastos varios" {% if request.args.get('payment_method') == 'Gastos varios' %}selected{% endif %}>Gastos varios</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3 mt-3">
+            <div class="col-12 col-md-3">
+                <label for="date_from" class="form-label">Fecha Desde</label>
+                <input type="date" id="date_from" name="date_from" class="form-control" 
+                       value="{{ request.args.get('date_from', '') }}">
+            </div>
+            <div class="col-12 col-md-3">
+                <label for="date_to" class="form-label">Fecha Hasta</label>
+                <input type="date" id="date_to" name="date_to" class="form-control" 
+                       value="{{ request.args.get('date_to', '') }}">
+            </div>
+            <div class="col-12 col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Buscar</button>
+            </div>
+        </div>
+    </form>
+
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Beneficiario</th>
                 <th>Monto</th>
                 <th>Tipo de Pago</th>
-                <th>Descripción</th>
+                <th><a href="{{ url_for('pagos.listar_pagos_route', page=pagination.page, 
+                                                                 date_from=request.args.get('date_from'), 
+                                                                 payment_method=request.args.get('payment_method'),
+                                                                 date_to=request.args.get('date_to'), 
+                                                                 order='asc' if request.args.get('order', 'asc') == 'desc' else 'desc') }}">
+                        Fecha
+                        {% if request.args.get('order', 'asc') == 'asc' %}
+                            ▲
+                        {% else %}
+                            ▼
+                        {% endif %}
+                    </a></th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            {% for pago in pagos.items %}
+            {% for pago in pagos %}
             <tr>
-                <td>{{ pago.id }}</td>
                 <td>{{ pago.beneficiario_nombre }} {{ pago.beneficiario_apellido }}</td>
                 <td>{{ pago.monto }}</td>
                 <td>{{ pago.tipo_pago }}</td>
-                <td>{{ pago.description }}</td>
+                <td>{{ pago.fecha_pago.strftime('%d/%m/%Y') }}</td>
                 <td>
                     <a href="{{ url_for('pagos.obtener_pago_route', id=pago.id) }}" class="btn btn-info btn-sm">Ver</a>
                     <a href="{{ url_for('pagos.actualizar_pago_route', id=pago.id) }}" class="btn btn-warning btn-sm">Editar</a>
@@ -42,21 +80,31 @@
     
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            {% if pagos.has_prev %}
+            {% if pagination.has_prev %}
             <li class="page-item">
-                <a class="page-link" href="{{ url_for('pagos.listar_pagos_route', page=pagos.prev_num) }}">Anterior</a>
+                <a class="page-link" href="{{ url_for('pagos.listar_pagos_route', page=pagination.prev_num, payment_method=request.args.get('payment_method', ''), 
+                                                      date_from=request.args.get('date_from', ''), 
+                                                      date_to=request.args.get('date_to', ''), 
+                                                      order=request.args.get('order', 'asc')) }}">
+                    Anterior
+                </a>
             </li>
             {% endif %}
             <li class="page-item disabled">
-                <span class="page-link">Página {{ pagos.page }} de {{ pagos.pages }}</span>
+                <span class="page-link">Página {{ pagination.page }} de {{ pagination.pages }}</span>
             </li>
-            {% if pagos.has_next %}
+            {% if pagination.has_next %}
             <li class="page-item">
-                <a class="page-link" href="{{ url_for('pagos.listar_pagos_route', page=pagos.next_num) }}">Siguiente</a>
+                <a class="page-link" href="{{ url_for('pagos.listar_pagos_route', page=pagination.next_num, payment_method=request.args.get('payment_method', ''), 
+                                                      date_from=request.args.get('date_from', ''), 
+                                                      date_to=request.args.get('date_to', ''), 
+                                                      order=request.args.get('order', 'asc')) }}">
+                    Siguiente
+                </a>
             </li>
             {% endif %}
         </ul>
     </nav>
-    <a class="btn btn-info btn-sm" href="{{url_for('empleados.show_create_employee_form')}}">Volver</a>
+    <a class="btn btn-info btn-sm" href="{{url_for('users.show_home')}}">Volver</a>
 </div>
 {% endblock %}
