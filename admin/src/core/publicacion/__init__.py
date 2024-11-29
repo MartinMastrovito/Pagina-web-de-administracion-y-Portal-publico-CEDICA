@@ -106,7 +106,7 @@ def filtrado_portal(**kwargs):
     per_page = kwargs.get('per_page')
     desde = kwargs.get('desde')
     hasta = kwargs.get('hasta')
-    publicaciones = Publicacion.query.order_by(Publicacion.fecha_creacion.desc())
+    publicaciones = Publicacion.query.filter(Publicacion.estado=='Publicado').order_by(Publicacion.fecha_creacion.desc())
     if desde:
         desde = desde.strip('"')
         publicaciones = publicaciones.filter(Publicacion.fecha_creacion >= (desde))

@@ -8,7 +8,7 @@ bp = Blueprint("documentos_empleado", __name__, url_prefix="/documentos_empleado
 
 @bp.get("/<int:empleado_dni>")
 @login_required
-#@check("empleado_index")
+@check("empleado_index")
 def index(empleado_dni):
     """
     Muestra la lista de documentos asociados a un empleado específico,
@@ -46,7 +46,7 @@ def index(empleado_dni):
 
 @bp.get("/cargar_documentos/<int:empleado_dni>")
 @login_required
-#@check("empleado_new")
+@check("empleado_new")
 def show_upload_document(empleado_dni):
     """
     Muestra el formulario para cargar un nuevo documento asociado a un empleado.
@@ -62,7 +62,7 @@ def show_upload_document(empleado_dni):
 
 @bp.post("/documentos/cargar_documentos/<int:empleado_dni>")
 @login_required
-#@check("empleado_new")
+@check("empleado_new")
 def upload_document(empleado_dni):
     """
     Carga un documento asociado a un empleado en el almacenamiento y lo guarda en la base de datos.
@@ -98,7 +98,7 @@ def upload_document(empleado_dni):
 
 @bp.get("/documentos/actualizar/<int:empleado_id>/<int:documento_id>")
 @login_required
-#@check("empleado_update")
+@check("empleado_update")
 def show_update_document_empleado(empleado_id, documento_id):
     """
     Muestra el formulario para actualizar un documento específico de un empleado.
@@ -117,7 +117,7 @@ def show_update_document_empleado(empleado_id, documento_id):
 
 @bp.post("/documentos/actualizar/<int:empleado_id>/<int:documento_id>")
 @login_required
-#@check("empleado_update")
+@check("empleado_update")
 def update_document_empleado(empleado_id, documento_id):
     """
     Actualiza un documento de un empleado, reemplazándolo en el almacenamiento
@@ -158,7 +158,7 @@ def update_document_empleado(empleado_id, documento_id):
 
 @bp.get("/documentos/eliminar/<int:empleado_id>/<int:documento_id>")
 @login_required
-#@check("empleado_destroy")
+@check("empleado_destroy")
 def show_delete_document_empleado(empleado_id, documento_id):
     """
     Muestra la confirmación para eliminar un documento específico de un empleado.
@@ -177,7 +177,7 @@ def show_delete_document_empleado(empleado_id, documento_id):
 
 @bp.post("/documentos/eliminar/<int:empleado_id>/<int:documento_id>")
 @login_required
-#@check("empleado_destroy")
+@check("empleado_destroy")
 def delete_document_empleado(empleado_id, documento_id):
     """
     Elimina un documento de un empleado tanto del almacenamiento como de la base de datos.
@@ -201,7 +201,7 @@ def delete_document_empleado(empleado_id, documento_id):
 
 @bp.get("/documentos/descargar/<int:documento_id>")
 @login_required
-#@check("empleado_show")
+@check("empleado_show")
 def download_documento(documento_id):
     """
     Permite la descarga de un documento específico asociado a un empleado.

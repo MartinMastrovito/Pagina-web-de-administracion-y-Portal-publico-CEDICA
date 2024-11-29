@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="container-fluid home">
       <section id="info" class="info">
         <h2 class="section-title">Sobre CEDICA</h2>
         <p>

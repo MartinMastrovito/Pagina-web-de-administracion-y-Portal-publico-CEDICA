@@ -9,7 +9,7 @@ bp = Blueprint('empleados', __name__, url_prefix="/empleados", template_folder='
 
 @bp.get("/")
 @login_required
-#@check("user_index")
+@check("team_index")
 def index():
     """
     Muestra la lista de empleados con filtros y ordenación.
@@ -18,7 +18,7 @@ def index():
     apellido = request.args.get('apellido', '').strip()
     dni = request.args.get('dni', '').strip()
     email = request.args.get('email', '').strip()
-    puesto = request.args.get('puesto', '').strip()
+    puesto = request.args.get('puesto', '').strip() 
     sort_by = request.args.get('sort_by', 'nombre')
     order = request.args.get('order', 'asc')
     page = request.args.get('page', 1, type=int)
@@ -44,6 +44,8 @@ def index():
 
 
 @bp.get("/crear_empleado")
+@login_required
+@check("team_new")
 def show_create_employee_form():
     """
     Muestra el formulario para crear un nuevo empleado.
@@ -55,7 +57,8 @@ def show_create_employee_form():
 
 
 @bp.post("/crear_empleado")
-#@login_required
+@login_required
+@check("team_new")
 def crear_empleado_listo():
     empleado_data = {
         "nombre": request.form['nombre'],
@@ -68,13 +71,15 @@ def crear_empleado_listo():
         "profesion": request.form['profesion'],
         "puesto": request.form['puesto'],
         "fecha_inicio": request.form['fecha_inicio'],
-        "fecha_cese": request.form.get('fecha_cese'),
         "contacto_emergencia": request.form['contacto_emergencia'],
         "obra_social": request.form.get('obra_social'),
         "numero_afiliado": request.form.get('numero_afiliado'),
         "condicion": request.form['condicion'],
         "activo": True if request.form['activo'] == 'true' else False
     }
+    
+    if request.form.get('fecha_cese'):
+        empleado_data["fecha_cese"] = request.form.get('fecha_cese')
 
     errores = validate_empleado_form(empleado_data)
     if errores:
@@ -93,6 +98,7 @@ def crear_empleado_listo():
 
 @bp.get("/actualizar/<int:empleado_dni>")
 @login_required
+@check("team_update")
 def show_update_employee_form(empleado_dni):
     """
     Muestra el formulario de actualización para un empleado específico.
@@ -112,7 +118,9 @@ def show_update_employee_form(empleado_dni):
 
 
 @bp.post("/actualizar/<int:empleado_dni>/<int:empleado_id>")
+
 @login_required
+@check("team_update")
 def update_employee(empleado_dni, empleado_id):
     """
     Actualiza los datos de un empleado existente.
@@ -135,7 +143,6 @@ def update_employee(empleado_dni, empleado_id):
         "profesion": request.form["profesion"],
         "puesto": request.form["puesto"],
         "fecha_inicio": request.form["fecha_inicio"],
-        "fecha_cese": request.form["fecha_cese"],
         "contacto_emergencia": request.form["contacto_emergencia"],
         "obra_social": request.form["obra_social"],
         "numero_afiliado": request.form["numero_afiliado"],
@@ -143,6 +150,9 @@ def update_employee(empleado_dni, empleado_id):
         "activo": request.form["activo"] == "true",
     }
 
+    if request.form.get('fecha_cese'):
+        empleado_data["fecha_cese"] = request.form.get('fecha_cese')
+        
     errores = validate_empleado_form(empleado_data)
     print(errores)
     if errores:
@@ -159,6 +169,7 @@ def update_employee(empleado_dni, empleado_id):
 
 @bp.post("/eliminar/<int:empleado_dni>")
 @login_required
+@check("team_destroy")
 def delete_employee(empleado_dni):
     """
     Elimina un empleado de la base de datos.
@@ -175,6 +186,7 @@ def delete_employee(empleado_dni):
 
 @bp.get("/detalle/<int:empleado_dni>")
 @login_required
+@check("team_show")
 def show_empleado(empleado_dni):
     """
     Muestra el formulario para crear un nuevo empleado.
