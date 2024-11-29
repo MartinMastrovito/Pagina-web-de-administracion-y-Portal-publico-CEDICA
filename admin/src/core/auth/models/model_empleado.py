@@ -24,12 +24,9 @@ class Empleados(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     documentos = db.relationship('DocumentoEmpleado', backref='empleado', lazy=True, cascade='all, delete-orphan')
-    jyas_roles = db.relationship('JYAEmpleado', back_populates='empleado')
-
+    jyas_roles = db.relationship('JYAEmpleado', back_populates='empleado', cascade="all, delete-orphan")
     beneficiary = db.relationship('Pago', secondary='beneficiary', back_populates='empleados')
     
-    
-
     def __repr__(self):
         return f'<Empleado {self.nombre},{self.id}>'
 

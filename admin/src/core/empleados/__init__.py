@@ -7,6 +7,7 @@ def get_empleados():
 
 def listar_empleados_activos():
     return Empleados.query.filter_by(activo=True).all()
+
 def lista_empleado():
     """
     Devuelve la lista de todos los empleados.

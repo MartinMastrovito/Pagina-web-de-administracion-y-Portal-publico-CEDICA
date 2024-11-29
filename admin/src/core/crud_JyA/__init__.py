@@ -89,13 +89,23 @@ def create_jya(caballo_id, **kwargs):
 
 def assign_employee_to_jya(jya_id, empleado_id, rol):
     """
-    Asigna un empleado a un JYA con un rol específico.
+    Asigna un empleado a un JYA con un rol específico si no existe previamente.
 
     Args:
         jya_id: ID del JYA.
         empleado_id: ID del empleado a asignar.
         rol: Rol del empleado (terapeuta, conductor, auxiliar).
     """
+    
+    existente = JYAEmpleado.query.filter_by(jya_id=jya_id, rol=rol).first()
+
+    if existente:
+        if existente.empleado_id == empleado_id:
+            return
+        else:
+            db.session.delete(existente)
+            db.session.commit()
+    
     asignacion = JYAEmpleado(
         jya_id=jya_id,
         empleado_id=empleado_id,
