@@ -33,7 +33,7 @@ class DevelopmentConfig(Config):
     DB_USER = os.getenv("DB_USER", "postgres")
     DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
     DB_HOST = "localhost"
-    DB_PORT = "5432"
+    DB_PORT = "5433"
     DB_NAME = "grupo30"
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
