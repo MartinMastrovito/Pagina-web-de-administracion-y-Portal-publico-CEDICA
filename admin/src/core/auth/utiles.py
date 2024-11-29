@@ -242,7 +242,7 @@ def block_user(user_id):
         bool: True si se bloqueó correctamente, False si no se pudo bloquear.
     """
     user = get_user(user_id)
-    if user and user.role_id != 5:  # 5 es el ID del rol System Admin
+    if user and user.role_id != 6:
         user.enabled = False
         db.session.commit()
         return True
