@@ -373,3 +373,6 @@ def get_jyaempleados(jya):
         empleados_por_rol[jya_empleado.rol] = jya_empleado
         
     return empleados_por_rol
+
+def cant_documentos():
+    return len(Documento.query.all())
