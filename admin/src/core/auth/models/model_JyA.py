@@ -40,5 +40,7 @@ class JYA(db.Model):
     caballo = db.relationship('Caballo', back_populates='jyas')
     documentos = db.relationship('Documento', backref='jya', lazy=True)
 
+    eliminado = db.Column(db.Boolean, default=False, nullable=False)
+    
     def __repr__(self):
         return f'<Persona {self.nombre} {self.apellido}>'

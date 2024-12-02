@@ -35,7 +35,7 @@ def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=No
     Returns:
         Objeto de paginación con los resultados de la búsqueda.
     """
-    query = JYA.query
+    query = JYA.query.filter_by(eliminado=False)
 
     if nombre:
         query = query.filter(JYA.nombre.ilike(f"%{nombre}%"))
@@ -173,13 +173,14 @@ def delete_jya(jya_dni):
 
     client = current_app.storage.client
     for documento in documentos:
+        if documento.nombre_documento.startswith("documentos-JYA/"):
             client.remove_object("grupo30", documento.nombre_documento)
-
-            delete_document(documento.id)
+            
+        delete_document(documento.id)
 
     db.session.query(JYAEmpleado).filter_by(jya_id=jya.id).delete(synchronize_session=False)
 
-    db.session.delete(jya)
+    jya.eliminado = True
     db.session.commit()
 
     
