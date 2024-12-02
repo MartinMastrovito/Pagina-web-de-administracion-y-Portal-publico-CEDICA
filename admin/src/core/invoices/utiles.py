@@ -115,7 +115,7 @@ def get_all_ja():
         Returns:
             Listado de JYA ordenados por apellido.
     """
-    ja_query = JYA.query.order_by(JYA.apellido)
+    ja_query = JYA.query.filter(JYA.eliminado == False).order_by(JYA.apellido)
     return ja_query
 
 def get_all_employees():
