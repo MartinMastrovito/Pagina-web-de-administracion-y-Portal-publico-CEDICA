@@ -1,15 +1,8 @@
-"""
-Módulo de controladores para la gestión de pagos.
-
-Este módulo contiene las rutas y controladores para listar, obtener, crear, actualizar y eliminar pagos.
-"""
-
-from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
+from flask import Blueprint, request, render_template, redirect, url_for, flash
 from src.core.auth.decorators import check, login_required
-from src.core.crud_pagos import listar_pagos, obtener_pago, crear_pago, actualizar_pago, eliminar_pago
-from src.core.auth.models.model_empleado import Empleados
-from src.core.database import db
 from src.core.empleados import listar_empleados_activos, get_empleado_by_id
+from src.core.crud_pagos import listar_pagos, obtener_pago, crear_pago, actualizar_pago, eliminar_pago, get_empleado
+
 
 pagos_bp = Blueprint('pagos', __name__, url_prefix='/pagos')
 
@@ -25,9 +18,23 @@ def listar_pagos_route():
     Returns:
         str: El contenido HTML de la página de listado de pagos.
     """
+    payment_method = request.args.get('payment_method')
+    date_from = request.args.get('date_from')
+    date_to = request.args.get('date_to')
+    order = request.args.get('order', 'asc')
     page = request.args.get('page', 1, type=int)
-    pagos = listar_pagos(page=page)
-    return render_template('pagos/listar_pago.html', pagos=pagos)
+    per_page = 10
+
+    pagos_paginacion = listar_pagos(
+        date_from=date_from,
+        date_to=date_to,
+        order=order,
+        payment_method=payment_method,
+        per_page=per_page,
+        page=page,
+    )
+    
+    return render_template('pagos/listar_pago.html', pagos=pagos_paginacion.items, pagination=pagos_paginacion,)
 
 @pagos_bp.route('/<int:id>', methods=['GET'])
 @login_required

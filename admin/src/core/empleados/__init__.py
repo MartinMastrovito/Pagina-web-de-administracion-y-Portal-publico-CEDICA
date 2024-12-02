@@ -7,6 +7,7 @@ def get_empleados():
 
 def listar_empleados_activos():
     return Empleados.query.filter_by(activo=True).all()
+
 def lista_empleado():
     """
     Devuelve la lista de todos los empleados.
@@ -243,3 +244,9 @@ def delete_document(document_id):
     """
     db.session.query(DocumentoEmpleado).filter(DocumentoEmpleado.id == str(document_id)).delete()
     db.session.commit()
+
+def cant_documentos():
+    '''
+        Retorna la cantidad de documentos en total de todos los empleados
+    '''
+    return len(DocumentoEmpleado.query.all())

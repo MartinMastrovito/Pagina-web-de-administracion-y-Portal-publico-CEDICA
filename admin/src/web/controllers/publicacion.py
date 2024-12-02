@@ -1,7 +1,7 @@
 from flask import render_template, request, Blueprint, flash, redirect
 from flask_ckeditor.utils import cleanify
 from src.core import publicacion
-from src.core.empleados import lista_empleado
+from src.core.empleados import lista_empleado, get_empleado_by_id
 from src.core.auth.decorators import login_required, check
 from datetime import datetime, timezone
 
@@ -74,6 +74,9 @@ def crear_publicacion():
         "fecha_creacion": datetime.now(timezone.utc),
         "fecha_actualizacion": datetime.now(timezone.utc),
     }
+    
+    empleado = get_empleado_by_id(pub_data["autor_id"])
+    pub_data["nombre_autor"] = f"{empleado.nombre} {empleado.apellido}"
     
     publicacion.crear_publicacion(pub_data)
     flash("Publicacion creada correctamente", "success")
