@@ -1,48 +1,62 @@
 {% extends "layout.html" %}
 
-{% block title %}Actualizar Consulta{% endblock %}
+{% block title %}Editar Consulta{% endblock %}
 
 {% block content %}
 
 <header class="d-flex justify-content-between align-items-center mt-4 mb-3">
-    <h4 class="display-4">Actualizar Consulta</h4>
+    <h4 class="display-4">Editar Consulta</h4>
     <a class="btn btn-secondary" href="{{ url_for('consultas.menu_consultas') }}">Volver</a>
 </header>
 
-<body>
-    <form method="POST" action="{{ url_for('consultas.editar_consulta', id=consulta.id) }}">
-        <div class="mb-3">
-            <label for="nombre_completo" class="form-label">Nombre Completo:</label>
-            <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-            <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="{{ consulta.nombre_completo }}" disabled required>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email:</label>
-            <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-            <input type="email" class="form-control" id="email" name="email" value="{{ consulta.email }}" disabled required>
-        </div>
-        <div class="mb-3">
-            <label for="fecha" class="form-label">Fecha:</label>
-            <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ consulta.fecha.strftime('%Y-%m-%d') }}" disabled required>
-        </div>
-        <div class="mb-3">
-            <label for="descripcion" class="form-label">Descripción:</label>
-            <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-            <textarea class="form-control" id="descripcion" name="descripcion" rows="10" cols="50" disabled required>{{ consulta.descripcion }}</textarea>
-        </div>
-        <div class="mb-3">
-            <label for="estado" class="form-label">Estado:</label>
-            <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
-            <select class="form-control" id="estado" name="estado" required>
-                <option value="Pendiente" {% if consulta.estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
-                <option value="Contestado" {% if consulta.estado == 'Contestado' %}selected{% endif %}>Contestado</option>
-                <option value="Revisar" {% if consulta.estado == 'Revisar' %}selected{% endif %}>Revisar</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Actualizar Consulta</button>
-    </form>
-</body>
-</html>
+<form action="{{ url_for('consultas.editar_consulta', id=consulta.id) }}" method="POST">
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ consulta.nombre_completo }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Nombre</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ consulta.email }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Email</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" type="text" value="{{ consulta.fecha.strftime('%Y-%m-%d') }}" aria-label="Disabled input example" disabled readonly>
+        <label for="floatingInputDisabled">Fecha</label>
+    </div>
+    <div class="form-floating mb-3">
+        <select class="form-control" id="estado" name="estado" required onchange="toggleComentario()">
+            <option value="Pendiente" {% if consulta.estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+            <option value="Contestado" {% if consulta.estado == 'Contestado' %}selected{% endif %}>Contestado</option>
+            <option value="Revisar" {% if consulta.estado == 'Revisar' %}selected{% endif %}>Revisar</option>
+        </select>
+        <label for="estado">Estado</label>
+    </div>
+    <div class="form-floating mb-3">
+        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>{{ consulta.descripcion }}</textarea>
+        <label for="floatingTextarea2Disabled">Descripcion</label>
+    </div>
+    <div class="form-floating mb-3" id="comentario-container" style="display: none;">
+        <textarea class="form-control" placeholder="Leave a comment here" id="cambio_estado" name="cambio_estado" style="height: 100px"></textarea>
+        <label for="cambio_estado">Comentario sobre el cambio de estado</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar Consulta</button>
+</form>
+
+<script>
+    var estadoInicial = "{{ consulta.estado }}";
+
+    function toggleComentario() {
+        var estadoActual = document.getElementById('estado').value;
+        var comentarioContainer = document.getElementById('comentario-container');
+        if (estadoActual !== estadoInicial) {
+            comentarioContainer.style.display = 'block';
+        } else {
+            comentarioContainer.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleComentario();
+    });
+</script>
 
 {% endblock %}

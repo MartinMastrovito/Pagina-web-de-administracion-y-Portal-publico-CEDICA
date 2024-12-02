@@ -10,5 +10,6 @@ class Consulta(db.Model):
     descripcion = db.Column(db.Text, nullable=False)
     fecha = db.Column(db.DateTime, default=db.func.current_timestamp())
     estado = db.Column(db.String(50), nullable=False, default='pendiente')
+    cambio_estado = db.Column(db.Text, nullable=True)
     def __repr__(self):
         return f'<Consulta ID {self.id}>'
