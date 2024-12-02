@@ -24,6 +24,8 @@ class User(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))  
     role = db.relationship('Role', backref='users')
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    
+    eliminado = db.Column(db.Boolean, default=False, nullable=False)
 
     def __repr__(self):
         return f'<User {self.email}>'

@@ -48,7 +48,7 @@ def search_users(email=None, enabled=None, role_id=None, sort_by='email', order=
     Returns:
         Objeto de paginación con los usuarios encontrados.
     """
-    query = User.query
+    query = User.query.filter_by(eliminado=False)
     
     query = query.filter(User.role_id.isnot(None))
 
@@ -197,8 +197,9 @@ def delete_user(user_id):
         user_id: ID del usuario a eliminar.
     """
     user = get_user(user_id)
-    if user and user.role_id != 5:
-        db.session.query(User).filter(User.id==user_id).delete()
+    if user and user.role_id != 6:
+        user.eliminado = True
+        block_user(user.id)
         db.session.commit()
         return True
     return False
