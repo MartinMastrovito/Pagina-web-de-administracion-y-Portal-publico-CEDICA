@@ -63,14 +63,17 @@ def actualizar_empleado(empleado_id, **kwargs):
 
 def eliminar_empleado(dni):
     """
-    Elimina un empleado de la base de datos.
+    Elimina logico un empleado.
 
     Args:
         dni: DNI del empleado a eliminar.
     """
     empleado = get_empleado_por_dni(dni)
-    db.session.delete(empleado)
+    if not empleado:
+        return False
+    empleado.activo = False  
     db.session.commit()
+    return True
 
 def get_empleado_por_dni(dni):
     """
@@ -157,7 +160,7 @@ def search_empleados(nombre=None, apellido=None, dni=None, email=None, puesto=No
     Returns:
         Pagination: Objeto de paginación con los resultados.
     """
-    query = Empleados.query
+    query = db.session.query(Empleados).filter_by(activo=True)
 
     if nombre:
         query = query.filter(Empleados.nombre.ilike(f"%{nombre}%"))
