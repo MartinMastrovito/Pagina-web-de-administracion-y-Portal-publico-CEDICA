@@ -71,7 +71,7 @@ def eliminar_empleado(dni):
     empleado = get_empleado_por_dni(dni)
     if not empleado:
         return False
-    empleado.activo = False  
+    empleado.estado = False  
     db.session.commit()
     return True
 
@@ -160,7 +160,7 @@ def search_empleados(nombre=None, apellido=None, dni=None, email=None, puesto=No
     Returns:
         Pagination: Objeto de paginación con los resultados.
     """
-    query = db.session.query(Empleados).filter_by(activo=True)
+    query = db.session.query(Empleados).filter_by(estado=True)
 
     if nombre:
         query = query.filter(Empleados.nombre.ilike(f"%{nombre}%"))
