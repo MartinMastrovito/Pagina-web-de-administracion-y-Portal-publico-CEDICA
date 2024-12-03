@@ -1,20 +1,15 @@
 {% extends "layout.html" %}
 
-<!DOCTYPE html>
-<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}Editar Enlace de J&A{% endblock %}</title>
+    <title>{% block title %}Actualizar Enlace de J&A{% endblock %}</title>
 </head>
 <body>
     {% block content %}
-    <header>
-        <h1>Editar Enlace</h1>
+    <header class="text-center my-4">
+        <h1>Actualizar Enlace para {{ jya.nombre }} {{ jya.apellido }}</h1>
     </header>
 
-    <section>
+    <section class="container">
         <form action="{{ url_for('enlaces.update_link_jya', jya_dni=jya.dni, documento_id=documento.id) }}" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="tipo">Tipo de documento:</label>
@@ -29,20 +24,15 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="documento">Selecciona el link a subir:</label>
-                <input type="text" name="documento" id="documento" class="form-control" value="{{ documento.archivo_url }}" required>
+                <label for="documento" class="form-label">Enlace del documento:</label>
+                <input type="url" name="documento" id="documento" class="form-control" value="{{ documento.nombre_documento }}" required>
             </div>
-            <button type="submit" class="btn btn-primary">Actualizar Documento</button>
-            <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-secondary">Volver</a>
-        </form>        
+            <div class="d-flex flex-wrap gap-3 justify-content-between mt-4">
+                <button type="submit" class="btn btn-primary flex-grow-1">Subir Enlace</button>
+                <a href="{{ url_for('documentos.index_documents_jya', jya_dni=jya.dni) }}" class="btn btn-secondary flex-grow-1">Volver</a>
+            </div>
+        </form>
     </section>
-    
-
     {% endblock %}
-
-    <footer>
-        <p>© 2024 Mi Aplicación - Administración de Usuarios</p>
-    </footer>
-
 </body>
 </html>

@@ -30,6 +30,12 @@
         <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>{{ consulta.descripcion }}</textarea>
         <label for="floatingTextarea2Disabled">Descripcion</label>
     </div>
+    {% if consulta.cambio_estado %}
+    <div class="form-floating mb-3">
+        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>{{ consulta.cambio_estado }}</textarea>
+        <label for="floatingTextarea2Disabled">Comentario sobre el cambio de estado</label>
+    </div>
+    {% endif %}
 </body>
 </html>
 

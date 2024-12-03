@@ -91,7 +91,8 @@ def editar_consulta(id):
     
     if request.method == 'POST':
         datos_consulta = {
-            'estado': request.form['estado']
+            'estado': request.form['estado'],
+            'cambio_estado': request.form.get('cambio_estado', '')
         }
         crud_consulta.update_consulta(id, **datos_consulta)
         flash('Consulta actualizada exitosamente.', 'success')

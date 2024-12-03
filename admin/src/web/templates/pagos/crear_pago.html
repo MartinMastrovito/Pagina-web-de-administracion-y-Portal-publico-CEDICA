@@ -8,6 +8,14 @@
     <h1>Crear Pago</h1>
     <form action="{{ url_for('pagos.crear_pago_route') }}" id="pagos_form" class="form_style" method="POST">
         <div class="form-group">
+            <label for="tipo_pago">Tipo de Pago</label>
+            <select id="tipo_pago" class="form-control" name="tipo_pago" required onchange="toggleBeneficiario()">
+                <option value="Honorarios">Honorarios</option>
+                <option value="Proveedor">Proveedor</option>
+                <option value="Gastos Varios">Gastos Varios</option>
+            </select>
+        </div>
+        <div class="form-group" id="beneficiario_group">
             <label for="beneficiario">Beneficiario:</label>
             <select id="beneficiario" name="beneficiario_id" class="form-control" required>
                 <option value="" disabled selected>Seleccione un empleado</option>
@@ -18,20 +26,13 @@
         </div>
         <div class="form-group">
             <label for="monto">Monto</label>
-            <input type="number" class="form-control" id="monto" name="monto" required>
+            <input type="number" class="form-control" id="monto" name="monto" min="0" required>
         </div>
         <div class="form-group">
             <label for="fecha_pago">Fecha de Pago</label>
             <input type="date" class="form-control" id="fecha_pago" name="fecha_pago" required>
         </div>
-        <div class="form-group">
-            <label for="tipo_pago">Tipo de Pago</label>
-            <select id="tipo_pago" class="form-control" name="tipo_pago" required>
-                <option value="Honorarios">Honorarios</option>
-                <option value="Proveedor">Proveedor</option>
-                <option value="Gastos Varios">Gastos Varios</option>
-            </select>
-        </div>
+        
         <div class="form-group">
             <label for="description">Descripción</label>
             <textarea class="form-control" id="description" name="description" rows="3"></textarea>
@@ -40,4 +41,25 @@
     </form>
     <a href="{{ url_for('pagos.listar_pagos_route') }}" class="btn btn-secondary">Volver al listado</a>
 </div>
+
+
+
+<script>
+    function toggleBeneficiario() {
+        const tipoPago = document.getElementById("tipo_pago").value;
+        const beneficiarioGroup = document.getElementById("beneficiario_group");
+        const beneficiarioField = document.getElementById("beneficiario");
+        
+        if (tipoPago === "Honorarios") {
+            beneficiarioGroup.style.display = "block";
+            beneficiarioField.required = true;
+        } else {
+            beneficiarioGroup.style.display = "none";
+            beneficiarioField.value = ""; 
+            beneficiarioField.required = false;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", toggleBeneficiario);
+</script>
 {% endblock %}

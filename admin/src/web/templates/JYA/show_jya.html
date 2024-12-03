@@ -230,16 +230,16 @@
     <input class="form-control" type="text" value="{{ jya.sede }}" aria-label="Disabled input example" disabled readonly>
     <label for="floatingInputDisabled">Sede</label>
 </div>
-{% if empleados_jya["auxiliar"] %}
 <div class="form-floating mb-3">
+{% if empleados_jya["auxiliar"] %}
     <input class="form-control" type="text" value="{{ empleados_jya["auxiliar"].empleado.nombre }} {{ empleados_jya["auxiliar"].empleado.apellido }}" aria-label="Disabled input example" disabled readonly>
 {% else %}
     <input class="form-control" type="text" value="No asignado" aria-label="Disabled input example" disabled readonly>
 {% endif %}
     <label for="floatingInputDisabled">Auxiliar de pista</label>
 </div>
-{% if empleados_jya["conductor"] %}
 <div class="form-floating mb-3">
+{% if empleados_jya["conductor"] %}
     <input class="form-control" type="text" value="{{ empleados_jya["conductor"].empleado.nombre }} {{ empleados_jya["conductor"].empleado.apellido }}" aria-label="Disabled input example" disabled readonly>
 {% else %}
     <input class="form-control" type="text" value="No asignado" aria-label="Disabled input example" disabled readonly>
@@ -256,7 +256,7 @@
 {% if empleados_jya["terapeuta"] %}
 <div class="form-floating mb-3">
     <input class="form-control" type="text" value="{{ empleados_jya["terapeuta"].empleado.nombre }} {{ empleados_jya["terapeuta"].empleado.apellido }}" aria-label="Disabled input example" disabled readonly>
-    <label for="floatingInputDisabled">Terapeuta</label>
+    <label for="floatingInputDisabled">Terapeuta / Profesor</label>
 {% endif %}
 </div>
 {% else %}
@@ -265,8 +265,8 @@
     <label for="floatingInputDisabled">Terapeuta o Profesor</label>
 </div>
 {% endif %}
-{% if jya.caballo_id %}
 <div class="form-floating mb-3">
+{% if jya.caballo_id %}
     <input class="form-control" type="text" value="{{ jya.caballo.nombre }}" aria-label="Disabled input example" disabled readonly>
 {% else %}
     <input class="form-control" type="text" value="No asignado" aria-label="Disabled input example" disabled readonly>

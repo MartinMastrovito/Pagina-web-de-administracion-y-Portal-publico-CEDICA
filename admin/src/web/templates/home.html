@@ -15,18 +15,22 @@ Página de Inicio
             </div>
         </a>
         {% endif %}
+        {% if check_permission(session, "team_index") %}
         <a class="card item_home text-center" href="{{ url_for('empleados.index') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/equipo.png') }}" alt="equipo icono">
             <div class="card-body">
                 <p class="card-text h4">Equipo</p>
             </div>
         </a>
+        {% endif %}
+        {% if check_permission(session, "payment_index") %}
         <a class="card item_home text-center" href="{{ url_for('pagos.listar_pagos_route') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/pago.png') }}" alt="pago icono">
             <div class="card-body">
                 <p class="card-text h4">Pagos</p>
             </div>
         </a>
+        {% endif %}
         {% if check_permission(session, "consulta_index") %}
         <a class="card item_home text-center" href="{{ url_for('consultas.menu_consultas') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/consultas.png') }}" alt="consultas icono">
@@ -51,12 +55,14 @@ Página de Inicio
             </div>
         </a>
         {% endif %}
+        {% if check_permission(session, "invoice_index") %}
         <a class="card item_home text-center" href="{{ url_for('invoices.invoices_index') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/cobros.png') }}" alt="cobros icono">
             <div class="card-body">
                 <p class="card-text h4">Cobros</p>
             </div>
         </a>
+        {% endif %}
         {% if check_permission(session, "publicacion_index") %}
         <a class="card item_home text-center" href="{{ url_for('publicacion.index') }}">
             <img class="card-img-top" src="{{ url_for('static', filename='assets/publicacion.png') }}" alt="publicaciones icono">

@@ -15,7 +15,7 @@ invoices_bp = Blueprint("invoices", __name__,url_prefix="/cobros", template_fold
 @check("invoice_index")
 def invoices_index():
     """
-    Muestra la lista de cobros con paginación y filtrado.
+    Ruta para mostrar la lista de cobros con paginación y filtrado.
 
     Returns:
         Renderiza la plantilla con la lista de cobros.
@@ -50,6 +50,16 @@ def invoices_index():
 @login_required
 @check("invoice_destroy")
 def delete_invoice(cobro_id):
+    """
+    Ruta para eliminar un cobro.
+
+    Elimina un cobro identificado por su ID y redirige a la lista de cobros.
+
+    Args:
+        cobro_id (int): ID del cobro a eliminar.
+
+    Returns: Redireccion a lista de cobros.
+    """
     utiles.delete(cobro_id)
     flash("Se elimino el cobro","success")
     return redirect("/cobros")
@@ -59,6 +69,17 @@ def delete_invoice(cobro_id):
 @login_required
 @check("invoice_update")
 def update_invoice(invoice_id):
+    """
+    Ruta para mostrar el formulario para actualizar un cobro.
+
+    Obtiene los datos de un cobro identificado por su ID y los envía al template para su edición.
+
+    Args:
+        invoice_id (int): ID del cobro a actualizar.
+
+    Returns:
+        El contenido HTML de la página con el formulario de actualización junto al cobro a actualizar.
+    """
     invoice = utiles.get_invoice(invoice_id)
     return render_template("update_invoice.html",invoice=invoice)
 
@@ -66,6 +87,16 @@ def update_invoice(invoice_id):
 @login_required
 @check("invoice_update")
 def invoice_update(invoice_id):
+    """
+    Ruta para actualizar la información de un cobro.
+
+    Recibe los datos del formulario, actualiza el cobro identificado por su ID y redirige al listado de cobros.
+
+    Args:
+        invoice_id (int): ID del cobro a actualizar.
+
+    Returns: Redireccion a lista de cobros
+    """
     invoice_information = {
         "pay_date":request.form['pay_date'],
         "amount":(request.form['amount']),
@@ -73,12 +104,20 @@ def invoice_update(invoice_id):
         "payment_method":request.form['payment_method']
     }
     utiles.update_invoice(invoice_id, **invoice_information)
-    return redirect("/cobros/lista-cobros/1")
+    return redirect("/cobros/")
 
 @invoices_bp.get("/crear-cobro")
 @login_required
 @check("invoice_new")
 def invoice_create():
+    """
+    Ruta para mostrar el formulario para crear un nuevo cobro.
+
+    Obtiene la lista de jinetes/amazonas y empleados para enviarlos al template de creación de cobros.
+
+    Returns:
+        El contenido HTML de la página con el formulario de creación de cobros junto a los listados de j&a, empleados y el blueprint de cobros.
+    """
     jinetes_amazonas = utiles.get_all_ja()
     employees = utiles.get_all_employees()
     return render_template("create_invoice.html",invoices=invoices_bp,jinetes_amazonas=jinetes_amazonas,employees = employees)
@@ -86,7 +125,16 @@ def invoice_create():
 @invoices_bp.post("/crear-cobro")
 @login_required
 @check("invoice_new")
-def create_invoice():                
+def create_invoice():
+    """
+    Ruta para crear un nuevo cobro.
+
+    Recibe los datos del formulario, valida la información y crea un cobro y mensaje de exito si es válido.
+    Sino, crea un mensaje de error.
+
+    Returns:
+        redireccion a pagina para crear cobros o redireccion a pagina de listado de cobros.
+    """               
     invoice_information = {
         "pay_date": request.form['pay_date'],
         "amount": float(request.form['amount']),
@@ -107,6 +155,15 @@ def create_invoice():
 @login_required
 @check("invoice_index")
 def invoice_statuses(page,**order):
+    """
+    Ruta para Listar el estado de deuda de los J&A.
+    Args:
+        page (int): Número de página para la paginación.
+        **order: Opcional, parámetros de búsqueda para filtrar jinetes/amazonas.
+
+    Returns:
+        El contenido HTML de la página con la lista de estados de deuda.
+    """
     per_page = 5
     if(len(order) != 0):
         ja_query = crud_JyA.search_JYA(
@@ -125,6 +182,13 @@ def invoice_statuses(page,**order):
 @login_required
 @check("invoice_index")
 def order_statuses_list(page):
+    """
+    Ruta que recibe el orden para el listado de estado de deuda de los J&A
+    Args: 
+        page(int): Numero actual de pagina
+    Returns:
+        Funcion invoice_statuses con los parametros de pagina actual y de orden.
+    """
     if("id" in request.form):
         return update_status(page)
     else:
@@ -139,6 +203,14 @@ def order_statuses_list(page):
 @login_required
 @check("invoice_update")
 def update_status(page,**order):
+    """
+    Ruta para actualizar el estado de deuda de un J&A
+    Args: 
+        page(int): Numero actual de pagina
+        **order: Opcional, parámetros de búsqueda para filtrar jinetes/amazonas. (Quedo sin usar :l)
+    Returns:
+        Funcion invoice_statuses con la pagina actual
+    """
     ja_update = request.form['id']
     utiles.change_status(ja_update)
     return invoice_statuses(page)
@@ -147,5 +219,12 @@ def update_status(page,**order):
 @login_required
 @check("invoice_show")
 def show_invoice(invoice_id):
+    """
+    Ruta para mostrar un cobro
+    Args: 
+       invoice_id(int): id del cobro a mostrar
+    Returns:
+        Contenido HTML para mostrar un cobro junto al cobro a mostrar.
+    """
     invoice = utiles.get_invoice(invoice_id)
     return render_template("show_invoice.html",invoice=invoice)

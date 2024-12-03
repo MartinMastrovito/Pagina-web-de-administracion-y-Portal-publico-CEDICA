@@ -3,14 +3,14 @@ from src.core.database import db
 
 
 caballo_entrenadores = db.Table('caballo_entrenadores', 
-    db.Column('caballo_id', db.Integer, db.ForeignKey('caballos.id'), primary_key=True),
-    db.Column('empleado_id', db.Integer, db.ForeignKey('empleados.id'), primary_key=True),
+    db.Column('caballo_id', db.Integer, db.ForeignKey('caballos.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('empleado_id', db.Integer, db.ForeignKey('empleados.id', ondelete='CASCADE'), primary_key=True),
     extend_existing=True
 )
 
 caballo_conductores = db.Table('caballo_conductores',
-    db.Column('caballo_id', db.Integer, db.ForeignKey('caballos.id'), primary_key=True),
-    db.Column('empleado_id', db.Integer, db.ForeignKey('empleados.id'), primary_key=True),
+    db.Column('caballo_id', db.Integer, db.ForeignKey('caballos.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('empleado_id', db.Integer, db.ForeignKey('empleados.id', ondelete='CASCADE'), primary_key=True),
     extend_existing=True
 )
 

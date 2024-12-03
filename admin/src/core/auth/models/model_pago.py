@@ -11,10 +11,10 @@ class Pago(db.Model):
     __table_args__ = {'extend_existing': True}
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    beneficiario_id = db.Column(db.Integer, db.ForeignKey('empleados.id'), nullable=True)  # Empleado dado de alta
+    beneficiario_id = db.Column(db.Integer, db.ForeignKey('empleados.id',ondelete='SET NULL'), nullable=True)
     monto = db.Column(db.Float, nullable=False)
     fecha_pago = db.Column(db.Date)
-    tipo_pago = db.Column(db.String, nullable=False)  # Honorarios, proveedor o gastos varios
+    tipo_pago = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
     beneficiario_nombre = db.Column(db.String, nullable=True)
     beneficiario_apellido = db.Column(db.String, nullable=True)    

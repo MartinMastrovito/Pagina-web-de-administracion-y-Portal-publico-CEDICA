@@ -79,11 +79,7 @@
                     {% for publicacion in publicaciones %}
                     <tr>
                         <td>{{ publicacion.titulo }}</td>
-                        {% if publicacion.autor %}
-                        <td>{{ publicacion.autor.nombre }} {{ publicacion.autor.apellido }}</td>
-                        {% else %}
-                        <td>Desconocido</td>
-                        {% endif %}
+                        <td>{{ publicacion.nombre_autor }}</td>
                         <td>{{ publicacion.fecha_creacion.strftime('%d/%m/%Y') }}</td>
                         <td>{{ publicacion.fecha_actualizacion.strftime('%d/%m/%Y') }}</td>
                         <td>{{ publicacion.estado }}</td>
