@@ -3,7 +3,7 @@ import io
 import base64
 import matplotlib.pyplot as plt
 from dateutil.relativedelta import relativedelta
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, flash
 from src.core.auth.decorators import login_required, check
 from src.core import reportes
 from src.core.empleados import get_empleados
@@ -186,11 +186,23 @@ def historico_cobros():
     Returns:
         Renderizado de la plantilla historico_cobros.html con los datos del informe.
     """
-    fecha_inicio = request.args.get('fecha_inicio', default="2024-01-01", type=str)
-    fecha_fin = request.args.get('fecha_fin', default=str(date.today()), type=str)
+    fecha_inicio_str = request.args.get('fecha_inicio', type=str)
+    fecha_fin_str = request.args.get('fecha_fin', type=str)
 
-    fecha_inicio = date.fromisoformat(fecha_inicio)
-    fecha_fin = date.fromisoformat(fecha_fin)
+    fecha_inicio = date.fromisoformat(fecha_inicio_str) if fecha_inicio_str else date.min
+    fecha_fin = date.fromisoformat(fecha_fin_str) if fecha_fin_str else date.max
+
+    if fecha_inicio > fecha_fin:
+        flash("La fecha de inicio no puede ser mayor que la fecha de fin", "danger")
+        return render_template(
+            "reportes/historico_cobros.html",
+            cobros=[],
+            total_cobros=0,
+            fecha_inicio=fecha_inicio if fecha_inicio != date.min else None,
+            fecha_fin=fecha_fin if fecha_fin != date.max else None,
+            empleados=get_empleados_con_cobros(),
+        )
+
     empleados = get_empleados_con_cobros()
     empleado_id = request.args.get('empleado_id', type=int)
     cobros = filtrar_cobros(empleado_id, fecha_inicio, fecha_fin)
@@ -200,9 +212,9 @@ def historico_cobros():
         "reportes/historico_cobros.html",
         cobros=cobros,
         total_cobros=total_cobros,
-        fecha_inicio=fecha_inicio,
-        fecha_fin=fecha_fin,
-        empleados=empleados
+        fecha_inicio=fecha_inicio if fecha_inicio != date.min else None,
+        fecha_fin=fecha_fin if fecha_fin != date.max else None,
+        empleados=empleados,
     )
     
 @bp.route('/deudores')

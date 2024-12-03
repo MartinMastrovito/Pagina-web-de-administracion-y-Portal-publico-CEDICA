@@ -322,7 +322,7 @@ def jya_update(jya_dni):
         flash("Ocurrió un error al completar los campos, intentelo nuevamente...", "danger")
         return redirect(f"/JYA/actualizar/{jya_dni}")
     
-    new_unique_dni = crud_JyA.update_jya(jya_dni, **jya_data)
+    new_unique_dni = crud_JyA.update_jya(jya_dni, request.form["caballo_id"], **jya_data)
     if new_unique_dni:
         flash("Se modificó el JYA exitosamente", "success")
         
@@ -373,7 +373,7 @@ def show_details_jya(jya_dni):
     if not empleados_jya["terapeuta"] or not empleados_jya["auxiliar"] or not empleados_jya["conductor"]:
         flash(f"Hemos realizado cambios en el personal y usted se ve impactado. Por favor verifique su/s empleado/s eliminado/s.", "danger")
     
-    if not jya.caballo_id:
+    if jya.caballo.dado_de_baja:
         flash(f"Su caballo ha sido dado de baja de nuestro sistema", "danger")
       
     return render_template("JYA/show_jya.html", jya=jya, empleados_jya=empleados_jya)
