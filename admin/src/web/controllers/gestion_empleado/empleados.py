@@ -75,7 +75,7 @@ def crear_empleado_listo():
         "obra_social": request.form.get('obra_social'),
         "numero_afiliado": request.form.get('numero_afiliado'),
         "condicion": request.form['condicion'],
-        "activo": True 
+        "activo": True if request.form['activo'] == 'true' else False
     }
     
     if request.form.get('fecha_cese'):
@@ -147,7 +147,8 @@ def update_employee(empleado_dni, empleado_id):
         "obra_social": request.form["obra_social"],
         "numero_afiliado": request.form["numero_afiliado"],
         "condicion": request.form["condicion"],
-        "activo": True,
+        "activo": request.form["activo"] == "true",
+        "estado": True
     }
 
     if request.form.get('fecha_cese'):
@@ -172,7 +173,7 @@ def update_employee(empleado_dni, empleado_id):
 @check("team_destroy")
 def delete_employee(empleado_dni):
     """
-    Eliminado lofigo de un empleado.
+    Elimina un empleado de la base de datos.
     
     Args:
         empleado_dni: DNI del empleado a eliminar.
@@ -180,7 +181,6 @@ def delete_employee(empleado_dni):
     Returns:
         Redirige a la vista principal de empleados después de eliminar al empleado.
     """
-
     empleados.eliminar_empleado(empleado_dni)
     flash("Empleado eliminado exitosamente", "success")
     return redirect("/empleados")
