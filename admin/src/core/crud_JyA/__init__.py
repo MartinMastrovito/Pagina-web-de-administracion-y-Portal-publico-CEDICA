@@ -114,7 +114,7 @@ def assign_employee_to_jya(jya_id, empleado_id, rol):
     db.session.add(asignacion)
     db.session.commit()
 
-def update_jya(jya_dni, **kwargs):
+def update_jya(jya_dni, caballo_id, **kwargs):
     """
     Actualiza los datos de un JYA existente.
 
@@ -131,6 +131,10 @@ def update_jya(jya_dni, **kwargs):
     if validation and (not (jya.dni == kwargs["dni"])):
         return None
 
+    caballo = Caballo.query.get(caballo_id)
+    jya.caballo = caballo
+    jya.caballo_id = caballo_id
+    
     for key, value in kwargs.items():
         setattr(jya, key, value)
 
@@ -330,7 +334,7 @@ def get_caballos():
     Returns:
         list: Lista de objetos Caballo.
     """
-    caballos = Caballo.query.all()
+    caballos = Caballo.query.filter_by(dado_de_baja=False)
     return caballos
 
 def get_jyaempleados_id(jya):

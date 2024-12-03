@@ -266,10 +266,10 @@
 </div>
 {% endif %}
 <div class="form-floating mb-3">
-{% if jya.caballo_id %}
-    <input class="form-control" type="text" value="{{ jya.caballo.nombre }}" aria-label="Disabled input example" disabled readonly>
+{% if jya.caballo.dado_de_baja %}
+    <input class="form-control" type="text" value="{{ jya.caballo.nombre }} - IMPORTANTE! Este caballo ya no trabaja en CEDICA" aria-label="Disabled input example" disabled readonly>
 {% else %}
-    <input class="form-control" type="text" value="No asignado" aria-label="Disabled input example" disabled readonly>
+    <input class="form-control" type="text" value="{{ jya.caballo.nombre }}" aria-label="Disabled input example" disabled readonly>
 {% endif %}
     <label for="floatingInputDisabled">Caballo</label>
 </div>
