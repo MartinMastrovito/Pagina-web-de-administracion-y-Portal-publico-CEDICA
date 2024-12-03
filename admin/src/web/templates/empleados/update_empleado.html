@@ -70,13 +70,13 @@
             <label for="condicion">Condición:</label>
             <input type="text" id="condicion" name="condicion" value="{{ empleado.condicion }}" class="form-control">
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="activo">Activo:</label>
             <select id="activo" name="activo" required>
                 <option value="true" {% if empleado.activo %}selected{% endif %}>Sí</option>
                 <option value="false" {% if not empleado.activo %}selected{% endif %}>No</option>
             </select>
-        </div>
+        </div> -->
         
         <button type="submit">Actualizar</button>
     </form>

@@ -75,7 +75,7 @@ def crear_empleado_listo():
         "obra_social": request.form.get('obra_social'),
         "numero_afiliado": request.form.get('numero_afiliado'),
         "condicion": request.form['condicion'],
-        "activo": True if request.form['activo'] == 'true' else False
+        "activo": True 
     }
     
     if request.form.get('fecha_cese'):
@@ -147,7 +147,7 @@ def update_employee(empleado_dni, empleado_id):
         "obra_social": request.form["obra_social"],
         "numero_afiliado": request.form["numero_afiliado"],
         "condicion": request.form["condicion"],
-        "activo": request.form["activo"] == "true",
+        "activo": True,
     }
 
     if request.form.get('fecha_cese'):
