@@ -172,7 +172,7 @@ def update_employee(empleado_dni, empleado_id):
 @check("team_destroy")
 def delete_employee(empleado_dni):
     """
-    Elimina un empleado de la base de datos.
+    Eliminado lofigo de un empleado.
     
     Args:
         empleado_dni: DNI del empleado a eliminar.
@@ -180,6 +180,7 @@ def delete_employee(empleado_dni):
     Returns:
         Redirige a la vista principal de empleados después de eliminar al empleado.
     """
+
     empleados.eliminar_empleado(empleado_dni)
     flash("Empleado eliminado exitosamente", "success")
     return redirect("/empleados")
