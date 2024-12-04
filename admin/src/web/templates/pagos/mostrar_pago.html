@@ -7,7 +7,9 @@
 <div class="container mt-4">
     <h1>Detalles del Pago</h1>
     <p><strong>ID:</strong> {{ pago.id }}</p>
-    <p><strong>Beneficiario:</strong> {{ pago.beneficiario_nombre }} {{ pago.beneficiario_apellido }}</p>
+    {% if pago.tipo_pago =="Honorarios" %}
+        <p><strong>Beneficiario:</strong> {{ pago.beneficiario_nombre }} {{ pago.beneficiario_apellido }}</p>
+    {% endif %}
     <p><strong>Monto:</strong> {{ pago.monto }}</p>
     <p><strong>Fecha de Pago:</strong> {{ pago.fecha_pago }}</p>
     <p><strong>Tipo de Pago:</strong> {{ pago.tipo_pago }}</p>

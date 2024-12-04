@@ -60,7 +60,11 @@
         <tbody>
             {% for pago in pagos %}
             <tr>
-                <td>{{ pago.beneficiario_nombre }} {{ pago.beneficiario_apellido }}</td>
+                {% if pago.tipo_pago == "Honorarios" %}
+                    <td>{{ pago.beneficiario_nombre }} {{ pago.beneficiario_apellido }}</td>
+                {% else %}
+                    <td>No posee</td>
+                {% endif %}
                 <td>{{ pago.monto }}</td>
                 <td>{{ pago.tipo_pago }}</td>
                 <td>{{ pago.fecha_pago.strftime('%d/%m/%Y') }}</td>

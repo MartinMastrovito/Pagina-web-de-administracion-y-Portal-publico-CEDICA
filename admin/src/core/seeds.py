@@ -1271,7 +1271,7 @@ def pagos_create():
             beneficiario_apellido = segundo_empleado.apellido,
             fecha_pago = "2023-06-07",
             monto = 100,
-            tipo_pago = "Proveedor",
+            tipo_pago = "Honorarios",
             description = "agrego pago 2",
 
            
