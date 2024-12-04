@@ -9,7 +9,7 @@ class JYAEmpleado(db.Model):
     empleado_id = db.Column(db.Integer, db.ForeignKey('empleados.id'), nullable=False)
 
     rol = db.Column(db.Enum('profesor', 'terapeuta', 'conductor', 'auxiliar', name='rol_empleado'), nullable=False)
-
+    
     jya = db.relationship('JYA', back_populates='empleados')
     empleado = db.relationship('Empleados', back_populates='jyas_roles')
 

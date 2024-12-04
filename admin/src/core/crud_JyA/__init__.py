@@ -304,7 +304,8 @@ def get_empleados_terapeuta_profesor():
     """
     empleados = Empleados.query.filter(
         or_(Empleados.puesto == "Terapeuta", Empleados.puesto == "Profesor")
-    ).all()
+    ).filter_by(estado=True).all()
+
     return empleados
 
 def get_empleados_conductor():
@@ -314,7 +315,7 @@ def get_empleados_conductor():
     Returns:
         list: Lista de empleados con profesión conductor.
     """
-    empleados = Empleados.query.filter_by(puesto="Conductor").all()
+    empleados = Empleados.query.filter_by(puesto="Conductor").filter_by(estado=True).all()
     return empleados
     
 def get_empleados_auxiliar():
@@ -324,7 +325,7 @@ def get_empleados_auxiliar():
     Returns:
         list: Lista de empleados con profesión auxiliar.
     """
-    empleados = Empleados.query.filter_by(puesto="Auxiliar de pista").all()
+    empleados = Empleados.query.filter_by(puesto="Auxiliar de pista").filter_by(estado=True).all()
     return empleados
 
 def get_caballos():
@@ -334,7 +335,7 @@ def get_caballos():
     Returns:
         list: Lista de objetos Caballo.
     """
-    caballos = Caballo.query.filter_by(dado_de_baja=False)
+    caballos = Caballo.query.filter_by(dado_de_baja=False).all()
     return caballos
 
 def get_jyaempleados_id(jya):
