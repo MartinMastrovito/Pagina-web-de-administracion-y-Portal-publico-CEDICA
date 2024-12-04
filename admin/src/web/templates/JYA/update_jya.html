@@ -204,7 +204,6 @@
 
                 <div class="mb-3">
                     <label for="obra_social" class="form-label">Obra Social:</label>
-                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" {% if jya.obra_social %} value={{ jya.obra_social }} {% endif %} title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="obra_social" name="obra_social" oninput="toggleObraSocialFields()">
                 </div>
             
