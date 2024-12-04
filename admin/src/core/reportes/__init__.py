@@ -16,7 +16,7 @@ def obtener_ranking_propuestas():
             func.count(JYA.propuesta_trabajo).label("cantidad")
         )
         .group_by(JYA.propuesta_trabajo)
-        .order_by(func.count(JYA.propuesta_trabajo).desc())
+        .order_by(func.count(JYA.propuesta_trabajo).desc()).filter_by(eliminado=False)
         .all()
     )
     return ranking
@@ -30,8 +30,8 @@ def torta_becados():
                - becados: La cantidad de personas becadas.
                - no_becados: La cantidad de personas no becadas.
     """
-    becados = db.session.query(func.count()).filter(JYA.becado == True).scalar()
-    no_becados = db.session.query(func.count()).filter(JYA.becado == False).scalar()
+    becados = db.session.query(func.count()).filter(JYA.eliminado == False, JYA.becado == True).scalar()
+    no_becados = db.session.query(func.count()).filter(JYA.eliminado == False, JYA.becado == False).scalar()
     
     return becados, no_becados
 
@@ -46,11 +46,11 @@ def contador_discapacidades():
     """
     discapacitados = db.session.query(
         func.count(JYA.id)
-    ).filter(JYA.certificado_discapacidad == True).scalar()
+    ).filter(JYA.eliminado == False, JYA.certificado_discapacidad == True).scalar()
     
     no_discapacitados = db.session.query(
         func.count(JYA.id)
-    ).filter(JYA.certificado_discapacidad == False).scalar()
+    ).filter(JYA.eliminado == False, JYA.certificado_discapacidad == False).scalar()
     
     return discapacitados, no_discapacitados
 
@@ -66,7 +66,7 @@ def tipo_discapacidad():
     tipos = db.session.query(
         JYA.tipo_discapacidad, 
         func.count(JYA.id)
-    ).filter(JYA.tipo_discapacidad.isnot(None)) \
+    ).filter(JYA.eliminado == False, JYA.tipo_discapacidad.isnot(None)) \
      .group_by(JYA.tipo_discapacidad) \
      .all()
     
@@ -79,4 +79,4 @@ def obtener_deudores():
     Returns:
         list: Una lista de instancias de `JYA` que representan a los deudores.
     """
-    return JYA.query.filter_by(debts=True).all()
+    return JYA.query.filter_by(eliminado=False, debts=True).all()

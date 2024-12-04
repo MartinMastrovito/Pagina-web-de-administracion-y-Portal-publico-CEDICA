@@ -148,6 +148,7 @@ def update_employee(empleado_dni, empleado_id):
         "numero_afiliado": request.form["numero_afiliado"],
         "condicion": request.form["condicion"],
         "activo": request.form["activo"] == "true",
+        "estado": True
     }
 
     if request.form.get('fecha_cese'):

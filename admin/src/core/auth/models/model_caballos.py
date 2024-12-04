@@ -42,7 +42,7 @@ class Caballo(db.Model):
     fecha_ingreso = db.Column(db.Date, nullable=False)
     sede_asignada = db.Column(db.String(255), nullable=False)
     tipo_ja_asignado = db.Column(db.String(255), nullable=True)
-    
+    dado_de_baja = db.Column(db.Boolean, nullable=False, default=False)
 
     def __repr__(self):
         return f'<Caballo {self.nombre}>'

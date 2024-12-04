@@ -11,7 +11,7 @@ class Pago(db.Model):
     __table_args__ = {'extend_existing': True}
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    beneficiario_id = db.Column(db.Integer, db.ForeignKey('empleados.id'), nullable=True)
+    beneficiario_id = db.Column(db.Integer, db.ForeignKey('empleados.id',ondelete='SET NULL'), nullable=True)
     monto = db.Column(db.Float, nullable=False)
     fecha_pago = db.Column(db.Date)
     tipo_pago = db.Column(db.String, nullable=False)

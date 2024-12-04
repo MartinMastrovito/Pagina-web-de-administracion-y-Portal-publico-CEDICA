@@ -204,7 +204,6 @@
 
                 <div class="mb-3">
                     <label for="obra_social" class="form-label">Obra Social:</label>
-                    <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <input pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" {% if jya.obra_social %} value={{ jya.obra_social }} {% endif %} title="Por favor ingresa solo letras válidas" type="text" class="form-control" id="obra_social" name="obra_social" oninput="toggleObraSocialFields()">
                 </div>
             
@@ -469,7 +468,7 @@
                     <label for="caballo_id">Caballo:</label>
                     <i class="fas fa-asterisk text-danger" title="Campo obligatorio"></i>
                     <select class="form-control" id="caballo_id" name="caballo_id" required>
-                        <option value="" disabled {% if not jya.caballo_id %} selected {% endif %}>Seleccione un Caballo</option>
+                        <option value="" disabled {% if jya.caballo.dado_de_baja %} selected {% endif %}>Seleccione un Caballo</option>
                         {% for caballo in caballos %}
                             <option value="{{ caballo.id }}" {% if jya.caballo_id == caballo.id %} selected {% endif %}>
                                 {{ caballo.nombre }}
@@ -478,7 +477,7 @@
                     </select>
                 </div>              
                 
-                <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
+                <button type="submit" class="btn btn-primary">Actualizar JYA</button>
             </form>
         </article>
     </section>

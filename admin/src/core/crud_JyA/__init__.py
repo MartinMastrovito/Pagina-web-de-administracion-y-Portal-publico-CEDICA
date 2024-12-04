@@ -35,7 +35,7 @@ def search_JYA(nombre=None, apellido=None, dni=None, profesionales_atendiendo=No
     Returns:
         Objeto de paginación con los resultados de la búsqueda.
     """
-    query = JYA.query
+    query = JYA.query.filter_by(eliminado=False)
 
     if nombre:
         query = query.filter(JYA.nombre.ilike(f"%{nombre}%"))
@@ -114,7 +114,7 @@ def assign_employee_to_jya(jya_id, empleado_id, rol):
     db.session.add(asignacion)
     db.session.commit()
 
-def update_jya(jya_dni, **kwargs):
+def update_jya(jya_dni, caballo_id, **kwargs):
     """
     Actualiza los datos de un JYA existente.
 
@@ -131,6 +131,10 @@ def update_jya(jya_dni, **kwargs):
     if validation and (not (jya.dni == kwargs["dni"])):
         return None
 
+    caballo = Caballo.query.get(caballo_id)
+    jya.caballo = caballo
+    jya.caballo_id = caballo_id
+    
     for key, value in kwargs.items():
         setattr(jya, key, value)
 
@@ -173,13 +177,14 @@ def delete_jya(jya_dni):
 
     client = current_app.storage.client
     for documento in documentos:
+        if documento.nombre_documento.startswith("documentos-JYA/"):
             client.remove_object("grupo30", documento.nombre_documento)
-
-            delete_document(documento.id)
+            
+        delete_document(documento.id)
 
     db.session.query(JYAEmpleado).filter_by(jya_id=jya.id).delete(synchronize_session=False)
 
-    db.session.delete(jya)
+    jya.eliminado = True
     db.session.commit()
 
     
@@ -299,7 +304,8 @@ def get_empleados_terapeuta_profesor():
     """
     empleados = Empleados.query.filter(
         or_(Empleados.puesto == "Terapeuta", Empleados.puesto == "Profesor")
-    ).all()
+    ).filter_by(estado=True).all()
+
     return empleados
 
 def get_empleados_conductor():
@@ -309,7 +315,7 @@ def get_empleados_conductor():
     Returns:
         list: Lista de empleados con profesión conductor.
     """
-    empleados = Empleados.query.filter_by(puesto="Conductor").all()
+    empleados = Empleados.query.filter_by(puesto="Conductor").filter_by(estado=True).all()
     return empleados
     
 def get_empleados_auxiliar():
@@ -319,7 +325,7 @@ def get_empleados_auxiliar():
     Returns:
         list: Lista de empleados con profesión auxiliar.
     """
-    empleados = Empleados.query.filter_by(puesto="Auxiliar de pista").all()
+    empleados = Empleados.query.filter_by(puesto="Auxiliar de pista").filter_by(estado=True).all()
     return empleados
 
 def get_caballos():
@@ -329,7 +335,7 @@ def get_caballos():
     Returns:
         list: Lista de objetos Caballo.
     """
-    caballos = Caballo.query.all()
+    caballos = Caballo.query.filter_by(dado_de_baja=False).all()
     return caballos
 
 def get_jyaempleados_id(jya):

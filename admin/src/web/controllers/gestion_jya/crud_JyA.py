@@ -66,7 +66,7 @@ def show_create_jya_form():
             "danger"
         )
         return redirect("/JYA")
-    
+
     return render_template(
         "JYA/create_jya.html",
         empleados_terapeuta_profesor=empleados_terapeuta_profesor,
@@ -204,14 +204,14 @@ def show_update_jya(jya_dni):
     empleados_conductor = crud_JyA.get_empleados_conductor()
     empleados_auxiliar = crud_JyA.get_empleados_auxiliar()
     caballos = crud_JyA.get_caballos()
-    
+
     if not (empleados_terapeuta_profesor and empleados_conductor and empleados_auxiliar and caballos):
         flash(
             "Debe asegurarse de que exista por lo menos un empleado terapeuta/profesor, "
             "conductor, auxiliar de pista y un caballo en el sistema",
             "danger"
         )
-        return redirect("/JYA")
+        return redirect(f"/JYA/detalles/{jya_dni}")
     
     return render_template(
         "JYA/update_jya.html",
@@ -322,7 +322,7 @@ def jya_update(jya_dni):
         flash("Ocurrió un error al completar los campos, intentelo nuevamente...", "danger")
         return redirect(f"/JYA/actualizar/{jya_dni}")
     
-    new_unique_dni = crud_JyA.update_jya(jya_dni, **jya_data)
+    new_unique_dni = crud_JyA.update_jya(jya_dni, request.form["caballo_id"], **jya_data)
     if new_unique_dni:
         flash("Se modificó el JYA exitosamente", "success")
         
@@ -370,10 +370,10 @@ def show_details_jya(jya_dni):
     
     empleados_jya = crud_JyA.get_jyaempleados(jya)
     
-    if not empleados_jya["terapeuta"] or not empleados_jya["auxiliar"] or not empleados_jya["conductor"]:
-        flash(f"Hemos realizado cambios en el personal y usted se ve impactado. Por favor verifique su/s empleado/s eliminado/s.", "danger")
+    if not empleados_jya["terapeuta"].empleado.estado or not empleados_jya["auxiliar"].empleado.estado or not empleados_jya["conductor"].empleado.estado:
+        flash(f"Hemos realizado cambios en el personal y este JYA se ve impactado. Por favor verifique su/s empleado/s eliminado/s.", "danger")
     
-    if not jya.caballo_id:
+    if jya.caballo.dado_de_baja:
         flash(f"Su caballo ha sido dado de baja de nuestro sistema", "danger")
       
     return render_template("JYA/show_jya.html", jya=jya, empleados_jya=empleados_jya)

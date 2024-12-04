@@ -1,5 +1,6 @@
 from src.core.database import db
 from src.core.auth.models.model_publicacion import Publicacion
+from src.core.empleados import get_empleado_by_id
 from datetime import datetime
 
 def obtener_publicaciones(estado=None, sort_by='fecha_actualizacion', order='desc', page=1, per_page=10):
@@ -77,6 +78,9 @@ def actualizar_publicacion(id, **kwargs):
         kwargs : Diccionario con los nuevos valores para los atributos de la publicación.
     """
     publicacion = Publicacion.query.filter_by(id=id).first()
+
+    empleado = get_empleado_by_id(kwargs["autor_id"])
+    publicacion.nombre_autor = f"{empleado.nombre} {empleado.apellido}"
 
     for key, value in kwargs.items():
         setattr(publicacion, key, value)

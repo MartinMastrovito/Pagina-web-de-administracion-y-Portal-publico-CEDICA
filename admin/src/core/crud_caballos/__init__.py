@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from minio import Minio
 from minio.error import S3Error
 from src.core.auth.models.model_empleado import Empleados as Empleado
-
+from flask import abort
 def search_caballos(nombre=None, tipo_ja_asignado=None, sort_by='nombre', order='asc', page=1, per_page=10):
     """
     Busca caballos con filtros opcionales y paginación.
@@ -23,7 +23,7 @@ def search_caballos(nombre=None, tipo_ja_asignado=None, sort_by='nombre', order=
         Pagination: Objeto de paginación con los caballos filtrados y ordenados.
     """
     query = db.session.query(Caballo)
-
+    query = query.filter(Caballo.dado_de_baja == False)
     if nombre:
         query = query.filter(Caballo.nombre.ilike(f"%{nombre}%"))
     
@@ -72,7 +72,10 @@ def get_caballo_by_id(id):
     Returns:
         Caballo: El caballo obtenido.
     """
-    return Caballo.query.get_or_404(id)
+    caballo = Caballo.query.filter_by(id=id, dado_de_baja=False).first()
+    if caballo is None:
+        abort(404)
+    return caballo
 
 def update_caballo(id, **kwargs):
     """
@@ -99,7 +102,7 @@ def delete_caballo(id):
         id (int): ID del caballo a eliminar.
     """
     caballo = get_caballo_by_id(id)
-    db.session.delete(caballo)
+    caballo.dado_de_baja = True
     db.session.commit()
 
 def list_documents(caballo_id, nombre_documento=None, tipo_documento=None, sort_by='nombre_documento', order='asc', page=1, per_page=10):
@@ -192,7 +195,7 @@ def get_caballo_by_document(document):
     Returns:
         Caballo or None: Retorna el objeto caballo encontrado o None si no existe.
     """
-    caballo = Caballo.query.filter_by(id=document.caballo_id).first()
+    caballo = Caballo.query.filter_by(id=document.caballo_id, dado_de_baja=False).first()
     return caballo
 
 
@@ -207,11 +210,14 @@ def get_empleados_by_rol(puesto):
         list[Empleado]: Lista de empleados con el rol especificado.
     """
     
-    return Empleado.query.filter_by(puesto=puesto).all()
+    return Empleado.query.filter_by(puesto=puesto).filter(Empleado.estado == True).all()
 
 
 def get_empleados_by_ids(ids):
     """
     Recupera los empleados por su lista de IDs.
     """
-    return Empleado.query.filter(Empleado.id.in_(ids)).all()
+ 
+ 
+
+    return Empleado.query.filter(Empleado.id.in_(ids), Empleado.estado == True).all()

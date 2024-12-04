@@ -1,7 +1,8 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from src.core.auth.decorators import check, login_required
+from src.core.empleados import listar_empleados_activos, get_empleado_by_id
 from src.core.crud_pagos import listar_pagos, obtener_pago, crear_pago, actualizar_pago, eliminar_pago, get_empleado
-from src.core.empleados import listar_empleados_activos
+
 
 pagos_bp = Blueprint('pagos', __name__, url_prefix='/pagos')
 
@@ -67,17 +68,25 @@ def crear_pago_route():
     """
     if request.method == 'POST':
         data = request.form.to_dict()
-        empleado_id = data.get('beneficiario_id')
-        empleado = get_empleado(empleado_id)
-        if empleado:
-            data['beneficiario_nombre'] = empleado.nombre
-            data['beneficiario_apellido'] = empleado.apellido
-            data['beneficiario_id'] = empleado.id
+        
+        tipo_pago = data.get('tipo_pago')
+
+        if tipo_pago in ["Proveedor", "Gastos Varios"]:
+            data['beneficiario_id'] = None
+            data['beneficiario_nombre'] = None
+            data['beneficiario_apellido'] = None
+        else:
+            empleado_id = data.get('beneficiario_id')
+            empleado = get_empleado_by_id(empleado_id)
+            if empleado:
+                data['beneficiario_nombre'] = empleado.nombre
+                data['beneficiario_apellido'] = empleado.apellido
+                data['beneficiario_id'] = empleado.id
         crear_pago(data)
         flash("Pago creado correctamente", 'success')
         return redirect(url_for('pagos.listar_pagos_route'))
 
-    empleados = listar_empleados_activos()
+    empleados = listar_empleados_activos()  
     return render_template('pagos/crear_pago.html', empleados=empleados)
 
 @pagos_bp.route('/<int:id>/editar', methods=['GET', 'POST'])
@@ -98,16 +107,26 @@ def actualizar_pago_route(id):
     pago = obtener_pago(id)
     if request.method == 'POST':
         data = request.form.to_dict()
-        empleado_id = data.get('beneficiario_id')
-        empleado = get_empleado(empleado_id)
-        if empleado:
-            data['beneficiario_nombre'] = empleado.nombre
-            data['beneficiario_apellido'] = empleado.apellido
-            data['beneficiario_id'] = empleado.id
+        tipo_pago = data.get('tipo_pago')
+        if tipo_pago in ["Proveedor", "Gastos Varios"]:
+            data['beneficiario_id'] = None
+            data['beneficiario_nombre'] = None
+            data['beneficiario_apellido'] = None
+        elif tipo_pago == "Honorarios":
+            empleado_id = data.get('beneficiario_id')
+            empleado = get_empleado_by_id(empleado_id)
+            if empleado:
+                data['beneficiario_nombre'] = empleado.nombre
+                data['beneficiario_apellido'] = empleado.apellido
+                data['beneficiario_id'] = empleado.id
+            else:
+                flash("Debe seleccionar un beneficiario válido para 'Honorarios'.", 'danger')
+                return redirect(url_for('pagos.actualizar_pago_route', id=id))
+
         actualizar_pago(id, data)
         flash("Pago actualizado correctamente", 'success')
         return redirect(url_for('pagos.listar_pagos_route'))
-    empleados = listar_empleados_activos()
+    empleados = listar_empleados_activos()  
     return render_template('pagos/editar_pago.html', pago=pago, empleados=empleados)
 
 @pagos_bp.route('/eliminar', methods=['POST'])

@@ -409,6 +409,7 @@ def JYA_create():
         sede_asignada="Sede Norte",
         tipo_ja_asignado="Equitación",
 
+
     )
     db.session.add_all([caballo_1, caballo_2])
     db.session.commit()
